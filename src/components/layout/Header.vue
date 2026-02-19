@@ -78,8 +78,11 @@ const onKeydown = (ev: KeyboardEvent) => {
 const openMobileMenu = () => {
   mobileOpen.value = true
   // Prevent body scroll when menu is open
+  const scrollbarWidth = getScrollbarWidth()
   document.body.style.overflow = 'hidden'
-  document.body.style.paddingRight = getScrollbarWidth() + 'px'
+  document.body.style.paddingRight = scrollbarWidth + 'px'
+  // Fix header shift - add padding to header too
+  document.documentElement.style.setProperty('--header-padding-right', scrollbarWidth + 'px')
 }
 
 const closeMobileMenu = () => {
@@ -87,6 +90,7 @@ const closeMobileMenu = () => {
   // Restore body scroll
   document.body.style.overflow = ''
   document.body.style.paddingRight = ''
+  document.documentElement.style.setProperty('--header-padding-right', '0px')
 }
 
 const toggleMobileMenu = () => {
@@ -163,7 +167,7 @@ onUnmounted(() => {
     :style="{
       top: `calc(env(safe-area-inset-top, 0px) + 1rem)`,
       paddingLeft: 'env(safe-area-inset-left)',
-      paddingRight: 'env(safe-area-inset-right)',
+      paddingRight: `calc(env(safe-area-inset-right) + var(--header-padding-right, 0px))`,
     }"
   >
     <div class="max-w-7xl mx-auto px-4">
@@ -319,27 +323,49 @@ onUnmounted(() => {
       </div>
 
       <!-- MOBILE MENU -->
-      <div
-        v-if="mobileOpen"
-        class="md:hidden mt-2 rounded-2xl bg-white border shadow p-4"
-      >
-        <nav class="flex flex-col gap-3">
-          <RouterLink to="/" @click="closeMobileMenu">Главная</RouterLink>
-          <RouterLink to="/catalog" @click="closeMobileMenu">Каталог</RouterLink>
-          <RouterLink to="/about" @click="closeMobileMenu">О нас</RouterLink>
-
-          <div class="pt-3 border-t">
-            <a
-              v-for="p in CONTACTS.phones"
-              :key="p.raw"
-              :href="`tel:${p.raw}`"
-              class="block text-center header-btn mb-2"
+      <Transition name="mobile-menu">
+        <div
+          v-if="mobileOpen"
+          class="md:hidden fixed left-0 right-0 top-[calc(env(safe-area-inset-top)+1rem)] z-50
+               mx-4 mt-2 rounded-2xl bg-white border shadow-xl p-4"
+        >
+          <nav class="flex flex-col gap-3 pt-20">
+            <RouterLink 
+              to="/" 
+              @click="closeMobileMenu"
+              class="px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors text-base font-medium"
             >
-              {{ p.label }}
-            </a>
-          </div>
-        </nav>
-      </div>
+              Главная
+            </RouterLink>
+            <RouterLink 
+              to="/catalog" 
+              @click="closeMobileMenu"
+              class="px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors text-base font-medium"
+            >
+              Каталог
+            </RouterLink>
+            <RouterLink 
+              to="/about" 
+              @click="closeMobileMenu"
+              class="px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors text-base font-medium"
+            >
+              О нас
+            </RouterLink>
+
+            <div class="pt-3 mt-3 border-t">
+              <a
+                v-for="p in CONTACTS.phones"
+                :key="p.raw"
+                :href="`tel:${p.raw}`"
+                class="block text-center header-btn mb-2"
+                @click="closeMobileMenu"
+              >
+                {{ p.label }}
+              </a>
+            </div>
+          </nav>
+        </div>
+      </Transition>
     </div>
   </header>
 </template>
@@ -364,5 +390,23 @@ onUnmounted(() => {
 :focus-visible {
   outline: 2px solid rgb(45 212 191); /* teal-400 */
   outline-offset: 3px;
+}
+
+/* Mobile Menu Transition */
+.mobile-menu-enter-active,
+.mobile-menu-leave-active {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mobile-menu-enter-from {
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+}
+
+.mobile-menu-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
 }
 </style>
