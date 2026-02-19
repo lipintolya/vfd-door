@@ -246,10 +246,11 @@ onUnmounted(() => {
             </div>
 
             <button
-              class="w-10 h-10 flex items-center justify-center"
+              class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors shrink-0"
               @click="toggleMobileMenu"
               :aria-expanded="mobileOpen"
               aria-label="Открыть меню навигации"
+              type="button"
             >
               <img :src="mobileOpen ? CloseIcon : BurgerIcon" class="w-6 h-6" />
             </button>
@@ -306,12 +307,31 @@ onUnmounted(() => {
       <!-- MOBILE MENU -->
       <div
         v-if="mobileOpen"
-        class="md:hidden mt-2 rounded-2xl bg-white border shadow p-4"
+        class="md:hidden fixed left-0 right-0 top-[calc(1rem+env(safe-area-inset-top)+72px)] z-50
+               mx-4 rounded-2xl bg-white border shadow-xl p-4"
       >
         <nav class="flex flex-col gap-3">
-          <RouterLink to="/" @click="closeMobileMenu">Главная</RouterLink>
-          <RouterLink to="/catalog" @click="closeMobileMenu">Каталог</RouterLink>
-          <RouterLink to="/about" @click="closeMobileMenu">О нас</RouterLink>
+          <RouterLink 
+            to="/" 
+            @click="closeMobileMenu"
+            class="px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors text-base font-medium"
+          >
+            Главная
+          </RouterLink>
+          <RouterLink 
+            to="/catalog" 
+            @click="closeMobileMenu"
+            class="px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors text-base font-medium"
+          >
+            Каталог
+          </RouterLink>
+          <RouterLink 
+            to="/about" 
+            @click="closeMobileMenu"
+            class="px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors text-base font-medium"
+          >
+            О нас
+          </RouterLink>
 
           <div class="pt-3 border-t">
             <a
@@ -319,6 +339,7 @@ onUnmounted(() => {
               :key="p.raw"
               :href="`tel:${p.raw}`"
               class="block text-center header-btn mb-2"
+              @click="closeMobileMenu"
             >
               {{ p.label }}
             </a>
