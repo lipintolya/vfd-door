@@ -112,13 +112,14 @@ onUnmounted(() => {
     <!-- HERO SECTION -->
     <div class="pb-8 sm:pb-12 lg:pb-16">
       <AppContainer>
-        <div class="relative w-full overflow-hidden rounded-2xl sm:rounded-3xl" style="height: clamp(280px, 50vw, 500px)">
-          <!-- Background Image -->
-          <div class="absolute inset-0">
+        <!-- Mobile: image + content stacked | Desktop: overlay -->
+        <div class="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-zinc-100">
+          <!-- Image -->
+          <div class="relative">
             <!-- Loading State -->
             <div
               v-if="!heroImageLoaded && !imageErrors.has('hero')"
-              class="absolute inset-0 flex items-center justify-center bg-zinc-100"
+              class="absolute inset-0 flex items-center justify-center bg-zinc-100 z-10"
             >
               <div class="w-10 h-10 sm:w-12 sm:h-12 border-2 sm:border-3 border-zinc-300 border-t-teal-500 rounded-full animate-spin" />
             </div>
@@ -126,40 +127,48 @@ onUnmounted(() => {
             <img
               src="https://storage.yandexcloud.net/catalog-vfd/alum/alum-1.webp"
               alt="Выставочный зал VFD Кашириных"
-              class="w-full h-full object-cover"
-              :class="{ 'opacity-0': !heroImageLoaded, 'opacity-100': heroImageLoaded }"
+              class="w-full object-cover"
+              :class="[
+                'transition-opacity duration-500',
+                heroImageLoaded ? 'opacity-100' : 'opacity-0',
+                // Mobile: fixed height
+                'h-72 sm:h-auto',
+                // Desktop: aspect ratio
+                'sm:aspect-[16/9] lg:aspect-[21/9]'
+              ]"
               fetchpriority="high"
               @load="handleImageLoad('hero')"
               @error="handleImageError('hero')"
             />
           </div>
 
-          <!-- Gradient Overlay -->
-          <div class="absolute inset-0 bg-linear-to-t from-black/70 via-black/40 to-transparent" />
+          <!-- Content - Mobile: relative below image | Desktop: absolute overlay -->
+          <div class="relative sm:absolute sm:inset-0 sm:flex sm:items-end">
+            <!-- Gradient overlay for desktop -->
+            <div class="absolute inset-0 bg-linear-to-t from-black/70 via-black/40 to-transparent sm:block hidden" />
+            <div class="absolute inset-0 bg-linear-to-t from-black/85 via-black/60 to-transparent sm:hidden block" />
 
-          <!-- Content -->
-          <div class="absolute inset-0 flex items-end">
-            <div class="w-full min-w-0 p-4 sm:p-6 lg:p-8 text-white pb-16 sm:pb-20 lg:pb-24">
+            <div class="relative z-10 p-4 sm:p-6 lg:p-8 text-white pb-6 sm:pb-16 sm:pb-20 lg:pb-24 w-full">
               <p class="text-xs uppercase tracking-widest text-white/70 mb-2 break-words">
                 О нашем салоне
               </p>
-              <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight break-words hyphens-auto max-w-full">
+              <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold leading-tight break-words max-w-full">
                 VFD Кашириных — фирменный салон фабрики
               </h1>
-              <p class="text-sm sm:text-base lg:text-lg text-white/90 mt-3 sm:mt-4 max-w-full leading-relaxed break-words hyphens-auto">
+              <p class="text-sm sm:text-base lg:text-lg text-white/90 mt-2 sm:mt-3 max-w-full sm:max-w-2xl leading-relaxed break-words">
                 Работаем с 2015 года. Более 200 образцов дверей и перегородок, работа с дизайнерами и коммерческими проектами.
               </p>
-              <div class="flex flex-wrap gap-3 mt-5 sm:mt-6">
+              <div class="flex flex-wrap gap-2 sm:gap-3 mt-4 sm:mt-5">
                 <button
                   @click="openTelegram"
-                  class="ui-button ui-button--primary max-w-full break-words"
+                  class="ui-button ui-button--primary text-xs sm:text-sm px-4 sm:px-5 py-2.5 sm:py-3"
                   type="button"
                 >
                   Консультация
                 </button>
                 <a
                   href="#contact"
-                  class="ui-button ui-button--ghost max-w-full break-words"
+                  class="ui-button ui-button--ghost text-xs sm:text-sm px-4 sm:px-5 py-2.5 sm:py-3"
                 >
                   Посетить салон
                 </a>
@@ -194,48 +203,48 @@ onUnmounted(() => {
     <div class="pb-8 sm:pb-12 lg:pb-16 bg-white">
       <AppContainer>
         <div class="max-w-4xl mx-auto">
-          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-zinc-900 mb-5 sm:mb-6 lg:mb-8 break-words">
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-zinc-900 mb-5 sm:mb-6 lg:mb-8 wrap-break-wordword">
             О салоне VFD Кашириных
           </h2>
 
           <div class="space-y-4 sm:space-y-5 lg:space-y-6 text-base sm:text-lg text-zinc-700 leading-relaxed">
-            <p class="break-words">
+            <p class="wrap-break-word">
               <strong class="text-zinc-900">VFD Кашириных</strong> — это фирменный салон фабрики дверей, где качество и профессионализм встречаются в каждом проекте. Работаем с 2015 года и накопили огромный опыт в работе с межкомнатными и входными дверями, а также алюминиевыми перегородками.
             </p>
 
             <div class="bg-teal-50 border-l-4 border-teal-600 p-4 sm:p-5 lg:p-6 rounded-xl">
-              <h3 class="text-lg sm:text-xl font-bold text-zinc-900 mb-3 sm:mb-4 break-words">
+              <h3 class="text-lg sm:text-xl font-bold text-zinc-900 mb-3 sm:mb-4 wrap-break-word">
                 Что нас отличает
               </h3>
               <ul class="space-y-2 sm:space-y-2.5 text-zinc-800">
                 <li class="flex items-start gap-2">
                   <span class="text-teal-600 font-bold shrink-0 mt-0.5">✓</span>
-                  <span class="break-words"><strong class="font-semibold">Большая выставка</strong> — более 500 образцов межкомнатных и входных дверей</span>
+                  <span class="wrap-break-wordword"><strong class="font-semibold">Большая выставка</strong> — более 500 образцов межкомнатных и входных дверей</span>
                 </li>
                 <li class="flex items-start gap-2">
                   <span class="text-teal-600 font-bold shrink-0 mt-0.5">✓</span>
-                  <span class="break-words"><strong class="font-semibold">Фирменный статус</strong> — прямое сотрудничество с фабрикой для лучших цен</span>
+                  <span class="wrap-break-word"><strong class="font-semibold">Фирменный статус</strong> — прямое сотрудничество с фабрикой для лучших цен</span>
                 </li>
                 <li class="flex items-start gap-2">
                   <span class="text-teal-600 font-bold shrink-0 mt-0.5">✓</span>
-                  <span class="break-words"><strong class="font-semibold">Работа с дизайнерами</strong> — консультации и реализация дизайн-проектов</span>
+                  <span class="wrap-break-wordword"><strong class="font-semibold">Работа с дизайнерами</strong> — консультации и реализация дизайн-проектов</span>
                 </li>
                 <li class="flex items-start gap-2">
                   <span class="text-teal-600 font-bold shrink-0 mt-0.5">✓</span>
-                  <span class="break-words"><strong class="font-semibold">Коммерческие проекты</strong> — опыт работы с офисами, ресторанами и магазинами</span>
+                  <span class="wrap-break-wordword"><strong class="font-semibold">Коммерческие проекты</strong> — опыт работы с офисами, ресторанами и магазинами</span>
                 </li>
                 <li class="flex items-start gap-2">
                   <span class="text-teal-600 font-bold shrink-0 mt-0.5">✓</span>
-                  <span class="break-words"><strong class="font-semibold">Полный спектр услуг</strong> — от выбора до монтажа и обслуживания</span>
+                  <span class="wrap-break-word"><strong class="font-semibold">Полный спектр услуг</strong> — от выбора до монтажа и обслуживания</span>
                 </li>
               </ul>
             </div>
 
-            <p class="break-words">
+            <p class="wrap-break-word">
               Мы работаем как с частными клиентами, так и с дизайн-бюро и коммерческими компаниями. Для каждого проекта находим идеальное решение, которое соответствует бюджету, стилю и функциональности.
             </p>
 
-            <p class="break-words">
+            <p class="wrap-break-word">
               Наша команда состоит из опытных специалистов: проектировщиков, мастеров по монтажу и консультантов. Мы гарантируем качество работы, честное консультирование и сервис на высшем уровне.
             </p>
           </div>
@@ -334,7 +343,7 @@ onUnmounted(() => {
                     </svg>
                     <div class="min-w-0">
                       <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wide mb-1">Юридический адрес</div>
-                      <p class="text-sm sm:text-base text-zinc-900 break-words">{{ companyDetails.legalAddress }}</p>
+                      <p class="text-sm sm:text-base text-zinc-900 wrap-break-word">{{ companyDetails.legalAddress }}</p>
                     </div>
                   </div>
 
@@ -345,7 +354,7 @@ onUnmounted(() => {
                     </svg>
                     <div class="min-w-0">
                       <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wide mb-1">Почтовый адрес</div>
-                      <p class="text-sm sm:text-base text-zinc-900 break-words">{{ companyDetails.postalAddress }}</p>
+                      <p class="text-sm sm:text-base text-zinc-900 wrap-break-wordword">{{ companyDetails.postalAddress }}</p>
                     </div>
                   </div>
                 </div>
@@ -356,7 +365,7 @@ onUnmounted(() => {
                   <div class="space-y-3">
                     <div class="flex justify-between items-center py-2 border-b border-zinc-100 gap-2">
                       <span class="text-sm text-zinc-500 shrink-0">Банк</span>
-                      <span class="text-sm font-medium text-zinc-900 text-right break-words">{{ companyDetails.bankName }}</span>
+                      <span class="text-sm font-medium text-zinc-900 text-right wrap-break-word">{{ companyDetails.bankName }}</span>
                     </div>
                     <div class="flex justify-between items-center py-2 border-b border-zinc-100 gap-2">
                       <span class="text-sm text-zinc-500 shrink-0">БИК</span>
@@ -574,32 +583,32 @@ onUnmounted(() => {
     <!-- CTA SECTION -->
     <div class="bg-linear-to-r from-teal-600 to-zinc-900 text-white">
       <AppContainer class="py-12 sm:py-16 lg:py-20 text-center space-y-5 sm:space-y-6">
-        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold break-words px-2">
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold wrap-break-word px-2">
           Готовы начать проект?
         </h2>
-        <p class="text-base sm:text-lg max-w-2xl mx-auto text-white/90 px-2 break-words">
+        <p class="text-base sm:text-lg max-w-2xl mx-auto text-white/90 px-2 wrap-break-wordword">
           Мы ответим на все вопросы и поможем с выбором дверей и перегородок, которые идеально подойдут для вашего интерьера.
         </p>
         <div class="flex flex-col sm:flex-row justify-center gap-4 pt-4 px-2">
           <a
             href="tel:+79000297888"
-            class="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-4 rounded-full bg-white text-teal-700 font-bold hover:bg-gray-100 transition-all duration-200 hover:shadow-lg hover:shadow-teal-500/30 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-teal-600 break-words max-w-full"
+            class="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-4 rounded-full bg-white text-teal-700 font-bold hover:bg-gray-100 transition-all duration-200 hover:shadow-lg hover:shadow-teal-500/30 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-teal-600 wrap-break-word max-w-full"
           >
             <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
             </svg>
-            <span class="break-words">Позвонить</span>
+            <span class="wrap-break-wordword">Позвонить</span>
           </a>
           <a
             href="https://t.me/vfddoors74"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-4 rounded-full border-2 border-white text-white hover:bg-white/10 font-bold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-teal-600 break-words max-w-full"
+            class="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-4 rounded-full border-2 border-white text-white hover:bg-white/10 font-bold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-teal-600 wrap-break-word max-w-full"
           >
             <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295-.042 0-.084 0-.127-.01l.214-3.054 5.56-5.023c.242-.213-.054-.328-.373-.115L6.71 13.65l-2.994-.924c-.649-.204-.659-.649.134-.96l11.783-4.545c.548-.211 1.028.133.86.942z" />
             </svg>
-            <span class="break-words">Написать в Telegram</span>
+            <span class="wrap-break-word">Написать в Telegram</span>
           </a>
         </div>
       </AppContainer>
@@ -653,6 +662,13 @@ a:focus-visible {
 }
 
 /* Ensure proper text wrapping in all browsers */
+.wrap-break-word {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
 .hyphens-auto {
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
