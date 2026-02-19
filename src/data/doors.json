@@ -1,0 +1,1338 @@
+[
+  {
+    "id": "innova01c",
+    "cover": "strong-flex",
+    "series": "innova",
+    "model": "1c",
+    "name": "Innova 01C",
+    "material": "Cосновый брус, MDF, покрытие StrongFlex",
+    "price": 11830,
+    "tags": [
+      "новинка",
+      "под заказ"
+    ],
+    "sizes": {
+      "height": [
+        2000
+      ],
+      "width": [
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "colors": [
+      {
+        "name": "Silky White",
+        "hex": "#ffffff",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova01c/innova01c-white.webp"
+      },
+      {
+        "name": "Silky Greige",
+        "hex": "#b7ab9f",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova01c/innova01c-greige.webp"
+      },
+      {
+        "name": "Silky Rock",
+        "hex": "#41424C",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova01c/innova01c-rock.webp"
+      },
+      {
+        "name": "Silky Sky",
+        "hex": "#396A85",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova01c/innova01c-silkysky.webp"
+      }
+    ],
+    "images": []
+  },
+  {
+    "id": "innova01c Crystal Cloud",
+    "cover": "strong-flex",
+    "series": "innova",
+    "model": "1c Crystal Cloud",
+    "name": "Innova 01C  Crystal Cloud",
+    "material": "Cосновый брус, MDF, покрытие StrongFlex",
+    "price": 13330,
+    "tags": [
+      "новинка",
+      "под заказ"
+    ],
+    "sizes": {
+      "height": [
+        2000
+      ],
+      "width": [
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "colors": [
+      {
+        "name": "Silky White",
+        "hex": "#ffffff",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova01cCC/innova01ccc-white.webp"
+      },
+      {
+        "name": "Silky Greige",
+        "hex": "#b7ab9f",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova01cCC/innova01ccc-greige.webp"
+      },
+      {
+        "name": "Silky Rock",
+        "hex": "#41424C",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova01cCC/innova01ccc-rock.webp"
+      },
+      {
+        "name": "Silky Sky",
+        "hex": "#396A85",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova01cCC/innova01ccc-silkysky.webp"
+      }
+    ],
+    "images": []
+  },
+  {
+    "id": "innova01st",
+    "cover": "strong-flex",
+    "series": "innova",
+    "model": "1st",
+    "name": "Innova 01ST",
+    "material": "Cосновый брус, MDF, покрытие StrongFlex",
+    "price": 11830,
+    "tags": [
+      "новинка",
+      "под заказ"
+    ],
+    "sizes": {
+      "height": [
+        2000
+      ],
+      "width": [
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "colors": [
+      {
+        "name": "Silky White",
+        "hex": "#ffffff",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova01st/innova01st-white.webp"
+      },
+      {
+        "name": "Silky Greige",
+        "hex": "#b7ab9f",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova01st/innova01st-greige.webp"
+      },
+      {
+        "name": "Silky Rock",
+        "hex": "#41424C",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova01st/innova01st-rock.webp"
+      },
+      {
+        "name": "Silky Sky",
+        "hex": "#396A85",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova01st/innova01st-silkysky.webp"
+      }
+    ],
+    "images": []
+  },
+  {
+    "id": "innova01r White Cloud",
+    "cover": "strong-flex",
+    "series": "innova",
+    "model": "1r White Cloud",
+    "name": "Innova 01R White Cloud",
+    "material": "Cосновый брус, MDF, покрытие StrongFlex",
+    "price": 13020,
+    "tags": [
+      "новинка",
+      "под заказ"
+    ],
+    "sizes": {
+      "height": [
+        2000
+      ],
+      "width": [
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "colors": [
+      {
+        "name": "Silky White",
+        "hex": "#ffffff",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova01r/innova01rwc-white.webp"
+      },
+      {
+        "name": "Silky Greige",
+        "hex": "#b7ab9f",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova01r/innova01rwc-greige.webp"
+      },
+      {
+        "name": "Silky Rock",
+        "hex": "#41424C",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova01r/innova01rwc-rock.webp"
+      },
+      {
+        "name": "Silky Sky",
+        "hex": "#396A85",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova01r/innova01rwc-silkysky.webp"
+      }
+    ],
+    "images": []
+  },
+  {
+    "id": "innova01r Air Space",
+    "cover": "strong-flex",
+    "series": "innova",
+    "model": "1r Air Space",
+    "name": "Innova 01R Air Space",
+    "material": "Cосновый брус, MDF, покрытие StrongFlex",
+    "price": 13020,
+    "tags": [
+      "новинка",
+      "под заказ"
+    ],
+    "sizes": {
+      "height": [
+        2000
+      ],
+      "width": [
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "colors": [
+      {
+        "name": "Silky White",
+        "hex": "#ffffff",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova01r/innova01rairspace-white.webp"
+      },
+      {
+        "name": "Silky Greige",
+        "hex": "#b7ab9f",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova01r/innova01rairspace-greige.webp"
+      },
+      {
+        "name": "Silky Rock",
+        "hex": "#41424C",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova01r/innova01rairspace-rock.webp"
+      },
+      {
+        "name": "Silky Sky",
+        "hex": "#396A85",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova01r/innova01rairspace-silkysky.webp"
+      }
+    ],
+    "images": []
+  },
+  {
+    "id": "innova01r Dark Cloud",
+    "cover": "strong-flex",
+    "series": "innova",
+    "model": "1r Dark Cloud",
+    "name": "Innova 01R Dark Cloud",
+    "material": "Cосновый брус, MDF, покрытие StrongFlex",
+    "price": 13020,
+    "tags": [
+      "новинка",
+      "под заказ"
+    ],
+    "sizes": {
+      "height": [
+        2000
+      ],
+      "width": [
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "colors": [
+      {
+        "name": "Silky White",
+        "hex": "#ffffff",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova01r/innova01rdc-white.webp"
+      },
+      {
+        "name": "Silky Greige",
+        "hex": "#b7ab9f",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova01r/innova01rdc-greige.webp"
+      },
+      {
+        "name": "Silky Rock",
+        "hex": "#41424C",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova01r/innova01rdc-rock.webp"
+      },
+      {
+        "name": "Silky Sky",
+        "hex": "#396A85",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova01r/innova01rdc-silkysky.webp"
+      }
+    ],
+    "images": []
+  },
+  {
+    "id": "innova02с",
+    "cover": "strong-flex",
+    "series": "innova",
+    "model": "02c",
+    "name": "Innova 02C",
+    "material": "Cосновый брус, MDF, покрытие StrongFlex",
+    "price": 11830,
+    "tags": [
+      "новинка",
+      "под заказ"
+    ],
+    "sizes": {
+      "height": [
+        2000
+      ],
+      "width": [
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "colors": [
+      {
+        "name": "Silky White",
+        "hex": "#ffffff",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova02c/innova02c-white.webp"
+      },
+      {
+        "name": "Silky Greige",
+        "hex": "#b7ab9f",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova02c/innova02c-greige.webp"
+      },
+      {
+        "name": "Silky Rock",
+        "hex": "#41424C",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova02c/innova02c-rock.webp"
+      },
+      {
+        "name": "Silky Sky",
+        "hex": "#396A85",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova02c/innova02c-silkysky.webp"
+      }
+    ],
+    "images": []
+  },
+  {
+    "id": "innova02с Crystal Cloud",
+    "cover": "strong-flex",
+    "series": "innova",
+    "model": "02c Crystal Cloud",
+    "name": "Innova 02C Crystal Cloud",
+    "material": "Cосновый брус, MDF, покрытие StrongFlex",
+    "price": 13330,
+    "tags": [
+      "новинка",
+      "под заказ"
+    ],
+    "sizes": {
+      "height": [
+        2000
+      ],
+      "width": [
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "colors": [
+      {
+        "name": "Silky White",
+        "hex": "#ffffff",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova02cCC/innova02ccc-white.webp"
+      },
+      {
+        "name": "Silky Greige",
+        "hex": "#b7ab9f",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova02cCC/innova02ccc-greige.webp"
+      },
+      {
+        "name": "Silky Rock",
+        "hex": "#41424C",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova02cCC/innova02ccc-rock.webp"
+      },
+      {
+        "name": "Silky Sky",
+        "hex": "#396A85",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova02cCC/innova02ccc-silkysky.webp"
+      }
+    ],
+    "images": []
+  },
+  {
+    "id": "innova02st",
+    "cover": "strong-flex",
+    "series": "innova",
+    "model": "02st",
+    "name": "Innova 02ST",
+    "material": "Cосновый брус, MDF, покрытие StrongFlex",
+    "price": 11830,
+    "tags": [
+      "новинка",
+      "под заказ"
+    ],
+    "sizes": {
+      "height": [
+        2000
+      ],
+      "width": [
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "colors": [
+      {
+        "name": "Silky White",
+        "hex": "#ffffff",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova02st/innova02st-white.webp"
+      },
+      {
+        "name": "Silky Greige",
+        "hex": "#b7ab9f",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova02st/innova02st-greige.webp"
+      },
+      {
+        "name": "Silky Rock",
+        "hex": "#41424C",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova02st/innova02st-rock.webp"
+      },
+      {
+        "name": "Silky Sky",
+        "hex": "#396A85",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova02st/innova02st-silkysky.webp"
+      }
+    ],
+    "images": []
+  },
+  {
+    "id": "innova02w",
+    "cover": "strong-flex",
+    "series": "innova",
+    "model": "02w",
+    "name": "Innova 02W",
+    "material": "Cосновый брус, MDF, покрытие StrongFlex",
+    "price": 11830,
+    "tags": [
+      "новинка",
+      "под заказ"
+    ],
+    "sizes": {
+      "height": [
+        2000
+      ],
+      "width": [
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "colors": [
+      {
+        "name": "Silky White",
+        "hex": "#ffffff",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova02w/innova02w-white.webp"
+      },
+      {
+        "name": "Silky Greige",
+        "hex": "#b7ab9f",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova02w/innova02w-greige.webp"
+      },
+      {
+        "name": "Silky Rock",
+        "hex": "#41424C",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova02w/innova02w-rock.webp"
+      },
+      {
+        "name": "Silky Sky",
+        "hex": "#396A85",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova02w/innova02w-silkysky.webp"
+      }
+    ],
+    "images": []
+  },
+  {
+    "id": "innova02w Crystal Cloud",
+    "cover": "strong-flex",
+    "series": "innova",
+    "model": "02w Crystal Cloud",
+    "name": "Innova 02W Crystal Cloud",
+    "material": "Cосновый брус, MDF, покрытие StrongFlex",
+    "price": 13330,
+    "tags": [
+      "новинка",
+      "под заказ"
+    ],
+    "sizes": {
+      "height": [
+        2000
+      ],
+      "width": [
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "colors": [
+      {
+        "name": "Silky White",
+        "hex": "#ffffff",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova02wCC/innova02wcc-white.webp"
+      },
+      {
+        "name": "Silky Greige",
+        "hex": "#b7ab9f",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova02wCC/innova02wcc-greige.webp"
+      },
+      {
+        "name": "Silky Rock",
+        "hex": "#41424C",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova02wCC/innova02wcc-rock.webp"
+      },
+      {
+        "name": "Silky Sky",
+        "hex": "#396A85",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova02wCC/innova02wcc-silkysky.webp"
+      }
+    ],
+    "images": []
+  },
+  {
+    "id": "innova03c",
+    "cover": "strong-flex",
+    "series": "innova",
+    "model": "03c",
+    "name": "Innova 03C",
+    "material": "Cосновый брус, MDF, покрытие StrongFlex",
+    "price": 11830,
+    "tags": [
+      "новинка",
+      "под заказ"
+    ],
+    "sizes": {
+      "height": [
+        2000
+      ],
+      "width": [
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "colors": [
+      {
+        "name": "Silky White",
+        "hex": "#ffffff",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova03cCC/innova03ccc-white.webp"
+      },
+      {
+        "name": "Silky Greige",
+        "hex": "#b7ab9f",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova03cCC/innova03ccc-greige.webp"
+      },
+      {
+        "name": "Silky Rock",
+        "hex": "#41424C",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova03cCC/innova03ccc-rock.webp"
+      },
+      {
+        "name": "Silky Sky",
+        "hex": "#396A85",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova03cCC/innova03ccc-silkysky.webp"
+      }
+    ],
+    "images": []
+  },
+  {
+    "id": "innova03c Crystal Cloud",
+    "cover": "strong-flex",
+    "series": "innova",
+    "model": "03c Crystal Cloud",
+    "name": "Innova 03C Crystal Cloud",
+    "material": "Cосновый брус, MDF, покрытие StrongFlex",
+    "price": 13330,
+    "tags": [
+      "новинка",
+      "под заказ"
+    ],
+    "sizes": {
+      "height": [
+        2000
+      ],
+      "width": [
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "colors": [
+      {
+        "name": "Silky White",
+        "hex": "#ffffff",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova03cCC/innova03ccc-white.webp"
+      },
+      {
+        "name": "Silky Greige",
+        "hex": "#b7ab9f",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova03cCC/innova03ccc-greige.webp"
+      },
+      {
+        "name": "Silky Rock",
+        "hex": "#41424C",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova03cCC/innova03ccc-rock.webp"
+      },
+      {
+        "name": "Silky Sky",
+        "hex": "#396A85",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova03cCC/innova03ccc-silkysky.webp"
+      }
+    ],
+    "images": []
+  },
+  {
+    "id": "innova03st",
+    "cover": "strong-flex",
+    "series": "innova",
+    "model": "03st",
+    "name": "Innova 03ST",
+    "material": "Cосновый брус, MDF, покрытие StrongFlex",
+    "price": 11830,
+    "tags": [
+      "новинка",
+      "под заказ"
+    ],
+    "sizes": {
+      "height": [
+        2000
+      ],
+      "width": [
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "colors": [
+      {
+        "name": "Silky White",
+        "hex": "#ffffff",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova03st/innova03st-white.webp"
+      },
+      {
+        "name": "Silky Greige",
+        "hex": "#b7ab9f",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova03st/innova03st-greige.webp"
+      },
+      {
+        "name": "Silky Rock",
+        "hex": "#41424C",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova03st/innova03st-rock.webp"
+      },
+      {
+        "name": "Silky Sky",
+        "hex": "#396A85",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova03st/innova03st-silkysky.webp"
+      }
+    ],
+    "images": []
+  },
+  {
+    "id": "innova03w",
+    "cover": "strong-flex",
+    "series": "innova",
+    "model": "03w",
+    "name": "Innova 03W",
+    "material": "Cосновый брус, MDF, покрытие StrongFlex",
+    "price": 11830,
+    "tags": [
+      "новинка",
+      "под заказ"
+    ],
+    "sizes": {
+      "height": [
+        2000
+      ],
+      "width": [
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "colors": [
+      {
+        "name": "Silky White",
+        "hex": "#ffffff",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova03w/innova03w-white.webp"
+      },
+      {
+        "name": "Silky Greige",
+        "hex": "#b7ab9f",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova03w/innova03w-greige.webp"
+      },
+      {
+        "name": "Silky Rock",
+        "hex": "#41424C",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova03w/innova03w-rock.webp"
+      },
+      {
+        "name": "Silky Sky",
+        "hex": "#396A85",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova03w/innova03w-silkysky.webp"
+      }
+    ],
+    "images": []
+  },
+  {
+    "id": "innova03w Crystal Cloud",
+    "cover": "strong-flex",
+    "series": "innova",
+    "model": "03w Crystal Cloud",
+    "name": "Innova 03W Crystal Cloud",
+    "material": "Cосновый брус, MDF, покрытие StrongFlex",
+    "price": 13330,
+    "tags": [
+      "новинка",
+      "под заказ"
+    ],
+    "sizes": {
+      "height": [
+        2000
+      ],
+      "width": [
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "colors": [
+      {
+        "name": "Silky White",
+        "hex": "#ffffff",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova03wCC/innova03wcc-white.webp"
+      },
+      {
+        "name": "Silky Greige",
+        "hex": "#b7ab9f",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova03wCC/innova03wcc-greige.webp"
+      },
+      {
+        "name": "Silky Rock",
+        "hex": "#41424C",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova03wCC/innova03wcc-rock.webp"
+      },
+      {
+        "name": "Silky Sky",
+        "hex": "#396A85",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/innova/innova03wCC/innova03wcc-silkysky.webp"
+      }
+    ],
+    "images": []
+  },
+  {
+    "id": "emalex33",
+    "cover": "emalex",
+    "series": "emalex",
+    "model": "33",
+    "name": "Emalex 33",
+    "material": "Cосновый брус, MDF, покрытие Emalex",
+    "price": 12300,
+    "tags": [
+      "в наличии"
+    ],
+    "sizes": {
+      "height": [
+        2000
+      ],
+      "width": [
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "colors": [
+      {
+        "name": "Ice",
+        "hex": "#ffffff",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalex33/emalex33-ice.webp"
+      },
+      {
+        "name": "Midwhite",
+        "hex": "#FFFDD2",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalex33/emalex33-midwhite.webp"
+      },
+      {
+        "name": "Steel",
+        "hex": "#808080",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalex33/emalex33-steel.webp"
+      },
+      {
+        "name": "Onyx",
+        "hex": "#41424C",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalex33/emalex33-onyx.webp"
+      }
+    ],
+    "images": []
+  },
+  {
+    "id": "emalexe1",
+    "cover": "emalex",
+    "series": "emalex",
+    "model": "1",
+    "name": "Emalex E1",
+    "material": "Cосновый брус, MDF, покрытие Emalex",
+    "price": 11570,
+    "tags": [
+      "хит",
+      "в наличии"
+    ],
+    "sizes": {
+      "height": [
+        2000
+      ],
+      "width": [
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "colors": [
+      {
+        "name": "Ice",
+        "hex": "#ffffff",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalex1/emalexe1-ice.webp"
+      },
+      {
+        "name": "Midwhite",
+        "hex": "#FFFDD2",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalex1/emalexe1-midwhite.webp"
+      },
+      {
+        "name": "Steel",
+        "hex": "#808080",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalex1/emalexe1-steel.webp"
+      },
+      {
+        "name": "Onyx",
+        "hex": "#41424C",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalex1/emalexe1-onyx.webp"
+      },
+      {
+        "name": "Taupe",
+        "hex": "#8C7D75",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalex1/emalexe1-taupe.webp"
+      }
+    ],
+    "images": []
+  },
+  {
+    "id": "emalexe2",
+    "cover": "emalex",
+    "series": "emalex",
+    "model": "2",
+    "name": "Emalex E2",
+    "material": "Cосновый брус, MDF, покрытие Emalex",
+    "price": 11570,
+    "tags": [
+      "хит",
+      "в наличии"
+    ],
+    "sizes": {
+      "height": [
+        2000
+      ],
+      "width": [
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "colors": [
+      {
+        "name": "Ice",
+        "hex": "#ffffff",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalex2/emalexe2-ice.webp"
+      },
+      {
+        "name": "Midwhite",
+        "hex": "#FFFDD2",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalex2/emalexe2-midwhite.webp"
+      },
+      {
+        "name": "Steel",
+        "hex": "#808080",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalex2/emalexe2-steel.webp"
+      },
+      {
+        "name": "Onyx",
+        "hex": "#41424C",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalex2/emalexe2-onyx.webp"
+      },
+      {
+        "name": "Taupe",
+        "hex": "#8C7D75",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalex2/emalexe2-taupe.webp"
+      }
+    ],
+    "images": []
+  },
+  {
+    "id": "emalexec2",
+    "cover": "emalex",
+    "series": "emalex",
+    "model": "c2",
+    "name": "Emalex EC2",
+    "material": "Cосновый брус, MDF, покрытие Emalex",
+    "price": 8030,
+    "tags": [
+      "акция",
+      "в наличии"
+    ],
+    "sizes": {
+      "height": [
+        2000
+      ],
+      "width": [
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "colors": [
+      {
+        "name": "Ice",
+        "hex": "#ffffff",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexec2/emalexec2-ice.webp"
+      },
+      {
+        "name": "Midwhite",
+        "hex": "#FFFDD2",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexec2/emalexec2-midwhite.webp"
+      },
+      {
+        "name": "Steel",
+        "hex": "#808080",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexec2/emalexec2-steel.webp"
+      },
+      {
+        "name": "Onyx",
+        "hex": "#41424C",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexec2/emalexec2-onyx.webp"
+      },
+      {
+        "name": "Taupe",
+        "hex": "#8C7D75",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexec2/emalexec2-taupe.webp"
+      }
+    ],
+    "images": []
+  },
+  {
+    "id": "emalexec2сс",
+    "cover": "emalex",
+    "series": "emalex",
+    "model": "c2",
+    "name": "Emalex EC2 Crystal Cloud",
+    "material": "Cосновый брус, MDF, покрытие Emalex",
+    "price": 8500,
+    "tags": [
+      "в наличии"
+    ],
+    "sizes": {
+      "height": [
+        2000
+      ],
+      "width": [
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "colors": [
+      {
+        "name": "Ice",
+        "hex": "#ffffff",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexec2c/emalexec2cc-ice.webp"
+      },
+      {
+        "name": "Midwhite",
+        "hex": "#FFFDD2",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexec2c/emalexec2cc-midwhite.webp"
+      },
+      {
+        "name": "Steel",
+        "hex": "#808080",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexec2c/emalexec2cc-steel.webp"
+      },
+      {
+        "name": "Onyx",
+        "hex": "#41424C",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexec2c/emalexec2cc-onyx.webp"
+      },
+      {
+        "name": "Taupe",
+        "hex": "#8C7D75",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexec2c/emalexec2cc-taupe.webp"
+      }
+    ],
+    "images": []
+  },
+  {
+    "id": "emalexe3",
+    "cover": "emalex",
+    "series": "emalex",
+    "model": "e3",
+    "name": "Emalex E3",
+    "material": "Cосновый брус, MDF, покрытие Emalex",
+    "price": 12310,
+    "tags": [
+      "в наличии",
+      "хит"
+    ],
+    "sizes": {
+      "height": [
+        2000
+      ],
+      "width": [
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "colors": [
+      {
+        "name": "Ice",
+        "hex": "#ffffff",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexe3/emalexe3-ice.webp"
+      },
+      {
+        "name": "Midwhite",
+        "hex": "#FFFDD2",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexe3/emalexe3-midwhite.webp"
+      },
+      {
+        "name": "Steel",
+        "hex": "#808080",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexe3/emalexe3-steel.webp"
+      },
+      {
+        "name": "Onyx",
+        "hex": "#41424C",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexe3/emalexe3-onyx.webp"
+      },
+      {
+        "name": "Taupe",
+        "hex": "#8C7D75",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexe3/emalexe3-taupe.webp"
+      }
+    ],
+    "images": []
+  },
+  {
+    "id": "emalexer1wc",
+    "cover": "emalex",
+    "series": "emalex",
+    "model": "er1wc",
+    "name": "Emalex ER1 White Cloud",
+    "material": "Cосновый брус, MDF, покрытие Emalex",
+    "price": 9400,
+    "tags": [
+      "в наличии"
+    ],
+    "sizes": {
+      "height": [
+        2000
+      ],
+      "width": [
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "colors": [
+      {
+        "name": "Ice",
+        "hex": "#ffffff",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexer1wc/emalexer1wc-ice.webp"
+      },
+      {
+        "name": "Midwhite",
+        "hex": "#FFFDD2",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexer1wc/emalexer1wc-midwhite.webp"
+      },
+      {
+        "name": "Steel",
+        "hex": "#808080",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexer1wc/emalexer1wc-steel.webp"
+      },
+      {
+        "name": "Onyx",
+        "hex": "#41424C",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexer1wc/emalexer1wc-onyx.webp"
+      },
+      {
+        "name": "Taupe",
+        "hex": "#8C7D75",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexer1wc/emalexer1wc-taupe.webp"
+      }
+    ],
+    "images": []
+  },
+  {
+    "id": "emalexer1",
+    "cover": "emalex",
+    "series": "emalex",
+    "model": "er1",
+    "name": "Emalex ER1",
+    "material": "Cосновый брус, MDF, покрытие Emalex",
+    "price": 9400,
+    "tags": [
+      "в наличии",
+      "хит"
+    ],
+    "sizes": {
+      "height": [
+        2000
+      ],
+      "width": [
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "colors": [
+      {
+        "name": "Ice",
+        "hex": "#ffffff",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexer1/emalexer1-ice.webp"
+      },
+      {
+        "name": "Midwhite",
+        "hex": "#FFFDD2",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexer1/emalexer1-midwhite.webp"
+      },
+      {
+        "name": "Steel",
+        "hex": "#808080",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexer1/emalexer1-steel.webp"
+      },
+      {
+        "name": "Onyx",
+        "hex": "#41424C",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexer1/emalexer1-onyx.webp"
+      },
+      {
+        "name": "Taupe",
+        "hex": "#8C7D75",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexer1/emalexer1-taupe.webp"
+      }
+    ],
+    "images": []
+  },
+  {
+    "id": "emalexer2wc",
+    "cover": "emalex",
+    "series": "emalex",
+    "model": "er2wc",
+    "name": "Emalex ER2 White Cloud",
+    "material": "Cосновый брус, MDF, покрытие Emalex",
+    "price": 10970,
+    "tags": [
+      "в наличии"
+    ],
+    "sizes": {
+      "height": [
+        2000
+      ],
+      "width": [
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "colors": [
+      {
+        "name": "Ice",
+        "hex": "#ffffff",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexer2wc/emalexer2wc-ice.webp"
+      },
+      {
+        "name": "Midwhite",
+        "hex": "#FFFDD2",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexer2wc/emalexer2wc-midwhite.webp"
+      },
+      {
+        "name": "Steel",
+        "hex": "#808080",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexer2wc/emalexer2wc-steel.webp"
+      },
+      {
+        "name": "Onyx",
+        "hex": "#41424C",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexer2wc/emalexer2wc-onyx.webp"
+      },
+      {
+        "name": "Taupe",
+        "hex": "#8C7D75",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/emalex/emalexer2wc/emalexer2wc-taupe.webp"
+      }
+    ],
+    "images": []
+  },
+  {
+    "id": "invisible",
+    "cover": "под покраску",
+    "series": "invisible",
+    "model": "invisiblesilver",
+    "name": "Скрытая дверь Invisible Silver Edition",
+    "material": "Алюминиевая кромка хром, MDF, покрытие грунтовое под покраску",
+    "price": 11360,
+    "tags": [
+      "в наличии",
+      "хит"
+    ],
+    "sizes": {
+      "height": [
+        2000
+      ],
+      "width": [
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "colors": [
+      {
+        "name": "Грунт",
+        "hex": "#C0C0C0",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/invisible/invisble.webp"
+      }
+    ],
+    "images": []
+  },
+  {
+    "id": "invisibleblack",
+    "cover": "под покраску",
+    "series": "invisible",
+    "model": "invisibleblack",
+    "name": "Скрытая дверь Invisible Black Edition",
+    "material": "Алюминиевая кромка чёрная, MDF, покрытие грунтовое под покраску",
+    "price": 11360,
+    "tags": [
+      "в наличии"
+    ],
+    "sizes": {
+      "height": [
+        2000
+      ],
+      "width": [
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "colors": [
+      {
+        "name": "Грунт",
+        "hex": "#000000",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/invisible/invisble.webp"
+      }
+    ],
+    "images": []
+  },
+  {
+    "id": "invisiblereverse",
+    "cover": "под покраску",
+    "series": "invisible",
+    "model": "invisiblereverse",
+    "name": "Скрытая дверь Invisible Reverse SE",
+    "material": "Алюминиевая кромка хром реверсивного типа, MDF, покрытие грунтовое под покраску",
+    "price": 15910,
+    "tags": [
+      "в наличии"
+    ],
+    "sizes": {
+      "height": [
+        2000
+      ],
+      "width": [
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "colors": [
+      {
+        "name": "Грунт",
+        "hex": "#C0C0C0",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/invisible/reverse.webp"
+      }
+    ],
+    "images": []
+  },
+  {
+    "id": "invisiblereversebe",
+    "cover": "под покраску",
+    "series": "invisible",
+    "model": "invisiblereverse",
+    "name": "Скрытая дверь Invisible Reverse BE",
+    "material": "Алюминиевая кромка чёрная реверсивного типа, MDF, покрытие грунтовое под покраску",
+    "price": 15910,
+    "tags": [
+      "в наличии"
+    ],
+    "sizes": {
+      "height": [
+        2000
+      ],
+      "width": [
+        600,
+        700,
+        800,
+        900
+      ]
+    },
+    "colors": [
+      {
+        "name": "Грунт",
+        "hex": "#000000",
+        "image": "https://storage.yandexcloud.net/catalog-vfd/invisible/reverse.webp"
+      }
+    ],
+    "images": []
+  }
+]

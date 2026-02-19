@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+/* ==================================================
+   BASE
+================================================== */
+
+html {
+  scroll-padding-top: var(--header-height, 0px);
+}
+
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* ==================================================
+   LAYOUT SYSTEM
+   (единая ширина, отступы, ритм)
+================================================== */
+
+/* Контейнер сайта — ИСТИНА */
+.app-container {
+  @apply mx-auto w-full px-4 sm:px-6 lg:px-8;
+  max-width: 1280px;
+}
+
+/* ==================================================
+   UI COMPONENTS
+================================================== */
+
+
+.ui-button {
+  @apply inline-flex items-center justify-center gap-2
+    px-5 h-11
+    rounded-full
+    text-sm font-medium
+    border
+    transition-all duration-200 ease-out
+    focus:outline-none
+    select-none;
+}
+
+/* Primary */
+.ui-button--primary {
+  @apply border-white/30
+    bg-white/10
+    text-white
+    backdrop-blur-sm;
+
+  @apply hover:bg-white/20
+    hover:border-white/40
+    hover:-translate-y-px;
+
+  @apply active:bg-white/25
+    active:translate-y-0
+    active:border-white/50;
+
+  @apply focus-visible:ring-2
+    focus-visible:ring-white/40
+    focus-visible:ring-offset-2
+    focus-visible:ring-offset-transparent;
+}
+
+/* Ghost */
+.ui-button--ghost {
+  @apply border-white/20
+    bg-transparent
+    text-white/80;
+
+  @apply hover:bg-white/10
+    hover:text-white
+    hover:border-white/30
+    hover:-translate-y-px;
+
+  @apply active:bg-white/15
+    active:translate-y-0;
+
+  @apply focus-visible:ring-2
+    focus-visible:ring-white/30
+    focus-visible:ring-offset-2
+    focus-visible:ring-offset-transparent;
+}
