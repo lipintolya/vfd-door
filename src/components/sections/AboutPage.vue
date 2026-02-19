@@ -143,10 +143,10 @@ onUnmounted(() => {
               <p class="text-xs uppercase tracking-widest text-white/70 mb-2">
                 О нашем салоне
               </p>
-              <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight">
+              <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight break-words">
                 VFD Кашириных — фирменный салон фабрики
               </h1>
-              <p class="text-sm sm:text-base lg:text-lg text-white/90 mt-3 sm:mt-4 max-w-2xl leading-relaxed">
+              <p class="text-sm sm:text-base lg:text-lg text-white/90 mt-3 sm:mt-4 max-w-full sm:max-w-2xl leading-relaxed break-words">
                 Работаем с 2015 года. Более 200 образцов дверей и перегородок, работа с дизайнерами и коммерческими проектами.
               </p>
               <div class="flex flex-wrap gap-3 mt-5 sm:mt-6">
@@ -194,48 +194,48 @@ onUnmounted(() => {
     <div class="pb-8 sm:pb-12 lg:pb-16 bg-white">
       <AppContainer>
         <div class="max-w-4xl mx-auto">
-          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-zinc-900 mb-5 sm:mb-6 lg:mb-8">
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-zinc-900 mb-5 sm:mb-6 lg:mb-8 break-words">
             О салоне VFD Кашириных
           </h2>
 
           <div class="space-y-4 sm:space-y-5 lg:space-y-6 text-base sm:text-lg text-zinc-700 leading-relaxed">
-            <p>
+            <p class="break-words">
               <strong class="text-zinc-900">VFD Кашириных</strong> — это фирменный салон фабрики дверей, где качество и профессионализм встречаются в каждом проекте. Работаем с 2015 года и накопили огромный опыт в работе с межкомнатными и входными дверями, а также алюминиевыми перегородками.
             </p>
 
             <div class="bg-teal-50 border-l-4 border-teal-600 p-4 sm:p-5 lg:p-6 rounded-xl">
-              <h3 class="text-lg sm:text-xl font-bold text-zinc-900 mb-3 sm:mb-4">
+              <h3 class="text-lg sm:text-xl font-bold text-zinc-900 mb-3 sm:mb-4 break-words">
                 Что нас отличает
               </h3>
               <ul class="space-y-2 sm:space-y-2.5 text-zinc-800">
                 <li class="flex items-start gap-2">
                   <span class="text-teal-600 font-bold shrink-0 mt-0.5">✓</span>
-                  <span><strong class="font-semibold">Большая выставка</strong> — более 500 образцов межкомнатных и входных дверей</span>
+                  <span class="break-words"><strong class="font-semibold">Большая выставка</strong> — более 500 образцов межкомнатных и входных дверей</span>
                 </li>
                 <li class="flex items-start gap-2">
                   <span class="text-teal-600 font-bold shrink-0 mt-0.5">✓</span>
-                  <span><strong class="font-semibold">Фирменный статус</strong> — прямое сотрудничество с фабрикой для лучших цен</span>
+                  <span class="break-words"><strong class="font-semibold">Фирменный статус</strong> — прямое сотрудничество с фабрикой для лучших цен</span>
                 </li>
                 <li class="flex items-start gap-2">
                   <span class="text-teal-600 font-bold shrink-0 mt-0.5">✓</span>
-                  <span><strong class="font-semibold">Работа с дизайнерами</strong> — консультации и реализация дизайн-проектов</span>
+                  <span class="break-words"><strong class="font-semibold">Работа с дизайнерами</strong> — консультации и реализация дизайн-проектов</span>
                 </li>
                 <li class="flex items-start gap-2">
                   <span class="text-teal-600 font-bold shrink-0 mt-0.5">✓</span>
-                  <span><strong class="font-semibold">Коммерческие проекты</strong> — опыт работы с офисами, ресторанами и магазинами</span>
+                  <span class="break-words"><strong class="font-semibold">Коммерческие проекты</strong> — опыт работы с офисами, ресторанами и магазинами</span>
                 </li>
                 <li class="flex items-start gap-2">
                   <span class="text-teal-600 font-bold shrink-0 mt-0.5">✓</span>
-                  <span><strong class="font-semibold">Полный спектр услуг</strong> — от выбора до монтажа и обслуживания</span>
+                  <span class="break-words"><strong class="font-semibold">Полный спектр услуг</strong> — от выбора до монтажа и обслуживания</span>
                 </li>
               </ul>
             </div>
 
-            <p>
+            <p class="break-words">
               Мы работаем как с частными клиентами, так и с дизайн-бюро и коммерческими компаниями. Для каждого проекта находим идеальное решение, которое соответствует бюджету, стилю и функциональности.
             </p>
 
-            <p>
+            <p class="break-words">
               Наша команда состоит из опытных специалистов: проектировщиков, мастеров по монтажу и консультантов. Мы гарантируем качество работы, честное консультирование и сервис на высшем уровне.
             </p>
           </div>
@@ -574,32 +574,32 @@ onUnmounted(() => {
     <!-- CTA SECTION -->
     <div class="bg-linear-to-r from-teal-600 to-zinc-900 text-white">
       <AppContainer class="py-12 sm:py-16 lg:py-20 text-center space-y-5 sm:space-y-6">
-        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold">
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold break-words px-2">
           Готовы начать проект?
         </h2>
-        <p class="text-base sm:text-lg max-w-2xl mx-auto text-white/90">
+        <p class="text-base sm:text-lg max-w-2xl mx-auto text-white/90 px-2 break-words">
           Мы ответим на все вопросы и поможем с выбором дверей и перегородок, которые идеально подойдут для вашего интерьера.
         </p>
-        <div class="flex flex-col sm:flex-row justify-center gap-4 pt-4">
+        <div class="flex flex-col sm:flex-row justify-center gap-4 pt-4 px-2">
           <a
             href="tel:+79000297888"
-            class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-white text-teal-700 font-bold hover:bg-gray-100 transition-all duration-200 hover:shadow-lg hover:shadow-teal-500/30 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-teal-600"
+            class="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-4 rounded-full bg-white text-teal-700 font-bold hover:bg-gray-100 transition-all duration-200 hover:shadow-lg hover:shadow-teal-500/30 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-teal-600 break-words max-w-full"
           >
-            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
             </svg>
-            <span>Позвонить</span>
+            <span class="break-words">Позвонить</span>
           </a>
           <a
             href="https://t.me/vfddoors74"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full border-2 border-white text-white hover:bg-white/10 font-bold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-teal-600"
+            class="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-4 rounded-full border-2 border-white text-white hover:bg-white/10 font-bold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-teal-600 break-words max-w-full"
           >
-            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+            <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295-.042 0-.084 0-.127-.01l.214-3.054 5.56-5.023c.242-.213-.054-.328-.373-.115L6.71 13.65l-2.994-.924c-.649-.204-.659-.649.134-.96l11.783-4.545c.548-.211 1.028.133.86.942z" />
             </svg>
-            <span>Написать в Telegram</span>
+            <span class="break-words">Написать в Telegram</span>
           </a>
         </div>
       </AppContainer>
