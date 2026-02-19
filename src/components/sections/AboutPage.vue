@@ -134,7 +134,7 @@ onUnmounted(() => {
                 // Mobile: fixed height
                 'h-72 sm:h-auto',
                 // Desktop: aspect ratio
-                'sm:aspect-[16/9] lg:aspect-[21/9]'
+                'sm:aspect-video lg:aspect-21/9'
               ]"
               fetchpriority="high"
               @load="handleImageLoad('hero')"
@@ -148,14 +148,14 @@ onUnmounted(() => {
             <div class="absolute inset-0 bg-linear-to-t from-black/70 via-black/40 to-transparent sm:block hidden" />
             <div class="absolute inset-0 bg-linear-to-t from-black/85 via-black/60 to-transparent sm:hidden block" />
 
-            <div class="relative z-10 p-4 sm:p-6 lg:p-8 text-white pb-6 sm:pb-16 sm:pb-20 lg:pb-24 w-full">
-              <p class="text-xs uppercase tracking-widest text-white/70 mb-2 break-words">
+            <div class="relative z-10 p-4 sm:p-6 lg:p-8 text-white pb-6 sm:pb-16 lg:pb-24 w-full">
+              <p class="text-xs uppercase tracking-widest text-white/70 mb-2 wrap-break-word">
                 О нашем салоне
               </p>
-              <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold leading-tight break-words max-w-full">
+              <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold leading-tight wrap-break-word max-w-full">
                 VFD Кашириных — фирменный салон фабрики
               </h1>
-              <p class="text-sm sm:text-base lg:text-lg text-white/90 mt-2 sm:mt-3 max-w-full sm:max-w-2xl leading-relaxed break-words">
+              <p class="text-sm sm:text-base lg:text-lg text-white/90 mt-2 sm:mt-3 max-w-full sm:max-w-2xl leading-relaxed wrap-break-word">
                 Работаем с 2015 года. Более 200 образцов дверей и перегородок, работа с дизайнерами и коммерческими проектами.
               </p>
               <div class="flex flex-wrap gap-2 sm:gap-3 mt-4 sm:mt-5">
