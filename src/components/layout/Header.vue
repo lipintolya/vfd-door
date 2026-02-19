@@ -52,6 +52,8 @@ const logoError = ref(false)
 
 const contactsBtnRef = ref<HTMLButtonElement | null>(null)
 const contactsPanelRef = ref<HTMLDivElement | null>(null)
+const mobileMenuRef = ref<HTMLDivElement | null>(null)
+const burgerBtnRef = ref<HTMLButtonElement | null>(null)
 
 /* ================= HELPERS ================= */
 const isActive = (path: string) => route.path === path
@@ -70,25 +72,53 @@ const onScroll = () => {
 const onKeydown = (ev: KeyboardEvent) => {
   if (ev.key === 'Escape') {
     if (mobileOpen.value) closeMobileMenu()
+    if (contactsOpen.value) closeContacts()
+  }
+}
+
+// Закрытие по клику вне панелей
+const onClickOutside = (ev: MouseEvent) => {
+  const target = ev.target as Node
+
+  if (
+    contactsOpen.value &&
+    contactsPanelRef.value &&
+    !contactsPanelRef.value.contains(target) &&
+    !contactsBtnRef.value?.contains(target)
+  ) {
     closeContacts()
+  }
+
+  if (
+    mobileOpen.value &&
+    mobileMenuRef.value &&
+    !mobileMenuRef.value.contains(target) &&
+    !burgerBtnRef.value?.contains(target)
+  ) {
+    closeMobileMenu()
   }
 }
 
 /* ================= MOBILE MENU ================= */
 const openMobileMenu = () => {
   mobileOpen.value = true
-  // Prevent body scroll when menu is open
   document.body.style.overflow = 'hidden'
 }
 
 const closeMobileMenu = () => {
   mobileOpen.value = false
-  // Restore body scroll
   document.body.style.overflow = ''
 }
 
 const toggleMobileMenu = () => {
   mobileOpen.value ? closeMobileMenu() : openMobileMenu()
+}
+
+// Закрываем мобильное меню при переходе на десктоп
+const onResize = () => {
+  if (window.innerWidth >= 768 && mobileOpen.value) {
+    closeMobileMenu()
+  }
 }
 
 /* ================= CONTACTS ================= */
@@ -131,14 +161,17 @@ onMounted(() => {
   setHeaderVar()
   window.addEventListener('scroll', onScroll, { passive: true })
   window.addEventListener('keydown', onKeydown)
+  window.addEventListener('resize', onResize)
+  // Используем capture, чтобы перехватить клик раньше других обработчиков
+  document.addEventListener('click', onClickOutside, { capture: true })
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', onScroll)
   window.removeEventListener('keydown', onKeydown)
-  // Принудительный cleanup для предотвращения утечки памяти
+  window.removeEventListener('resize', onResize)
+  document.removeEventListener('click', onClickOutside, { capture: true })
   document.body.style.overflow = ''
-  document.body.style.paddingRight = ''
 })
 </script>
 
@@ -192,13 +225,13 @@ onUnmounted(() => {
 
         <!-- DESKTOP NAV -->
         <nav class="hidden md:flex gap-8 text-sm">
-          <RouterLink to="/" :class="isActive('/') ? 'text-black' : 'text-gray-600'">
+          <RouterLink to="/" :class="isActive('/') ? 'text-black font-semibold' : 'text-gray-600'">
             Главная
           </RouterLink>
-          <RouterLink to="/catalog" :class="isActive('/catalog') ? 'text-black' : 'text-gray-600'">
+          <RouterLink to="/catalog" :class="isActive('/catalog') ? 'text-black font-semibold' : 'text-gray-600'">
             Каталог
           </RouterLink>
-          <RouterLink to="/about" :class="isActive('/about') ? 'text-black' : 'text-gray-600'">
+          <RouterLink to="/about" :class="isActive('/about') ? 'text-black font-semibold' : 'text-gray-600'">
             О нас
           </RouterLink>
         </nav>
@@ -212,10 +245,10 @@ onUnmounted(() => {
               :key="s.name"
               :href="s.url"
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
               :aria-label="s.ariaLabel"
             >
-              <img :src="s.icon" class="w-7 h-7" />
+              <img :src="s.icon" class="w-7 h-7" :alt="s.label" />
             </a>
           </div>
 
@@ -238,114 +271,128 @@ onUnmounted(() => {
                 :key="s.name"
                 :href="s.url"
                 target="_blank"
-                rel="noopener"
+                rel="noopener noreferrer"
                 :aria-label="s.ariaLabel"
               >
-                <img :src="s.icon" class="w-7 h-7" />
+                <img :src="s.icon" class="w-7 h-7" :alt="s.label" />
               </a>
             </div>
 
             <button
+              ref="burgerBtnRef"
               class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors shrink-0"
               @click="toggleMobileMenu"
               :aria-expanded="mobileOpen"
               aria-label="Открыть меню навигации"
               type="button"
             >
-              <img :src="mobileOpen ? CloseIcon : BurgerIcon" class="w-6 h-6" />
+              <img :src="mobileOpen ? CloseIcon : BurgerIcon" class="w-6 h-6" alt="" />
             </button>
           </div>
         </div>
       </div>
 
-      <!-- CONTACTS POPOVER (DESKTOP) -->
-      <div
-        v-if="contactsOpen"
-        ref="contactsPanelRef"
-        class="hidden md:block mt-3 ml-auto w-[20rem] rounded-2xl
-               bg-white border shadow-lg p-4"
-        role="dialog"
-      >
-        <div class="space-y-3 text-sm">
-          <div>
-            <div class="text-xs text-gray-500 mb-1">Телефоны</div>
-            <a
-              v-for="p in CONTACTS.phones"
-              :key="p.raw"
-              :href="`tel:${p.raw}`"
-              class="block font-medium hover:text-teal-600 transition-colors"
-            >
-              {{ p.label }}
-            </a>
-          </div>
-
-          <div>
-            <div class="text-xs text-gray-500 mb-1">Адрес</div>
-            <div class="wrap-break-word text-gray-700">
-              {{ CONTACTS.address }}
+      <!-- CONTACTS POPOVER (DESKTOP ONLY) -->
+      <Transition name="fade-slide">
+        <div
+          v-if="contactsOpen"
+          ref="contactsPanelRef"
+          class="hidden md:block mt-3 ml-auto w-[20rem] rounded-2xl
+                 bg-white border shadow-lg p-4"
+          role="dialog"
+          aria-label="Контактная информация"
+          aria-modal="false"
+        >
+          <div class="space-y-3 text-sm">
+            <div>
+              <div class="text-xs text-gray-500 mb-1">Телефоны</div>
+              <a
+                v-for="p in CONTACTS.phones"
+                :key="p.raw"
+                :href="`tel:${p.raw}`"
+                class="block font-medium hover:text-teal-600 transition-colors"
+              >
+                {{ p.label }}
+              </a>
             </div>
-          </div>
 
-          <div>
-            <div class="text-xs text-gray-500 mb-1">Время работы</div>
-            <div>{{ CONTACTS.worktime }}</div>
-          </div>
+            <div>
+              <div class="text-xs text-gray-500 mb-1">Адрес</div>
+              <!-- ИСПРАВЛЕНО: wrap-break-word → break-words -->
+              <div class="wrap-break-word text-gray-700">
+                {{ CONTACTS.address }}
+              </div>
+            </div>
 
-          <div>
-            <div class="text-xs text-gray-500 mb-1">Почта</div>
-            <a :href="`mailto:${CONTACTS.email}`" class="underline hover:text-teal-600 transition-colors">
-              {{ CONTACTS.email }}
-            </a>
-          </div>
+            <div>
+              <div class="text-xs text-gray-500 mb-1">Время работы</div>
+              <div>{{ CONTACTS.worktime }}</div>
+            </div>
 
-          <button class="header-btn w-full" @click="callPrimary">
-            Позвонить
-          </button>
+            <div>
+              <div class="text-xs text-gray-500 mb-1">Почта</div>
+              <a :href="`mailto:${CONTACTS.email}`" class="underline hover:text-teal-600 transition-colors">
+                {{ CONTACTS.email }}
+              </a>
+            </div>
+
+            <button class="header-btn w-full" @click="callPrimary">
+              Позвонить
+            </button>
+          </div>
         </div>
-      </div>
+      </Transition>
 
       <!-- MOBILE MENU -->
-      <div
-        v-if="mobileOpen"
-        class="md:hidden fixed left-0 right-0 top-[calc(1rem+env(safe-area-inset-top)+72px)] z-50
-               mx-4 rounded-2xl bg-white border shadow-xl p-4"
-      >
-        <nav class="flex flex-col gap-3">
-          <RouterLink 
-            to="/" 
-            @click="closeMobileMenu"
-            class="px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors text-base font-medium"
-          >
-            Главная
-          </RouterLink>
-          <RouterLink 
-            to="/catalog" 
-            @click="closeMobileMenu"
-            class="px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors text-base font-medium"
-          >
-            Каталог
-          </RouterLink>
-          <RouterLink 
-            to="/about" 
-            @click="closeMobileMenu"
-            class="px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors text-base font-medium"
-          >
-            О нас
-          </RouterLink>
-
-          <div class="pt-3 border-t">
-            <a
-              v-for="p in CONTACTS.phones"
-              :key="p.raw"
-              :href="`tel:${p.raw}`"
-              class="block text-center header-btn mb-2"
+      <Transition name="fade-slide">
+        <div
+          v-if="mobileOpen"
+          ref="mobileMenuRef"
+          class="md:hidden fixed left-0 right-0 z-55 mx-4 rounded-2xl bg-white border shadow-xl p-4"
+          :style="{ top: `calc(1rem + env(safe-area-inset-top, 0px) + ${HEADER_HEIGHT}px + 0.75rem)` }"
+          role="navigation"
+          aria-label="Мобильное меню"
+        >
+          <nav class="flex flex-col gap-1">
+            <RouterLink
+              to="/"
               @click="closeMobileMenu"
+              class="px-4 py-3 rounded-xl transition-colors text-base font-medium"
+              :class="isActive('/') ? 'bg-gray-100 text-black' : 'hover:bg-gray-50 text-gray-700'"
             >
-              {{ p.label }}
-            </a>
-          </div>
-        </nav>
-      </div>
+              Главная
+            </RouterLink>
+            <RouterLink
+              to="/catalog"
+              @click="closeMobileMenu"
+              class="px-4 py-3 rounded-xl transition-colors text-base font-medium"
+              :class="isActive('/catalog') ? 'bg-gray-100 text-black' : 'hover:bg-gray-50 text-gray-700'"
+            >
+              Каталог
+            </RouterLink>
+            <RouterLink
+              to="/about"
+              @click="closeMobileMenu"
+              class="px-4 py-3 rounded-xl transition-colors text-base font-medium"
+              :class="isActive('/about') ? 'bg-gray-100 text-black' : 'hover:bg-gray-50 text-gray-700'"
+            >
+              О нас
+            </RouterLink>
+
+            <div class="pt-3 border-t flex flex-col gap-2">
+              <a
+                v-for="p in CONTACTS.phones"
+                :key="p.raw"
+                :href="`tel:${p.raw}`"
+                class="block text-center header-btn"
+                @click="closeMobileMenu"
+              >
+                {{ p.label }}
+              </a>
+            </div>
+          </nav>
+        </div>
+      </Transition>
     </div>
   </header>
 </template>
@@ -370,5 +417,17 @@ onUnmounted(() => {
 :focus-visible {
   outline: 2px solid rgb(45 212 191); /* teal-400 */
   outline-offset: 3px;
+}
+
+/* Анимация для меню и попапа */
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.fade-slide-enter-from,
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
 }
 </style>

@@ -15,84 +15,73 @@ interface StatItem {
 // ========================
 const breadcrumbs = computed<BreadcrumbItem[]>(() => [
   { label: 'Главная', path: '/' },
-  { label: 'О компании', isActive: true }
+  { label: 'О компании', isActive: true },
 ])
 
 // ========================
-// DATA
+// CONFIG
 // ========================
 const TELEGRAM_URL = 'https://t.me/vfddoors74'
 const YANDEX_MAPS_URL = 'https://yandex.ru/maps/org/vladimirskaya_fabrika_dverey/17517257940/'
 
 const stats: StatItem[] = [
-  { id: 'years', value: '9+', label: 'лет на рынке' },
-  { id: 'clients', value: '2000+', label: 'довольных клиентов' },
-  { id: 'projects', value: '150+', label: 'коммерческих проектов' },
-  { id: 'doors', value: '500+', label: 'образцов в выставке' }
+  { id: 'years',    value: '9+',    label: 'лет на рынке' },
+  { id: 'clients',  value: '2000+', label: 'довольных клиентов' },
+  { id: 'projects', value: '150+',  label: 'коммерческих проектов' },
+  { id: 'doors',    value: '500+',  label: 'образцов в выставке' },
 ]
 
-// Реквизиты компании
 const companyDetails = {
-  name: 'ООО "Владимирская Фабрика Дверей"',
-  inn: '3333000000',
-  kpp: '333301001',
-  ogrn: '1153333000000',
-  legalAddress: '600000, Владимирская обл., г. Владимир, ул. Примерная, д. 1',
-  postalAddress: '454000, г. Челябинск, ул. Братьев Кашириных, 131Б',
-  bankName: 'ПАО "Сбербанк России"',
-  bik: '044525225',
-  account: '40702810000000000000',
-  correspondentAccount: '30101810400000000225',
-  director: 'Генеральный директор: Петров Владимир Сергеевич',
-  phone: '+7 (900) 029-78-88',
-  email: 'vfddoors74@mail.ru'
+  name:                'ООО "Владимирская Фабрика Дверей"',
+  inn:                 '3333000000',
+  kpp:                 '333301001',
+  ogrn:                '1153333000000',
+  legalAddress:        '600000, Владимирская обл., г. Владимир, ул. Примерная, д. 1',
+  postalAddress:       '454000, г. Челябинск, ул. Братьев Кашириных, 131Б',
+  bankName:            'ПАО "Сбербанк России"',
+  bik:                 '044525225',
+  account:             '40702810000000000000',
+  correspondentAccount:'30101810400000000225',
+  director:            'Генеральный директор: Петров Владимир Сергеевич',
+  phone:               '+7 (900) 029-78-88',
+  phoneRaw:            '+79000297888',
+  email:               'vfddoors74@mail.ru',
 }
 
-// QR код для СБП (заглушка, заменить на реальный QR)
 const sbpQrCode = 'https://storage.yandexcloud.net/catalog-vfd/sbp-qr-placeholder.png'
 
 // ========================
-// IMAGE LOADING STATE
+// IMAGE STATE
 // ========================
 const heroImageLoaded = ref(false)
-const mapImageLoaded = ref(false)
-const qrImageLoaded = ref(false)
-const imageErrors = ref<Set<string>>(new Set())
+const mapImageLoaded  = ref(false)
+const qrImageLoaded   = ref(false)
+const imageErrors     = ref<Set<string>>(new Set())
 
-const handleImageLoad = (id: string) => {
+const handleImageLoad  = (id: string) => {
   if (id === 'hero') heroImageLoaded.value = true
-  if (id === 'map') mapImageLoaded.value = true
-  if (id === 'qr') qrImageLoaded.value = true
+  if (id === 'map')  mapImageLoaded.value  = true
+  if (id === 'qr')   qrImageLoaded.value   = true
 }
 
 const handleImageError = (id: string) => {
-  imageErrors.value.add(id)
+  imageErrors.value = new Set([...imageErrors.value, id])
 }
 
 // ========================
 // ACTIONS
 // ========================
-const openTelegram = (): void => {
-  window.open(TELEGRAM_URL, '_blank', 'noopener,noreferrer')
-}
-
-const openYandexMaps = (): void => {
-  window.open(YANDEX_MAPS_URL, '_blank', 'noopener,noreferrer')
-}
+const openTelegram   = () => window.open(TELEGRAM_URL,   '_blank', 'noopener,noreferrer')
+const openYandexMaps = () => window.open(YANDEX_MAPS_URL, '_blank', 'noopener,noreferrer')
 
 // ========================
 // LIFECYCLE
 // ========================
 onMounted(() => {
   document.title = 'О компании VFD Кашириных — фирменный салон фабрики дверей'
-
-  const metaDescription = document.querySelector('meta[name="description"]')
-  if (metaDescription) {
-    metaDescription.setAttribute(
-      'content',
-      'VFD Кашириных — фирменный салон фабрики дверей в Челябинске. Более 500 образцов, собственное производство, профессиональный монтаж. Работаем с 2015 года.'
-    )
-  }
+  document
+    .querySelector('meta[name="description"]')
+    ?.setAttribute('content', 'VFD Кашириных — фирменный салон фабрики дверей в Челябинске. Более 500 образцов, собственное производство, профессиональный монтаж. Работаем с 2015 года.')
 })
 
 onUnmounted(() => {
@@ -102,84 +91,79 @@ onUnmounted(() => {
 
 <template>
   <div class="min-h-screen bg-white">
-    <!-- BREADCRUMBS -->
+
+    <!-- ===================== BREADCRUMBS ===================== -->
     <div class="pt-6 sm:pt-8 lg:pt-10 pb-4 sm:pb-6">
       <AppContainer>
         <Breadcrumbs :items="breadcrumbs" :show-home="false" />
       </AppContainer>
     </div>
 
-    <!-- HERO SECTION -->
+    <!-- ===================== HERO ===================== -->
+    <!-- Full-bleed image with overlay content, consistent on all screen sizes -->
     <div class="pb-8 sm:pb-12 lg:pb-16">
       <AppContainer>
-        <!-- Mobile: image + content stacked | Desktop: overlay -->
-        <div class="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-zinc-100">
-          <!-- Image -->
-          <div class="relative">
-            <!-- Loading State -->
-            <div
-              v-if="!heroImageLoaded && !imageErrors.has('hero')"
-              class="absolute inset-0 flex items-center justify-center bg-zinc-100 z-10"
-            >
-              <div class="w-10 h-10 sm:w-12 sm:h-12 border-2 sm:border-3 border-zinc-300 border-t-teal-500 rounded-full animate-spin" />
-            </div>
+        <div class="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-zinc-900"
+             style="min-height: 420px;">
 
-            <img
-              src="https://storage.yandexcloud.net/catalog-vfd/alum/alum-1.webp"
-              alt="Выставочный зал VFD Кашириных"
-              class="w-full object-cover"
-              :class="[
-                'transition-opacity duration-500',
-                heroImageLoaded ? 'opacity-100' : 'opacity-0',
-                // Mobile: fixed height
-                'h-72 sm:h-auto',
-                // Desktop: aspect ratio
-                'sm:aspect-video lg:aspect-21/9'
-              ]"
-              fetchpriority="high"
-              @load="handleImageLoad('hero')"
-              @error="handleImageError('hero')"
-            />
+          <!-- Background image -->
+          <div
+            v-if="!heroImageLoaded && !imageErrors.has('hero')"
+            class="absolute inset-0 flex items-center justify-center"
+          >
+            <div class="w-10 h-10 border-2 border-zinc-600 border-t-teal-500 rounded-full animate-spin" />
           </div>
 
-          <!-- Content - Mobile: relative below image | Desktop: absolute overlay -->
-          <div class="relative sm:absolute sm:inset-0 sm:flex sm:items-end">
-            <!-- Gradient overlay for desktop -->
-            <div class="absolute inset-0 bg-linear-to-t from-black/70 via-black/40 to-transparent sm:block hidden" />
-            <div class="absolute inset-0 bg-linear-to-t from-black/85 via-black/60 to-transparent sm:hidden block" />
+          <img
+            src="https://storage.yandexcloud.net/catalog-vfd/alum/alum-1.webp"
+            alt="Выставочный зал VFD Кашириных"
+            class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
+            :class="heroImageLoaded ? 'opacity-100' : 'opacity-0'"
+            fetchpriority="high"
+            @load="handleImageLoad('hero')"
+            @error="handleImageError('hero')"
+          />
 
-            <div class="relative z-10 p-4 sm:p-6 lg:p-8 text-white pb-6 sm:pb-16 lg:pb-24 w-full">
-              <p class="text-xs uppercase tracking-widest text-white/70 mb-2 wrap-break-word">
-                О нашем салоне
-              </p>
-              <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold leading-tight wrap-break-word max-w-full">
-                VFD Кашириных — фирменный салон фабрики
-              </h1>
-              <p class="text-sm sm:text-base lg:text-lg text-white/90 mt-2 sm:mt-3 max-w-full sm:max-w-2xl leading-relaxed wrap-break-word">
-                Работаем с 2015 года. Более 200 образцов дверей и перегородок, работа с дизайнерами и коммерческими проектами.
-              </p>
-              <div class="flex flex-wrap gap-2 sm:gap-3 mt-4 sm:mt-5">
-                <button
-                  @click="openTelegram"
-                  class="ui-button ui-button--primary text-xs sm:text-sm px-4 sm:px-5 py-2.5 sm:py-3"
-                  type="button"
-                >
-                  Консультация
-                </button>
-                <a
-                  href="#contact"
-                  class="ui-button ui-button--ghost text-xs sm:text-sm px-4 sm:px-5 py-2.5 sm:py-3"
-                >
-                  Посетить салон
-                </a>
-              </div>
+          <!-- Gradient overlay — single, always visible -->
+          <div class="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-black/10" />
+
+          <!-- Content -->
+          <div class="relative z-10 flex flex-col justify-end h-full p-6 sm:p-10 lg:p-14"
+               style="min-height: 420px;">
+
+            <p class="text-xs uppercase tracking-widest text-white/60 mb-2 sm:mb-3">
+              О нашем салоне
+            </p>
+
+            <h1 class="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold leading-tight text-white max-w-3xl">
+              VFD Кашириных — фирменный салон фабрики дверей
+            </h1>
+
+            <p class="text-sm sm:text-base lg:text-lg text-white/85 mt-3 sm:mt-4 max-w-2xl leading-relaxed">
+              Работаем с 2015 года. Более 500 образцов дверей и перегородок, работа с дизайнерами и коммерческими проектами.
+            </p>
+
+            <div class="flex flex-wrap gap-3 mt-5 sm:mt-7">
+              <button
+                type="button"
+                class="ui-button ui-button--primary text-sm px-5 sm:px-7 py-3"
+                @click="openTelegram"
+              >
+                Консультация
+              </button>
+              <a
+                href="#contact"
+                class="ui-button ui-button--ghost text-sm px-5 sm:px-7 py-3"
+              >
+                Посетить салон
+              </a>
             </div>
           </div>
         </div>
       </AppContainer>
     </div>
 
-    <!-- STATS SECTION -->
+    <!-- ===================== STATS ===================== -->
     <div class="pb-8 sm:pb-12 lg:pb-16">
       <AppContainer>
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
@@ -199,60 +183,54 @@ onUnmounted(() => {
       </AppContainer>
     </div>
 
-    <!-- ABOUT CONTENT -->
+    <!-- ===================== ABOUT TEXT ===================== -->
     <div class="pb-8 sm:pb-12 lg:pb-16 bg-white">
       <AppContainer>
         <div class="max-w-4xl mx-auto">
-          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-zinc-900 mb-5 sm:mb-6 lg:mb-8 wrap-break-wordword">
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-zinc-900 mb-5 sm:mb-6 lg:mb-8">
             О салоне VFD Кашириных
           </h2>
 
           <div class="space-y-4 sm:space-y-5 lg:space-y-6 text-base sm:text-lg text-zinc-700 leading-relaxed">
-            <p class="wrap-break-word">
-              <strong class="text-zinc-900">VFD Кашириных</strong> — это фирменный салон фабрики дверей, где качество и профессионализм встречаются в каждом проекте. Работаем с 2015 года и накопили огромный опыт в работе с межкомнатными и входными дверями, а также алюминиевыми перегородками.
+            <p>
+              <strong class="text-zinc-900">VFD Кашириных</strong> — фирменный салон фабрики дверей,
+              где качество и профессионализм встречаются в каждом проекте. Работаем с 2015 года
+              и накопили богатый опыт работы с межкомнатными и входными дверями, а также алюминиевыми перегородками.
             </p>
 
             <div class="bg-teal-50 border-l-4 border-teal-600 p-4 sm:p-5 lg:p-6 rounded-xl">
-              <h3 class="text-lg sm:text-xl font-bold text-zinc-900 mb-3 sm:mb-4 wrap-break-word">
+              <h3 class="text-lg sm:text-xl font-bold text-zinc-900 mb-3 sm:mb-4">
                 Что нас отличает
               </h3>
               <ul class="space-y-2 sm:space-y-2.5 text-zinc-800">
-                <li class="flex items-start gap-2">
+                <li v-for="item in [
+                  { title: 'Большая выставка',      text: 'более 500 образцов межкомнатных и входных дверей' },
+                  { title: 'Фирменный статус',      text: 'прямое сотрудничество с фабрикой для лучших цен' },
+                  { title: 'Работа с дизайнерами',  text: 'консультации и реализация дизайн-проектов' },
+                  { title: 'Коммерческие проекты',  text: 'опыт работы с офисами, ресторанами и магазинами' },
+                  { title: 'Полный спектр услуг',   text: 'от выбора до монтажа и обслуживания' },
+                ]" :key="item.title" class="flex items-start gap-2">
                   <span class="text-teal-600 font-bold shrink-0 mt-0.5">✓</span>
-                  <span class="wrap-break-wordword"><strong class="font-semibold">Большая выставка</strong> — более 500 образцов межкомнатных и входных дверей</span>
-                </li>
-                <li class="flex items-start gap-2">
-                  <span class="text-teal-600 font-bold shrink-0 mt-0.5">✓</span>
-                  <span class="wrap-break-word"><strong class="font-semibold">Фирменный статус</strong> — прямое сотрудничество с фабрикой для лучших цен</span>
-                </li>
-                <li class="flex items-start gap-2">
-                  <span class="text-teal-600 font-bold shrink-0 mt-0.5">✓</span>
-                  <span class="wrap-break-wordword"><strong class="font-semibold">Работа с дизайнерами</strong> — консультации и реализация дизайн-проектов</span>
-                </li>
-                <li class="flex items-start gap-2">
-                  <span class="text-teal-600 font-bold shrink-0 mt-0.5">✓</span>
-                  <span class="wrap-break-wordword"><strong class="font-semibold">Коммерческие проекты</strong> — опыт работы с офисами, ресторанами и магазинами</span>
-                </li>
-                <li class="flex items-start gap-2">
-                  <span class="text-teal-600 font-bold shrink-0 mt-0.5">✓</span>
-                  <span class="wrap-break-word"><strong class="font-semibold">Полный спектр услуг</strong> — от выбора до монтажа и обслуживания</span>
+                  <span><strong class="font-semibold">{{ item.title }}</strong> — {{ item.text }}</span>
                 </li>
               </ul>
             </div>
 
-            <p class="wrap-break-word">
-              Мы работаем как с частными клиентами, так и с дизайн-бюро и коммерческими компаниями. Для каждого проекта находим идеальное решение, которое соответствует бюджету, стилю и функциональности.
+            <p>
+              Мы работаем как с частными клиентами, так и с дизайн-бюро и коммерческими компаниями.
+              Для каждого проекта находим решение, которое соответствует бюджету, стилю и функциональности.
             </p>
 
-            <p class="wrap-break-word">
-              Наша команда состоит из опытных специалистов: проектировщиков, мастеров по монтажу и консультантов. Мы гарантируем качество работы, честное консультирование и сервис на высшем уровне.
+            <p>
+              Наша команда состоит из опытных специалистов: проектировщиков, мастеров по монтажу и консультантов.
+              Мы гарантируем качество работы, честное консультирование и сервис на высшем уровне.
             </p>
           </div>
         </div>
       </AppContainer>
     </div>
 
-    <!-- REQUISITES SECTION -->
+    <!-- ===================== REQUISITES ===================== -->
     <div class="pb-8 sm:pb-12 lg:pb-16 bg-zinc-50">
       <AppContainer>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-center text-zinc-900 mb-6 sm:mb-8 lg:mb-10">
@@ -260,7 +238,8 @@ onUnmounted(() => {
         </h2>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-          <!-- QR Code SBP -->
+
+          <!-- QR / СБП -->
           <div class="lg:col-span-1">
             <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-lg">
               <h3 class="text-lg font-bold text-zinc-900 mb-4 text-center">
@@ -268,29 +247,23 @@ onUnmounted(() => {
               </h3>
 
               <div class="relative aspect-square w-full max-w-xs mx-auto mb-4 bg-zinc-50 rounded-xl overflow-hidden border-2 border-zinc-100">
-                <!-- Loading State -->
-                <div
-                  v-if="!qrImageLoaded && !imageErrors.has('qr')"
-                  class="absolute inset-0 flex items-center justify-center"
-                >
+                <div v-if="!qrImageLoaded && !imageErrors.has('qr')"
+                     class="absolute inset-0 flex items-center justify-center">
                   <div class="w-8 h-8 border-2 border-zinc-300 border-t-teal-500 rounded-full animate-spin" />
                 </div>
 
                 <img
                   :src="sbpQrCode"
                   alt="QR код для оплаты через СБП"
-                  class="w-full h-full object-contain p-4"
-                  :class="{ 'opacity-0': !qrImageLoaded, 'opacity-100': qrImageLoaded }"
+                  class="w-full h-full object-contain p-4 transition-opacity duration-300"
+                  :class="qrImageLoaded ? 'opacity-100' : 'opacity-0'"
                   loading="lazy"
                   @load="handleImageLoad('qr')"
                   @error="handleImageError('qr')"
                 />
 
-                <!-- Error State -->
-                <div
-                  v-if="imageErrors.has('qr')"
-                  class="absolute inset-0 flex items-center justify-center text-zinc-400 p-4 text-center"
-                >
+                <div v-if="imageErrors.has('qr')"
+                     class="absolute inset-0 flex items-center justify-center text-zinc-400 p-4 text-center">
                   <div>
                     <svg class="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4" />
@@ -306,7 +279,7 @@ onUnmounted(() => {
             </div>
           </div>
 
-          <!-- Company Details -->
+          <!-- Details -->
           <div class="lg:col-span-2">
             <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
               <!-- Header -->
@@ -316,103 +289,86 @@ onUnmounted(() => {
                 </h3>
               </div>
 
-              <!-- Content -->
               <div class="p-5 sm:p-6 lg:p-8 space-y-5 sm:space-y-6">
-                <!-- INN, KPP, OGRN -->
+                <!-- INN / KPP / OGRN -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-                  <div class="bg-zinc-50 p-3 sm:p-4 rounded-xl">
-                    <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wide mb-1">ИНН</div>
-                    <div class="text-sm sm:text-base font-semibold text-zinc-900 break-all">{{ companyDetails.inn }}</div>
-                  </div>
-                  <div class="bg-zinc-50 p-3 sm:p-4 rounded-xl">
-                    <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wide mb-1">КПП</div>
-                    <div class="text-sm sm:text-base font-semibold text-zinc-900 break-all">{{ companyDetails.kpp }}</div>
-                  </div>
-                  <div class="bg-zinc-50 p-3 sm:p-4 rounded-xl">
-                    <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wide mb-1">ОГРН</div>
-                    <div class="text-sm sm:text-base font-semibold text-zinc-900 break-all">{{ companyDetails.ogrn }}</div>
+                  <div v-for="[label, value] in [['ИНН', companyDetails.inn], ['КПП', companyDetails.kpp], ['ОГРН', companyDetails.ogrn]]"
+                       :key="label"
+                       class="bg-zinc-50 p-3 sm:p-4 rounded-xl">
+                    <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wide mb-1">{{ label }}</div>
+                    <div class="text-sm sm:text-base font-semibold text-zinc-900 break-all">{{ value }}</div>
                   </div>
                 </div>
 
                 <!-- Addresses -->
                 <div class="space-y-3">
-                  <div class="flex items-start gap-3">
+                  <div v-for="[label, value] in [['Юридический адрес', companyDetails.legalAddress], ['Почтовый адрес', companyDetails.postalAddress]]"
+                       :key="label"
+                       class="flex items-start gap-3">
                     <svg class="w-5 h-5 text-teal-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                     <div class="min-w-0">
-                      <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wide mb-1">Юридический адрес</div>
-                      <p class="text-sm sm:text-base text-zinc-900 wrap-break-word">{{ companyDetails.legalAddress }}</p>
-                    </div>
-                  </div>
-
-                  <div class="flex items-start gap-3">
-                    <svg class="w-5 h-5 text-teal-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    <div class="min-w-0">
-                      <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wide mb-1">Почтовый адрес</div>
-                      <p class="text-sm sm:text-base text-zinc-900 wrap-break-wordword">{{ companyDetails.postalAddress }}</p>
+                      <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wide mb-1">{{ label }}</div>
+                      <p class="text-sm sm:text-base text-zinc-900 wrap-break-word">{{ value }}</p>
                     </div>
                   </div>
                 </div>
 
-                <!-- Bank Details -->
+                <!-- Bank details -->
                 <div class="border-t border-zinc-200 pt-5">
                   <h4 class="text-sm font-bold text-zinc-900 mb-4">Банковские реквизиты</h4>
                   <div class="space-y-3">
-                    <div class="flex justify-between items-center py-2 border-b border-zinc-100 gap-2">
-                      <span class="text-sm text-zinc-500 shrink-0">Банк</span>
-                      <span class="text-sm font-medium text-zinc-900 text-right wrap-break-word">{{ companyDetails.bankName }}</span>
-                    </div>
-                    <div class="flex justify-between items-center py-2 border-b border-zinc-100 gap-2">
-                      <span class="text-sm text-zinc-500 shrink-0">БИК</span>
-                      <span class="text-sm font-medium text-zinc-900 break-all">{{ companyDetails.bik }}</span>
-                    </div>
-                    <div class="flex justify-between items-center py-2 border-b border-zinc-100 gap-2">
-                      <span class="text-sm text-zinc-500 shrink-0">Расчётный счёт</span>
-                      <span class="text-sm font-medium text-zinc-900 break-all">{{ companyDetails.account }}</span>
-                    </div>
-                    <div class="flex justify-between items-center py-2 gap-2">
-                      <span class="text-sm text-zinc-500 shrink-0">Корр. счёт</span>
-                      <span class="text-sm font-medium text-zinc-900 break-all">{{ companyDetails.correspondentAccount }}</span>
+                    <div v-for="[label, value] in [
+                          ['Банк',           companyDetails.bankName],
+                          ['БИК',            companyDetails.bik],
+                          ['Расчётный счёт', companyDetails.account],
+                          ['Корр. счёт',     companyDetails.correspondentAccount],
+                        ]" :key="label"
+                        class="flex justify-between items-center py-2 border-b border-zinc-100 gap-4 last:border-b-0">
+                      <span class="text-sm text-zinc-500 shrink-0">{{ label }}</span>
+                      <span class="text-sm font-medium text-zinc-900 break-all text-right">{{ value }}</span>
                     </div>
                   </div>
                 </div>
 
                 <!-- Director & Contacts -->
-                <div class="border-t border-zinc-200 pt-5">
-                  <div class="flex items-start gap-3 mb-4">
+                <div class="border-t border-zinc-200 pt-5 space-y-4">
+                  <!-- Director -->
+                  <div class="flex items-start gap-3">
                     <svg class="w-5 h-5 text-teal-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                     <div class="min-w-0">
                       <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wide mb-1">Руководитель</div>
-                      <p class="text-sm sm:text-base text-zinc-900 truncate">{{ companyDetails.director }}</p>
+                      <p class="text-sm sm:text-base text-zinc-900 wrap-break-word">{{ companyDetails.director }}</p>
                     </div>
                   </div>
 
-                  <div class="flex items-start gap-3 mb-4">
+                  <!-- Phone -->
+                  <div class="flex items-start gap-3">
                     <svg class="w-5 h-5 text-teal-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                     </svg>
                     <div class="min-w-0">
                       <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wide mb-1">Телефон</div>
-                      <a :href="`tel:${companyDetails.phone.replace(/\s|\(|\)/g, '')}`" class="text-sm sm:text-base text-teal-600 hover:text-teal-700 font-medium whitespace-nowrap">
+                      <a :href="`tel:${companyDetails.phoneRaw}`"
+                         class="text-sm sm:text-base text-teal-600 hover:text-teal-700 font-medium">
                         {{ companyDetails.phone }}
                       </a>
                     </div>
                   </div>
 
+                  <!-- Email -->
                   <div class="flex items-start gap-3">
                     <svg class="w-5 h-5 text-teal-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                     <div class="min-w-0">
                       <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wide mb-1">Email</div>
-                      <a :href="`mailto:${companyDetails.email}`" class="text-sm sm:text-base text-teal-600 hover:text-teal-700 font-medium break-all">
+                      <a :href="`mailto:${companyDetails.email}`"
+                         class="text-sm sm:text-base text-teal-600 hover:text-teal-700 font-medium break-all">
                         {{ companyDetails.email }}
                       </a>
                     </div>
@@ -425,18 +381,20 @@ onUnmounted(() => {
       </AppContainer>
     </div>
 
-    <!-- CONTACT SECTION -->
+    <!-- ===================== CONTACT ===================== -->
     <div id="contact" class="pb-8 sm:pb-12 lg:pb-16 bg-zinc-50">
       <AppContainer>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10">
-          <!-- Contact Info -->
+
+          <!-- Info -->
           <div class="space-y-5 lg:space-y-6">
             <div>
               <h2 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-zinc-900 mb-3">
                 Посетите наш салон
               </h2>
               <p class="text-base sm:text-lg text-zinc-700 leading-relaxed">
-                Приходите лично, чтобы увидеть всю выставку дверей и перегородок. Наши специалисты помогут вам выбрать идеальный вариант для вашего интерьера.
+                Приходите лично, чтобы увидеть всю выставку дверей и перегородок.
+                Наши специалисты помогут выбрать идеальный вариант для вашего интерьера.
               </p>
             </div>
 
@@ -450,14 +408,14 @@ onUnmounted(() => {
                   </svg>
                   <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wide">Адрес</div>
                 </div>
-                <p class="text-base font-medium text-zinc-900 mt-1">
+                <p class="text-base font-medium text-zinc-900">
                   Челябинск, ул. Братьев Кашириных, 131Б
                 </p>
               </div>
 
               <div class="border-t border-zinc-200" />
 
-              <!-- Working Hours -->
+              <!-- Hours -->
               <div>
                 <div class="flex items-center gap-2 mb-2">
                   <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -467,7 +425,7 @@ onUnmounted(() => {
                 </div>
                 <div class="mt-2 space-y-1 text-sm sm:text-base text-zinc-900">
                   <p><span class="font-medium">Пн–Пт:</span> 10:00 – 19:00</p>
-                  <p><span class="font-medium">Сб-Вс:</span> 10:00 – 18:00</p>
+                  <p><span class="font-medium">Сб–Вс:</span> 10:00 – 18:00</p>
                 </div>
               </div>
 
@@ -482,12 +440,8 @@ onUnmounted(() => {
                   <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wide">Телефоны</div>
                 </div>
                 <div class="mt-2 space-y-2">
-                  <a href="tel:+79000297888" class="block font-medium text-zinc-900 hover:text-teal-600 transition-colors text-sm sm:text-base">
-                    +7 (900) 029-78-88
-                  </a>
-                  <a href="tel:+79630807888" class="block font-medium text-zinc-900 hover:text-teal-600 transition-colors text-sm sm:text-base">
-                    +7 (963) 080-78-88
-                  </a>
+                  <a href="tel:+79000297888" class="block font-medium text-zinc-900 hover:text-teal-600 transition-colors text-sm sm:text-base">+7 (900) 029-78-88</a>
+                  <a href="tel:+79630807888" class="block font-medium text-zinc-900 hover:text-teal-600 transition-colors text-sm sm:text-base">+7 (963) 080-78-88</a>
                 </div>
               </div>
 
@@ -501,18 +455,22 @@ onUnmounted(() => {
                   </svg>
                   <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wide">Email</div>
                 </div>
-                <a href="mailto:vfddoors74@mail.ru" class="block font-medium text-zinc-900 hover:text-teal-600 transition-colors text-sm sm:text-base mt-1">
+                <a href="mailto:vfddoors74@mail.ru"
+                   class="block font-medium text-zinc-900 hover:text-teal-600 transition-colors text-sm sm:text-base mt-1">
                   vfddoors74@mail.ru
                 </a>
               </div>
 
-              <!-- Map Button -->
+              <!-- Map CTA -->
               <button
-                @click="openYandexMaps"
                 type="button"
-                class="w-full inline-flex items-center justify-center gap-2 py-3 px-6 rounded-full bg-teal-600 hover:bg-teal-700 text-white font-semibold transition-all duration-200 hover:shadow-lg hover:shadow-teal-500/30 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+                class="w-full inline-flex items-center justify-center gap-2 py-3 px-6 rounded-full
+                       bg-teal-600 hover:bg-teal-700 text-white font-semibold transition-all duration-200
+                       hover:shadow-lg hover:shadow-teal-500/30 focus:outline-none focus:ring-2
+                       focus:ring-teal-500 focus:ring-offset-2"
+                @click="openYandexMaps"
               >
-                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                   <circle cx="12" cy="10" r="3" />
                 </svg>
@@ -521,58 +479,52 @@ onUnmounted(() => {
             </div>
           </div>
 
-          <!-- Map -->
-          <div class="relative rounded-2xl overflow-hidden border-2 border-zinc-200 shadow-lg h-80 sm:h-96 lg:h-full min-h-80 group bg-zinc-100">
-            <!-- Background Image -->
-            <div class="absolute inset-0">
-              <div
-                v-if="!mapImageLoaded && !imageErrors.has('map')"
-                class="absolute inset-0 flex items-center justify-center bg-zinc-100"
-              >
-                <div class="w-8 h-8 border-2 border-zinc-300 border-t-teal-500 rounded-full animate-spin" />
-              </div>
+          <!-- Map thumbnail -->
+          <div class="relative rounded-2xl overflow-hidden border-2 border-zinc-200 shadow-lg
+                      h-80 sm:h-96 lg:h-full min-h-80 bg-zinc-100 group">
 
-              <img
-                src="https://storage.yandexcloud.net/catalog-vfd/covers/yandex-location.webp"
-                alt="Местоположение салона на карте"
-                class="w-full h-full object-cover"
-                :class="{ 'opacity-0': !mapImageLoaded, 'opacity-100': mapImageLoaded }"
-                loading="lazy"
-                @load="handleImageLoad('map')"
-                @error="handleImageError('map')"
-              />
+            <div v-if="!mapImageLoaded && !imageErrors.has('map')"
+                 class="absolute inset-0 flex items-center justify-center bg-zinc-100">
+              <div class="w-8 h-8 border-2 border-zinc-300 border-t-teal-500 rounded-full animate-spin" />
             </div>
 
-            <!-- Overlay -->
+            <img
+              src="https://storage.yandexcloud.net/catalog-vfd/covers/yandex-location.webp"
+              alt="Местоположение салона на карте"
+              class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
+              :class="mapImageLoaded ? 'opacity-100' : 'opacity-0'"
+              loading="lazy"
+              @load="handleImageLoad('map')"
+              @error="handleImageError('map')"
+            />
+
+            <!-- Dark overlay -->
             <div class="absolute inset-0 bg-black/20" />
 
-            <!-- Location Marker -->
+            <!-- Pulsing marker -->
             <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div class="relative group-hover:opacity-0 transition-opacity duration-300">
-                <div class="absolute inset-0 rounded-full border-2 border-teal-400 animate-pulse" style="width: 80px; height: 80px; margin: -40px 0 0 -40px;" />
-                <div class="w-5 h-5 bg-teal-600 rounded-full shadow-lg shadow-teal-600/50 relative z-10" style="width: 20px; height: 20px; margin-left: -10px; margin-top: -10px;" />
+              <div class="relative group-hover:opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                <span class="absolute inline-flex h-16 w-16 rounded-full bg-teal-400/40 animate-ping" />
+                <span class="w-5 h-5 bg-teal-600 rounded-full shadow-lg shadow-teal-600/50 ring-4 ring-white/60 relative z-10" />
               </div>
             </div>
 
-            <!-- Info Banner -->
+            <!-- Bottom info -->
             <div class="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/80 via-black/40 to-transparent p-4 sm:p-6">
-              <h3 class="text-white font-bold text-sm sm:text-base mb-1">
-                Vladimirskaya Fabrika Dverey
-              </h3>
-              <p class="text-white/80 text-xs sm:text-sm">
-                Челябинск, ул. Братьев Кашириных, 131Б
-              </p>
+              <h3 class="text-white font-bold text-sm sm:text-base mb-1">Vladimirskaya Fabrika Dverey</h3>
+              <p class="text-white/80 text-xs sm:text-sm">Челябинск, ул. Братьев Кашириных, 131Б</p>
             </div>
 
-            <!-- Click Overlay -->
+            <!-- Clickable overlay -->
             <button
-              @click="openYandexMaps"
               type="button"
-              class="absolute inset-0 w-full h-full flex items-center justify-center group cursor-pointer"
+              class="absolute inset-0 w-full h-full flex items-center justify-center cursor-pointer"
               aria-label="Открыть на Яндекс.Картах"
+              @click="openYandexMaps"
             >
-              <span class="text-white font-semibold text-sm sm:text-base lg:text-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg">
-                Смотреть в Яндекс.Картах
+              <span class="text-white font-semibold text-sm sm:text-base lg:text-lg
+                           opacity-0 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg">
+                Открыть в Яндекс.Картах
               </span>
             </button>
           </div>
@@ -580,99 +532,58 @@ onUnmounted(() => {
       </AppContainer>
     </div>
 
-    <!-- CTA SECTION -->
+    <!-- ===================== CTA ===================== -->
     <div class="bg-linear-to-r from-teal-600 to-zinc-900 text-white">
       <AppContainer class="py-12 sm:py-16 lg:py-20 text-center space-y-5 sm:space-y-6">
-        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold wrap-break-word px-2">
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold px-2">
           Готовы начать проект?
         </h2>
-        <p class="text-base sm:text-lg max-w-2xl mx-auto text-white/90 px-2 wrap-break-wordword">
-          Мы ответим на все вопросы и поможем с выбором дверей и перегородок, которые идеально подойдут для вашего интерьера.
+        <p class="text-base sm:text-lg max-w-2xl mx-auto text-white/90 px-2">
+          Ответим на все вопросы и поможем выбрать двери и перегородки,
+          которые идеально подойдут для вашего интерьера.
         </p>
         <div class="flex flex-col sm:flex-row justify-center gap-4 pt-4 px-2">
           <a
             href="tel:+79000297888"
-            class="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-4 rounded-full bg-white text-teal-700 font-bold hover:bg-gray-100 transition-all duration-200 hover:shadow-lg hover:shadow-teal-500/30 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-teal-600 wrap-break-word max-w-full"
+            class="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-4 rounded-full
+                   bg-white text-teal-700 font-bold hover:bg-gray-100 transition-all duration-200
+                   hover:shadow-lg hover:shadow-teal-500/30 focus:outline-none focus:ring-2
+                   focus:ring-white focus:ring-offset-2 focus:ring-offset-teal-600"
           >
             <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
             </svg>
-            <span class="wrap-break-wordword">Позвонить</span>
+            Позвонить
           </a>
           <a
             href="https://t.me/vfddoors74"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-4 rounded-full border-2 border-white text-white hover:bg-white/10 font-bold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-teal-600 wrap-break-word max-w-full"
+            class="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-4 rounded-full
+                   border-2 border-white text-white hover:bg-white/10 font-bold transition-all duration-200
+                   focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-teal-600"
           >
             <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295-.042 0-.084 0-.127-.01l.214-3.054 5.56-5.023c.242-.213-.054-.328-.373-.115L6.71 13.65l-2.994-.924c-.649-.204-.659-.649.134-.96l11.783-4.545c.548-.211 1.028.133.86.942z" />
             </svg>
-            <span class="wrap-break-word">Написать в Telegram</span>
+            Написать в Telegram
           </a>
         </div>
       </AppContainer>
     </div>
+
   </div>
 </template>
 
 <style scoped>
-/* Smooth scroll for anchor links */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Focus visible for accessibility */
 button:focus-visible,
 a:focus-visible {
   outline: 2px solid rgb(20 184 166);
   outline-offset: 2px;
 }
 
-/* Animation for pulse marker */
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-.animate-pulse {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-/* Safari-specific word break fixes */
-.break-words {
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  -webkit-hyphens: auto;
-  hyphens: auto;
-}
-
-/* Prevent text overflow in flex containers */
-.min-w-0 {
-  min-width: 0;
-}
-
-/* Additional Safari fix for long words */
-.max-w-full {
-  max-width: 100%;
-}
-
-/* Ensure proper text wrapping in all browsers */
-.wrap-break-word {
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  -webkit-hyphens: auto;
-  hyphens: auto;
-}
-
-.hyphens-auto {
-  -webkit-hyphens: auto;
-  -moz-hyphens: auto;
-  -ms-hyphens: auto;
-  hyphens: auto;
+/* Smooth anchor scrolling */
+:global(html) {
+  scroll-behavior: smooth;
 }
 </style>
