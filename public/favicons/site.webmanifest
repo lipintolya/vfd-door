@@ -1,0 +1,26 @@
+{
+  "name": "VFD Кашириных — салон дверей и перегородок",
+  "short_name": "VFD",
+  "description": "Межкомнатные и входные двери, алюминиевые перегородки в Челябинске",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0d9488",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicons/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/favicons/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["business", "shopping"],
+  "lang": "ru-RU"
+}
