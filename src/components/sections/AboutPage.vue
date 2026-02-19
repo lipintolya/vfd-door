@@ -250,15 +250,15 @@ onUnmounted(() => {
           Реквизиты компании
         </h2>
 
-        <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
           <!-- QR Code SBP -->
-          <div class="lg:col-span-2">
-            <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-lg sticky top-24">
+          <div class="lg:col-span-1">
+            <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-lg">
               <h3 class="text-lg font-bold text-zinc-900 mb-4 text-center">
                 Оплата через СБП
               </h3>
 
-              <div class="relative aspect-square max-w-xs mx-auto mb-4 bg-zinc-50 rounded-xl overflow-hidden border-2 border-zinc-100">
+              <div class="relative aspect-square w-full max-w-xs mx-auto mb-4 bg-zinc-50 rounded-xl overflow-hidden border-2 border-zinc-100">
                 <!-- Loading State -->
                 <div
                   v-if="!qrImageLoaded && !imageErrors.has('qr')"
@@ -298,11 +298,11 @@ onUnmounted(() => {
           </div>
 
           <!-- Company Details -->
-          <div class="lg:col-span-3">
+          <div class="lg:col-span-2">
             <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
               <!-- Header -->
               <div class="bg-linear-to-r from-teal-600 to-teal-700 px-5 sm:px-6 lg:px-8 py-4 sm:py-5">
-                <h3 class="text-lg sm:text-xl font-bold text-white">
+                <h3 class="text-base sm:text-lg lg:text-xl font-bold text-white">
                   {{ companyDetails.name }}
                 </h3>
               </div>
@@ -310,18 +310,18 @@ onUnmounted(() => {
               <!-- Content -->
               <div class="p-5 sm:p-6 lg:p-8 space-y-5 sm:space-y-6">
                 <!-- INN, KPP, OGRN -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                   <div class="bg-zinc-50 p-3 sm:p-4 rounded-xl">
                     <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wide mb-1">ИНН</div>
-                    <div class="text-base font-semibold text-zinc-900">{{ companyDetails.inn }}</div>
+                    <div class="text-sm sm:text-base font-semibold text-zinc-900 break-all">{{ companyDetails.inn }}</div>
                   </div>
                   <div class="bg-zinc-50 p-3 sm:p-4 rounded-xl">
                     <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wide mb-1">КПП</div>
-                    <div class="text-base font-semibold text-zinc-900">{{ companyDetails.kpp }}</div>
+                    <div class="text-sm sm:text-base font-semibold text-zinc-900 break-all">{{ companyDetails.kpp }}</div>
                   </div>
                   <div class="bg-zinc-50 p-3 sm:p-4 rounded-xl">
                     <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wide mb-1">ОГРН</div>
-                    <div class="text-base font-semibold text-zinc-900">{{ companyDetails.ogrn }}</div>
+                    <div class="text-sm sm:text-base font-semibold text-zinc-900 break-all">{{ companyDetails.ogrn }}</div>
                   </div>
                 </div>
 
@@ -332,9 +332,9 @@ onUnmounted(() => {
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
-                    <div>
+                    <div class="min-w-0">
                       <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wide mb-1">Юридический адрес</div>
-                      <p class="text-sm sm:text-base text-zinc-900">{{ companyDetails.legalAddress }}</p>
+                      <p class="text-sm sm:text-base text-zinc-900 break-words">{{ companyDetails.legalAddress }}</p>
                     </div>
                   </div>
 
@@ -343,9 +343,9 @@ onUnmounted(() => {
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
-                    <div>
+                    <div class="min-w-0">
                       <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wide mb-1">Почтовый адрес</div>
-                      <p class="text-sm sm:text-base text-zinc-900">{{ companyDetails.postalAddress }}</p>
+                      <p class="text-sm sm:text-base text-zinc-900 break-words">{{ companyDetails.postalAddress }}</p>
                     </div>
                   </div>
                 </div>
@@ -354,21 +354,21 @@ onUnmounted(() => {
                 <div class="border-t border-zinc-200 pt-5">
                   <h4 class="text-sm font-bold text-zinc-900 mb-4">Банковские реквизиты</h4>
                   <div class="space-y-3">
-                    <div class="flex justify-between items-center py-2 border-b border-zinc-100">
-                      <span class="text-sm text-zinc-500">Банк</span>
-                      <span class="text-sm font-medium text-zinc-900 text-right ml-4">{{ companyDetails.bankName }}</span>
+                    <div class="flex justify-between items-center py-2 border-b border-zinc-100 gap-2">
+                      <span class="text-sm text-zinc-500 shrink-0">Банк</span>
+                      <span class="text-sm font-medium text-zinc-900 text-right break-words">{{ companyDetails.bankName }}</span>
                     </div>
-                    <div class="flex justify-between items-center py-2 border-b border-zinc-100">
-                      <span class="text-sm text-zinc-500">БИК</span>
-                      <span class="text-sm font-medium text-zinc-900">{{ companyDetails.bik }}</span>
+                    <div class="flex justify-between items-center py-2 border-b border-zinc-100 gap-2">
+                      <span class="text-sm text-zinc-500 shrink-0">БИК</span>
+                      <span class="text-sm font-medium text-zinc-900 break-all">{{ companyDetails.bik }}</span>
                     </div>
-                    <div class="flex justify-between items-center py-2 border-b border-zinc-100">
-                      <span class="text-sm text-zinc-500">Расчётный счёт</span>
-                      <span class="text-sm font-medium text-zinc-900">{{ companyDetails.account }}</span>
+                    <div class="flex justify-between items-center py-2 border-b border-zinc-100 gap-2">
+                      <span class="text-sm text-zinc-500 shrink-0">Расчётный счёт</span>
+                      <span class="text-sm font-medium text-zinc-900 break-all">{{ companyDetails.account }}</span>
                     </div>
-                    <div class="flex justify-between items-center py-2">
-                      <span class="text-sm text-zinc-500">Корр. счёт</span>
-                      <span class="text-sm font-medium text-zinc-900">{{ companyDetails.correspondentAccount }}</span>
+                    <div class="flex justify-between items-center py-2 gap-2">
+                      <span class="text-sm text-zinc-500 shrink-0">Корр. счёт</span>
+                      <span class="text-sm font-medium text-zinc-900 break-all">{{ companyDetails.correspondentAccount }}</span>
                     </div>
                   </div>
                 </div>
@@ -379,9 +379,9 @@ onUnmounted(() => {
                     <svg class="w-5 h-5 text-teal-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
-                    <div>
+                    <div class="min-w-0">
                       <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wide mb-1">Руководитель</div>
-                      <p class="text-sm sm:text-base text-zinc-900">{{ companyDetails.director }}</p>
+                      <p class="text-sm sm:text-base text-zinc-900 truncate">{{ companyDetails.director }}</p>
                     </div>
                   </div>
 
@@ -389,9 +389,9 @@ onUnmounted(() => {
                     <svg class="w-5 h-5 text-teal-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                     </svg>
-                    <div>
+                    <div class="min-w-0">
                       <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wide mb-1">Телефон</div>
-                      <a :href="`tel:${companyDetails.phone.replace(/\s|\(|\)/g, '')}`" class="text-sm sm:text-base text-teal-600 hover:text-teal-700 font-medium">
+                      <a :href="`tel:${companyDetails.phone.replace(/\s|\(|\)/g, '')}`" class="text-sm sm:text-base text-teal-600 hover:text-teal-700 font-medium whitespace-nowrap">
                         {{ companyDetails.phone }}
                       </a>
                     </div>
@@ -401,9 +401,9 @@ onUnmounted(() => {
                     <svg class="w-5 h-5 text-teal-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
-                    <div>
+                    <div class="min-w-0">
                       <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wide mb-1">Email</div>
-                      <a :href="`mailto:${companyDetails.email}`" class="text-sm sm:text-base text-teal-600 hover:text-teal-700 font-medium">
+                      <a :href="`mailto:${companyDetails.email}`" class="text-sm sm:text-base text-teal-600 hover:text-teal-700 font-medium break-all">
                         {{ companyDetails.email }}
                       </a>
                     </div>
@@ -441,7 +441,7 @@ onUnmounted(() => {
                   </svg>
                   <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wide">Адрес</div>
                 </div>
-                <p class="text-base font-medium text-zinc-900 ml-7">
+                <p class="text-base font-medium text-zinc-900 mt-1">
                   Челябинск, ул. Братьев Кашириных, 131Б
                 </p>
               </div>
@@ -456,7 +456,7 @@ onUnmounted(() => {
                   </svg>
                   <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wide">Время работы</div>
                 </div>
-                <div class="ml-7 space-y-1 text-sm sm:text-base text-zinc-900">
+                <div class="mt-2 space-y-1 text-sm sm:text-base text-zinc-900">
                   <p><span class="font-medium">Пн–Пт:</span> 10:00 – 19:00</p>
                   <p><span class="font-medium">Сб-Вс:</span> 10:00 – 18:00</p>
                 </div>
@@ -472,7 +472,7 @@ onUnmounted(() => {
                   </svg>
                   <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wide">Телефоны</div>
                 </div>
-                <div class="space-y-1 ml-7">
+                <div class="mt-2 space-y-2">
                   <a href="tel:+79000297888" class="block font-medium text-zinc-900 hover:text-teal-600 transition-colors text-sm sm:text-base">
                     +7 (900) 029-78-88
                   </a>
@@ -492,7 +492,7 @@ onUnmounted(() => {
                   </svg>
                   <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wide">Email</div>
                 </div>
-                <a href="mailto:vfddoors74@mail.ru" class="block font-medium text-zinc-900 hover:text-teal-600 transition-colors text-sm sm:text-base ml-7">
+                <a href="mailto:vfddoors74@mail.ru" class="block font-medium text-zinc-900 hover:text-teal-600 transition-colors text-sm sm:text-base mt-1">
                   vfddoors74@mail.ru
                 </a>
               </div>
@@ -513,7 +513,7 @@ onUnmounted(() => {
           </div>
 
           <!-- Map -->
-          <div class="relative rounded-2xl overflow-hidden border-2 border-zinc-200 shadow-lg h-80 lg:h-full min-h-80 group bg-zinc-100">
+          <div class="relative rounded-2xl overflow-hidden border-2 border-zinc-200 shadow-lg h-80 sm:h-96 lg:h-full min-h-80 group bg-zinc-100">
             <!-- Background Image -->
             <div class="absolute inset-0">
               <div
