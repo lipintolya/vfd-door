@@ -139,27 +139,27 @@ onUnmounted(() => {
 
           <!-- Content -->
           <div class="absolute inset-0 flex items-end">
-            <div class="w-full p-4 sm:p-6 lg:p-8 text-white pb-16 sm:pb-20 lg:pb-24">
-              <p class="text-xs uppercase tracking-widest text-white/70 mb-2">
+            <div class="w-full min-w-0 p-4 sm:p-6 lg:p-8 text-white pb-16 sm:pb-20 lg:pb-24">
+              <p class="text-xs uppercase tracking-widest text-white/70 mb-2 break-words">
                 О нашем салоне
               </p>
-              <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight break-words">
+              <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight break-words hyphens-auto max-w-full">
                 VFD Кашириных — фирменный салон фабрики
               </h1>
-              <p class="text-sm sm:text-base lg:text-lg text-white/90 mt-3 sm:mt-4 max-w-full sm:max-w-2xl leading-relaxed break-words">
+              <p class="text-sm sm:text-base lg:text-lg text-white/90 mt-3 sm:mt-4 max-w-full leading-relaxed break-words hyphens-auto">
                 Работаем с 2015 года. Более 200 образцов дверей и перегородок, работа с дизайнерами и коммерческими проектами.
               </p>
               <div class="flex flex-wrap gap-3 mt-5 sm:mt-6">
                 <button
                   @click="openTelegram"
-                  class="ui-button ui-button--primary"
+                  class="ui-button ui-button--primary max-w-full break-words"
                   type="button"
                 >
                   Консультация
                 </button>
                 <a
                   href="#contact"
-                  class="ui-button ui-button--ghost"
+                  class="ui-button ui-button--ghost max-w-full break-words"
                 >
                   Посетить салон
                 </a>
@@ -632,5 +632,31 @@ a:focus-visible {
 
 .animate-pulse {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Safari-specific word break fixes */
+.break-words {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+/* Prevent text overflow in flex containers */
+.min-w-0 {
+  min-width: 0;
+}
+
+/* Additional Safari fix for long words */
+.max-w-full {
+  max-width: 100%;
+}
+
+/* Ensure proper text wrapping in all browsers */
+.hyphens-auto {
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
 }
 </style>
