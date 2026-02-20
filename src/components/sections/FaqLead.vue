@@ -40,17 +40,18 @@ const toggleFaq = (id: number) => {
       </div>
 
       <!-- FAQ BLOCK -->
-      <div class="max-w-3xl mx-auto space-y-4 mb-12">
+      <div class="w-full max-w-none sm:max-w-3xl mx-auto space-y-4 mb-12">
         <div
           v-for="item in faqs"
           :key="item.id"
           class="group rounded-2xl border-2 border-zinc-700 bg-zinc-900 hover:border-teal-500 hover:shadow-lg hover:shadow-teal-500/20 overflow-hidden transition-all duration-300"
         >
           <button
-            class="w-full flex items-center justify-between px-6 py-4 text-left hover:bg-zinc-800/50 transition-colors"
+            class="w-full flex items-center justify-between px-4 sm:px-6 py-4 text-left hover:bg-zinc-800/50 transition-colors touch-manipulation"
             @click="toggleFaq(item.id)"
+            @touchend.prevent
           >
-            <span class="text-base sm:text-lg font-semibold text-white pr-4">
+            <span class="text-base sm:text-lg font-semibold text-white pr-4 break-words">
               {{ item.question }}
             </span>
             <span
@@ -88,9 +89,9 @@ const toggleFaq = (id: number) => {
             leave-from-class="opacity-100 translate-y-0"
             leave-to-class="opacity-0 -translate-y-2"
           >
-            <div v-if="activeFaqIds.has(item.id)" class="px-6 pb-4">
+            <div v-if="activeFaqIds.has(item.id)" class="px-4 sm:px-6 pb-4">
               <div class="pt-3 border-t border-zinc-700">
-                <p class="text-sm sm:text-base text-zinc-300 leading-relaxed">
+                <p class="text-sm sm:text-base text-zinc-300 leading-relaxed break-words">
                   {{ item.answer }}
                 </p>
               </div>
@@ -100,19 +101,20 @@ const toggleFaq = (id: number) => {
       </div>
 
       <!-- CONTACT CTA BLOCK -->
-      <div class="max-w-3xl mx-auto p-8 rounded-3xl border-2 border-teal-600 bg-teal-50 text-center">
-        <h3 class="text-2xl font-semibold text-zinc-900 mb-2">
+      <div class="w-full max-w-none sm:max-w-3xl mx-auto p-6 sm:p-8 rounded-3xl border-2 border-teal-600 bg-teal-50 text-center">
+        <h3 class="text-xl sm:text-2xl font-semibold text-zinc-900 mb-2">
           Не нашли ответ?
         </h3>
-        <p class="text-zinc-700 mb-6">
+        <p class="text-sm sm:text-base text-zinc-700 mb-6">
           Свяжитесь с нашими менеджерами — мы ответим на ваш вопрос в течение 15 минут
         </p>
-        
+
         <a
           href="https://t.me/vfddoors74"
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-teal-600 hover:bg-teal-700 text-white text-base font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/30"
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-teal-600 hover:bg-teal-700 text-white text-sm sm:text-base font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/30 touch-manipulation"
+          @touchend.prevent
         >
           <img :src="TgIcon" alt="Telegram" class="w-5 h-5" />
           Написать в Telegram

@@ -281,16 +281,18 @@ watch(product, (p) => {
               <button
                 v-if="galleryImages.length > 1"
                 @click="prevImage"
-                class="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/90 backdrop-blur-sm shadow-lg flex items-center justify-center text-gray-700 hover:bg-white hover:text-teal-600 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500"
+                @touchend.prevent
+                class="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/90 backdrop-blur-sm shadow-lg flex items-center justify-center text-gray-700 hover:bg-white hover:text-teal-600 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 touch-manipulation"
                 aria-label="Предыдущее изображение"
               >
                 <span class="text-2xl leading-none">‹</span>
               </button>
-              
+
               <button
                 v-if="galleryImages.length > 1"
                 @click="nextImage"
-                class="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/90 backdrop-blur-sm shadow-lg flex items-center justify-center text-gray-700 hover:bg-white hover:text-teal-600 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500"
+                @touchend.prevent
+                class="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/90 backdrop-blur-sm shadow-lg flex items-center justify-center text-gray-700 hover:bg-white hover:text-teal-600 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 touch-manipulation"
                 aria-label="Следующее изображение"
               >
                 <span class="text-2xl leading-none">›</span>
@@ -314,7 +316,8 @@ watch(product, (p) => {
                 v-for="(img, idx) in galleryImages"
                 :key="img"
                 @click="selectImage(idx)"
-                class="shrink-0 w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden border-2 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500"
+                @touchend.prevent
+                class="shrink-0 w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden border-2 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 touch-manipulation"
                 :class="idx === activeImageIndex ? 'border-teal-600 ring-2 ring-teal-600/20' : 'border-gray-200 hover:border-gray-300'"
               >
                 <img :src="img" class="w-full h-full object-cover" loading="lazy" />
@@ -331,7 +334,8 @@ watch(product, (p) => {
                   v-for="c in product.colors"
                   :key="c.name"
                   @click="selectColor(c)"
-                  class="group relative w-12 h-12 sm:w-14 sm:h-14 rounded-full shadow-md transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 overflow-visible"
+                  @touchend.prevent
+                  class="group relative w-12 h-12 sm:w-14 sm:h-14 rounded-full shadow-md transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 overflow-visible touch-manipulation"
                   :class="c.name === selectedColor.name ? 'ring-2 ring-teal-600 ring-offset-2 scale-110' : 'hover:scale-105'"
                   :style="{ backgroundColor: c.hex }"
                   :aria-label="`Выбрать цвет ${c.name}`"
@@ -376,7 +380,8 @@ watch(product, (p) => {
               <div class="flex items-center gap-4">
                 <button
                   @click="quantity = Math.max(1, quantity - 1)"
-                  class="w-11 h-11 rounded-full border-2 border-gray-200 flex items-center justify-center text-gray-600 hover:border-teal-500 hover:text-teal-600 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  @touchend.prevent
+                  class="w-11 h-11 rounded-full border-2 border-gray-200 flex items-center justify-center text-gray-600 hover:border-teal-500 hover:text-teal-600 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 touch-manipulation"
                   :disabled="quantity <= 1"
                   :class="quantity <= 1 ? 'opacity-40 cursor-not-allowed' : ''"
                 >
@@ -389,7 +394,8 @@ watch(product, (p) => {
 
                 <button
                   @click="quantity++"
-                  class="w-11 h-11 rounded-full border-2 border-gray-200 flex items-center justify-center text-gray-600 hover:border-teal-500 hover:text-teal-600 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  @touchend.prevent
+                  class="w-11 h-11 rounded-full border-2 border-gray-200 flex items-center justify-center text-gray-600 hover:border-teal-500 hover:text-teal-600 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 touch-manipulation"
                 >
                   <span class="text-xl leading-none">+</span>
                 </button>
@@ -416,7 +422,8 @@ watch(product, (p) => {
             <a
               :href="telegramLink"
               target="_blank"
-              class="block w-full h-12 rounded-full bg-gray-900 text-white font-semibold text-center leading-12 hover:bg-teal-600 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+              class="block w-full h-12 rounded-full bg-gray-900 text-white font-semibold text-center leading-12 hover:bg-teal-600 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 touch-manipulation"
+              @touchend.prevent
             >
               Отправить на расчёт
             </a>
@@ -510,7 +517,8 @@ watch(product, (p) => {
             v-for="rp in relatedProducts"
             :key="rp.id"
             @click="router.push({ name: 'ProductPage', params: { id: rp.id } })"
-            class="group cursor-pointer"
+            @touchend.prevent
+            class="group cursor-pointer touch-manipulation"
           >
             <div class="bg-gray-50 rounded-2xl overflow-hidden aspect-3/4 mb-3 transition-all group-hover:shadow-lg">
               <img
