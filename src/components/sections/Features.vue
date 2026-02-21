@@ -13,8 +13,8 @@ let observer: IntersectionObserver | null = null
    Rotating text (SEO + UX)
 ----------------------------- */
 const words = [
-  '→ салон дверей на Кашириных?',
-  '→ межкомнатные двери VFD?',
+  '→ VFD на Кашириных?',
+  '→ скрытые двери VFD?',
   '→ входные двери VFD?',
   '→ перегородки VFD?',
 ]
@@ -44,8 +44,7 @@ interface Feature {
   id: number
   title: string
   text: string
-  iconUrl: string // URL to SVG icon (Yandex CDN)
-  accentColor: string // teal, slate, etc
+  iconUrl: string
 }
 
 const features: Feature[] = [
@@ -53,28 +52,25 @@ const features: Feature[] = [
     id: 1,
     title: 'Двери в наличии',
     text: 'Популярные модели всегда есть на складе в Челябинске. Заказ и получение без долгого ожидания.',
-    iconUrl: 'https://storage.yandexcloud.net/catalog-vfd/icons/verified.svg', 
-    accentColor: 'teal',
+    iconUrl: 'https://storage.yandexcloud.net/catalog-vfd/icons/icons-first.svg',
   },
   {
     id: 2,
     title: 'Точный замер и монтаж',
     text: 'Замер и установка выполняются специалистами с опытом более 20 лет. Аккуратно и без переделок.',
-    iconUrl: 'https://storage.yandexcloud.net/catalog-vfd/icons/handyman.svg', 
-    accentColor: 'slate',
+    iconUrl: 'https://storage.yandexcloud.net/catalog-vfd/icons/size%3D24px.svg',
   },
   {
     id: 3,
     title: 'Экспозиция VFD',
     text: 'Одна из крупнейших экспозиций дверей VFD в Челябинске. Можно выбрать модель вживую.',
-    iconUrl: 'https://storage.yandexcloud.net/catalog-vfd/icons/store_mall_directory.svg', 
-    accentColor: 'teal',
+    iconUrl: 'https://storage.yandexcloud.net/catalog-vfd/icons/icons-third.svg',
   },
 ]
 
 /* ----------------------------
    Intersection Observer
-   ----------------------------- */
+----------------------------- */
 onMounted(() => {
   const el = document.getElementById('features-section')
   if (!el) return
@@ -101,29 +97,29 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <AppSection id="features-section" size="lg" class="bg-white">
+  <AppSection id="features-section" size="lg" class="bg-zinc-900">
     <AppContainer>
-      <div class="space-y-16">
+      <div class="space-y-12 sm:space-y-16">
 
         <!-- Header -->
         <header class="max-w-4xl space-y-4">
-          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-gray-900 leading-tight">
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-white leading-tight">
             Почему выбирают
             <span
               :key="currentWord"
-              class="inline-block ml-2 text-teal-600 animate-word"
+              class="inline-block ml-2 text-teal-400 animate-word"
             >
               {{ currentWord }}
             </span>
           </h2>
 
-          <p class="text-base sm:text-lg text-gray-600 leading-relaxed">
+          <p class="text-base sm:text-lg text-zinc-400 leading-relaxed">
             Помогаем выбрать и установить двери без лишних затрат, ошибок и затянутых сроков.
           </p>
         </header>
 
         <!-- Features Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
           <article
             v-for="(feature, idx) in features"
             :key="feature.id"
@@ -131,41 +127,47 @@ onBeforeUnmount(() => {
             :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'"
             :style="visible ? { transitionDelay: `${idx * 120}ms`, transition: 'opacity 600ms ease-out, transform 600ms ease-out' } : {}"
           >
-            <!-- Card Background with gradient border effect -->
-            <div class="relative h-full rounded-3xl border border-gray-200 bg-white/50 backdrop-blur-sm p-8 transition-all duration-500 ease-out hover:border-gray-300 hover:bg-white hover:shadow-lg">
+            <div class="relative h-full rounded-2xl sm:rounded-3xl overflow-hidden bg-zinc-700 border border-teal-700/50 md:border-zinc-800 md:group-hover:border-teal-700/50 shadow-2xl shadow-teal-900/30 md:shadow-none md:group-hover:shadow-2xl md:group-hover:shadow-teal-900/30 transition-all duration-500">
 
-              <!-- Icon Container with animated glow -->
-              <div
-                class="mb-6 w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-500 relative overflow-hidden"
-                :class="feature.accentColor === 'teal' 
-                  ? 'bg-teal-100 group-hover:bg-teal-500 group-hover:shadow-lg group-hover:shadow-teal-200' 
-                  : 'bg-slate-100 group-hover:bg-slate-500 group-hover:shadow-lg group-hover:shadow-slate-200'"
-              >
-                <img 
-                  v-if="feature.iconUrl" 
-                  :src="feature.iconUrl" 
-                  :alt="feature.title"
-                  class="w-8 h-8 object-contain"
-                  loading="lazy"
-                  decoding="async"
-                />
+              <!-- Teal glow on top -->
+              <div class="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-transparent via-teal-500 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-500" />
+
+              <!-- Subtle teal corner accent -->
+              <div class="absolute top-0 right-0 w-20 h-20 bg-linear-to-bl from-teal-500/10 to-transparent rounded-bl-full opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-700" />
+
+              <div class="relative h-full p-6 sm:p-8">
+                <!-- Icon Container -->
+                <div
+                  class="mb-5 sm:mb-6 w-14 h-14 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center transition-all duration-500 relative overflow-hidden bg-teal-700 md:bg-teal-950/80 md:group-hover:bg-teal-700 shadow-lg shadow-teal-500/40 md:shadow-none md:group-hover:shadow-lg md:group-hover:shadow-teal-500/40"
+                >
+                  <!-- Teal glow overlay -->
+                  <div
+                    class="absolute inset-0 bg-linear-to-br from-teal-400/20 to-transparent md:from-teal-500/10 md:group-hover:from-teal-400/20 transition-all duration-500"
+                  />
+                  <img
+                    v-if="feature.iconUrl"
+                    :src="feature.iconUrl"
+                    :alt="feature.title"
+                    class="w-7 h-7 sm:w-8 sm:h-8 object-contain relative z-10"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+
+                <!-- Content -->
+                <div class="space-y-2.5 sm:space-y-3">
+                  <h3 class="text-lg sm:text-xl font-semibold text-white">
+                    {{ feature.title }}
+                  </h3>
+
+                  <p class="text-sm sm:text-base text-zinc-200 md:text-zinc-300 md:group-hover:text-zinc-200 leading-relaxed transition-colors duration-300">
+                    {{ feature.text }}
+                  </p>
+                </div>
+
+                <!-- Teal underline accent -->
+                <div class="mt-5 sm:mt-6 h-0.5 w-16 md:w-0 md:group-hover:w-16 rounded-full transition-all duration-700 ease-out bg-linear-to-r from-teal-500 to-teal-400" />
               </div>
-
-              <!-- Content -->
-              <div class="space-y-3">
-                <h3 class="text-xl font-semibold text-gray-900 transition-colors duration-300">
-                  {{ feature.title }}
-                </h3>
-
-                <p class="text-sm sm:text-base text-gray-600 leading-relaxed">
-                  {{ feature.text }}
-                </p>
-              </div>
-
-              <!-- Animated underline accent -->
-              <div class="mt-6 h-1 w-0 rounded-full transition-all duration-700 ease-out group-hover:w-8"
-                :class="feature.accentColor === 'teal' ? 'bg-linear-to-r from-teal-500 to-teal-300' : 'bg-linear-to-r from-slate-500 to-slate-300'"
-              />
             </div>
           </article>
         </div>

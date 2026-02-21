@@ -30,23 +30,23 @@ const categories: Category[] = [
   {
     title: 'Межкомнатные двери',
     subtitle: 'Стильные и долговечные решения',
-    image: 'https://storage.yandexcloud.net/catalog-vfd/slider/slide1.webp',
+    image: 'https://storage.yandexcloud.net/catalog-vfd/renders/cover-in.webp',
     link: '/catalog',
     cta: 'Перейти в каталог',
   },
   {
     title: 'Входные двери',
     subtitle: 'Надёжность и безопасность',
-    image: 'https://storage.yandexcloud.net/catalog-vfd/slider/slide2.png',
+    image: 'https://storage.yandexcloud.net/catalog-vfd/renders/cover-out.webp',
     link: '/catalog?series=innova',
     cta: 'Перейти в каталог',
   },
   {
     title: 'Алюминиевые перегородки',
     subtitle: 'Современные интерьерные решения',
-    image: 'https://storage.yandexcloud.net/catalog-vfd/slider/slide3.png',
+    image: 'https://storage.yandexcloud.net/catalog-vfd/renders/cover-alum.webp',
     link: '/partitions',
-    cta: 'Узнать больше',
+    cta: 'Перейти в каталог',
   },
 ]
 
@@ -182,7 +182,7 @@ onBeforeUnmount(() => observer?.disconnect())
                       {{ category.subtitle }}
                     </p>
 
-                    <button class="catalog-button catalog-button--ghost">
+                    <button class="catalog-button catalog-button--primary">
                       {{ category.cta }}
                     </button>
                   </div>
@@ -224,19 +224,6 @@ onBeforeUnmount(() => observer?.disconnect())
 .catalog-button--primary:hover {
   background-color: rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.4);
-  transform: translateY(-1px);
-}
-
-.catalog-button--ghost {
-  border-color: rgba(255, 255, 255, 0.2);
-  background-color: transparent;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.catalog-button--ghost:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: white;
-  border-color: rgba(255, 255, 255, 0.3);
   transform: translateY(-1px);
 }
 </style>

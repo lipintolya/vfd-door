@@ -26,20 +26,16 @@ interface Slide {
   secondaryCta?: string
 }
 
-/* =========================
-   Data
-   (в prod можно вынести в API)
-========================= */
+
 const slides: Slide[] = [
   {
     id: 1,
-    image: 'https://storage.yandexcloud.net/catalog-vfd/renders/vfdsalon-1.webp',
+    image: 'https://storage.yandexcloud.net/catalog-vfd/renders/hero-cover.webp',
     title: 'Двери прямо с фабрики',
     subtitle: 'шоурум с новинками',
     description:
-      'Фирменный салон дверей и интерьерных решений на Братьев Кашириных 131Б в Челябинске',
-    primaryCta: 'Консультация',
-    secondaryCta: 'Каталог',
+      'Фирменный салон интерьерных решений на Братьев Кашириных в Челябинске',
+    primaryCta: 'Смотреть новинки в Telegram',
   },
   {
     id: 2,
@@ -47,7 +43,7 @@ const slides: Slide[] = [
     title: 'Серия Innova уже в салоне',
     subtitle: 'не оставляет отпечатков пальцев',
     description: 'Новинка в инновационном покрытии STRONG FLEX',
-    primaryCta: 'Узнать больше',
+    primaryCta: 'Смотреть в каталоге',
   },
   {
     id: 3,
@@ -56,7 +52,7 @@ const slides: Slide[] = [
     subtitle: 'Современный дизайн по доступной цене',
     description:
       'Светостойкая эмаль с фрезерованными элементами и алюминиевым декором',
-    primaryCta: 'Рассчитать стоимость',
+    primaryCta: 'Смотреть в каталоге',
   },
 ]
 
@@ -115,14 +111,19 @@ const restart = (): void => {
 ========================= */
 const handlePrimaryCta = (): void => {
   const ctaText = currentSlide.value.primaryCta
+  const slideTitle = currentSlide.value.title
 
   if (ctaText === 'Консультация' || ctaText === 'Получить скидку' || ctaText === 'Рассчитать стоимость') {
     window.open(TELEGRAM_URL, '_blank')
   }
-}
-
-const handleSecondaryCta = (): void => {
-  router.push('/catalog')
+  
+  if (ctaText === 'Смотреть в каталоге') {
+    if (slideTitle.includes('Innova')) {
+      router.push('/catalog?series=innova')
+    } else if (slideTitle.includes('Linea')) {
+      router.push('/catalog?series=linea')
+    }
+  }
 }
 
 const navigateAbout = (): void => {
@@ -195,15 +196,6 @@ onUnmounted(() => stop())
                 >
                   {{ currentSlide.primaryCta }}
                 </button>
-
-                <button
-                  v-if="currentSlide.secondaryCta"
-                  class="ui-button ui-button--ghost"
-                  type="button"
-                  @click="handleSecondaryCta"
-                >
-                  {{ currentSlide.secondaryCta }}
-                </button>
               </div>
             </div>
           </div>
@@ -232,7 +224,7 @@ onUnmounted(() => stop())
         <div class="lg:col-span-5 grid grid-rows-2 gap-6">
           <!-- Top: Перегородки за 48 часов -->
           <div class="relative overflow-hidden rounded-3xl">
-            <div class="absolute inset-0 bg-cover bg-center" style="background-image:url('https://storage.yandexcloud.net/catalog-vfd/slider/slide5.jpg')" />
+            <div class="absolute inset-0 bg-cover bg-center" style="background-image:url('https://storage.yandexcloud.net/catalog-vfd/covers/alum-hero.webp')" />
             <div class="absolute inset-0 bg-linear-to-t from-black/70 via-black/40 to-transparent" />
             <div class="relative z-10 h-full p-6 flex flex-col justify-end text-white">
               <p class="text-xs uppercase tracking-wider text-white/70 mb-1">Дизайнерские решения для вашего интерьера</p>
@@ -254,9 +246,8 @@ onUnmounted(() => stop())
             <div class="rounded-2xl bg-linear-to-t from-teal-600 to-gray-800 p-6 text-white flex flex-col justify-between">
               <div>
                 <p class="text-xs uppercase text-white/60 mb-1">Салон дверей VFD на Кашириных</p>
-                <h4 class="font-semibold mb-2">Работаем с 2014 года</h4>
-                <p class="text-sm text-white/80">Берём на себя весь процесс — от замера до монтажа.
-                Без посредников, ошибок и переделок</p>
+                <h4 class="font-semibold mb-2">Полный цикл: от замера до монтажа</h4>
+                <p class="text-sm text-white/80">Мы не перекладываем ответственность на сторонних подрядчиков. Работаем в Челябинске с 2014 года</p>
               </div>
               <button
                 class="ui-button ui-button--primary mt-4"
@@ -269,7 +260,7 @@ onUnmounted(() => stop())
 
             <!-- Портфолио → /portfolio -->
             <div class="relative overflow-hidden rounded-2xl min-h-48 sm:min-h-56">
-              <div class="absolute inset-0 bg-cover bg-center" style="background-image:url('https://storage.yandexcloud.net/catalog-vfd/ourworks/cover-works.webp')" />
+              <div class="absolute inset-0 bg-cover bg-center" style="background-image:url('https://storage.yandexcloud.net/catalog-vfd/covers/ourworks.webp')" />
               <div class="absolute inset-0 bg-black/50" />
               <div class="relative z-10 h-full p-6 flex flex-col justify-between text-white">
                 <div>
