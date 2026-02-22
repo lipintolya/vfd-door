@@ -11,8 +11,8 @@ import type { PortfolioWork } from '@/data/portfolio'
 ============================================ */
 const WORKS_PER_PAGE = 3
 const WORKS_PER_PAGE_MOBILE = 1
-const AUTOPLAY_DELAY = 4000
-const ANIMATION_DURATION = 400
+const AUTOPLAY_DELAY = 7000
+const ANIMATION_DURATION = 700
 
 const PRODUCT_TYPE_LABELS: Record<PortfolioWork['productType'], string> = {
   door: 'Двери',

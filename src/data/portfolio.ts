@@ -75,7 +75,7 @@ export const portfolioWorks: PortfolioWork[] = [
     images: [
       'https://storage.yandexcloud.net/catalog-vfd/portfolio/28.01.26/photo_2026-01-28_16-33-23.webp',
       'https://storage.yandexcloud.net/catalog-vfd/portfolio/28.01.26/photo_2026-01-28_16-33-24.webp',
-      'hhttps://storage.yandexcloud.net/catalog-vfd/portfolio/28.01.26/photo_2026-01-28_16-33-25.webp',
+      'https://storage.yandexcloud.net/catalog-vfd/portfolio/28.01.26/photo_2026-01-28_16-33-25.webp',
       'https://storage.yandexcloud.net/catalog-vfd/portfolio/28.01.26/photo_2026-01-28_16-33-26.webp',
 
     ],
