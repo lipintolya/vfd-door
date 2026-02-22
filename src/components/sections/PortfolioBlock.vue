@@ -58,6 +58,15 @@ const visibleWorks = computed(() => {
   const perPage = worksPerPage.value
   if (!len) return []
 
+  // На мобильных показываем только 1 карточку
+  if (isMobile.value) {
+    const idx = currentIndex.value % len
+    const work = portfolioWorks[idx]
+    if (!work) return []
+    return [{ work, position: 0 }]
+  }
+
+  // На десктопе показываем 3 карточки
   const result: Array<{ work: PortfolioWork; position: number }> = []
   for (let i = 0; i < perPage; i++) {
     const idx = ((currentIndex.value + i) % len + len) % len
@@ -87,8 +96,21 @@ const goTo = (index: number) => {
   }, ANIMATION_DURATION)
 }
 
-const next = () => goTo(currentIndex.value + worksPerPage.value)
-const prev = () => goTo(currentIndex.value - worksPerPage.value)
+const next = () => {
+  if (isMobile.value) {
+    goTo(currentIndex.value + 1)
+  } else {
+    goTo(currentIndex.value + WORKS_PER_PAGE)
+  }
+}
+
+const prev = () => {
+  if (isMobile.value) {
+    goTo(currentIndex.value - 1)
+  } else {
+    goTo(currentIndex.value - WORKS_PER_PAGE)
+  }
+}
 
 /* ============================================
    АВТОПЛЕЙ
