@@ -1,7 +1,19 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import AppContainer from '@/components/layout/AppContainer.vue'
 
 const year = new Date().getFullYear()
+const isModalOpen = ref(false)
+
+const openModal = () => {
+  isModalOpen.value = true
+  document.body.style.overflow = 'hidden'
+}
+
+const closeModal = () => {
+  isModalOpen.value = false
+  document.body.style.overflow = ''
+}
 </script>
 
 <template>
@@ -69,7 +81,7 @@ const year = new Date().getFullYear()
                  text-xs text-white/50"
         >
           <span>
-            © {{ year }} VFD
+            © {{ year }} VFD. Все права защищены.
           </span>
           <span>
             Разработка —
@@ -83,14 +95,67 @@ const year = new Date().getFullYear()
           </span>
         </div>
         
-        <!-- COPYRIGHT NOTICE -->
-        <div class="mt-6 pt-6 border-t border-white/10 text-center space-y-2">
-          <p class="text-xs text-white/40 max-w-2xl mx-auto">
-            📸 Все изображения — собственность VFD Кашириных. Использование — с письменного разрешения и ссылкой на источник.
-          </p>
-          <p class="text-xs text-white/30 max-w-3xl mx-auto">
-            ⚠️ Сайт не является публичной офертой (ст. 437 ГК РФ). Цены указаны для ознакомления. Актуальную стоимость уточняйте в салоне или у менеджеров.
-          </p>
+        <!-- Legal Links -->
+        <div class="mt-4 text-center text-xs text-white/40">
+          <button
+            @click="openModal"
+            class="hover:text-white/70 transition underline"
+          >
+            Правовая информация
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal -->
+      <div
+        v-if="isModalOpen"
+        class="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+        @click="closeModal"
+      >
+        <div
+          class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 relative"
+          @click.stop
+        >
+          <button
+            @click="closeModal"
+            class="absolute top-4 right-4 w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 flex items-center justify-center transition-colors"
+            aria-label="Закрыть"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+          <div class="space-y-6">
+            <div>
+              <h3 class="text-lg font-bold text-zinc-900 mb-3">
+                📸 Авторские права
+              </h3>
+              <p class="text-sm text-zinc-700 leading-relaxed">
+                Все изображения, представленные на сайте, являются объектами авторского права VFD Кашириных. Любое использование материалов возможно только с письменного разрешения правообладателя и обязательным указанием источника.
+              </p>
+            </div>
+
+            <div class="border-t border-zinc-200 pt-4">
+              <h3 class="text-lg font-bold text-zinc-900 mb-3">
+                ⚠️ Публичная оферта
+              </h3>
+              <p class="text-sm text-zinc-700 leading-relaxed">
+                Сайт не является публичной офертой в соответствии со ст. 437 ГК РФ. Цены указаны для ознакомления и не являются публичной офертой. Актуальную стоимость товаров и услуг уточняйте в фирменном салоне VFD Кашириных или у менеджеров компании.
+              </p>
+            </div>
+
+            <div class="border-t border-zinc-200 pt-4">
+              <h3 class="text-lg font-bold text-zinc-900 mb-3">
+                Контакты
+              </h3>
+              <p class="text-sm text-zinc-700 leading-relaxed">
+                г. Челябинск, ул. Братьев Кашириных, 131Б<br />
+                Телефон: +7 (900) 029-78-88<br />
+                Email: vfddoors74@mail.ru
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </AppContainer>

@@ -18,7 +18,7 @@ export interface PortfolioWork {
 export const portfolioWorks: PortfolioWork[] = [
   {
     id: '1',
-    title: 'Двери Innova в п.Петровский',
+    title: 'Двери Innova в посёлке Петровский',
     description: 'Установили межкомнатные дверии серии Innova в уютном доме',
     location: 'Челябинская область, п.Петровский',
     date: '2026-02-20',
@@ -117,5 +117,31 @@ export const portfolioWorks: PortfolioWork[] = [
     ],
     productType: 'partition',
     series: 'Alum',
+  },
+    {
+    id: '7',
+    title: 'Установка скрытых дверей в коттеджном посёлке "Привилегия"',
+    description: 'Устанавливаются на скрытый короб в одной плоскости со стеной для создания «невидимой» конструкции. Универсальный короб Invisible подходит для монтажа дверей как прямого, так и обратного открывания. Монтируется на этапе черновых работ.                                   ',
+    location: 'Челябинск, "Привелегия"',
+    date: '2026-01-5',
+    images: [
+      'https://storage.yandexcloud.net/catalog-vfd/portfolio/5.01.26/myimage%20(10).webp',
+      'https://storage.yandexcloud.net/catalog-vfd/portfolio/5.01.26/myimage%20(11).webp', 
+    ],
+    productType: 'door',
+    series: 'Invisible',
+  },
+   {
+    id: '8',
+    title: 'Установка скрытых дверей в коттеджном посёлке "Привилегия"',
+    description: 'Устанавливаются на скрытый короб в одной плоскости со стеной для создания «невидимой» конструкции. Универсальный короб Invisible подходит для монтажа дверей как прямого, так и обратного открывания. Монтируется на этапе черновых работ.                                   ',
+    location: 'Челябинск, "Привелегия"',
+    date: '2026-01-5',
+    images: [
+      'https://storage.yandexcloud.net/catalog-vfd/portfolio/5.01.26/myimage%20(10).webp',
+      'https://storage.yandexcloud.net/catalog-vfd/portfolio/5.01.26/myimage%20(11).webp', 
+    ],
+    productType: 'door',
+    series: 'Urban',
   },
 ]

@@ -95,6 +95,8 @@ const prev = () => goTo(currentIndex.value - worksPerPage.value)
 ============================================ */
 const startAutoplay = () => {
   if (autoplayTimer.value) return
+  // Отключаем автоплей на мобильных для оптимизации
+  if (isMobile.value) return
   autoplayTimer.value = window.setInterval(next, AUTOPLAY_DELAY)
 }
 
@@ -299,15 +301,12 @@ onBeforeUnmount(() => {
                     :src="img"
                     :alt="`${work.title} - фото ${idx + 1}`"
                     class="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110"
-                    loading="lazy"
+                    :loading="idx === 0 ? 'eager' : 'lazy'"
+                    :fetchpriority="idx === 0 ? 'high' : 'auto'"
                     decoding="async"
                     @load="handleImageLoad(work.id)"
                     @error="handleImageError(work.id)"
                   />
-                  <!-- Watermark -->
-                  <div class="absolute bottom-8 sm:bottom-3 right-3 px-2 py-1 bg-black/60 backdrop-blur-sm rounded text-xs font-medium text-white/90 pointer-events-none">
-                    © VFD Кашириных
-                  </div>
                 </div>
               </div>
 
@@ -445,13 +444,6 @@ onBeforeUnmount(() => {
         <!-- WORKS COUNTER -->
         <div class="text-center mt-6 text-sm text-zinc-500">
           Показано {{ visibleWorks.length }} из {{ totalWorks }} работ
-        </div>
-        
-        <!-- COPYRIGHT NOTICE -->
-        <div class="mt-8 pt-6 border-t border-zinc-200 text-center">
-          <p class="text-xs text-zinc-500">
-            📸 Все фото — собственность VFD Кашириных. Использование — только с ссылкой на источник.
-          </p>
         </div>
       </div>
     </AppContainer>

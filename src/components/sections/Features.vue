@@ -13,10 +13,10 @@ let observer: IntersectionObserver | null = null
    Rotating text (SEO + UX)
 ----------------------------- */
 const words = [
-  '→ VFD на Кашириных?',
-  '→ скрытые двери VFD?',
-  '→ входные двери VFD?',
-  '→ перегородки VFD?',
+  '→ салон Кашириных',
+  '→ двери VFD',
+  '→ перегородки VFD',
+  '→ входные двери',
 ]
 
 const currentWord = ref(words[0])
@@ -51,19 +51,19 @@ const features: Feature[] = [
   {
     id: 1,
     title: 'Двери в наличии',
-    text: 'Популярные модели всегда есть на складе в Челябинске. Заказ и получение без долгого ожидания.',
+    text: 'Популярные модели всегда есть на складе в Челябинске.',
     iconUrl: 'https://storage.yandexcloud.net/catalog-vfd/icons/icons-first.svg',
   },
   {
     id: 2,
-    title: 'Точный замер и монтаж',
-    text: 'Замер и установка выполняются специалистами с опытом более 20 лет. Аккуратно и без переделок.',
+    title: 'Замер и монтаж',
+    text: 'Специалисты с опытом более 20 лет. Аккуратно и без переделок.',
     iconUrl: 'https://storage.yandexcloud.net/catalog-vfd/icons/size%3D24px.svg',
   },
   {
     id: 3,
     title: 'Экспозиция VFD',
-    text: 'Одна из крупнейших экспозиций дверей VFD в Челябинске. Можно выбрать модель вживую.',
+    text: 'Крупнейшая экспозиция дверей VFD в Челябинске.',
     iconUrl: 'https://storage.yandexcloud.net/catalog-vfd/icons/icons-third.svg',
   },
 ]
@@ -127,12 +127,12 @@ onBeforeUnmount(() => {
             :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'"
             :style="visible ? { transitionDelay: `${idx * 120}ms`, transition: 'opacity 600ms ease-out, transform 600ms ease-out' } : {}"
           >
-            <div class="relative h-full rounded-2xl sm:rounded-3xl overflow-hidden bg-zinc-700 border border-teal-700/50 md:border-zinc-800 md:group-hover:border-teal-700/50 shadow-2xl shadow-teal-900/30 md:shadow-none md:group-hover:shadow-2xl md:group-hover:shadow-teal-900/30 transition-all duration-500">
+            <div class="relative h-full rounded-2xl sm:rounded-3xl overflow-hidden bg-zinc-700 border border-teal-700/50 md:border-zinc-800 shadow-2xl shadow-teal-900/30 transition-all duration-500">
 
-              <!-- Teal glow on top -->
+              <!-- Teal glow on top - always visible on mobile -->
               <div class="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-transparent via-teal-500 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-500" />
 
-              <!-- Subtle teal corner accent -->
+              <!-- Subtle teal corner accent - always visible on mobile -->
               <div class="absolute top-0 right-0 w-20 h-20 bg-linear-to-bl from-teal-500/10 to-transparent rounded-bl-full opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-700" />
 
               <div class="relative h-full p-6 sm:p-8">
@@ -140,7 +140,7 @@ onBeforeUnmount(() => {
                 <div
                   class="mb-5 sm:mb-6 w-14 h-14 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center transition-all duration-500 relative overflow-hidden bg-teal-700 md:bg-teal-950/80 md:group-hover:bg-teal-700 shadow-lg shadow-teal-500/40 md:shadow-none md:group-hover:shadow-lg md:group-hover:shadow-teal-500/40"
                 >
-                  <!-- Teal glow overlay -->
+                  <!-- Teal glow overlay - always visible on mobile -->
                   <div
                     class="absolute inset-0 bg-linear-to-br from-teal-400/20 to-transparent md:from-teal-500/10 md:group-hover:from-teal-400/20 transition-all duration-500"
                   />
@@ -160,12 +160,12 @@ onBeforeUnmount(() => {
                     {{ feature.title }}
                   </h3>
 
-                  <p class="text-sm sm:text-base text-zinc-200 md:text-zinc-300 md:group-hover:text-zinc-200 leading-relaxed transition-colors duration-300">
+                  <p class="text-sm sm:text-base text-zinc-200 md:text-zinc-300 leading-relaxed">
                     {{ feature.text }}
                   </p>
                 </div>
 
-                <!-- Teal underline accent -->
+                <!-- Teal underline accent - always visible on mobile -->
                 <div class="mt-5 sm:mt-6 h-0.5 w-16 md:w-0 md:group-hover:w-16 rounded-full transition-all duration-700 ease-out bg-linear-to-r from-teal-500 to-teal-400" />
               </div>
             </div>
