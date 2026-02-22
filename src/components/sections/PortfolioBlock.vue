@@ -10,6 +10,7 @@ import type { PortfolioWork } from '@/data/portfolio'
    КОНСТАНТЫ
 ============================================ */
 const WORKS_PER_PAGE = 3
+const WORKS_PER_PAGE_MOBILE = 1
 const AUTOPLAY_DELAY = 4000
 const ANIMATION_DURATION = 400
 
@@ -45,12 +46,20 @@ const imageError = shallowRef<Set<string>>(new Set())
 ============================================ */
 const totalWorks = computed(() => portfolioWorks.length)
 
+const isMobile = computed(() => {
+  if (typeof window === 'undefined') return false
+  return window.innerWidth < 640
+})
+
+const worksPerPage = computed(() => isMobile.value ? WORKS_PER_PAGE_MOBILE : WORKS_PER_PAGE)
+
 const visibleWorks = computed(() => {
   const len = portfolioWorks.length
+  const perPage = worksPerPage.value
   if (!len) return []
 
   const result: Array<{ work: PortfolioWork; position: number }> = []
-  for (let i = 0; i < WORKS_PER_PAGE; i++) {
+  for (let i = 0; i < perPage; i++) {
     const idx = ((currentIndex.value + i) % len + len) % len
     const work = portfolioWorks[idx]
     if (work) result.push({ work, position: i })
@@ -58,9 +67,9 @@ const visibleWorks = computed(() => {
   return result
 })
 
-const totalPages = computed(() => Math.ceil(totalWorks.value / WORKS_PER_PAGE))
+const totalPages = computed(() => Math.ceil(totalWorks.value / worksPerPage.value))
 
-const currentPage = computed(() => Math.floor(currentIndex.value / WORKS_PER_PAGE))
+const currentPage = computed(() => Math.floor(currentIndex.value / worksPerPage.value))
 
 /* ============================================
    НАВИГАЦИЯ
@@ -78,8 +87,8 @@ const goTo = (index: number) => {
   }, ANIMATION_DURATION)
 }
 
-const next = () => goTo(currentIndex.value + 1)
-const prev = () => goTo(currentIndex.value - 1)
+const next = () => goTo(currentIndex.value + worksPerPage.value)
+const prev = () => goTo(currentIndex.value - worksPerPage.value)
 
 /* ============================================
    АВТОПЛЕЙ
@@ -257,7 +266,7 @@ onBeforeUnmount(() => {
             @touchend="(e) => handleCardTouchEnd(e, work.id, work.images.length)"
           >
             <!-- IMAGE GALLERY -->
-            <div class="relative aspect-4/3 overflow-hidden bg-zinc-100">
+            <div class="relative aspect-3/2 sm:aspect-4/3 overflow-hidden bg-zinc-100">
               <!-- Loading State -->
               <div
                 v-if="!imageLoaded.has(work.id) && !imageError.has(work.id)"
@@ -296,7 +305,7 @@ onBeforeUnmount(() => {
                     @error="handleImageError(work.id)"
                   />
                   <!-- Watermark -->
-                  <div class="absolute bottom-3 right-3 px-2 py-1 bg-black/60 backdrop-blur-sm rounded text-xs font-medium text-white/90 pointer-events-none">
+                  <div class="absolute bottom-8 sm:bottom-3 right-3 px-2 py-1 bg-black/60 backdrop-blur-sm rounded text-xs font-medium text-white/90 pointer-events-none">
                     © VFD Кашириных
                   </div>
                 </div>
@@ -435,7 +444,7 @@ onBeforeUnmount(() => {
 
         <!-- WORKS COUNTER -->
         <div class="text-center mt-6 text-sm text-zinc-500">
-          Показано {{ Math.min(WORKS_PER_PAGE, totalWorks) }} из {{ totalWorks }} работ
+          Показано {{ visibleWorks.length }} из {{ totalWorks }} работ
         </div>
         
         <!-- COPYRIGHT NOTICE -->
