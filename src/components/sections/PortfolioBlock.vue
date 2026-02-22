@@ -297,7 +297,7 @@ onBeforeUnmount(() => {
                   />
                   <!-- Watermark -->
                   <div class="absolute bottom-3 right-3 px-2 py-1 bg-black/60 backdrop-blur-sm rounded text-xs font-medium text-white/90 pointer-events-none">
-                    © VFD Doors
+                    © VFD Кашириных
                   </div>
                 </div>
               </div>
@@ -441,10 +441,7 @@ onBeforeUnmount(() => {
         <!-- COPYRIGHT NOTICE -->
         <div class="mt-8 pt-6 border-t border-zinc-200 text-center">
           <p class="text-xs text-zinc-500">
-            📸 Все фотографии являются объектами авторского права VFD Doors.
-            <br class="sm:hidden" />
-            Использование возможно только с указанием источника:
-            <a href="https://vfd-door.vercel.app" class="text-teal-600 hover:text-teal-700 hover:underline font-medium">vfd-door.vercel.app</a>
+            📸 Все фото — собственность VFD Кашириных. Использование — только с ссылкой на источник.
           </p>
         </div>
       </div>
