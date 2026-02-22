@@ -82,6 +82,16 @@ const year = new Date().getFullYear()
             </a>
           </span>
         </div>
+        
+        <!-- COPYRIGHT NOTICE -->
+        <div class="mt-6 pt-6 border-t border-white/10 text-center">
+          <p class="text-xs text-white/40 max-w-2xl mx-auto">
+            📸 Все изображения, представленные на сайте, являются объектами авторского права VFD Doors.
+            Любое использование материалов возможно только с письменного разрешения правообладателя
+            и обязательным указанием источника:
+            <a href="https://vfd-door.vercel.app" class="text-white/60 hover:text-white transition underline">vfd-door.vercel.app</a>
+          </p>
+        </div>
       </div>
     </AppContainer>
   </footer>

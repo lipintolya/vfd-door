@@ -10,8 +10,9 @@ const router = useRouter()
    Constants
 ========================= */
 const TELEGRAM_URL = 'https://t.me/vfddoors174'
-const SLIDER_INTERVAL_MS = 9000 // Интервал авто-переключения слайдов
-const HERO_HEIGHT_PX = 520 // Высота hero-секции в пикселях (min-height для grid)
+const SLIDER_INTERVAL_MS = 9000
+const HERO_HEIGHT_PX = 520
+const SWIPE_THRESHOLD = 50
 
 /* =========================
    Types
@@ -39,7 +40,7 @@ const slides: Slide[] = [
   },
   {
     id: 2,
-    image: 'https://storage.yandexcloud.net/catalog-vfd/renders/innova-1.webp',
+    image: 'https://storage.yandexcloud.net/catalog-vfd/covers/innova-1.webp',
     title: 'Серия Innova уже в салоне',
     subtitle: 'не оставляет отпечатков пальцев',
     description: 'Новинка в инновационном покрытии STRONG FLEX',
@@ -47,7 +48,7 @@ const slides: Slide[] = [
   },
   {
     id: 3,
-    image: 'https://storage.yandexcloud.net/catalog-vfd/renders/linea-1.webp',
+    image: 'https://storage.yandexcloud.net/catalog-vfd/covers/linea-1.webp',
     title: 'Серия Linea уже в салоне',
     subtitle: 'Современный дизайн по доступной цене',
     description:
@@ -84,6 +85,10 @@ const next = (): void => {
   activeIndex.value = (activeIndex.value + 1) % slides.length
 }
 
+const prev = (): void => {
+  activeIndex.value = (activeIndex.value - 1 + slides.length) % slides.length
+}
+
 const goTo = (index: number): void => {
   if (index < 0 || index >= slides.length) return
   activeIndex.value = index
@@ -104,6 +109,45 @@ const stop = (): void => {
 
 const restart = (): void => {
   start()
+}
+
+/* =========================
+   Swipe handlers
+========================= */
+const touchStartX = ref<number>(0)
+const touchStartY = ref<number>(0)
+const isPaused = ref<boolean>(false)
+
+const handleTouchStart = (e: TouchEvent): void => {
+  if (!e.touches?.[0]) return
+  touchStartX.value = e.touches[0].clientX
+  touchStartY.value = e.touches[0].clientY
+  // Пауза автоплея во время взаимодействия
+  stop()
+  isPaused.value = true
+}
+
+const handleTouchEnd = (e: TouchEvent): void => {
+  if (!e.changedTouches?.[0]) return
+  const dx = touchStartX.value - e.changedTouches[0].clientX
+  const dy = touchStartY.value - e.changedTouches[0].clientY
+  
+  // Горизонтальный свайп с порогом 50px
+  if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > SWIPE_THRESHOLD) {
+    if (dx > 0) {
+      next()
+    } else {
+      prev()
+    }
+  }
+  
+  // Возобновляем автоплей через небольшую задержку
+  setTimeout(() => {
+    if (isPaused.value) {
+      start()
+      isPaused.value = false
+    }
+  }, 300)
 }
 
 /* =========================
@@ -153,9 +197,11 @@ onUnmounted(() => stop())
         <div
           class="lg:col-span-7 relative overflow-hidden rounded-3xl min-h-96 sm:min-h-112 lg:h-auto"
           :style="{
-            paddingBottom: 'var(--dot-offset)', 
+            paddingBottom: 'var(--dot-offset)',
             '--dot-offset': 'clamp(1rem, 5vh, 1.5rem)'
           }"
+          @touchstart.passive="handleTouchStart"
+          @touchend="handleTouchEnd"
         >
           <!-- backgrounds -->
           <div class="absolute inset-0">
@@ -247,7 +293,7 @@ onUnmounted(() => stop())
               <div>
                 <p class="text-xs uppercase text-white/60 mb-1">Салон дверей VFD на Кашириных</p>
                 <h4 class="font-semibold mb-2">Полный цикл: от замера до монтажа</h4>
-                <p class="text-sm text-white/80">Мы не перекладываем ответственность на сторонних подрядчиков. Работаем в Челябинске с 2014 года</p>
+                <p class="text-sm text-white/80">Работаем в Челябинске с 2014 года</p>
               </div>
               <button
                 class="ui-button ui-button--primary mt-4"

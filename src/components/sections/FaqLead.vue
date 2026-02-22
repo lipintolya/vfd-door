@@ -25,6 +25,25 @@ const toggleFaq = (id: number) => {
   const set = activeFaqIds.value
   set.has(id) ? set.delete(id) : set.add(id)
 }
+
+/* ============================================
+   SWIPE HANDLERS
+============================================ */
+const touchStartY = ref(0)
+
+const handleTouchStart = (e: TouchEvent) => {
+  if (!e.touches?.[0]) return
+  touchStartY.value = e.touches[0].clientY
+}
+
+const handleTouchEnd = (e: TouchEvent, id: number) => {
+  if (!e.changedTouches?.[0]) return
+  const dy = touchStartY.value - e.changedTouches[0].clientY
+  // Вертикальный свайп > 50px для открытия/закрытия
+  if (Math.abs(dy) > 50) {
+    toggleFaq(id)
+  }
+}
 </script>
 
 <template>
@@ -45,11 +64,12 @@ const toggleFaq = (id: number) => {
           v-for="item in faqs"
           :key="item.id"
           class="group rounded-2xl border-2 border-zinc-700 bg-zinc-900 hover:border-teal-500 hover:shadow-lg hover:shadow-teal-500/20 overflow-hidden transition-all duration-300"
+          @touchstart.passive="handleTouchStart"
+          @touchend="handleTouchEnd($event, item.id)"
         >
           <button
-            class="w-full flex items-center justify-between px-4 sm:px-6 py-4 text-left hover:bg-zinc-800/50 transition-colors touch-manipulation"
+            class="w-full flex items-center justify-between px-4 sm:px-6 py-4 text-left hover:bg-zinc-800/50 transition-colors"
             @click="toggleFaq(item.id)"
-            @touchend.prevent
           >
             <span class="text-base sm:text-lg font-semibold text-white pr-4 break-words">
               {{ item.question }}
@@ -113,8 +133,7 @@ const toggleFaq = (id: number) => {
           href="https://t.me/vfddoors74"
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-teal-600 hover:bg-teal-700 text-white text-sm sm:text-base font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/30 touch-manipulation"
-          @touchend.prevent
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-teal-600 hover:bg-teal-700 text-white text-sm sm:text-base font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/30"
         >
           <img :src="TgIcon" alt="Telegram" class="w-5 h-5" />
           Написать в Telegram

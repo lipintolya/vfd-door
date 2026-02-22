@@ -1,475 +1,29 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, shallowRef } from 'vue'
 import { useRouter } from 'vue-router'
 import AppSection from '@/components/layout/AppSection.vue'
 import AppContainer from '@/components/layout/AppContainer.vue'
+import { portfolioWorks } from '@/data/portfolio'
+import type { PortfolioWork } from '@/data/portfolio'
 
 /* ============================================
-   ТИПЫ
+   КОНСТАНТЫ
 ============================================ */
-export interface PortfolioWork {
-  id: string
-  title: string
-  description: string
-  location: string
-  date: string
-  images: string[]  // Массив изображений для галереи
-  productType: 'door' | 'partition' | 'entrance'
-  series?: string
-  budget?: string
-  area?: number
+const WORKS_PER_PAGE = 3
+const AUTOPLAY_DELAY = 4000
+const ANIMATION_DURATION = 400
+
+const PRODUCT_TYPE_LABELS: Record<PortfolioWork['productType'], string> = {
+  door: 'Двери',
+  partition: 'Перегородки',
+  entrance: 'Входные группы',
 }
 
-/* ============================================
-   ДАННЫЕ ПОРТФОЛИО (30+ работ)
-============================================ */
-const portfolioWorks: PortfolioWork[] = [
-  {
-    id: '1',
-    title: 'Раздвижные двери в ЖК "Ньютон"',
-    description: 'Установка раздвижных дверей серии Uno в интерьере современной гостиной',
-    location: 'Челябинск, ЖК "Ньютон"',
-    date: '2025-02-10',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/001.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/001-2.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/001-3.webp',
-    ],
-    productType: 'door',
-    series: 'Uno',
-    area: 45,
-  },
-  {
-    id: '2',
-    title: 'Алюминиевые перегородки в офисе',
-    description: 'Зонирование офисного пространства с помощью перегородок ГРАФ101',
-    location: 'Челябинск, БЦ "Гринвич"',
-    date: '2025-02-08',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/002.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/002-2.webp',
-    ],
-    productType: 'partition',
-    series: 'ГРАФ101',
-    area: 120,
-  },
-  {
-    id: '3',
-    title: 'Двери в эмали для квартиры',
-    description: 'Монтаж дверей Erica в цвете эмаль для спальной комнаты',
-    location: 'Челябинск, ул. Кирова',
-    date: '2025-02-05',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/003.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/003-2.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/003-3.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/003-4.webp',
-    ],
-    productType: 'door',
-    series: 'Erica',
-    area: 38,
-  },
-  {
-    id: '4',
-    title: 'Входная группа в ресторан',
-    description: 'Установка входных дверей с терморазрывом в ресторанном комплексе',
-    location: 'Челябинск, ресторан "Оливия"',
-    date: '2025-02-01',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/004.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/004-2.webp',
-    ],
-    productType: 'entrance',
-    area: 25,
-  },
-  {
-    id: '5',
-    title: 'Invisible двери в гардеробную',
-    description: 'Скрытые двери под покраску в интерьере гардеробной',
-    location: 'Челябинск, ЖК "Александровский"',
-    date: '2025-01-28',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/005.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/005-2.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/005-3.webp',
-    ],
-    productType: 'door',
-    series: 'Invisible',
-    area: 12,
-  },
-  {
-    id: '6',
-    title: 'Перегородки в коворкинге',
-    description: 'Остекление переговорных комнат алюминиевыми перегородками',
-    location: 'Челябинск, коворкинг "Точка"',
-    date: '2025-01-25',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/006.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/006-2.webp',
-    ],
-    productType: 'partition',
-    series: 'ГРАФ102',
-    area: 85,
-  },
-  {
-    id: '7',
-    title: 'Двери Loft в студию',
-    description: 'Установка дверей в стиле Loft с матовым стеклом',
-    location: 'Челябинск, ул. Свободы',
-    date: '2025-01-20',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/007.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/007-2.webp',
-    ],
-    productType: 'door',
-    series: 'Loft',
-    area: 52,
-  },
-  {
-    id: '8',
-    title: 'Emalex двери в детскую',
-    description: 'Экологичные двери с покрытием Emalex для детской комнаты',
-    location: 'Копейск, ул. Молодёжная',
-    date: '2025-01-15',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/008.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/008-2.webp',
-    ],
-    productType: 'door',
-    series: 'Emalex',
-    area: 18,
-  },
-  {
-    id: '9',
-    title: 'Входные двери в коттедж',
-    description: 'Установка двухконтурных входных дверей с терморазрывом',
-    location: 'Челябинская обл., пос. Рощино',
-    date: '2025-01-10',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/009.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/009-2.webp',
-    ],
-    productType: 'entrance',
-    area: 35,
-  },
-  {
-    id: '10',
-    title: 'Раздвижная система в кухню',
-    description: 'Компактная раздвижная дверь между кухней и гостиной',
-    location: 'Челябинск, ЖК "Челябинск-Сити"',
-    date: '2025-01-05',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/010.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/010-2.webp',
-    ],
-    productType: 'door',
-    series: 'Uno',
-    area: 28,
-  },
-  {
-    id: '11',
-    title: 'Перегородка в ванной',
-    description: 'Влагостойкая перегородка для душевой зоны',
-    location: 'Челябинск, ул. Труда',
-    date: '2024-12-28',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/011.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/011-2.webp',
-    ],
-    productType: 'partition',
-    series: 'ГРАФ103',
-    area: 8,
-  },
-  {
-    id: '12',
-    title: 'Двери StrongFlex в прихожую',
-    description: 'Износостойкие двери с покрытием StrongFlex для прихожей',
-    location: 'Магнитогорск, пр. Ленина',
-    date: '2024-12-22',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/012.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/012-2.webp',
-    ],
-    productType: 'door',
-    series: 'StrongFlex',
-    area: 22,
-  },
-  {
-    id: '13',
-    title: 'Офисные перегородки',
-    description: 'Модульные перегородки для open-space офиса',
-    location: 'Челябинск, БЦ "Александровский"',
-    date: '2024-12-18',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/013.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/013-2.webp',
-    ],
-    productType: 'partition',
-    series: 'ГРАФ101',
-    area: 150,
-  },
-  {
-    id: '14',
-    title: 'Двери в классическом стиле',
-    description: 'Массив дуба с патиной для классического интерьера',
-    location: 'Челябинск, пос. Западный Луч',
-    date: '2024-12-12',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/014.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/014-2.webp',
-    ],
-    productType: 'door',
-    series: 'Classic',
-    area: 65,
-  },
-  {
-    id: '15',
-    title: 'Входная группа в магазин',
-    description: 'Алюминиевые входные группы с остеклением',
-    location: 'Челябинск, ТРК "Галактика"',
-    date: '2024-12-08',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/015.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/015-2.webp',
-    ],
-    productType: 'entrance',
-    area: 42,
-  },
-  {
-    id: '16',
-    title: 'Двери-книжка в гардеробную',
-    description: 'Компактная система складных дверей для гардеробной',
-    location: 'Челябинск, ул. Воровского',
-    date: '2024-12-01',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/016.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/016-2.webp',
-    ],
-    productType: 'door',
-    series: 'Book',
-    area: 15,
-  },
-  {
-    id: '17',
-    title: 'Перегородка в студии',
-    description: 'Зонирование студии-лофта стеклянной перегородкой',
-    location: 'Челябинск, ЖК "Король Плаза"',
-    date: '2024-11-25',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/017.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/017-2.webp',
-    ],
-    productType: 'partition',
-    series: 'ГРАФ102',
-    area: 55,
-  },
-  {
-    id: '18',
-    title: 'Двери в современном стиле',
-    description: 'Минималистичные двери без наличников для современного интерьера',
-    location: 'Челябинск, ЖК "Ньютон 2.0"',
-    date: '2024-11-20',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/018.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/018-2.webp',
-    ],
-    productType: 'door',
-    series: 'Innova',
-    area: 48,
-  },
-  {
-    id: '19',
-    title: 'Входные двери в подъезд',
-    description: 'Антивандальные входные двери с кодовым замком',
-    location: 'Челябинск, ул. Коммуны',
-    date: '2024-11-15',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/019.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/019-2.webp',
-    ],
-    productType: 'entrance',
-    area: 30,
-  },
-  {
-    id: '20',
-    title: 'Двери с остеклением',
-    description: 'Двери с триплекс-стеклом для гостиной',
-    location: 'Златоуст, ул. Таганайская',
-    date: '2024-11-10',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/020.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/020-2.webp',
-    ],
-    productType: 'door',
-    series: 'Vetro',
-    area: 35,
-  },
-  {
-    id: '21',
-    title: 'Перегородка в спальню',
-    description: 'Раздвижная перегородка для зонирования спальни',
-    location: 'Челябинск, ул. Молодогвардейцев',
-    date: '2024-11-05',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/021.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/021-2.webp',
-    ],
-    productType: 'partition',
-    series: 'ГРАФ101',
-    area: 32,
-  },
-  {
-    id: '22',
-    title: 'Двери в ванную',
-    description: 'Влагостойкие двери с покрытием Emalex для ванной',
-    location: 'Челябинск, пос. АМЗ',
-    date: '2024-10-28',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/022.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/022-2.webp',
-    ],
-    productType: 'door',
-    series: 'Emalex',
-    area: 12,
-  },
-  {
-    id: '23',
-    title: 'Входная дверь в частный дом',
-    description: 'Тёплая входная дверь с зеркальным покрытием',
-    location: 'Челябинская обл., СНТ "Лесное"',
-    date: '2024-10-22',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/023.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/023-2.webp',
-    ],
-    productType: 'entrance',
-    area: 28,
-  },
-  {
-    id: '24',
-    title: 'Двери в кабинет',
-    description: 'Солидные двери из массива для домашнего кабинета',
-    location: 'Челябинск, ул. Пушкина',
-    date: '2024-10-18',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/024.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/024-2.webp',
-    ],
-    productType: 'door',
-    series: 'Classic',
-    area: 20,
-  },
-  {
-    id: '25',
-    title: 'Перегородка в ресторане',
-    description: 'Декоративная перегородка с тонированным стеклом',
-    location: 'Челябинск, ресторан "Белая лошадь"',
-    date: '2024-10-12',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/025.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/025-2.webp',
-    ],
-    productType: 'partition',
-    series: 'ГРАФ103',
-    area: 45,
-  },
-  {
-    id: '26',
-    title: 'Двери в гостиную',
-    description: 'Широкие двустворчатые двери для просторной гостиной',
-    location: 'Челябинск, ЖК "Парковый"',
-    date: '2024-10-08',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/026.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/026-2.webp',
-    ],
-    productType: 'door',
-    series: 'Erica',
-    area: 58,
-  },
-  {
-    id: '27',
-    title: 'Входная группа в отель',
-    description: 'Панорамные входные двери для гостиничного комплекса',
-    location: 'Челябинск, гостиница "Южный Урал"',
-    date: '2024-10-01',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/027.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/027-2.webp',
-    ],
-    productType: 'entrance',
-    area: 65,
-  },
-  {
-    id: '28',
-    title: 'Двери-невидимки',
-    description: 'Скрытые двери под покраску в коридоре',
-    location: 'Челябинск, ул. Лесная',
-    date: '2024-09-25',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/028.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/028-2.webp',
-    ],
-    productType: 'door',
-    series: 'Invisible',
-    area: 25,
-  },
-  {
-    id: '29',
-    title: 'Перегородка в фитнес-зал',
-    description: 'Звукоизолирующая перегородка для фитнес-зоны',
-    location: 'Челябинск, ФК "Атлант"',
-    date: '2024-09-20',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/029.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/029-2.webp',
-    ],
-    productType: 'partition',
-    series: 'ГРАФ102',
-    area: 78,
-  },
-  {
-    id: '30',
-    title: 'Двери в кухню-гостиную',
-    description: 'Раздвижная система для объединения кухни и гостиной',
-    location: 'Челябинск, ЖК "Тургояк"',
-    date: '2024-09-15',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/030.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/030-2.webp',
-    ],
-    productType: 'door',
-    series: 'Uno',
-    area: 42,
-  },
-  {
-    id: '31',
-    title: 'Входные двери в банк',
-    description: 'Бронированные входные двери для банковского отделения',
-    location: 'Челябинск, пр. Ленина',
-    date: '2024-09-10',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/031.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/031-2.webp',
-    ],
-    productType: 'entrance',
-    area: 40,
-  },
-  {
-    id: '32',
-    title: 'Двери в стиле модерн',
-    description: 'Двери с витражным остеклением для стиля модерн',
-    location: 'Челябинск, ул. Вайнера',
-    date: '2024-09-05',
-    images: [
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/032.webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/works/032-2.webp',
-    ],
-    productType: 'door',
-    series: 'Art',
-    area: 33,
-  },
-]
+const PRODUCT_TYPE_ICONS: Record<PortfolioWork['productType'], string> = {
+  door: '🚪',
+  partition: '🪟',
+  entrance: '🏢',
+}
 
 /* ============================================
    STATE
@@ -480,10 +34,11 @@ const isAnimating = ref(false)
 const touchStartX = ref(0)
 const touchStartY = ref(0)
 const autoplayTimer = ref<number | null>(null)
-const imageLoaded = ref<Set<string>>(new Set())
-const imageError = ref<Set<string>>(new Set())
-// Состояние мини-слайдера для каждой карточки
 const cardImageIndex = ref<Record<string, number>>({})
+
+// Оптимизированное хранение состояния изображений
+const imageLoaded = shallowRef<Set<string>>(new Set())
+const imageError = shallowRef<Set<string>>(new Set())
 
 /* ============================================
    COMPUTED
@@ -494,26 +49,18 @@ const visibleWorks = computed(() => {
   const len = portfolioWorks.length
   if (!len) return []
 
-  const result: PortfolioWork[] = []
-  for (let i = 0; i < 3; i++) {
+  const result: Array<{ work: PortfolioWork; position: number }> = []
+  for (let i = 0; i < WORKS_PER_PAGE; i++) {
     const idx = ((currentIndex.value + i) % len + len) % len
     const work = portfolioWorks[idx]
-    if (work) result.push(work)
+    if (work) result.push({ work, position: i })
   }
   return result
 })
 
-const productTypeLabels: Record<PortfolioWork['productType'], string> = {
-  door: 'Двери',
-  partition: 'Перегородки',
-  entrance: 'Входные группы',
-}
+const totalPages = computed(() => Math.ceil(totalWorks.value / WORKS_PER_PAGE))
 
-const productTypeIcons: Record<PortfolioWork['productType'], string> = {
-  door: '🚪',
-  partition: '🪟',
-  entrance: '🏢',
-}
+const currentPage = computed(() => Math.floor(currentIndex.value / WORKS_PER_PAGE))
 
 /* ============================================
    НАВИГАЦИЯ
@@ -526,7 +73,9 @@ const goTo = (index: number) => {
   const newIndex = ((index % len) + len) % len
   currentIndex.value = newIndex
 
-  setTimeout(() => (isAnimating.value = false), 400)
+  setTimeout(() => {
+    isAnimating.value = false
+  }, ANIMATION_DURATION)
 }
 
 const next = () => goTo(currentIndex.value + 1)
@@ -537,7 +86,7 @@ const prev = () => goTo(currentIndex.value - 1)
 ============================================ */
 const startAutoplay = () => {
   if (autoplayTimer.value) return
-  autoplayTimer.value = window.setInterval(next, 4000)
+  autoplayTimer.value = window.setInterval(next, AUTOPLAY_DELAY)
 }
 
 const stopAutoplay = () => {
@@ -614,12 +163,19 @@ const handleCardTouchEnd = (e: TouchEvent, workId: string, imagesCount: number) 
 /* ============================================
    ФОРМАТТЕРЫ
 ============================================ */
+const formatDateCache = new Map<string, string>()
+
 function formatDate(dateString: string): string {
-  return new Date(dateString).toLocaleDateString('ru-RU', {
+  if (formatDateCache.has(dateString)) {
+    return formatDateCache.get(dateString)!
+  }
+  const formatted = new Date(dateString).toLocaleDateString('ru-RU', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
   })
+  formatDateCache.set(dateString, formatted)
+  return formatted
 }
 
 /* ============================================
@@ -640,6 +196,7 @@ onBeforeUnmount(() => {
   stopAutoplay()
   imageLoaded.value.clear()
   imageError.value.clear()
+  cardImageIndex.value = {}
 })
 </script>
 
@@ -693,14 +250,14 @@ onBeforeUnmount(() => {
           @touchend="handleTouchEnd"
         >
           <div
-            v-for="work in visibleWorks"
-            :key="work.id"
+            v-for="{ work, position } in visibleWorks"
+            :key="`${work.id}-${position}`"
             class="group/card relative bg-white rounded-2xl overflow-hidden border border-zinc-200 hover:border-teal-300 transition-all duration-300 hover:shadow-xl hover:shadow-teal-100/50 hover:-translate-y-1 cursor-pointer"
             @touchstart.passive="(e) => handleCardTouchStart(e, work.id)"
             @touchend="(e) => handleCardTouchEnd(e, work.id, work.images.length)"
           >
             <!-- IMAGE GALLERY -->
-            <div class="relative aspect-[4/3] overflow-hidden bg-zinc-100">
+            <div class="relative aspect-4/3 overflow-hidden bg-zinc-100">
               <!-- Loading State -->
               <div
                 v-if="!imageLoaded.has(work.id) && !imageError.has(work.id)"
@@ -724,17 +281,25 @@ onBeforeUnmount(() => {
                 class="w-full h-full flex transition-transform duration-300 ease-out"
                 :style="{ transform: `translateX(-${getCardImageIndex(work.id) * 100}%)` }"
               >
-                <img
+                <div
                   v-for="(img, idx) in work.images"
                   :key="idx"
-                  :src="img"
-                  :alt="`${work.title} - фото ${idx + 1}`"
-                  class="w-full h-full object-cover flex-shrink-0 transition-transform duration-500 group-hover/card:scale-110"
-                  loading="lazy"
-                  decoding="async"
-                  @load="handleImageLoad(work.id)"
-                  @error="handleImageError(work.id)"
-                />
+                  class="w-full h-full relative shrink-0"
+                >
+                  <img
+                    :src="img"
+                    :alt="`${work.title} - фото ${idx + 1}`"
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110"
+                    loading="lazy"
+                    decoding="async"
+                    @load="handleImageLoad(work.id)"
+                    @error="handleImageError(work.id)"
+                  />
+                  <!-- Watermark -->
+                  <div class="absolute bottom-3 right-3 px-2 py-1 bg-black/60 backdrop-blur-sm rounded text-xs font-medium text-white/90 pointer-events-none">
+                    © VFD Doors
+                  </div>
+                </div>
               </div>
 
               <!-- Navigation Arrows (show on hover) -->
@@ -789,8 +354,8 @@ onBeforeUnmount(() => {
 
               <!-- Type Badge -->
               <div class="absolute top-3 left-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-sm text-xs font-semibold text-zinc-700 shadow-sm" :class="work.images.length > 1 ? 'mt-0' : ''">
-                <span>{{ productTypeIcons[work.productType] }}</span>
-                <span>{{ productTypeLabels[work.productType] }}</span>
+                <span>{{ PRODUCT_TYPE_ICONS[work.productType] }}</span>
+                <span>{{ PRODUCT_TYPE_LABELS[work.productType] }}</span>
               </div>
             </div>
 
@@ -859,18 +424,28 @@ onBeforeUnmount(() => {
         <!-- PAGINATION DOTS -->
         <div class="flex justify-center gap-2 mt-8">
           <button
-            v-for="(_, idx) in Math.ceil(totalWorks / 3)"
+            v-for="(_, idx) in totalPages"
             :key="idx"
-            @click="goTo(idx * 3)"
+            @click="goTo(idx * WORKS_PER_PAGE)"
             class="w-2.5 h-2.5 rounded-full transition-all duration-300"
-            :class="Math.floor(currentIndex / 3) === idx ? 'bg-teal-600 w-8' : 'bg-zinc-300 hover:bg-zinc-400'"
+            :class="currentPage === idx ? 'bg-teal-600 w-8' : 'bg-zinc-300 hover:bg-zinc-400'"
             :aria-label="`Перейти к странице ${idx + 1}`"
           />
         </div>
 
         <!-- WORKS COUNTER -->
         <div class="text-center mt-6 text-sm text-zinc-500">
-          Показано {{ Math.min(3, totalWorks) }} из {{ totalWorks }} работ
+          Показано {{ Math.min(WORKS_PER_PAGE, totalWorks) }} из {{ totalWorks }} работ
+        </div>
+        
+        <!-- COPYRIGHT NOTICE -->
+        <div class="mt-8 pt-6 border-t border-zinc-200 text-center">
+          <p class="text-xs text-zinc-500">
+            📸 Все фотографии являются объектами авторского права VFD Doors.
+            <br class="sm:hidden" />
+            Использование возможно только с указанием источника:
+            <a href="https://vfd-door.vercel.app" class="text-teal-600 hover:text-teal-700 hover:underline font-medium">vfd-door.vercel.app</a>
+          </p>
         </div>
       </div>
     </AppContainer>
@@ -878,7 +453,6 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
-/* Line clamp utilities */
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -887,7 +461,6 @@ onBeforeUnmount(() => {
   overflow: hidden;
 }
 
-/* Hide scrollbar for clean look */
 .no-scrollbar {
   scrollbar-width: none;
   -ms-overflow-style: none;
