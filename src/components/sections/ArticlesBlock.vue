@@ -88,7 +88,7 @@ onUnmounted(() => {
         class="mb-10 sm:mb-12 cursor-pointer group"
         @click="openModal(featuredArticle)"
       >
-        <div class="relative rounded-3xl overflow-hidden bg-zinc-100 aspect-4/3 sm:aspect-16/9">
+        <div class="relative rounded-3xl overflow-hidden bg-zinc-100 aspect-4/3 sm:aspect-video">
           <!-- Loading State -->
           <div
             v-if="!imageLoaded.has(featuredArticle.id)"
@@ -182,7 +182,7 @@ onUnmounted(() => {
       <!-- Modal -->
       <div
         v-if="selectedArticle"
-        class="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+        class="fixed inset-0 z-100 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
         @click="closeModal"
       >
         <div
@@ -199,7 +199,7 @@ onUnmounted(() => {
             </svg>
           </button>
 
-          <div class="relative aspect-16/9 bg-zinc-100">
+          <div class="relative aspect-video bg-zinc-100">
             <img
               :src="selectedArticle.image"
               :alt="selectedArticle.title"
@@ -242,6 +242,7 @@ onUnmounted(() => {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   overflow: hidden;
 }
 </style>

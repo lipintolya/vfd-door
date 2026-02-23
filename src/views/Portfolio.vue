@@ -243,12 +243,13 @@ onMounted(() => {
           <div
             v-for="work in filteredWorks"
             :key="work.id"
-            class="group/card relative bg-white rounded-2xl overflow-hidden border border-zinc-200 hover:border-teal-300 transition-all duration-300 hover:shadow-xl hover:shadow-teal-100/50 hover:-translate-y-1"
+            class="group/card relative bg-white rounded-2xl overflow-hidden border border-zinc-200 hover:border-teal-300 hover:shadow-xl hover:shadow-teal-100/50 transition-all duration-300"
+            style="contain: layout paint;"
             @touchstart.passive="(e) => handleCardTouchStart(e, work.id)"
             @touchend="(e) => handleCardTouchEnd(e, work.id, work.images.length)"
           >
             <!-- IMAGE GALLERY -->
-            <div class="relative aspect-4/3 overflow-hidden bg-zinc-100">
+            <div class="relative aspect-4/3 overflow-hidden bg-zinc-100" style="contain: layout paint;">
               <!-- Loading State -->
               <div
                 v-if="!imageLoaded.has(work.id) && !imageError.has(work.id)"
@@ -271,6 +272,7 @@ onMounted(() => {
               <div
                 class="w-full h-full flex transition-transform duration-300 ease-out"
                 :style="{ transform: `translateX(-${getCardImageIndex(work.id) * 100}%)` }"
+                style="contain: strict;"
               >
                 <div
                   v-for="(img, idx) in work.images"
