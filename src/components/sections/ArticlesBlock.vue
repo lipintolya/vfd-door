@@ -14,6 +14,7 @@ interface Article {
   date: string
   featured?: boolean
   popular?: boolean
+  content?: string
   seoTitle?: string
   seoDescription?: string
 }
@@ -221,15 +222,7 @@ onUnmounted(() => {
               {{ selectedArticle.title }}
             </h2>
 
-            <p class="text-base text-zinc-700 leading-relaxed mb-6">
-              {{ selectedArticle.excerpt }}
-            </p>
-
-            <div class="border-t border-zinc-200 pt-6">
-              <p class="text-sm text-zinc-500">
-                Полная версия статьи доступна в салоне VFD Кашириных или по запросу у менеджеров.
-              </p>
-            </div>
+            <div class="article-content" v-html="selectedArticle.content || selectedArticle.excerpt" />
           </div>
         </div>
       </div>
@@ -244,5 +237,75 @@ onUnmounted(() => {
   -webkit-line-clamp: 2;
   line-clamp: 2;
   overflow: hidden;
+}
+
+.article-content :deep(h2) {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.article-content :deep(h3) {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
+.article-content :deep(p) {
+  margin-bottom: 1rem;
+  line-height: 1.7;
+  color: #374151;
+}
+
+.article-content :deep(ul),
+.article-content :deep(ol) {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1rem;
+}
+
+.article-content :deep(li) {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #374151;
+}
+
+.article-content :deep(ul li)::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #0d9488;
+  font-weight: bold;
+}
+
+.article-content :deep(ol li)::before {
+  content: counter(list-item) '.';
+  position: absolute;
+  left: 0;
+  color: #0d9488;
+  font-weight: bold;
+}
+
+.article-content :deep(strong) {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.article-content :deep(blockquote) {
+  border-left: 4px solid #0d9488;
+  padding-left: 1rem;
+  margin: 1rem 0;
+  font-style: italic;
+  color: #4b5563;
+  background: #f0fdfa;
+  padding: 1rem;
+  border-radius: 0.5rem;
 }
 </style>
