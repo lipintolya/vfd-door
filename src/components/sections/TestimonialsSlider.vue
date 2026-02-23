@@ -34,7 +34,7 @@ const reviews: ReviewCard[] = [
     role: 'Клиент',
     rating: 5,
     text: 'Однозначно могу порекомендовать этот салон. Понравилось все от помощи в выборе до монтажа, все быстро и четко. Общительный и приятный менеджер, всегда был на связи.',
-    image: 'https://storage.yandexcloud.net/catalog-vfd/ourworks/review-1.png',
+    image: 'https://storage.yandexcloud.net/catalog-vfd/review/myimage%20(12).webp',
     projectType: 'Двери в эмали Erica',
     location: 'Челябинск',
     date: '31 января 2024'
@@ -45,7 +45,7 @@ const reviews: ReviewCard[] = [
     role: 'Клиент',
     rating: 5,
     text: 'Заказали двери, и остались очень довольны 👏 Шикарный дизайн, смотрятся намного дороже, чем их стоимость 👏 Спасибо менеджеру Надежде, помогла подобрать, подробно все проконсультировала 👍',
-    image: 'https://storage.yandexcloud.net/catalog-vfd/ourworks/review-2.png',
+    image: 'https://storage.yandexcloud.net/catalog-vfd/review/myimage%20(13).webp',
     projectType: 'Покрытие Emalex',
     location: 'Челябинск',
     date: '20 января 2024'
@@ -56,7 +56,7 @@ const reviews: ReviewCard[] = [
     role: 'Клиент',
     rating: 5,
     text: 'Обратились в салон дверей ВФД — всё понравилось! Монтажники приехали быстро, аккуратно сделали замер, всё объяснили. Грамотный персонал и широкий выбор дверей и фурнитуры.',
-    image: 'https://storage.yandexcloud.net/catalog-vfd/ourworks/review-3.png',
+    image: 'https://storage.yandexcloud.net/catalog-vfd/review/myimage%20(14).webp',
     projectType: 'Двери Loft',
     location: 'Копейск',
     date: '14 мая 2024'
@@ -67,7 +67,7 @@ const reviews: ReviewCard[] = [
     role: 'Клиент',
     rating: 5,
     text: 'Большой салон дверей, широкий выбор входных и межкомнатных дверей. Ставим металл от этой фирмы с терморазрывом не в первый дом. Все супер, рекомендую.',
-    image: 'https://storage.yandexcloud.net/catalog-vfd/ourworks/review-4.png',
+    image: 'https://storage.yandexcloud.net/catalog-vfd/review/myimage%20(15).webp',
     projectType: 'Входная дверь',
     location: 'Челябинск',
     date: '2 июля 2024'
@@ -78,7 +78,7 @@ const reviews: ReviewCard[] = [
     role: 'Партнер',
     rating: 5,
     text: 'Отличные двери и фурнитура, наши партнеры более 10 лет. Быстрая доставка и много дверей в наличии. Рекомендуем',
-    image: 'https://storage.yandexcloud.net/catalog-vfd/ourworks/review-5.png',
+    image: 'https://storage.yandexcloud.net/catalog-vfd/review/myimage%20(16).webp',
     projectType: 'Двери Emalex',
     location: 'Челябинск',
     date: '26 октября 2024'
@@ -89,7 +89,7 @@ const reviews: ReviewCard[] = [
     role: 'Клиент',
     rating: 5,
     text: 'Выбор дверей большой. Как входных дверей, так и фурнитуры. Актуальные расцветки и модели с алюминиевыми кромками, приятные цены.',
-    image: 'https://storage.yandexcloud.net/catalog-vfd/ourworks/review-6.webp',
+    image: 'https://storage.yandexcloud.net/catalog-vfd/review/myimage%20(17).webp',
     projectType: 'Двери Invisible',
     location: 'ЖК НИКС-сити',
     date: '8 августа 2024'
