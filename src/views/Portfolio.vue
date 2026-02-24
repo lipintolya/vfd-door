@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import type { PortfolioWork } from '@/data/portfolio'
 import AppContainer from '@/components/layout/AppContainer.vue'
 import Breadcrumbs from '@/components/ui/Breadcrumbs.vue'
@@ -13,8 +13,11 @@ const selectedType = ref<'all' | PortfolioWork['productType']>('all')
 const searchQuery = ref('')
 const imageLoaded = ref<Set<string>>(new Set())
 const imageError = ref<Set<string>>(new Set())
-// Состояние мини-слайдера для каждой карточки
-const cardImageIndex = ref<Record<string, number>>({})
+
+// Модальное окно просмотра
+const selectedWork = ref<PortfolioWork | null>(null)
+const currentImageIndex = ref(0)
+const isModalOpen = ref(false)
 
 /* ============================================
    BREADCRUMBS
@@ -90,37 +93,46 @@ const handleImageError = (workId: string) => {
 }
 
 /* ============================================
-   MINI SLIDER ДЛЯ КАРТОЧКИ
+   MODAL HANDLERS
 ============================================ */
-const getCardImageIndex = (workId: string): number => {
-  return cardImageIndex.value[workId] ?? 0
+const openModal = (work: PortfolioWork, imageIndex: number = 0) => {
+  selectedWork.value = work
+  currentImageIndex.value = imageIndex
+  isModalOpen.value = true
+  document.body.style.overflow = 'hidden'
 }
 
-const nextCardImage = (workId: string, imagesCount: number, event: Event) => {
-  event.stopPropagation()
-  const currentIdx = cardImageIndex.value[workId] ?? 0
-  cardImageIndex.value[workId] = (currentIdx + 1) % imagesCount
+const closeModal = () => {
+  isModalOpen.value = false
+  selectedWork.value = null
+  document.body.style.overflow = ''
 }
 
-const prevCardImage = (workId: string, imagesCount: number, event: Event) => {
-  event.stopPropagation()
-  const currentIdx = cardImageIndex.value[workId] ?? 0
-  cardImageIndex.value[workId] = (currentIdx - 1 + imagesCount) % imagesCount
+const nextImage = () => {
+  if (!selectedWork.value) return
+  currentImageIndex.value = (currentImageIndex.value + 1) % selectedWork.value.images.length
 }
 
-const handleCardTouchStart = (e: TouchEvent, _workId: string) => {
-  if (!e.touches?.[0]) return
-  // Можно использовать для будущей логики
-  void _workId
+const prevImage = () => {
+  if (!selectedWork.value) return
+  currentImageIndex.value = (currentImageIndex.value - 1 + selectedWork.value.images.length) % selectedWork.value.images.length
 }
 
-const handleCardTouchEnd = (e: TouchEvent, workId: string, imagesCount: number) => {
-  if (!e.changedTouches?.[0]) return
-  const dx = (e.target as HTMLElement).getBoundingClientRect().left - e.changedTouches[0].clientX
-  if (Math.abs(dx) > 50) {
-    dx > 0 ? nextCardImage(workId, imagesCount, e) : prevCardImage(workId, imagesCount, e)
-  }
+const handleKeydown = (e: KeyboardEvent) => {
+  if (!isModalOpen.value) return
+  if (e.key === 'Escape') closeModal()
+  if (e.key === 'ArrowRight') nextImage()
+  if (e.key === 'ArrowLeft') prevImage()
 }
+
+onMounted(() => {
+  window.addEventListener('keydown', handleKeydown)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeydown)
+  document.body.style.overflow = ''
+})
 
 /* ============================================
    FORMATTERS
@@ -243,10 +255,9 @@ onMounted(() => {
           <div
             v-for="work in filteredWorks"
             :key="work.id"
-            class="group/card relative bg-white rounded-2xl overflow-hidden border border-zinc-200 hover:border-teal-300 hover:shadow-xl hover:shadow-teal-100/50 transition-all duration-300"
+            class="group/card relative bg-white rounded-2xl overflow-hidden border border-zinc-200 hover:border-teal-300 hover:shadow-xl hover:shadow-teal-100/50 transition-all duration-300 cursor-pointer"
             style="contain: layout paint;"
-            @touchstart.passive="(e) => handleCardTouchStart(e, work.id)"
-            @touchend="(e) => handleCardTouchEnd(e, work.id, work.images.length)"
+            @click="openModal(work, 0)"
           >
             <!-- IMAGE GALLERY -->
             <div class="relative aspect-4/3 overflow-hidden bg-zinc-100" style="contain: layout paint;">
@@ -270,9 +281,7 @@ onMounted(() => {
 
               <!-- Images Slider -->
               <div
-                class="w-full h-full flex transition-transform duration-300 ease-out"
-                :style="{ transform: `translateX(-${getCardImageIndex(work.id) * 100}%)` }"
-                style="contain: strict;"
+                class="w-full h-full flex"
               >
                 <div
                   v-for="(img, idx) in work.images"
@@ -292,58 +301,18 @@ onMounted(() => {
                 </div>
               </div>
 
-              <!-- Navigation Arrows (show on hover) -->
-              <template v-if="work.images.length > 1">
-                <!-- Prev Button -->
-                <button
-                  @click="(e) => prevCardImage(work.id, work.images.length, e)"
-                  class="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-white/90 backdrop-blur-sm border border-zinc-200 shadow-md text-zinc-700 opacity-0 group-hover/card:opacity-100 hover:bg-white hover:text-teal-600 transition-all"
-                  aria-label="Предыдущее фото"
-                >
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                  </svg>
-                </button>
-
-                <!-- Next Button -->
-                <button
-                  @click="(e) => nextCardImage(work.id, work.images.length, e)"
-                  class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-white/90 backdrop-blur-sm border border-zinc-200 shadow-md text-zinc-700 opacity-0 group-hover/card:opacity-100 hover:bg-white hover:text-teal-600 transition-all"
-                  aria-label="Следующее фото"
-                >
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-
-                <!-- Dots Indicator -->
-                <div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
-                  <span
-                    v-for="(_, idx) in work.images"
-                    :key="idx"
-                    class="w-1.5 h-1.5 rounded-full transition-all duration-300"
-                    :class="getCardImageIndex(work.id) === idx ? 'bg-white w-4' : 'bg-white/50'"
-                  />
-                </div>
-
-                <!-- Image Counter -->
-                <div class="absolute top-3 right-3 flex items-center gap-2">
-                  <span
-                    v-if="work.series"
-                    class="px-3 py-1.5 rounded-full bg-teal-600/95 backdrop-blur-sm text-xs font-semibold text-white shadow-sm"
-                  >
-                    {{ work.series }}
-                  </span>
-                  <span class="px-2 py-1 rounded-md bg-black/50 backdrop-blur-sm text-xs font-medium text-white">
-                    {{ getCardImageIndex(work.id) + 1 }} / {{ work.images.length }}
-                  </span>
-                </div>
-              </template>
-
               <!-- Type Badge -->
               <div class="absolute top-3 left-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-sm text-xs font-semibold text-zinc-700 shadow-sm">
                 <span>{{ productTypeIcons[work.productType] }}</span>
                 <span>{{ productTypeLabels[work.productType] }}</span>
+              </div>
+
+              <!-- View Counter -->
+              <div
+                v-if="work.images.length > 1"
+                class="absolute bottom-3 right-3 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-sm text-xs font-semibold text-white shadow-sm"
+              >
+                📸 {{ work.images.length }}
               </div>
             </div>
 
@@ -395,6 +364,66 @@ onMounted(() => {
           Показано {{ filteredWorks.length }} из {{ portfolioWorks.length }} работ
         </div>
       </AppContainer>
+    </div>
+
+    <!-- MODAL -->
+    <div
+      v-if="isModalOpen && selectedWork"
+      class="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm"
+      @click="closeModal"
+    >
+      <!-- Close Button -->
+      <button
+        @click="closeModal"
+        class="absolute top-4 right-4 sm:top-6 sm:right-6 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors z-10"
+        aria-label="Закрыть"
+      >
+        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <!-- Navigation -->
+      <button
+        @click.stop="prevImage"
+        class="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors z-10"
+        aria-label="Предыдущее фото"
+      >
+        <svg class="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+
+      <button
+        @click.stop="nextImage"
+        class="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors z-10"
+        aria-label="Следующее фото"
+      >
+        <svg class="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+
+      <!-- Image -->
+      <div class="relative w-full h-full flex items-center justify-center p-4 sm:p-8" @click.stop>
+        <img
+          :src="selectedWork.images[currentImageIndex]"
+          :alt="`${selectedWork.title} - фото ${currentImageIndex + 1}`"
+          class="max-w-full max-h-full object-contain"
+          loading="eager"
+        />
+
+        <!-- Info -->
+        <div class="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 text-center">
+          <h3 class="text-white text-lg sm:text-xl font-semibold mb-2">
+            {{ selectedWork.title }}
+          </h3>
+          <div class="flex items-center justify-center gap-4 text-white/80 text-sm">
+            <span>{{ currentImageIndex + 1 }} / {{ selectedWork.images.length }}</span>
+            <span v-if="selectedWork.series">• {{ selectedWork.series }}</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
