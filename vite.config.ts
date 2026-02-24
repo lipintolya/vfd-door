@@ -13,4 +13,6 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src'),
     },
   },
+  // Отключаем обработку XML и TXT файлов как HTML
+  assetsInclude: ['**/*.xml', '**/*.txt'],
 })
