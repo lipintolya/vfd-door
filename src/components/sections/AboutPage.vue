@@ -25,24 +25,24 @@ const TELEGRAM_URL = 'https://t.me/vfddoors74'
 const YANDEX_MAPS_URL = 'https://yandex.ru/maps/org/vladimirskaya_fabrika_dverey/17517257940/'
 
 const stats: StatItem[] = [
-  { id: 'years',    value: '9+',    label: 'лет на рынке' },
+  { id: 'years',    value: '10+',    label: 'лет на рынке' },
   { id: 'clients',  value: '2000+', label: 'довольных клиентов' },
-  { id: 'projects', value: '150+',  label: 'коммерческих проектов' },
-  { id: 'doors',    value: '500+',  label: 'образцов в выставке' },
+  { id: 'projects', value: '15+',  label: 'коммерческих проектов' },
+  { id: 'doors',    value: '80+',  label: 'образцов в выставке' },
 ]
 
 const companyDetails = {
-  name:                'ООО "Владимирская Фабрика Дверей"',
-  inn:                 '3333000000',
-  kpp:                 '333301001',
-  ogrn:                '1153333000000',
-  legalAddress:        '600000, Владимирская обл., г. Владимир, ул. Примерная, д. 1',
-  postalAddress:       '454000, г. Челябинск, ул. Братьев Кашириных, 131Б',
-  bankName:            'ПАО "Сбербанк России"',
+  name:                'ИП Липина Надежда Анатольевна',
+  inn:                 '452402308842',
+  kpp:                 '-',
+  ogrn:                '323745600047178',
+  legalAddress:        '-',
+  postalAddress:       '-',
+  bankName:            '-',
   bik:                 '044525225',
-  account:             '40702810000000000000',
-  correspondentAccount:'30101810400000000225',
-  director:            'Генеральный директор: Петров Владимир Сергеевич',
+  account:             '-',
+  correspondentAccount:'-',
+  director:            'Руководитель салона: Липина Надежда Анатольевна',
   phone:               '+7 (900) 029-78-88',
   phoneRaw:            '+79000297888',
   email:               'vfddoors74@mail.ru',
@@ -81,7 +81,7 @@ onMounted(() => {
   document.title = 'О компании VFD Кашириных — фирменный салон фабрики дверей'
   document
     .querySelector('meta[name="description"]')
-    ?.setAttribute('content', 'VFD Кашириных — фирменный салон фабрики дверей в Челябинске. Более 500 образцов, собственное производство, профессиональный монтаж. Работаем с 2015 года.')
+    ?.setAttribute('content', 'VFD Кашириных — фирменный салон фабрики дверей в Челябинске. Более 80 образцов, работаем без посредников и наценок, профессиональный монтаж. Работаем с 2015 года.')
 })
 
 onUnmounted(() => {
@@ -115,7 +115,7 @@ onUnmounted(() => {
           </div>
 
           <img
-            src="https://storage.yandexcloud.net/catalog-vfd/alum/alum-1.webp"
+            src="https://storage.yandexcloud.net/catalog-vfd/renders/vfdsalon-1.webp"
             alt="Выставочный зал VFD Кашириных"
             class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
             :class="heroImageLoaded ? 'opacity-100' : 'opacity-0'"
@@ -140,7 +140,7 @@ onUnmounted(() => {
             </h1>
 
             <p class="text-sm sm:text-base lg:text-lg text-white/85 mt-3 sm:mt-4 max-w-2xl leading-relaxed">
-              Работаем с 2015 года. Более 500 образцов дверей и перегородок, работа с дизайнерами и коммерческими проектами.
+              Работаем с 2015 года. Более 80 образцов дверей и перегородок, работа с дизайнерами и коммерческими проектами.
             </p>
 
             <div class="flex flex-wrap gap-3 mt-5 sm:mt-7">
@@ -204,7 +204,7 @@ onUnmounted(() => {
               </h3>
               <ul class="space-y-2 sm:space-y-2.5 text-zinc-800">
                 <li v-for="item in [
-                  { title: 'Большая выставка',      text: 'более 500 образцов межкомнатных и входных дверей' },
+                  { title: 'Большая выставка',      text: 'более 80 образцов межкомнатных и входных дверей' },
                   { title: 'Фирменный статус',      text: 'прямое сотрудничество с фабрикой для лучших цен' },
                   { title: 'Работа с дизайнерами',  text: 'консультации и реализация дизайн-проектов' },
                   { title: 'Коммерческие проекты',  text: 'опыт работы с офисами, ресторанами и магазинами' },
