@@ -1,0 +1,13 @@
+# robots.txt для vfd74.ru
+User-agent: *
+Allow: /
+
+# Запрет на админки (если будут)
+Disallow: /admin/
+Disallow: /_next/
+
+# Sitemap
+Sitemap: https://vfd74.ru/sitemap.xml
+
+# Хост
+Host: https://vfd74.ru
