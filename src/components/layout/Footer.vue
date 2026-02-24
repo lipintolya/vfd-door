@@ -152,7 +152,8 @@ const closeModal = () => {
               <p class="text-sm text-zinc-700 leading-relaxed">
                 г. Челябинск, ул. Братьев Кашириных, 131Б<br />
                 Телефон: +7 (900) 029-78-88<br />
-                Email: vfddoors74@mail.ru
+                Email: vfddoors74@mail.ru<br />
+                Сайт: <a href="https://vfd74.ru" class="text-teal-600 hover:underline">vfd74.ru</a>
               </p>
             </div>
           </div>

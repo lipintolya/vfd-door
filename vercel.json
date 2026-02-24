@@ -21,5 +21,12 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/portfolio",
+      "destination": "/#portfolio",
+      "permanent": false
+    }
   ]
 }
