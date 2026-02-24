@@ -13,6 +13,10 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src'),
     },
   },
-  // Отключаем обработку XML и TXT файлов как HTML
-  assetsInclude: ['**/*.xml', '**/*.txt'],
+  build: {
+    // Копируем public файлы без обработки
+    assetsDir: 'assets',
+  },
+  // Исключаем XML и TXT из обработки
+  publicDir: 'public',
 })
