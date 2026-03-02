@@ -1,4 +1,4 @@
-name: Deploy to Reg.ru
+name: Deploy to Beget VPS
 
 on:
   push:
@@ -28,18 +28,17 @@ jobs:
         YANDEX_CAPTCHA_SECRET_KEY: ${{ secrets.YANDEX_CAPTCHA_SECRET_KEY }}
         VITE_FORM_SECRET_TOKEN: ${{ secrets.VITE_FORM_SECRET_TOKEN }}
 
-    - name: Deploy to Reg.ru via FTP
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+    - name: Deploy to Beget via SSH
+      uses: easingthemes/ssh-deploy@v4
       with:
-        server: ${{ secrets.REG_FTP_HOST }}
-        username: ${{ secrets.REG_FTP_USER }}
-        password: ${{ secrets.REG_FTP_PASS }}
-        local-dir: ./dist/
-        server-dir: ${{ secrets.REG_FTP_PATH }}/
-        exclude: |
-          **/.git*
-          **/.git*/**
-        dangerous-clean-slate: true
+        SSH_PRIVATE_KEY: ${{ secrets.BEGET_SSH_KEY }}
+        REMOTE_HOST: ${{ secrets.BEGET_HOST }}
+        REMOTE_USER: ${{ secrets.BEGET_USER }}
+        REMOTE_PORT: ${{ secrets.BEGET_PORT }}
+        SOURCE: ./dist/
+        TARGET: ${{ secrets.BEGET_TARGET_PATH }}
+        EXCLUDE: '.git*, .env*, node_modules'
+        ARGS: '-rltgoDzvO'
 
     - name: Notify success
       run: |
