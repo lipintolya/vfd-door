@@ -29,7 +29,7 @@ jobs:
         VITE_FORM_SECRET_TOKEN: ${{ secrets.VITE_FORM_SECRET_TOKEN }}
 
     - name: Deploy to Beget via SSH
-      uses: easingthemes/ssh-deploy@v4
+      uses: easingthemes/ssh-deploy@main
       with:
         SSH_PRIVATE_KEY: ${{ secrets.BEGET_SSH_KEY }}
         REMOTE_HOST: ${{ secrets.BEGET_HOST }}
