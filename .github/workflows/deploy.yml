@@ -2,7 +2,7 @@ name: Deploy to Beget VPS
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Setup Node.js
+    - name: Setup Node.js 20
       uses: actions/setup-node@v4
       with:
         node-version: '20'
@@ -29,19 +29,21 @@ jobs:
         YANDEX_CAPTCHA_SECRET_KEY: ${{ secrets.YANDEX_CAPTCHA_SECRET_KEY }}
         VITE_FORM_SECRET_TOKEN: ${{ secrets.VITE_FORM_SECRET_TOKEN }}
 
-    - name: Deploy to Beget VPS
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.BEGET_HOST }}
-        username: ${{ secrets.BEGET_USER }}
-        port: ${{ secrets.BEGET_PORT }}
-        key: ${{ secrets.BEGET_SSH_KEY }}
-        script: |
-          cd /var/www/vfd-door/data
-          rm -rf *
-          cp -r /home/runner/work/vfd-door/vfd-door/dist/* .
-          chown -R www-data:www-data /var/www/vfd-door/data
-          systemctl reload nginx
+    - name: Show build info
+      run: |
+        echo "=== Build completed ==="
+        ls -la dist/
 
-    - name: Success
+    - name: Deploy via rsync
+      uses: burnett01/rsync-deployments@7.0.2
+      with:
+        switches: -avzr --delete
+        path: dist/
+        remote_path: /var/www/vfd-door/data/
+        remote_host: ${{ secrets.BEGET_HOST }}
+        remote_user: ${{ secrets.BEGET_USER }}
+        remote_port: ${{ secrets.BEGET_PORT }}
+        remote_key: ${{ secrets.BEGET_SSH_KEY }}
+
+    - name: Done
       run: echo "✅ Deployed to https://vfd74.ru"
