@@ -1,0 +1,47 @@
+name: Deploy to Reg.ru
+
+on:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build project
+      run: npm run build
+      env:
+        YANDEX_CAPTCHA_SITE_KEY: ${{ secrets.YANDEX_CAPTCHA_SITE_KEY }}
+        YANDEX_CAPTCHA_SECRET_KEY: ${{ secrets.YANDEX_CAPTCHA_SECRET_KEY }}
+        VITE_FORM_SECRET_TOKEN: ${{ secrets.VITE_FORM_SECRET_TOKEN }}
+
+    - name: Deploy to Reg.ru via FTP
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.REG_FTP_HOST }}
+        username: ${{ secrets.REG_FTP_USER }}
+        password: ${{ secrets.REG_FTP_PASS }}
+        local-dir: ./dist/
+        server-dir: ${{ secrets.REG_FTP_PATH }}/
+        exclude: |
+          **/.git*
+          **/.git*/**
+        dangerous-clean-slate: true
+
+    - name: Notify success
+      run: |
+        echo "✅ Деплой успешен!"
+        echo "🌐 Сайт: https://vfd74.ru"

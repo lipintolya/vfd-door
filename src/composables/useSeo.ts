@@ -12,7 +12,7 @@ export interface SeoOptions {
   type?: 'website' | 'article' | 'product'
 }
 
-const BASE_URL = 'https://vfd-door.vercel.app'
+const BASE_URL = 'https://vfd74.ru'
 const DEFAULT_KEYWORDS = [
   'межкомнатные двери Челябинск',
   'входные двери Челябинск',

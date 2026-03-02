@@ -3,7 +3,6 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import Header from './components/layout/Header.vue'
 import Footer from './components/layout/Footer.vue'
 import ScrollToTop from './components/ui/ScrollToTop.vue'
-import { inject } from '@vercel/analytics'
 
 const headerRef = ref<InstanceType<typeof Header> | null>(null)
 const headerHeight = ref(0)
@@ -20,9 +19,6 @@ const updateHeaderHeight = () => {
 }
 
 onMounted(() => {
-  // Инициализация Vercel Analytics
-  inject()
-  
   updateHeaderHeight()
   window.addEventListener('resize', updateHeaderHeight)
 })

@@ -1,13 +1,38 @@
 # robots.txt для vfd74.ru
+# Последнее обновление: 2025-02-25
+
+# ==========================================
+# ВСЕ РОБОТЫ
+# ==========================================
 User-agent: *
 Allow: /
 
-# Запрет на админки (если будут)
+# Запрет на служебные пути
 Disallow: /admin/
 Disallow: /_next/
+Disallow: /node_modules/
+Disallow: /*.log$
+Disallow: /api/internal/
 
-# Sitemap
+# ==========================================
+# YANDEX SPECIFIC
+# ==========================================
+User-agent: Yandex
+Allow: /
+Clean-param: utm_source&utm_medium&utm_campaign&utm_content&utm_term /
+
+# ==========================================
+# GOOGLE BOT
+# ==========================================
+User-agent: Googlebot
+Allow: /
+
+# ==========================================
+# SITEMAP
+# ==========================================
 Sitemap: https://vfd74.ru/sitemap.xml
 
-# Хост
+# ==========================================
+# HOST (для Яндекса)
+# ==========================================
 Host: https://vfd74.ru

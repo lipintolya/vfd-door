@@ -344,7 +344,7 @@ const handleImageLoad = (workId: string) => {
     <!-- MODAL (оптимизировано) -->
     <div
       v-if="isModalOpen && selectedWork"
-      class="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm"
+      class="fixed inset-0 z-100 flex items-center justify-center bg-black/95 backdrop-blur-sm"
       @click="closeModal"
       @touchstart.passive="handleTouchStart"
       @touchend="handleTouchEnd"

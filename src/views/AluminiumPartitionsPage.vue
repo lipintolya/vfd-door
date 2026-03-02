@@ -3,6 +3,7 @@ import { ref, computed, onMounted, onBeforeUnmount, reactive } from 'vue'
 import AppSection from '@/components/layout/AppSection.vue'
 import AppContainer from '@/components/layout/AppContainer.vue'
 import Breadcrumbs from '@/components/ui/Breadcrumbs.vue'
+import { submitContactForm, formatPhone, isValidPhone } from '@/services/formSubmit'
 
 // Импорт данных и типов из отдельного файла
 import type {
@@ -72,56 +73,20 @@ const quickContact = reactive({
   isSubmitting: false,
 })
 
-const isValidPhone = (phone: string) => {
-  const phoneRegex = /^[\+]?[78][-\s]?\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{2}[-\s]?\d{2}$/
-  return phoneRegex.test(phone.replace(/\s/g, ''))
-}
-
 const sendContactToTelegram = async (name: string, phone: string) => {
-  const token = import.meta.env.VITE_TELEGRAM_BOT_TOKEN
-  const chat = import.meta.env.VITE_TELEGRAM_CHAT_ID
-
-  if (!token || !chat) {
-    return { success: false, error: 'Конфигурация Telegram не настроена' }
-  }
-
-  const message = `Новая заявка с блока FAQ на сайте VFD Doors\n\nИмя: ${name}\nТелефон: ${phone}\n\nДата: ${new Date().toLocaleString('ru-RU')}\nИсточник: ${window.location.href}`
-
-  try {
-    const response = await fetch(
-      `https://api.telegram.org/bot${token}/sendMessage`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: chat,
-          text: message,
-          parse_mode: 'Markdown',
-          disable_web_page_preview: true,
-        }),
-      }
-    )
-
-    const data = await response.json()
-    return data.ok ? { success: true } : { success: false, error: data.description }
-  } catch {
-    return { success: false, error: 'Ошибка сети' }
-  }
-}
-
-const formatPhoneQuick = (value: string) => {
-  const numbers = value.replace(/\D/g, '')
-  if (!numbers) return ''
-  if (numbers.length <= 1) return `+7 (${numbers}`
-  if (numbers.length <= 4) return `+7 (${numbers.slice(1, 4)}`
-  if (numbers.length <= 7) return `+7 (${numbers.slice(1, 4)}) ${numbers.slice(4, 7)}`
-  if (numbers.length <= 9) return `+7 (${numbers.slice(1, 4)}) ${numbers.slice(4, 7)}-${numbers.slice(7, 9)}`
-  return `+7 (${numbers.slice(1, 4)}) ${numbers.slice(4, 7)}-${numbers.slice(7, 9)}-${numbers.slice(9, 11)}`
+  // Используем защищённый API вместо прямой отправки
+  const result = await submitContactForm({
+    name,
+    phone,
+    source: 'AluminiumPartitionsPage - Quick Contact',
+  })
+  
+  return result
 }
 
 const onQuickPhoneInput = (event: Event) => {
   const target = event.target as HTMLInputElement
-  quickContact.phone = formatPhoneQuick(target.value)
+  quickContact.phone = formatPhone(target.value)
 }
 
 const handleContactSubmit = async () => {

@@ -48,7 +48,7 @@ const companyDetails = {
   email:               'vfddoors74@mail.ru',
 }
 
-const sbpQrCode = 'https://storage.yandexcloud.net/catalog-vfd/sbp-qr-placeholder.png'
+const sbpQrCode = 'https://storage.yandexcloud.net/catalog-vfd/qrcode/qr.webp'
 
 // ========================
 // IMAGE STATE
