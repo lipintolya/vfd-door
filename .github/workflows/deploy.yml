@@ -2,14 +2,14 @@ name: Deploy to Beget VPS
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main ]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout repository
       uses: actions/checkout@v4
 
     - name: Setup Node.js
@@ -28,19 +28,21 @@ jobs:
         YANDEX_CAPTCHA_SECRET_KEY: ${{ secrets.YANDEX_CAPTCHA_SECRET_KEY }}
         VITE_FORM_SECRET_TOKEN: ${{ secrets.VITE_FORM_SECRET_TOKEN }}
 
-    - name: Deploy to Beget via SSH
-      uses: easingthemes/ssh-deploy@main
+    - name: Verify build
+      run: |
+        echo "Build contents:"
+        ls -la dist/
+
+    - name: Deploy via SSH
+      uses: easingthemes/ssh-deploy@v4.1.2
       with:
         SSH_PRIVATE_KEY: ${{ secrets.BEGET_SSH_KEY }}
         REMOTE_HOST: ${{ secrets.BEGET_HOST }}
         REMOTE_USER: ${{ secrets.BEGET_USER }}
         REMOTE_PORT: ${{ secrets.BEGET_PORT }}
-        SOURCE: ./dist/
+        SOURCE: dist/
         TARGET: ${{ secrets.BEGET_TARGET_PATH }}
-        EXCLUDE: '.git*, .env*, node_modules'
-        ARGS: '-rltgoDzvO'
+        ARGS: '-rltgoDzvO --delete'
 
-    - name: Notify success
-      run: |
-        echo "✅ Деплой успешен!"
-        echo "🌐 Сайт: https://vfd74.ru"
+    - name: Success notification
+      run: echo "✅ Deployed to https://vfd74.ru"
