@@ -2,14 +2,15 @@ name: Deploy to Beget VPS
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
+    - name: Checkout code
       uses: actions/checkout@v4
 
     - name: Setup Node.js
@@ -28,21 +29,19 @@ jobs:
         YANDEX_CAPTCHA_SECRET_KEY: ${{ secrets.YANDEX_CAPTCHA_SECRET_KEY }}
         VITE_FORM_SECRET_TOKEN: ${{ secrets.VITE_FORM_SECRET_TOKEN }}
 
-    - name: Verify build
-      run: |
-        echo "Build contents:"
-        ls -la dist/
-
-    - name: Deploy via SSH
-      uses: easingthemes/ssh-deploy@v4.1.2
+    - name: Deploy to Beget VPS
+      uses: appleboy/ssh-action@v1.0.3
       with:
-        SSH_PRIVATE_KEY: ${{ secrets.BEGET_SSH_KEY }}
-        REMOTE_HOST: ${{ secrets.BEGET_HOST }}
-        REMOTE_USER: ${{ secrets.BEGET_USER }}
-        REMOTE_PORT: ${{ secrets.BEGET_PORT }}
-        SOURCE: dist/
-        TARGET: ${{ secrets.BEGET_TARGET_PATH }}
-        ARGS: '-rltgoDzvO --delete'
+        host: ${{ secrets.BEGET_HOST }}
+        username: ${{ secrets.BEGET_USER }}
+        port: ${{ secrets.BEGET_PORT }}
+        key: ${{ secrets.BEGET_SSH_KEY }}
+        script: |
+          cd /var/www/vfd-door/data
+          rm -rf *
+          cp -r /home/runner/work/vfd-door/vfd-door/dist/* .
+          chown -R www-data:www-data /var/www/vfd-door/data
+          systemctl reload nginx
 
-    - name: Success notification
+    - name: Success
       run: echo "✅ Deployed to https://vfd74.ru"
