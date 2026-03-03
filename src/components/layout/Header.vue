@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
 import BurgerIcon from '@/assets/icons/burger.svg'
 import CloseIcon from '@/assets/icons/close.svg'
 
-/* ================= CONFIG ================= */
+
 const HEADER_HEIGHT = 72
 
 const LOGO = {
   url: new URL('@/assets/icons/logo.svg', import.meta.url).href,
-  alt: 'VFD Кашириных - Интернет-магазин дверных систем',
+  alt: 'Двери и перегородки ВФД на Кашириных - Офлайн-магазин дверей и систем открывания',
 } as const
 
 const SOCIAL_NETWORKS = [
@@ -19,14 +19,14 @@ const SOCIAL_NETWORKS = [
     label: 'ВКонтакте',
     url: 'https://vk.com/vfddoors174',
     icon: 'https://storage.yandexcloud.net/catalog-vfd/icons/vk_logo.svg',
-    ariaLabel: 'VFD Doors ВКонтакте',
+    ariaLabel: 'Двери ВФД Челябинск на Братьев Кашириных ВКонтакте',
   },
   {
     name: 'TG',
     label: 'Telegram',
     url: 'https://t.me/vfddoors174',
     icon: 'https://storage.yandexcloud.net/catalog-vfd/icons/tg_logo.svg',
-    ariaLabel: 'VFD Doors Telegram',
+    ariaLabel: 'Двери ВФД Челябинск на Братьев Кашириных в Телеграмме',
   },
 ] as const
 
@@ -35,12 +35,17 @@ const CONTACTS = {
     { raw: '+79000297888', label: '+7 (900) 029-78-88' },
     { raw: '+79630807888', label: '+7 (963) 080-78-88' },
   ],
-  address: 'Челябинск, улица Братьев Кашириных, 131Б',
-  worktime: 'Пн–Пт: 10:00 – 19:00  Сб-Вс: 10:00 – 18:00',
+  address: 'Челябинск, улица Братьев Кашириных, 131Б (Вход с ул.Чичерина)',
+  worktime: 'Пн–Пт: 10:00 – 20:00  Сб-Вс: 10:00 – 18:00',
   email: 'vfddoors74@mail.ru',
 } as const
 
-/* ================= STATE ================= */
+const WORK_SCHEDULE = {
+  weekday: { open: 10, close: 20 },
+  weekend: { open: 10, close: 18 },
+} as const
+
+
 const route = useRoute()
 
 const scrolled = ref(false)
@@ -55,7 +60,55 @@ const contactsPanelRef = ref<HTMLDivElement | null>(null)
 const mobileMenuRef = ref<HTMLDivElement | null>(null)
 const burgerBtnRef = ref<HTMLButtonElement | null>(null)
 
-/* ================= HELPERS ================= */
+const now = ref(new Date())
+let timerId: ReturnType<typeof setInterval> | null = null
+
+const isWeekend = computed(() => {
+  const day = now.value.getDay()
+  return day === 0 || day === 6
+})
+
+const workScheduleToday = computed(() => {
+  return isWeekend.value ? WORK_SCHEDULE.weekend : WORK_SCHEDULE.weekday
+})
+
+const closingTime = computed(() => {
+  const schedule = workScheduleToday.value
+  const close = new Date(now.value)
+  close.setHours(schedule.close, 0, 0, 0)
+  return close
+})
+
+const isOpen = computed(() => {
+  const schedule = workScheduleToday.value
+  const currentHour = now.value.getHours()
+  return currentHour >= schedule.open && currentHour < schedule.close
+})
+
+const timeUntilClose = computed(() => {
+  if (!isOpen.value) return null
+  
+  const diff = closingTime.value.getTime() - now.value.getTime()
+  
+  const hours = Math.floor(diff / (1000 * 60 * 60))
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+  const seconds = Math.floor((diff % (1000 * 60)) / 1000)
+  
+  return { hours, minutes, seconds }
+})
+
+const timeUntilCloseText = computed(() => {
+  const time = timeUntilClose.value
+  if (!time) return null
+  
+  const hoursStr = time.hours > 0 ? `${time.hours} ч` : ''
+  const minStr = time.minutes > 0 || time.hours > 0 ? `${time.minutes} мин` : ''
+  const secStr = `${time.seconds} сек`
+  
+  return `${hoursStr} ${minStr} ${secStr}`.trim()
+})
+
+
 const isActive = (path: string) => route.path === path
 
 const setHeaderVar = () => {
@@ -76,7 +129,7 @@ const onKeydown = (ev: KeyboardEvent) => {
   }
 }
 
-// Закрытие по клику вне панелей
+
 const onClickOutside = (ev: MouseEvent) => {
   const target = ev.target as Node
 
@@ -99,7 +152,7 @@ const onClickOutside = (ev: MouseEvent) => {
   }
 }
 
-/* ================= MOBILE MENU ================= */
+
 const openMobileMenu = () => {
   mobileOpen.value = true
   document.body.style.overflow = 'hidden'
@@ -114,14 +167,14 @@ const toggleMobileMenu = () => {
   mobileOpen.value ? closeMobileMenu() : openMobileMenu()
 }
 
-// Закрываем мобильное меню при переходе на десктоп
+
 const onResize = () => {
   if (window.innerWidth >= 768 && mobileOpen.value) {
     closeMobileMenu()
   }
 }
 
-/* ================= CONTACTS ================= */
+
 const openContacts = async () => {
   contactsOpen.value = true
   await nextTick()
@@ -147,7 +200,7 @@ const callPrimary = () => {
   window.location.href = `tel:${CONTACTS.phones[0].raw}`
 }
 
-/* ================= LOGO ================= */
+
 const handleLogoLoad = () => {
   logoLoaded.value = true
 }
@@ -156,14 +209,17 @@ const handleLogoError = () => {
   logoError.value = true
 }
 
-/* ================= LIFECYCLE ================= */
+
 onMounted(() => {
   setHeaderVar()
   window.addEventListener('scroll', onScroll, { passive: true })
   window.addEventListener('keydown', onKeydown)
   window.addEventListener('resize', onResize)
-  // Используем capture, чтобы перехватить клик раньше других обработчиков
   document.addEventListener('click', onClickOutside, { capture: true })
+  
+  timerId = setInterval(() => {
+    now.value = new Date()
+  }, 1000)
 })
 
 onUnmounted(() => {
@@ -172,6 +228,10 @@ onUnmounted(() => {
   window.removeEventListener('resize', onResize)
   document.removeEventListener('click', onClickOutside, { capture: true })
   document.body.style.overflow = ''
+  
+  if (timerId) {
+    clearInterval(timerId)
+  }
 })
 </script>
 
@@ -214,12 +274,12 @@ onUnmounted(() => {
               class="w-10 h-10 rounded-lg bg-linear-to-br from-gray-700 to-gray-900
                      text-white flex items-center justify-center text-xs font-bold"
             >
-              VFD
+              ВФД
             </div>
           </div>
 
           <span class="hidden sm:block text-sm font-bold tracking-wide">
-            КАШИРИНЫХ
+             ВФД НА КАШИРИНЫХ
           </span>
         </RouterLink>
 
@@ -318,7 +378,6 @@ onUnmounted(() => {
 
             <div>
               <div class="text-xs text-gray-500 mb-1">Адрес</div>
-              <!-- ИСПРАВЛЕНО: wrap-break-word → break-words -->
               <div class="wrap-break-word text-gray-700">
                 {{ CONTACTS.address }}
               </div>
@@ -327,6 +386,27 @@ onUnmounted(() => {
             <div>
               <div class="text-xs text-gray-500 mb-1">Время работы</div>
               <div>{{ CONTACTS.worktime }}</div>
+            </div>
+
+            <div
+              class="rounded-xl px-3 py-2.5 text-sm font-medium"
+              :class="isOpen ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'"
+            >
+              <div class="flex items-center gap-2">
+                <span
+                  class="w-2 h-2 rounded-full shrink-0"
+                  :class="isOpen ? 'bg-green-500 animate-pulse' : 'bg-red-500'"
+                />
+                <span class="flex-1">
+                  {{ isOpen ? 'Салон открыт' : 'Салон закрыт' }}
+                </span>
+                <span
+                  v-if="isOpen && timeUntilCloseText"
+                  class="text-xs text-gray-500 shrink-0"
+                >
+                  ({{ timeUntilCloseText }})
+                </span>
+              </div>
             </div>
 
             <div>
@@ -411,15 +491,15 @@ onUnmounted(() => {
 }
 
 .header-btn:hover {
-  background: rgb(20 184 166); /* teal-500 */
+  background: rgb(20 184 166); 
 }
 
 :focus-visible {
-  outline: 2px solid rgb(45 212 191); /* teal-400 */
+  outline: 2px solid rgb(45 212 191); 
   outline-offset: 3px;
 }
 
-/* Анимация для меню и попапа */
+
 .fade-slide-enter-active,
 .fade-slide-leave-active {
   transition: opacity 0.2s ease, transform 0.2s ease;

@@ -184,7 +184,7 @@ const resetForm = () => {
   <div class="w-full max-w-md mx-auto">
     <!-- Заголовок -->
     <div v-if="title || subtitle" class="mb-6 text-center">
-      <h3 v-if="title" class="text-xl font-bold text-zinc-900">{{ title }}</h3>
+      <h3 v-if="title" class="text-xl font-medium text-zinc-900">{{ title }}</h3>
       <p v-if="subtitle" class="mt-1 text-sm text-zinc-600">{{ subtitle }}</p>
     </div>
 

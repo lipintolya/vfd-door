@@ -263,7 +263,7 @@ watch(product, (p) => {
 
     <!-- PRODUCT HEADER -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 sm:mt-6 mb-8 sm:mb-10">
-      <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
+      <h1 class="text-2xl sm:text-3xl lg:text-4xl font-medium text-gray-900 mb-2">
         {{ product.name }}
       </h1>
       <div class="flex items-center gap-3 text-sm sm:text-base text-gray-600">
@@ -351,7 +351,7 @@ watch(product, (p) => {
 
             <!-- Color Selection -->
             <div class="mt-6 sm:mt-8">
-              <h3 class="text-sm font-semibold text-gray-900 mb-3">
+              <h3 class="text-sm font-normal text-gray-900 mb-3">
                 Выберите цвет: <span class="font-normal text-gray-600">{{ selectedColor.name }}</span>
               </h3>
               <div class="flex flex-wrap gap-3 overflow-visible">
@@ -463,7 +463,7 @@ watch(product, (p) => {
         <div class="grid lg:grid-cols-12 gap-8 lg:gap-12">
           <!-- Description -->
           <div class="lg:col-span-7">
-            <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
+            <h2 class="text-xl sm:text-2xl font-medium text-gray-900 mb-4 sm:mb-6">
               Описание
             </h2>
             <div class="prose prose-gray max-w-none">
@@ -475,7 +475,7 @@ watch(product, (p) => {
 
           <!-- Characteristics -->
           <div class="lg:col-span-5">
-            <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
+            <h2 class="text-xl sm:text-2xl font-medium text-gray-900 mb-4 sm:mb-6">
               Характеристики
             </h2>
             <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
@@ -498,7 +498,7 @@ watch(product, (p) => {
     <!-- PACKAGE -->
     <div class="py-12 sm:py-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-6 sm:mb-8">
+        <h2 class="text-xl sm:text-2xl font-medium text-gray-900 mb-6 sm:mb-8">
           Что входит в комплект
         </h2>
         <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -530,7 +530,7 @@ watch(product, (p) => {
     <!-- RELATED PRODUCTS -->
     <div v-if="relatedProducts.length" class="py-12 sm:py-16 bg-gray-50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-6 sm:mb-8">
+        <h2 class="text-xl sm:text-2xl font-medium text-gray-900 mb-6 sm:mb-8">
           Похожие модели
         </h2>
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">

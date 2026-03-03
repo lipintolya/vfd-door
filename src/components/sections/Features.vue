@@ -3,20 +3,16 @@ import { ref, onMounted, onBeforeUnmount } from 'vue'
 import AppSection from '@/components/layout/AppSection.vue'
 import AppContainer from '@/components/layout/AppContainer.vue'
 
-/* ----------------------------
-   Visibility
------------------------------ */
+
 const visible = ref(false)
 let observer: IntersectionObserver | null = null
 
-/* ----------------------------
-   Rotating text (SEO + UX)
------------------------------ */
+
 const words = [
-  '→ салон Кашириных',
-  '→ двери VFD',
-  '→ перегородки VFD',
-  '→ входные двери',
+  '→ официальный салон ВФД',
+  '→ межкомнатные двери ВФД',
+  '→ входные двери под ключ',
+  '→ наш монтаж дверей',
 ]
 
 const currentWord = ref(words[0])
@@ -37,9 +33,7 @@ const stopWordAnimation = () => {
   wordInterval = null
 }
 
-/* ----------------------------
-   Features data
------------------------------ */
+
 interface Feature {
   id: number
   title: string
@@ -50,20 +44,20 @@ interface Feature {
 const features: Feature[] = [
   {
     id: 1,
-    title: 'Двери в наличии',
-    text: 'Популярные модели всегда есть на складе в Челябинске.',
+    title: 'Официальный дилер ВФД',
+    text: 'Прямые поставки с Владимирской фабрики дверей. Сотни моделей межкомнатных и входных дверей постоянно в наличии на складе в Челябинске — без ожидания и переплат посредникам.',
     iconUrl: 'https://storage.yandexcloud.net/catalog-vfd/icons/icons-first.svg',
   },
   {
     id: 2,
-    title: 'Замер и монтаж',
-    text: 'Специалисты с опытом более 20 лет. Аккуратно и без переделок.',
+    title: 'Монтаж под ключ',
+    text: 'Полный цикл без лишних забот: замер, расчёт, доставка и профессиональная установка дверей. Собственные монтажники с опытом более 20 лет — аккуратно, в срок и с гарантией.',
     iconUrl: 'https://storage.yandexcloud.net/catalog-vfd/icons/size%3D24px.svg',
   },
   {
     id: 3,
-    title: 'Экспозиция VFD',
-    text: 'Крупнейшая экспозиция дверей VFD в Челябинске.',
+    title: 'Крупнейшая выставка дверей',
+    text: 'Самая большая экспозиция межкомнатных и входных дверей ВФД в Челябинске. Более 80 моделей вживую — оцените фактуру, цвет и фурнитуру прежде чем принять решение.',
     iconUrl: 'https://storage.yandexcloud.net/catalog-vfd/icons/icons-third.svg',
   },
 ]
@@ -104,7 +98,7 @@ onBeforeUnmount(() => {
         <!-- Header -->
         <header class="max-w-4xl space-y-4">
           <h2 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-white leading-tight">
-            Почему выбирают
+            Почему клиенты выбирают
             <span
               :key="currentWord"
               class="inline-block ml-2 text-teal-400 animate-word"
@@ -114,7 +108,8 @@ onBeforeUnmount(() => {
           </h2>
 
           <p class="text-base sm:text-lg text-zinc-400 leading-relaxed">
-            Помогаем выбрать и установить двери без лишних затрат, ошибок и затянутых сроков.
+            Официальный салон Владимирской фабрики дверей в Челябинске. Берём на себя всё —
+            от подбора межкомнатных и входных дверей до профессионального монтажа под ключ.
           </p>
         </header>
 

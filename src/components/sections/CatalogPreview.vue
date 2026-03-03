@@ -29,24 +29,24 @@ let observer: IntersectionObserver | null = null
 const categories: Category[] = [
   {
     title: 'Межкомнатные двери',
-    subtitle: 'Стильные и долговечные решения',
+    subtitle: 'Официальный каталог Владимирской фабрики дверей. Покрытия: эмаль, экошпон, ПВХ, полипропилен, под покраску — широкий выбор моделей в наличии в Челябинске.',
     image: 'https://storage.yandexcloud.net/catalog-vfd/renders/cover-in.webp',
     link: '/catalog',
-    cta: 'Перейти в каталог',
+    cta: 'Смотреть межкомнатные двери',
   },
   {
     title: 'Входные двери',
-    subtitle: 'Надёжность и безопасность',
+    subtitle: 'Уличные двери с терморазрывом для частного дома и подъездные с МДФ-панелями для квартиры — надёжная защита под любые условия.',
     image: 'https://storage.yandexcloud.net/catalog-vfd/renders/cover-out.webp',
     link: '/catalog?series=innova',
-    cta: 'Перейти в каталог',
+    cta: 'Смотреть входные двери',
   },
   {
     title: 'Алюминиевые перегородки',
-    subtitle: 'Современные интерьерные решения',
+    subtitle: 'Стеклянные перегородки для офисов, квартир и коммерческих пространств. Проектирование и монтаж под ключ.',
     image: 'https://storage.yandexcloud.net/catalog-vfd/renders/cover-alum.webp',
     link: '/partitions',
-    cta: 'Перейти в каталог',
+    cta: 'Смотреть перегородки',
   },
 ]
 
@@ -94,11 +94,12 @@ onBeforeUnmount(() => observer?.disconnect())
             class="lg:col-span-12 transition-all duration-700"
             :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
           >
-            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-zinc-900 mb-3">
-              Категории товаров
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-normal text-zinc-900 mb-3">
+              Двери и перегородки ВФД в Челябинске
             </h2>
             <p class="text-base sm:text-lg text-zinc-600 max-w-2xl">
-              Выберите подходящее решение для вашего интерьера
+              Межкомнатные и входные двери, алюминиевые перегородки от официального дилера
+              Владимирской фабрики дверей — в наличии и под заказ.
             </p>
           </header>
 
@@ -124,12 +125,12 @@ onBeforeUnmount(() => observer?.disconnect())
                     class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
                     :style="{ backgroundImage: `url(${heroCategory.image})` }"
                   />
-                  <div class="absolute inset-0 bg-black/35"></div>
+                  <div class="absolute inset-0 bg-black/35" />
                 </div>
 
                 <!-- Content -->
                 <div class="relative z-10 p-6 lg:p-8 text-white">
-                  <h3 class="text-xl sm:text-2xl font-semibold mb-2">
+                  <h3 class="text-xl sm:text-2xl font-normal mb-2">
                     {{ heroCategory.title }}
                   </h3>
 
@@ -166,12 +167,12 @@ onBeforeUnmount(() => observer?.disconnect())
                       class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
                       :style="{ backgroundImage: `url(${category.image})` }"
                     />
-                    <div class="absolute inset-0 bg-black/40"></div>
+                    <div class="absolute inset-0 bg-black/40" />
                   </div>
 
                   <!-- Content -->
                   <div class="relative z-10 p-6 text-white">
-                    <h3 class="text-xl sm:text-2xl font-semibold mb-2">
+                    <h3 class="text-xl sm:text-2xl font-normal mb-2">
                       {{ category.title }}
                     </h3>
 

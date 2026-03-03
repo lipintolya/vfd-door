@@ -439,7 +439,7 @@ onBeforeUnmount(() => {
               <p class="text-xs uppercase tracking-widest text-white/70">
                 {{ currentSlide.subtitle }}
               </p>
-              <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight">
+              <h1 class="text-2xl sm:text-3xl lg:text-4xl font-medium leading-tight">
                 {{ currentSlide.title }}
               </h1>
             </div>
@@ -526,7 +526,7 @@ onBeforeUnmount(() => {
 
           <!-- CONTENT -->
           <div class="p-6">
-            <h3 class="text-xl font-bold text-zinc-900 mb-3">
+            <h3 class="text-xl font-medium text-zinc-900 mb-3">
               {{ feature.title }}
             </h3>
             <p class="text-sm text-zinc-700 leading-relaxed">
@@ -543,13 +543,13 @@ onBeforeUnmount(() => {
     <AppContainer>
       <div class="space-y-10 sm:space-y-12">
         <div>
-          <h2 class="text-3xl sm:text-4xl font-bold text-zinc-900 mb-2 sm:mb-3">Характеристики и преимущества</h2>
+          <h2 class="text-3xl sm:text-4xl font-medium text-zinc-900 mb-2 sm:mb-3">Характеристики и преимущества</h2>
           <p class="text-zinc-700 max-w-2xl">Полная информация о свойствах наших перегородок</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
           <div v-for="spec in specifications" :key="spec.id" class="space-y-6">
-            <h3 class="text-2xl font-bold text-zinc-900">{{ spec.title }}</h3>
+            <h3 class="text-2xl font-medium text-zinc-900">{{ spec.title }}</h3>
             <ul class="space-y-3">
               <li v-for="(item, idx) in spec.items" :key="idx" class="flex items-start gap-3 text-base text-zinc-700">
                 <span class="text-lg leading-none mt-0.5 text-teal-600">✓</span>
@@ -568,7 +568,7 @@ onBeforeUnmount(() => {
       <div class="space-y-10 sm:space-y-12">
         <div class="flex items-center justify-between flex-wrap gap-4">
           <div>
-            <h2 class="text-3xl sm:text-4xl font-bold text-zinc-900 mb-2 sm:mb-3">Типы раздвижения</h2>
+            <h2 class="text-3xl sm:text-4xl font-medium text-zinc-900 mb-2 sm:mb-3">Типы раздвижения</h2>
             <p class="text-zinc-700 max-w-2xl">Выберите оптимальный тип системы раздвижения для вашего помещения</p>
           </div>
           <button 
@@ -596,7 +596,7 @@ onBeforeUnmount(() => {
               </div>
             </div>
             <div class="p-6">
-              <h3 class="text-xl font-bold text-zinc-900 mb-2">{{ type.name }}</h3>
+              <h3 class="text-xl font-medium text-zinc-900 mb-2">{{ type.name }}</h3>
               <p class="text-sm text-zinc-700 leading-relaxed mb-3">{{ type.description }}</p>
               <button 
                 class="md:hidden w-full ui-button ui-button--ghost text-sm py-2"
@@ -632,7 +632,7 @@ onBeforeUnmount(() => {
         </button>
 
         <div class="modal-header">
-          <h2 class="text-2xl sm:text-3xl font-bold text-zinc-900">
+          <h2 class="text-2xl sm:text-3xl font-medium text-zinc-900">
             {{ currentModalType.name }}
           </h2>
           <p class="text-zinc-700 mt-2">{{ currentModalType.description }}</p>
@@ -640,7 +640,7 @@ onBeforeUnmount(() => {
 
         <div class="modal-content">
           <div class="space-y-6">
-            <h3 class="text-xl font-bold text-zinc-900">Схемы расположения</h3>
+            <h3 class="text-xl font-medium text-zinc-900">Схемы расположения</h3>
             
             <div v-if="hasSchemaImages" class="relative">
               <div class="rounded-2xl overflow-hidden border-2 border-zinc-200 bg-white">
@@ -707,7 +707,7 @@ onBeforeUnmount(() => {
           </div>
 
           <div class="space-y-4">
-            <h3 class="text-xl font-bold text-zinc-900">Информация о монтаже</h3>
+            <h3 class="text-xl font-medium text-zinc-900">Информация о монтаже</h3>
             <div class="space-y-3">
               <p 
                 v-for="(info, idx) in currentModalType.mountingInfo" 
@@ -720,7 +720,7 @@ onBeforeUnmount(() => {
           </div>
 
           <div class="space-y-4">
-            <h3 class="text-xl font-bold text-zinc-900">Особенности системы</h3>
+            <h3 class="text-xl font-medium text-zinc-900">Особенности системы</h3>
             <ul class="space-y-2">
               <li 
                 v-for="(info, idx) in currentModalType.systemInfo" 
@@ -734,7 +734,7 @@ onBeforeUnmount(() => {
           </div>
 
           <div class="space-y-4">
-            <h3 class="text-xl font-bold text-zinc-900">Преимущества</h3>
+            <h3 class="text-xl font-medium text-zinc-900">Преимущества</h3>
             <ul class="space-y-2">
               <li 
                 v-for="(advantage, idx) in currentModalType.advantages" 
@@ -794,7 +794,7 @@ onBeforeUnmount(() => {
     <AppContainer>
       <div class="space-y-10 sm:space-y-12">
         <div>
-          <h2 class="text-3xl sm:text-4xl font-bold text-zinc-900 mb-2 sm:mb-3">Типы крепления</h2>
+          <h2 class="text-3xl sm:text-4xl font-medium text-zinc-900 mb-2 sm:mb-3">Типы крепления</h2>
           <p class="text-zinc-700 max-w-2xl">Различные варианты монтажа в зависимости от вашего помещения</p>
         </div>
 
@@ -807,7 +807,7 @@ onBeforeUnmount(() => {
             <div class="mb-6">
               <img :src="mount.image" :alt="mount.name" class="w-60 h-80 mx-auto object-contain" loading="lazy" />
             </div>
-            <h3 class="text-2xl font-bold text-zinc-900 mb-3">{{ mount.name }}</h3>
+            <h3 class="text-2xl font-medium text-zinc-900 mb-3">{{ mount.name }}</h3>
             <p class="text-base text-zinc-700 leading-relaxed">{{ mount.description }}</p>
           </div>
         </div>
@@ -820,7 +820,7 @@ onBeforeUnmount(() => {
     <AppContainer>
       <div class="space-y-10 sm:space-y-12">
         <div>
-          <h2 class="text-3xl sm:text-4xl font-bold text-zinc-900 mb-2 sm:mb-3">Модельный ряд створок</h2>
+          <h2 class="text-3xl sm:text-4xl font-medium text-zinc-900 mb-2 sm:mb-3">Модельный ряд створок</h2>
           <p class="text-zinc-700 mb-6">{{ descriptionBlocks.partitionTypes }}</p>
         </div>
 
@@ -860,7 +860,7 @@ onBeforeUnmount(() => {
 
           <div class="lg:col-span-2 flex flex-col justify-between space-y-8">
             <div class="space-y-4">
-              <h3 class="text-2xl lg:text-3xl font-bold text-zinc-900">{{ currentPartitionType.name }}</h3>
+              <h3 class="text-2xl lg:text-3xl font-medium text-zinc-900">{{ currentPartitionType.name }}</h3>
               <p class="text-base lg:text-lg text-zinc-700 leading-relaxed max-w-2xl">{{ currentPartitionType.description }}</p>
               <p v-if="currentPartitionType.fullDescription" class="text-sm text-zinc-600">
                 {{ currentPartitionType.fullDescription }}
@@ -916,7 +916,7 @@ onBeforeUnmount(() => {
           </div>
 
           <div class="space-y-4">
-            <h3 class="text-2xl font-bold text-zinc-900">{{ currentPartitionType.name }}</h3>
+            <h3 class="text-2xl font-medium text-zinc-900">{{ currentPartitionType.name }}</h3>
             <p class="text-base text-zinc-700 leading-relaxed">{{ currentPartitionType.description }}</p>
             <p v-if="currentPartitionType.fullDescription" class="text-sm text-zinc-600">
               {{ currentPartitionType.fullDescription }}
@@ -944,7 +944,7 @@ onBeforeUnmount(() => {
     <AppContainer>
       <div class="space-y-10 sm:space-y-12">
         <div>
-          <h2 class="text-3xl sm:text-4xl font-bold text-zinc-900 mb-2 sm:mb-3">Накладной декор</h2>
+          <h2 class="text-3xl sm:text-4xl font-medium text-zinc-900 mb-2 sm:mb-3">Накладной декор</h2>
           <p class="text-zinc-700 mb-6">{{ descriptionBlocks.decorativeProfiles }}</p>
         </div>
 
@@ -984,7 +984,7 @@ onBeforeUnmount(() => {
 
           <div class="lg:col-span-2 flex flex-col justify-between space-y-8">
             <div class="space-y-4">
-              <h3 class="text-2xl lg:text-3xl font-bold text-zinc-900">{{ currentProfile.name }}</h3>
+              <h3 class="text-2xl lg:text-3xl font-medium text-zinc-900">{{ currentProfile.name }}</h3>
               <p class="text-base lg:text-lg text-zinc-700 leading-relaxed max-w-2xl">{{ currentProfile.description }}</p>
             </div>
 
@@ -1037,7 +1037,7 @@ onBeforeUnmount(() => {
           </div>
 
           <div class="space-y-4">
-            <h3 class="text-2xl font-bold text-zinc-900">{{ currentProfile.name }}</h3>
+            <h3 class="text-2xl font-medium text-zinc-900">{{ currentProfile.name }}</h3>
             <p class="text-base text-zinc-700 leading-relaxed">{{ currentProfile.description }}</p>
           </div>
 
@@ -1062,7 +1062,7 @@ onBeforeUnmount(() => {
     <AppContainer>
       <div class="space-y-10 sm:space-y-12">
         <div>
-          <h2 class="text-3xl sm:text-4xl font-bold text-zinc-900 mb-2 sm:mb-3">Цветовые решения профиля</h2>
+          <h2 class="text-3xl sm:text-4xl font-medium text-zinc-900 mb-2 sm:mb-3">Цветовые решения профиля</h2>
           <p class="text-zinc-700 mb-6">{{ descriptionBlocks.colorSolutions }}</p>
         </div>
 
@@ -1128,7 +1128,7 @@ onBeforeUnmount(() => {
     <AppContainer>
       <div class="space-y-10 sm:space-y-12">
         <div>
-          <h2 class="text-3xl sm:text-4xl font-bold text-zinc-900 mb-2 sm:mb-3">Заполнение перегородок</h2>
+          <h2 class="text-3xl sm:text-4xl font-medium text-zinc-900 mb-2 sm:mb-3">Заполнение перегородок</h2>
           <p class="text-zinc-700 mb-6">{{ descriptionBlocks.fillingOptions }}</p>
         </div>
 
@@ -1149,7 +1149,7 @@ onBeforeUnmount(() => {
     <AppContainer>
       <div class="space-y-10 sm:space-y-12">
         <div>
-          <h2 class="text-3xl sm:text-4xl font-bold text-zinc-900 mb-2 sm:mb-3">Реализованные проекты</h2>
+          <h2 class="text-3xl sm:text-4xl font-medium text-zinc-900 mb-2 sm:mb-3">Реализованные проекты</h2>
           <p class="text-zinc-700 max-w-2xl">Портфолио успешно выполненных проектов. Нажмите на проект для подробной информации</p>
         </div>
 
@@ -1171,7 +1171,7 @@ onBeforeUnmount(() => {
             </div>
 
             <div class="p-6 space-y-4">
-              <h3 class="text-xl font-bold text-zinc-900 leading-tight">{{ project.title }}</h3>
+              <h3 class="text-xl font-medium text-zinc-900 leading-tight">{{ project.title }}</h3>
               <p class="text-sm text-zinc-700 leading-relaxed">{{ project.description }}</p>
               
               <button 
@@ -1214,7 +1214,7 @@ onBeforeUnmount(() => {
             </span>
             <span class="text-sm text-zinc-600">{{ currentPortfolioProject.date }}</span>
           </div>
-          <h2 class="text-2xl sm:text-3xl font-bold text-zinc-900">
+          <h2 class="text-2xl sm:text-3xl font-medium text-zinc-900">
             {{ currentPortfolioProject.title }}
           </h2>
           <p class="text-zinc-700 mt-3">{{ currentPortfolioProject.fullDescription }}</p>
@@ -1223,7 +1223,7 @@ onBeforeUnmount(() => {
         <div class="modal-content">
           <!-- Gallery -->
           <div class="space-y-6">
-            <h3 class="text-xl font-bold text-zinc-900">Галерея проекта</h3>
+            <h3 class="text-xl font-medium text-zinc-900">Галерея проекта</h3>
             
             <div class="relative">
               <div class="rounded-2xl overflow-hidden border-2 border-zinc-200 bg-white">
@@ -1283,27 +1283,27 @@ onBeforeUnmount(() => {
 
           <!-- Project Details -->
           <div v-if="currentPortfolioProject.clientName" class="space-y-3">
-            <h3 class="text-lg font-bold text-zinc-900">Клиент</h3>
+            <h3 class="text-lg font-medium text-zinc-900">Клиент</h3>
             <p class="text-sm text-zinc-800">{{ currentPortfolioProject.clientName }}</p>
           </div>
 
           <div class="space-y-3">
-            <h3 class="text-lg font-bold text-zinc-900">Характеристики</h3>
+            <h3 class="text-lg font-medium text-zinc-900">Характеристики</h3>
             <p class="text-sm text-zinc-800 leading-relaxed">{{ currentPortfolioProject.specifications }}</p>
           </div>
 
           <div v-if="currentPortfolioProject.challenge" class="space-y-3">
-            <h3 class="text-lg font-bold text-zinc-900">Задача</h3>
+            <h3 class="text-lg font-medium text-zinc-900">Задача</h3>
             <p class="text-sm text-zinc-800 leading-relaxed">{{ currentPortfolioProject.challenge }}</p>
           </div>
 
           <div v-if="currentPortfolioProject.solution" class="space-y-3">
-            <h3 class="text-lg font-bold text-zinc-900">Решение</h3>
+            <h3 class="text-lg font-medium text-zinc-900">Решение</h3>
             <p class="text-sm text-zinc-800 leading-relaxed">{{ currentPortfolioProject.solution }}</p>
           </div>
 
           <div v-if="currentPortfolioProject.results && currentPortfolioProject.results.length > 0" class="space-y-3">
-            <h3 class="text-lg font-bold text-zinc-900">Результаты</h3>
+            <h3 class="text-lg font-medium text-zinc-900">Результаты</h3>
             <ul class="space-y-2">
               <li 
                 v-for="(result, idx) in currentPortfolioProject.results" 
@@ -1363,7 +1363,7 @@ onBeforeUnmount(() => {
     <AppContainer>
       <div class="space-y-10 sm:space-y-12">
         <div>
-          <h2 class="text-3xl sm:text-4xl font-bold text-zinc-900 mb-2 sm:mb-3">Процесс заказа</h2>
+          <h2 class="text-3xl sm:text-4xl font-medium text-zinc-900 mb-2 sm:mb-3">Процесс заказа</h2>
           <p class="text-zinc-700">Выберите этап для просмотра подробной информации</p>
         </div>
 
@@ -1424,7 +1424,7 @@ onBeforeUnmount(() => {
 
             <!-- Description -->
             <div class="space-y-4">
-              <h3 class="text-2xl font-bold text-zinc-900">{{ currentProcessStep.title }}</h3>
+              <h3 class="text-2xl font-medium text-zinc-900">{{ currentProcessStep.title }}</h3>
               <p class="text-base text-zinc-800 leading-relaxed">{{ currentProcessStep.description }}</p>
             </div>
 
@@ -1457,7 +1457,7 @@ onBeforeUnmount(() => {
   <AppSection>
     <AppContainer>
       <div class="mb-16 text-center">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-zinc-900 mb-4">
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-normal text-zinc-900 mb-4">
           Ответы на вопросы
         </h2>
         <p class="text-base sm:text-lg text-zinc-700 max-w-2xl mx-auto">
@@ -1525,7 +1525,7 @@ onBeforeUnmount(() => {
 
         <!-- Contact Block with links -->
         <div class="mt-8 p-8 rounded-3xl border-2 border-teal-600 bg-teal-50">
-          <h3 class="text-2xl font-semibold text-zinc-900 mb-2">
+          <h3 class="text-2xl font-normal text-zinc-900 mb-2">
             Не нашли ответ?
           </h3>
           <p class="text-zinc-700 mb-6">

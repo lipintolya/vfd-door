@@ -28,7 +28,6 @@ export default defineConfig({
       output: {
         manualChunks: {
           'vendor': ['vue', 'vue-router'],
-          'swiper': ['swiper'],
         },
       },
     },
@@ -37,12 +36,6 @@ export default defineConfig({
     assetsInlineLimit: 4096, // 4kb
     // Копировать .htaccess для Reg.ru
     copyPublicDir: true,
-  },
-  // Исключаем XML и TXT из обработки
-  publicDir: 'public',
-  // Оптимизация preload/prefetch
-  ssr: {
-    noExternal: ['swiper'],
   },
   // Base URL для CDN (в продакшене)
   base: process.env.NODE_ENV === 'production' ? '/' : '/',

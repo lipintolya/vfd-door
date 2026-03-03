@@ -323,7 +323,7 @@ onUnmounted(() => {
       <!-- SERIES BENTO GRID -->
       <section class="mb-8 sm:mb-10 lg:mb-14">
         <div class="mb-4 sm:mb-6 lg:mb-8">
-          <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
+          <h2 class="text-2xl sm:text-3xl lg:text-4xl font-medium text-gray-900 mb-2">
             Коллекции дверей
           </h2>
           <p class="text-sm sm:text-base text-gray-600">
@@ -348,7 +348,7 @@ onUnmounted(() => {
             </div>
 
             <div class="relative z-10 h-full flex flex-col justify-end p-4 sm:p-6 lg:p-8 text-white">
-              <h3 class="text-lg sm:text-xl lg:text-2xl font-bold mb-1 sm:mb-2">{{ series.title }}</h3>
+              <h3 class="text-lg sm:text-xl lg:text-2xl font-medium mb-1 sm:mb-2">{{ series.title }}</h3>
               <p class="text-xs sm:text-sm lg:text-base text-white/90 line-clamp-2">{{ series.description }}</p>
             </div>
 

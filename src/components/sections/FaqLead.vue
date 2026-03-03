@@ -71,7 +71,7 @@ const handleTouchEnd = (e: TouchEvent, id: number) => {
             class="w-full flex items-center justify-between px-4 sm:px-6 py-4 text-left hover:bg-zinc-800/50 transition-colors"
             @click="toggleFaq(item.id)"
           >
-            <span class="text-base sm:text-lg font-semibold text-white pr-4 break-words">
+            <span class="text-base sm:text-lg font-semibold text-white pr-4 wrap-break-wordword">
               {{ item.question }}
             </span>
             <span
@@ -111,7 +111,7 @@ const handleTouchEnd = (e: TouchEvent, id: number) => {
           >
             <div v-if="activeFaqIds.has(item.id)" class="px-4 sm:px-6 pb-4">
               <div class="pt-3 border-t border-zinc-700">
-                <p class="text-sm sm:text-base text-zinc-300 leading-relaxed break-words">
+                <p class="text-sm sm:text-base text-zinc-300 leading-relaxed wrap-break-word">
                   {{ item.answer }}
                 </p>
               </div>

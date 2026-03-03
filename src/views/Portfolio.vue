@@ -174,7 +174,7 @@ const handleImageLoad = (workId: string) => {
     <div class="pb-8 sm:pb-12 lg:pb-16">
       <AppContainer>
         <div class="max-w-3xl">
-          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-zinc-900 mb-3">
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-normal text-zinc-900 mb-3">
             Портфолио работ
           </h1>
           <p class="text-base sm:text-lg text-zinc-600">
@@ -234,7 +234,7 @@ const handleImageLoad = (workId: string) => {
           <svg class="w-16 h-16 mx-auto mb-4 text-zinc-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <h3 class="text-xl font-semibold text-zinc-900 mb-2">Ничего не найдено</h3>
+          <h3 class="text-xl font-normal text-zinc-900 mb-2">Ничего не найдено</h3>
           <p class="text-zinc-500 mb-6">Попробуйте изменить параметры поиска</p>
           <button
             @click="() => { selectedType = 'all'; searchQuery = '' }"
@@ -293,7 +293,7 @@ const handleImageLoad = (workId: string) => {
 
             <!-- CONTENT -->
             <div class="p-4">
-              <h3 class="text-base font-semibold text-zinc-900 mb-2 line-clamp-2 group-hover/card:text-teal-700 transition-colors">
+              <h3 class="text-base font-normal text-zinc-900 mb-2 line-clamp-2 group-hover/card:text-teal-700 transition-colors">
                 {{ work.title }}
               </h3>
               <p class="text-sm text-zinc-600 mb-3 line-clamp-2">
@@ -394,7 +394,7 @@ const handleImageLoad = (workId: string) => {
 
         <!-- Info -->
         <div class="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 text-center">
-          <h3 class="text-white text-lg sm:text-xl font-semibold mb-2">
+          <h3 class="text-white text-lg sm:text-xl font-normal mb-2">
             {{ selectedWork.title }}
           </h3>
           <div class="flex items-center justify-center gap-4 text-white/80 text-sm">
