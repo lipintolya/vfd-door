@@ -43,21 +43,13 @@ jobs:
         find dist -name "index.html" -exec ls -lh {} \;
         
     - name: Deploy to Beget via SSH
-      uses: easingthemes/ssh-deploy@v4
+      uses: easingthemes/ssh-deploy@main
       with:
         SSH_PRIVATE_KEY: ${{ secrets.BEGET_SSH_KEY }}
-        SSH_PRIVATE_KEY_PASSPHRASE: ${{ secrets.BEGET_SSH_PASSPHRASE }}
         REMOTE_HOST: ${{ secrets.BEGET_HOST }}
         REMOTE_USER: ${{ secrets.BEGET_USER }}
         REMOTE_PORT: ${{ secrets.BEGET_PORT }}
         SOURCE: ./dist/
         TARGET: ${{ secrets.BEGET_TARGET_PATH }}
         EXCLUDE: '.git*, .env*, node_modules'
-        ARGS: '-rltgoDzvO --delete'
-        SSH_KNOWN_HOSTS: false
-        
-    - name: Deployment complete
-      run: |
-        echo "✅ Deploy completed!"
-        echo "🌐 Site: https://vfd74.ru"
-        echo "📝 Sitemap: https://vfd74.ru/sitemap.xml"
+        ARGS: '-rltgoDzvO'
