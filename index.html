@@ -6,6 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="yandex-verification" content="b030b4edecf534b8" />
 
+    <!-- Prevent FOUC: Hide app until Vue is ready -->
+    <style>
+      #app:not([data-v-app]) { opacity: 0; }
+      #app { transition: opacity 0.1s ease-in; }
+      body { margin: 0; padding: 0; }
+    </style>
+
     <!-- ==========================================
          FAVICON (Production Ready)
     ========================================== -->
