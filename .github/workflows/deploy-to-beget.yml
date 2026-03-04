@@ -46,6 +46,7 @@ jobs:
       uses: easingthemes/ssh-deploy@v4
       with:
         SSH_PRIVATE_KEY: ${{ secrets.BEGET_SSH_KEY }}
+        SSH_PRIVATE_KEY_PASSPHRASE: ${{ secrets.BEGET_SSH_PASSPHRASE }}
         REMOTE_HOST: ${{ secrets.BEGET_HOST }}
         REMOTE_USER: ${{ secrets.BEGET_USER }}
         REMOTE_PORT: ${{ secrets.BEGET_PORT }}
@@ -53,6 +54,7 @@ jobs:
         TARGET: ${{ secrets.BEGET_TARGET_PATH }}
         EXCLUDE: '.git*, .env*, node_modules'
         ARGS: '-rltgoDzvO --delete'
+        SSH_KNOWN_HOSTS: false
         
     - name: Deployment complete
       run: |

@@ -211,8 +211,12 @@ onUnmounted(() => stop())
               class="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out"
               :style="{ backgroundImage: `url(${slide.image})` }"
               :class="i === activeIndex ? 'opacity-100' : 'opacity-0 pointer-events-none'"
+              :loading="i === 0 ? 'eager' : 'lazy'"
+              :fetchpriority="i === 0 ? 'high' : 'low'"
               aria-hidden="true"
             />
+            <!-- Preload first slide image -->
+            <link v-if="slides[0]" rel="preload" as="image" :href="slides[0].image" fetchpriority="high" />
           </div>
 
           <!-- overlay for contrast -->

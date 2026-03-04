@@ -353,7 +353,6 @@ onUnmounted(() => {
           }"
           loading="lazy"
           decoding="async"
-          fetchpriority="high"
           @error="handleImageError"
           @load="handleImageLoad"
         />
