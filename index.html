@@ -10,6 +10,73 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
+    <!-- Inline Preloader (показывается до загрузки Vue) -->
+    <style>
+      #preloader {
+        position: fixed;
+        inset: 0;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 99999;
+        transition: opacity 0.5s ease;
+      }
+      #preloader.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+      .vfd-logo {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+      }
+      .vfd-letter {
+        font-size: 4rem;
+        font-weight: 700;
+        color: #14b8a6;
+        animation: pulse 1.5s ease-in-out infinite;
+      }
+      .vfd-letter.v { animation-delay: 0s; }
+      .vfd-letter.f { animation-delay: 0.2s; }
+      .vfd-letter.d { animation-delay: 0.4s; }
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.1); opacity: 0.7; }
+      }
+      .progress-bar {
+        width: 280px;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 9999px;
+        overflow: hidden;
+        margin: 0 auto 1.5rem;
+      }
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #14b8a6, #2dd4bf);
+        border-radius: 9999px;
+        width: 0%;
+        animation: progress 2s ease-out infinite;
+        box-shadow: 0 0 20px rgba(20, 184, 166, 0.5);
+      }
+      @keyframes progress {
+        0% { width: 0%; }
+        50% { width: 70%; }
+        100% { width: 100%; }
+      }
+      .loading-text {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.875rem;
+        font-weight: 500;
+        letter-spacing: 0.05em;
+      }
+      @media (max-width: 640px) {
+        .vfd-letter { font-size: 3rem; }
+        .progress-bar { width: 200px; }
+      }
+    </style>
+
     <!-- ==========================================
          FAVICON (Production Ready)
     ========================================== -->
@@ -271,6 +338,19 @@
     </script>
   </head>
   <body>
+    <!-- Inline Preloader (виден до загрузки Vue) -->
+    <div id="preloader">
+      <div class="vfd-logo">
+        <span class="vfd-letter v">V</span>
+        <span class="vfd-letter f">F</span>
+        <span class="vfd-letter d">D</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill"></div>
+      </div>
+      <p class="loading-text">Загружаем двери...</p>
+    </div>
+
     <div id="app"></div>
     <!-- Yandex Metrika counter -->
     <noscript><div><img src="https://mc.yandex.ru/watch/106993554" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
@@ -292,6 +372,19 @@
           e.preventDefault();
         }
       }, true);
+
+      // Скрываем прелоадер после загрузки страницы
+      window.addEventListener('load', function() {
+        const preloader = document.getElementById('preloader');
+        if (preloader) {
+          setTimeout(function() {
+            preloader.classList.add('hidden');
+            setTimeout(function() {
+              preloader.style.display = 'none';
+            }, 500);
+          }, 500);
+        }
+      });
     </script>
     
     <script type="module" src="/src/main.ts"></script>

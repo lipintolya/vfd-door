@@ -4,7 +4,6 @@ import Header from './components/layout/Header.vue'
 import Footer from './components/layout/Footer.vue'
 import ScrollToTop from './components/ui/ScrollToTop.vue'
 import SiteNotice from './components/ui/SiteNotice.vue'
-import Preloader from './components/ui/Preloader.vue'
 
 const headerRef = ref<InstanceType<typeof Header> | null>(null)
 const headerHeight = ref(0)
@@ -50,7 +49,6 @@ onUnmounted(() => {
 
 <template>
   <div class="min-h-screen flex flex-col relative overflow-x-hidden">
-    <Preloader />
     <SiteNotice />
     <div class="relative">
       <Header ref="headerRef" />
