@@ -27,6 +27,55 @@ body {
 }
 
 /* ==================================================
+   TYPOGRAPHY — PROFESSIONAL STANDARD
+   Based on: UXPin, WCAG, Nielsen Norman Group
+   Used by: Vercel, Linear, Stripe, Tailwind UI
+================================================== */
+
+/* 
+  Hero/Section subtitle: 55-65 characters optimal for scanning
+  This is the "sweet spot" for hero sections — short enough to scan
+  in 2-3 lines, long enough to convey value proposition
+  ONLY for centered layouts (use with mx-auto)
+*/
+.prose-subtitle {
+  max-width: 65ch;
+}
+
+/*
+  Body text: 66 characters — classic typography standard
+  Optimal for comfortable reading without eye fatigue
+  ONLY for centered layouts (use with mx-auto)
+*/
+.prose-body {
+  max-width: 66ch;
+}
+
+/*
+  Narrow text: 45-50 characters for quotes, captions, testimonials
+  Creates visual rhythm and emphasis
+*/
+.prose-narrow {
+  max-width: 50ch;
+}
+
+/*
+  Wide text: 70-75 characters for technical content, documentation
+  WCAG maximum for non-CJK languages
+*/
+.prose-wide {
+  max-width: 75ch;
+}
+
+/* 
+  Left-aligned sections (Hero, Features, CatalogPreview)
+  No max-width constraint — text flows naturally within container
+*/
+.prose-left {
+  max-width: none;
+}
+
+/* ==================================================
    UI COMPONENTS
 ================================================== */
 

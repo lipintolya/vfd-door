@@ -100,12 +100,54 @@ const timeUntilClose = computed(() => {
 const timeUntilCloseText = computed(() => {
   const time = timeUntilClose.value
   if (!time) return null
-  
+
   const hoursStr = time.hours > 0 ? `${time.hours} ч` : ''
   const minStr = time.minutes > 0 || time.hours > 0 ? `${time.minutes} мин` : ''
   const secStr = `${time.seconds} сек`
-  
+
   return `${hoursStr} ${minStr} ${secStr}`.trim()
+})
+
+// Следующий рабочий день (сегодня или завтра)
+const nextWorkDay = computed(() => {
+  const today = now.value.getDay()
+  const schedule = workScheduleToday.value
+  const currentHour = now.value.getHours()
+  
+  // Если сейчас выходной или после закрытия — следующий рабочий день завтра
+  const isClosedToday = isWeekend.value || currentHour >= schedule.close
+  
+  // Определяем день недели следующего рабочего дня
+  let nextDay = today + (isClosedToday ? 1 : 0)
+  if (nextDay > 6) nextDay = 0
+  
+  return nextDay
+})
+
+// Время открытия следующего рабочего дня
+const nextWorkDayOpenTime = computed(() => {
+  const isWeekendNext = nextWorkDay.value === 0 || nextWorkDay.value === 6
+  const schedule = isWeekendNext ? WORK_SCHEDULE.weekend : WORK_SCHEDULE.weekday
+  const hours = String(schedule.open).padStart(2, '0')
+  return `${hours}:00`
+})
+
+// Текст когда салон закрыт
+const closedMessage = computed(() => {
+  const todaySchedule = workScheduleToday.value
+  const currentHour = now.value.getHours()
+  
+  // Если сейчас выходной — открыт ли салон сегодня
+  const isClosedForDay = isWeekend.value && (currentHour < todaySchedule.open || currentHour >= todaySchedule.close)
+  
+  // Если будний день, но уже закрыто
+  const isClosedAfterHours = !isWeekend.value && currentHour >= todaySchedule.close
+  
+  if (isClosedForDay || isClosedAfterHours) {
+    return `Закрыто. Работаем завтра с ${nextWorkDayOpenTime.value}`
+  }
+  
+  return 'Закрыто'
 })
 
 
@@ -239,7 +281,7 @@ onUnmounted(() => {
   <header
     class="fixed inset-x-0 z-60"
     :style="{
-      top: `calc(env(safe-area-inset-top, 0px) + 1rem)`,
+      top: `calc(env(safe-area-inset-top, 0px) + 1rem + (var(--has-banner, 1) * 40px))`,
       paddingLeft: 'env(safe-area-inset-left)',
       paddingRight: 'env(safe-area-inset-right)',
     }"
@@ -398,7 +440,7 @@ onUnmounted(() => {
                   :class="isOpen ? 'bg-green-500 animate-pulse' : 'bg-red-500'"
                 />
                 <span class="flex-1">
-                  {{ isOpen ? 'Салон открыт' : 'Салон закрыт' }}
+                  {{ isOpen ? 'Салон открыт' : closedMessage }}
                 </span>
                 <span
                   v-if="isOpen && timeUntilCloseText"
@@ -458,6 +500,28 @@ onUnmounted(() => {
             >
               О нас
             </RouterLink>
+
+            <!-- Индикатор работы салона (мобильные) -->
+            <div
+              class="mt-2 rounded-xl px-4 py-3 text-sm font-medium"
+              :class="isOpen ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'"
+            >
+              <div class="flex items-center gap-2">
+                <span
+                  class="w-2 h-2 rounded-full shrink-0"
+                  :class="isOpen ? 'bg-green-500 animate-pulse' : 'bg-red-500'"
+                />
+                <span class="flex-1">
+                  {{ isOpen ? 'Салон открыт' : closedMessage }}
+                </span>
+                <span
+                  v-if="isOpen && timeUntilCloseText"
+                  class="text-xs text-gray-500 shrink-0"
+                >
+                  ({{ timeUntilCloseText }})
+                </span>
+              </div>
+            </div>
 
             <div class="pt-3 border-t flex flex-col gap-2">
               <a

@@ -21,12 +21,32 @@ const emit = defineEmits<Emits>()
 const router = useRouter()
 const seriesTheme = useSeriesTheme(props.door.series as DoorSeries)
 
+// Маппинг покрытий для отображения
+const COVER_NAMES: Record<string, string> = {
+  'ПЭТ': 'ПЭТ',
+  'emalex': 'Полипропилен',
+  'emal': 'Эмаль'
+}
+
+const displayCover = computed(() => {
+  return COVER_NAMES[props.door.cover] || props.door.cover
+})
+
 const isDetailsOpen = ref(false)
 const isMaterialOpen = ref(false)
+const isQuickViewOpen = ref(false)
 const imageLoaded = ref(false)
 const imageError = ref(false)
 const isHovering = ref(false)
 const passiveSupported = ref(false)
+
+// Получаем изображение для текущего цвета
+const currentQuickViewImage = computed(() => {
+  if (props.modelValue?.image) {
+    return props.modelValue.image
+  }
+  return currentImage.value || ''
+})
 // NOTE: colorsScrollContainer removed - using native browser scrolling
 
 interface TouchState {
@@ -338,6 +358,32 @@ onUnmounted(() => {
           @load="handleImageLoad"
         />
 
+        <!-- Quick View Button - Desktop (наведение) -->
+        <button
+          class="hidden sm:flex absolute top-3 right-3 w-10 h-10 items-center justify-center rounded-full bg-white/90 backdrop-blur-sm text-zinc-700 shadow-md opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-teal-600 hover:text-white hover:scale-110 focus:outline-none focus:ring-2 focus:ring-teal-500"
+          @click.stop="isQuickViewOpen = true"
+          @mouseenter.stop
+          @mouseleave.stop
+          aria-label="Быстрый просмотр"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          </svg>
+        </button>
+
+        <!-- Quick View Button - Mobile (всегда видна) -->
+        <button
+          class="sm:hidden absolute top-3 right-3 w-9 h-9 flex items-center justify-center rounded-full bg-white/95 backdrop-blur-sm text-zinc-700 shadow-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+          @click.stop="isQuickViewOpen = true"
+          aria-label="Быстрый просмотр"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          </svg>
+        </button>
+
         <!-- Error State -->
         <div 
           v-if="!currentImage || imageError" 
@@ -367,17 +413,17 @@ onUnmounted(() => {
     <!-- Content Section -->
     <div class="flex flex-col flex-1 p-3 sm:p-5 gap-2 sm:gap-3">
       <!-- Title -->
-        <h3 class="font-semibold text-sm sm:text-base text-zinc-900 leading-tight line-clamp-2 h-10 sm:h-12">
+        <h3 class="font-semibold text-sm sm:text-base text-zinc-900 leading-snug line-clamp-3 min-h-[3.75rem] sm:min-h-[4.5rem]">
           {{ props.door.name }}
         </h3>
 
         <!-- Pricing -->
         <div class="space-y-0.5">
-          <p class="text-base sm:text-lg font-bold text-zinc-900 h-7">
-            {{ formatPrice(doorPrice) }}
+          <p class="text-base sm:text-lg font-bold text-zinc-900">
+            {{ formatPrice(doorPrice) }} <span class="text-xs font-medium text-zinc-500">за полотно</span>
           </p>
-          <p class="text-xs text-zinc-500 h-5">
-            {{ formatPrice(setPrice) }}
+          <p class="text-xs text-zinc-500">
+            {{ formatPrice(setPrice) }} <span class="font-medium">за комплект</span>
           </p>
         </div>
 
@@ -537,7 +583,7 @@ onUnmounted(() => {
             </p>
             <p class="flex justify-between">
               <span class="text-zinc-500">Покрытие:</span>
-              <span class="font-medium text-zinc-900">{{ props.door.cover }}</span>
+              <span class="font-medium text-zinc-900">{{ displayCover }}</span>
             </p>
             <p v-if="props.door.thickness" class="flex justify-between">
               <span class="text-zinc-500">Толщина:</span>
@@ -553,6 +599,56 @@ onUnmounted(() => {
         </Transition>
       </div>
     </div>
+
+    <!-- QUICK VIEW MODAL - Только изображение -->
+    <Transition name="fade">
+      <div
+        v-if="isQuickViewOpen"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+        @click.stop="isQuickViewOpen = false"
+      >
+        <div
+          class="relative bg-white rounded-2xl sm:rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+          @click.stop
+          @touchstart.stop
+        >
+          <!-- Close Button -->
+          <button
+            class="absolute top-3 right-3 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm shadow-lg text-zinc-500 hover:text-zinc-900 hover:bg-white transition-all focus:outline-none focus:ring-2 focus:ring-teal-500"
+            @click.stop="isQuickViewOpen = false"
+            aria-label="Закрыть"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+          <!-- Image Container -->
+          <div class="w-full h-[70vh] sm:h-[80vh] bg-zinc-50 flex items-center justify-center p-6 sm:p-10">
+            <img
+              v-if="currentQuickViewImage && !imageError"
+              :src="currentQuickViewImage"
+              :alt="props.door.name"
+              class="max-w-full max-h-full object-contain"
+              loading="eager"
+            />
+            <div v-else class="flex flex-col items-center justify-center text-zinc-400">
+              <svg class="w-20 h-20 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <p class="text-sm">Изображение недоступно</p>
+            </div>
+          </div>
+
+          <!-- Color Label -->
+          <div class="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-white/95 backdrop-blur-sm rounded-full shadow-lg">
+            <p class="text-sm font-medium text-zinc-700">
+              {{ props.modelValue?.name?.split('/')[0] || 'Выберите цвет' }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </Transition>
   </article>
 </template>
 
@@ -602,29 +698,13 @@ button {
 /* Fixed heights to prevent CLS */
 @media (max-width: 640px) {
   .product-card h3 {
-    min-height: 2.5rem;
-  }
-  
-  .product-card .space-y-0\.5 > p:first-child {
-    min-height: 1.75rem;
-  }
-  
-  .product-card .space-y-0\.5 > p:last-child {
-    min-height: 1.25rem;
+    min-height: 3.75rem; /* min-h-[3.75rem] for line-clamp-3 */
   }
 }
 
 @media (min-width: 641px) {
   .product-card h3 {
-    min-height: 3rem;
-  }
-  
-  .product-card .space-y-0\.5 > p:first-child {
-    min-height: 1.75rem;
-  }
-  
-  .product-card .space-y-0\.5 > p:last-child {
-    min-height: 1.25rem;
+    min-height: 4.5rem; /* min-h-[4.5rem] for line-clamp-3 */
   }
 }
 
@@ -645,5 +725,27 @@ button {
 
 .product-card ::-webkit-scrollbar-thumb:hover {
   background: #a1a1a5;
+}
+
+/* Quick View Fade Transition */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active > div:last-child,
+.fade-leave-active > div:last-child {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.fade-enter-from > div:last-child,
+.fade-leave-to > div:last-child {
+  transform: scale(0.95);
+  opacity: 0;
 }
 </style>

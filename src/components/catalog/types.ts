@@ -14,13 +14,15 @@ export type Tag =
 /* =========================
    Серии дверей
 ========================= */
-export type DoorSeries =
+export type DoorSeriesBase =
   | 'innova'
   | 'emalex'
   | 'invisible'
   | 'urban'
   | 'linea'
   | 'skinel'
+
+export type DoorSeries = DoorSeriesBase | `${DoorSeriesBase}/${string}`
 
 /* =========================
    Тип покрытия

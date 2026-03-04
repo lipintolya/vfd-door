@@ -139,7 +139,7 @@ onUnmounted(() => {
               VFD Кашириных — фирменный салон фабрики дверей
             </h1>
 
-            <p class="text-sm sm:text-base lg:text-lg text-white/85 mt-3 sm:mt-4 max-w-2xl leading-relaxed">
+            <p class="text-sm sm:text-base lg:text-lg text-white/85 mt-3 sm:mt-4 prose-body leading-relaxed">
               Работаем с 2015 года. Более 80 образцов дверей и перегородок, работа с дизайнерами и коммерческими проектами.
             </p>
 
@@ -538,7 +538,7 @@ onUnmounted(() => {
         <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold px-2">
           Готовы начать проект?
         </h2>
-        <p class="text-base sm:text-lg max-w-2xl mx-auto text-white/90 px-2">
+        <p class="text-base sm:text-lg prose-subtitle mx-auto text-white/90 px-2">
           Ответим на все вопросы и поможем выбрать двери и перегородки,
           которые идеально подойдут для вашего интерьера.
         </p>

@@ -1,9 +1,9 @@
-import type { DoorSeries } from '@/components/catalog/types'
+import type { DoorSeriesBase } from '@/components/catalog/types'
 
 export interface PricingConfig {
   globalMultiplier: number
   series: {
-    [key in DoorSeries]?: {
+    [key in DoorSeriesBase]?: {
       colorMultiplier: {
         white: number
         default: number

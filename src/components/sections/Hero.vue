@@ -33,27 +33,27 @@ const slides: Slide[] = [
     id: 1,
     image: 'https://storage.yandexcloud.net/catalog-vfd/renders/hero-cover.webp',
     title: 'Двери прямо с фабрики',
-    subtitle: 'шоурум с новинками',
+    subtitle: 'выставка с новинками',
     description:
       'Фирменный салон интерьерных решений на Братьев Кашириных в Челябинске',
-    primaryCta: 'Смотреть новинки в Telegram',
+    primaryCta: 'Подпишись на нас в Телеграм',
   },
   {
     id: 2,
     image: 'https://storage.yandexcloud.net/catalog-vfd/covers/innova-1.webp',
-    title: 'Серия Innova уже в салоне',
+    title: 'Серия "Иннова" уже в салоне',
     subtitle: 'не оставляет отпечатков пальцев',
-    description: 'Новинка в инновационном покрытии STRONG FLEX',
-    primaryCta: 'Смотреть в каталоге',
+    description: 'Новинка в инновационном покрытии ПЭТ',
+    primaryCta: 'Смотреть каталог',
   },
   {
     id: 3,
     image: 'https://storage.yandexcloud.net/catalog-vfd/covers/linea-1.webp',
-    title: 'Серия Linea уже в салоне',
+    title: 'Серия "Линеа" уже в салоне',
     subtitle: 'Современный дизайн по доступной цене',
     description:
       'Светостойкая эмаль с фрезерованными элементами и алюминиевым декором',
-    primaryCta: 'Смотреть в каталоге',
+    primaryCta: 'Смотреть каталог',
   },
 ]
 
@@ -220,7 +220,7 @@ onUnmounted(() => stop())
 
           <!-- content -->
           <div class="relative z-10 flex h-full items-end">
-            <div class="p-4 sm:p-6 lg:p-8 max-w-2xl text-white">
+            <div class="p-4 sm:p-6 lg:p-8 max-w-3xl text-white">
               <p class="text-xs uppercase tracking-wider text-white/70 mb-2">
                 {{ currentSlide.subtitle }}
               </p>
@@ -229,7 +229,7 @@ onUnmounted(() => stop())
                 {{ currentSlide.title }}
               </h1>
 
-              <p class="text-sm sm:text-base text-white/90 mb-6 max-w-xl">
+              <p class="text-sm sm:text-base text-white/90 mb-6 max-w-2xl">
                 {{ currentSlide.description }}
               </p>
 

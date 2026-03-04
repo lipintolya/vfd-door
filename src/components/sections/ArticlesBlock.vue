@@ -78,7 +78,7 @@ onUnmounted(() => {
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-zinc-900 mb-4">
           Статьи и новости
         </h2>
-        <p class="text-base sm:text-lg text-zinc-600 max-w-2xl mx-auto">
+        <p class="text-base sm:text-lg text-zinc-600 prose-subtitle mx-auto">
           Полезная информация о дверях, перегородках и интерьерных решениях
         </p>
       </div>

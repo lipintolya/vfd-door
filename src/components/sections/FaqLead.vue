@@ -50,10 +50,10 @@ const handleTouchEnd = (e: TouchEvent, id: number) => {
   <AppSection size="lg" class="bg-zinc-900">
     <AppContainer>
       <div class="mb-16 text-center">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-white mb-4">
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-white mb-4 prose-subtitle mx-auto">
           Ответы на вопросы
         </h2>
-        <p class="text-base sm:text-lg text-zinc-400 max-w-2xl mx-auto">
+        <p class="text-base sm:text-lg text-zinc-400 prose-subtitle mx-auto">
           Найдите ответ на ваш вопрос или свяжитесь с нами в Telegram
         </p>
       </div>

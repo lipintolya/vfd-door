@@ -1,5 +1,13 @@
-import type { Door, Color } from '@/components/catalog/types'
+import type { Door, Color, DoorSeriesBase } from '@/components/catalog/types'
 import { pricingConfig } from '@/config/pricing'
+
+/**
+ * Извлекает базовое название серии из формата "series/Серия" или возвращает как есть
+ */
+function getBaseSeries(series: string): DoorSeriesBase {
+  const base = series.split('/')[0] as string
+  return base as DoorSeriesBase
+}
 
 export function calculateDoorPrice(
   door: Door,
@@ -10,7 +18,8 @@ export function calculateDoorPrice(
 
   let colorMultiplier = 1
 
-  const seriesRule = pricingConfig.series[door.series]
+  const baseSeries = getBaseSeries(door.series)
+  const seriesRule = pricingConfig.series[baseSeries]
 
   if (seriesRule?.colorMultiplier && color) {
     const isWhite = color.name.toLowerCase().includes('white')
@@ -29,7 +38,7 @@ export function calculateSetPrice(
   seriesMultipliers?: Record<string, number>
 ): number {
   const doorPrice = calculateDoorPrice(door, color)
-  
+
   const defaultMultipliers: Record<string, number> = {
     innova: 1.5,
     emalex: 2,
@@ -40,7 +49,8 @@ export function calculateSetPrice(
   }
 
   const multipliers = seriesMultipliers ?? defaultMultipliers
-  const multiplier = multipliers[door.series] ?? 1.8
+  const baseSeries = getBaseSeries(door.series)
+  const multiplier = multipliers[baseSeries] ?? 1.8
 
   return Math.round(doorPrice * multiplier)
 }

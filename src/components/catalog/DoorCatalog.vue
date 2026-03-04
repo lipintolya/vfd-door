@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ProductCard from './ProductCard.vue'
 import catalogJson from '@/data/doors.json'
@@ -17,37 +17,37 @@ interface Breadcrumb {
 const seriesData = [
   {
     id: 'innova',
-    title: 'Innova',
+    title: 'Innova/Иннова',
     description: 'Инновационное износостойкое покрытие УФ отверждения STRONG FLEX',
     image: 'https://storage.yandexcloud.net/catalog-vfd/covers/innova-cover.webp',
   },
   {
     id: 'urban',
-    title: 'Urban',
+    title: 'Urban/Урбан',
     description: 'Каркасные двери с гладкой поверхностью в современном дизайне',
     image: 'https://storage.yandexcloud.net/catalog-vfd/covers/urban-cover.webp',
   },
   {
     id: 'emalex',
-    title: 'Emalex',
+    title: 'Emalex/Эмалекс',
     description: 'Инновационный экошпон из Германии с защитным слоем лака',
     image: 'https://storage.yandexcloud.net/catalog-vfd/covers/emalex-cover.webp',
   },
   {
     id: 'linea',
-    title: 'Linea',
+    title: 'Linea/Линеа',
     description: 'Современные двери в эмалевом покрытии с фрезировкой элементов',
     image: 'https://storage.yandexcloud.net/catalog-vfd/covers/linea-cover.webp',
   },
   {
     id: 'invisible',
-    title: 'Invisible',
+    title: 'Invisible/скрытые',
     description: 'Двери скрытого монтажа Invisible VFD с алюминиевым коробом',
     image: 'https://storage.yandexcloud.net/catalog-vfd/covers/invisible-cover.webp',
   },
   {
     id: 'skinel',
-    title: 'Skinel',
+    title: 'Skinel/Скинель',
     description: 'Двери в эмалевом покрытии, стиль Арт Деко c лаконичной фрезировкой',
     image: 'https://storage.yandexcloud.net/catalog-vfd/covers/skinel-cover.webp',
   }
@@ -105,7 +105,7 @@ const initFiltersFromUrl = () => {
 }
 
 const isValidSeries = (seriesId: string): seriesId is DoorSeries =>
-  seriesData.some(series => series.id === seriesId)
+  seriesData.some(series => series.id === seriesId || series.id.split('/')[0] === seriesId.split('/')[0])
 
 const allTags = computed(() => Array.from(new Set(doors.value.flatMap(d => d.tags))).sort())
 const allCovers = computed(() => Array.from(new Set(doors.value.map(d => d.cover))).sort())
@@ -159,7 +159,10 @@ const filteredDoors = computed<Door[]>(() => {
     list = list.filter(d => Array.from(appliedFilters.value.activeTags).every(tag => d.tags.includes(tag)))
 
   if (appliedFilters.value.inStock) list = list.filter(d => d.tags.includes('в наличии'))
-  if (appliedFilters.value.series) list = list.filter(d => d.series === appliedFilters.value.series)
+  if (appliedFilters.value.series) {
+    const baseSeries = appliedFilters.value.series.split('/')[0]
+    list = list.filter(d => d.series.split('/')[0] === baseSeries)
+  }
   if (appliedFilters.value.cover) list = list.filter(d => d.cover === appliedFilters.value.cover)
   if (appliedFilters.value.material) list = list.filter(d => d.material === appliedFilters.value.material)
   if (appliedFilters.value.colorName) {
@@ -183,6 +186,15 @@ const paginatedDoors = computed(() => {
   const start = (currentPage.value-1)*itemsPerPage.value
   return filteredDoors.value.slice(start,start+itemsPerPage.value)
 })
+
+const totalPages = computed(() => Math.ceil(filteredDoors.value.length / itemsPerPage.value))
+
+const canGoPrev = computed(() => currentPage.value > 1)
+const canGoNext = computed(() => currentPage.value < totalPages.value)
+
+const goToPage = (page: number) => {
+  currentPage.value = Math.max(1, Math.min(page, totalPages.value))
+}
 
 const selectColor = (doorId:string,color:Color) => selectedColors.value[doorId]=color
 const getSelectedColor = (doorId:string) => selectedColors.value[doorId] ?? DEFAULT_COLOR
@@ -265,10 +277,6 @@ const resetFilters = () => {
 const selectSeries = (seriesId:DoorSeries) => {
   tempFilters.value={ activeTags:new Set(), inStock:false, series:seriesId, cover:'', material:'', colorName:'' }
   applyFilters()
-  nextTick(()=>{
-    const section = document.querySelector('.products-section')
-    if(section) section.scrollIntoView({behavior:'smooth',block:'start'})
-  })
 }
 
 const selectSeriesFilter = (seriesId: DoorSeries | '') => {
@@ -673,7 +681,7 @@ onUnmounted(() => {
 
         <!-- PRODUCTS GRID - ✅ ОПТИМИЗИРОВАНО: 1 КОЛОННА НА МОБИЛКЕ, 2 НА ПЛАНШЕТЕ, 3 НА ПК -->
         <div class="flex-1 min-w-0">
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 auto-rows-max">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 auto-rows-max items-stretch">
             <ProductCard
               v-for="door in paginatedDoors" :key="door.id"
               :door="door"
@@ -691,6 +699,41 @@ onUnmounted(() => {
             <p class="text-sm sm:text-base text-gray-600 mb-6 max-w-md">Попробуйте изменить параметры фильтрации</p>
             <button @click="resetFilters" class="px-6 py-3 bg-teal-600 text-white rounded-lg font-semibold hover:bg-teal-700 transition-all hover:shadow-lg hover:shadow-teal-500/30 focus:outline-none focus:ring-2 focus:ring-teal-500">
               Сбросить фильтры
+            </button>
+          </div>
+
+          <!-- PAGINATION -->
+          <div v-if="totalPages > 1" class="mt-8 flex items-center justify-center gap-2">
+            <button
+              @click="goToPage(currentPage - 1)"
+              :disabled="!canGoPrev"
+              class="px-4 py-2 rounded-lg border-2 border-gray-300 text-gray-700 font-medium hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            >
+              ← Назад
+            </button>
+            
+            <div class="flex items-center gap-1">
+              <button
+                v-for="page in totalPages"
+                :key="page"
+                @click="goToPage(page)"
+                :class="[
+                  'w-10 h-10 rounded-lg font-medium transition-all',
+                  currentPage === page
+                    ? 'bg-teal-600 text-white shadow-lg shadow-teal-200'
+                    : 'border-2 border-gray-300 text-gray-700 hover:bg-gray-50'
+                ]"
+              >
+                {{ page }}
+              </button>
+            </div>
+            
+            <button
+              @click="goToPage(currentPage + 1)"
+              :disabled="!canGoNext"
+              class="px-4 py-2 rounded-lg border-2 border-gray-300 text-gray-700 font-medium hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            >
+              Вперёд →
             </button>
           </div>
         </div>

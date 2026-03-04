@@ -122,7 +122,7 @@ const isHovered = (index: number): boolean => hoveredIndex.value === index
           Акции и скидки
         </h2>
 
-        <p class="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
+        <p class="text-base sm:text-lg text-gray-600 prose-subtitle mx-auto">
           Получите лучшие условия на двери и перегородки премиум-класса
         </p>
       </div>

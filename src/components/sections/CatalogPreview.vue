@@ -29,21 +29,21 @@ let observer: IntersectionObserver | null = null
 const categories: Category[] = [
   {
     title: 'Межкомнатные двери',
-    subtitle: 'Официальный каталог Владимирской фабрики дверей. Покрытия: эмаль, экошпон, ПВХ, полипропилен, под покраску — широкий выбор моделей в наличии в Челябинске.',
+    subtitle: 'Межкомнатные двери ВФД в эмали, экошпоне и ПЭТ. Большой выбор моделей в наличии и под заказ',
     image: 'https://storage.yandexcloud.net/catalog-vfd/renders/cover-in.webp',
     link: '/catalog',
     cta: 'Смотреть межкомнатные двери',
   },
   {
     title: 'Входные двери',
-    subtitle: 'Уличные двери с терморазрывом для частного дома и подъездные с МДФ-панелями для квартиры — надёжная защита под любые условия.',
+    subtitle: 'Уличные входные двери для частных домов и двери подъездного типа для квартир. Надёжные решения для разных условий эксплуатации',
     image: 'https://storage.yandexcloud.net/catalog-vfd/renders/cover-out.webp',
     link: '/catalog?series=innova',
     cta: 'Смотреть входные двери',
   },
   {
     title: 'Алюминиевые перегородки',
-    subtitle: 'Стеклянные перегородки для офисов, квартир и коммерческих пространств. Проектирование и монтаж под ключ.',
+    subtitle: 'Алюминиевые стеклянные перегородки для офисов, домов и квартир. Проектирование, изготовление и профессиональный монтаж',
     image: 'https://storage.yandexcloud.net/catalog-vfd/renders/cover-alum.webp',
     link: '/partitions',
     cta: 'Смотреть перегородки',
@@ -94,12 +94,12 @@ onBeforeUnmount(() => observer?.disconnect())
             class="lg:col-span-12 transition-all duration-700"
             :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
           >
-            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-normal text-zinc-900 mb-3">
-              Двери и перегородки ВФД в Челябинске
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-zinc-900 leading-tight mb-4">
+              Каталог
             </h2>
-            <p class="text-base sm:text-lg text-zinc-600 max-w-2xl">
+            <p class="text-base sm:text-lg text-zinc-600 max-w-3xl leading-relaxed">
               Межкомнатные и входные двери, алюминиевые перегородки от официального дилера
-              Владимирской фабрики дверей — в наличии и под заказ.
+              Владимирской фабрики дверей
             </p>
           </header>
 
@@ -130,13 +130,13 @@ onBeforeUnmount(() => observer?.disconnect())
 
                 <!-- Content -->
                 <div class="relative z-10 p-6 lg:p-8 text-white">
-                  <h3 class="text-xl sm:text-2xl font-normal mb-2">
+                  <h3 class="text-xl sm:text-2xl font-semibold mb-3">
                     {{ heroCategory.title }}
                   </h3>
 
                   <p
                     v-if="heroCategory.subtitle"
-                    class="text-sm sm:text-base mb-6 max-w-md text-white/90"
+                    class="text-sm sm:text-base mb-6 max-w-md text-white/90 leading-relaxed"
                   >
                     {{ heroCategory.subtitle }}
                   </p>
@@ -172,13 +172,13 @@ onBeforeUnmount(() => observer?.disconnect())
 
                   <!-- Content -->
                   <div class="relative z-10 p-6 text-white">
-                    <h3 class="text-xl sm:text-2xl font-normal mb-2">
+                    <h3 class="text-xl sm:text-2xl font-semibold mb-3">
                       {{ category.title }}
                     </h3>
 
                     <p
                       v-if="category.subtitle"
-                      class="text-sm sm:text-base mb-6 max-w-md text-white/90"
+                      class="text-sm sm:text-base mb-6 max-w-md text-white/90 leading-relaxed"
                     >
                       {{ category.subtitle }}
                     </p>

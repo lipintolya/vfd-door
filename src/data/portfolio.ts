@@ -18,8 +18,8 @@ export interface PortfolioWork {
 export const portfolioWorks: PortfolioWork[] = [
   {
     id: '1',
-    title: 'Двери Innova в посёлке Петровский',
-    description: 'Установили межкомнатные дверии серии Innova в уютном доме',
+    title: 'Двери Innova/Иннова в посёлке Петровский',
+    description: 'Установили межкомнатные дверии серии Innova/Иннова в уютном доме',
     location: 'Челябинская область, п.Петровский',
     date: '2026-02-20',
     images: [
@@ -34,12 +34,12 @@ export const portfolioWorks: PortfolioWork[] = [
       'https://storage.yandexcloud.net/catalog-vfd/portfolio/20.02.26/9.webp',
     ],
     productType: 'door',
-    series: 'Innova',
+    series: 'Innova/Иннова',
   },
   {
     id: '2',
-    title: 'Серия Atum в покрытии Экошпон',
-    description: 'Монтаж дверей серии Atum с декоротивными вставками тонированного стекла',
+    title: 'Серия Atum/Атум в покрытии Экошпон',
+    description: 'Монтаж дверей серии Atum/Атум с декоротивными вставками тонированного стекла',
     location: 'Челябинск, Калининский район',
     date: '2026-02-09',
     images: [
@@ -50,12 +50,12 @@ export const portfolioWorks: PortfolioWork[] = [
       'https://storage.yandexcloud.net/catalog-vfd/portfolio/9.02.26/photo_2026-02-09_11-22-17.webp',
     ],
     productType: 'door',
-    series: 'Atum',
+    series: 'Atum/Атум',
   },
   {
     id: '3',
-    title: 'Двери серии Emalex C2 в цвете Steel',
-    description: 'Серый оттенок Steel подчёркивает геометрию полотна и отлично сочетается с современными пространствами: минимализм, лофт, неоклассика.',
+    title: 'Двери серии Emalex/Эмалекс C2 в цвете Steel/Сталь',
+    description: 'Серый оттенок Steel/Сталь подчёркивает геометрию полотна и отлично сочетается с современными пространствами: минимализм, лофт, неоклассика.',
     location: 'Челябинск',
     date: '2026-01-29',
     images: [
@@ -64,12 +64,12 @@ export const portfolioWorks: PortfolioWork[] = [
       'https://storage.yandexcloud.net/catalog-vfd/portfolio/29.01.26/photo_2026-01-29_10-38-26.webp',
     ],
     productType: 'door',
-    series: 'Emalex',
+    series: 'Emalex/Эмалекс',
   },
   {
     id: '4',
-    title: 'Современный стиль и чистота форм: Urban 1V Emalex Ice',
-    description: 'Если вы ищете идеальный баланс минимализма и выразительного акцента в интерьере, тогда белые прямые двери с вертикальным молдингом Urban - ваш выбор',
+    title: 'Современный стиль и чистота форм: Urban/Урбан 1V Emalex/Эмалекс Ice/Лёд',
+    description: 'Если вы ищете идеальный баланс минимализма и выразительного акцента в интерьере, тогда белые прямые двери с вертикальным молдингом Urban/Урбан - ваш выбор',
     location: 'Челябинск',
     date: '2026-02-28',
     images: [
@@ -80,7 +80,7 @@ export const portfolioWorks: PortfolioWork[] = [
 
     ],
     productType: 'door',
-    series: 'Urban',
+    series: 'Urban/Урбан',
   },
    {
     id: '5',
@@ -91,10 +91,10 @@ export const portfolioWorks: PortfolioWork[] = [
     images: [
       'https://storage.yandexcloud.net/catalog-vfd/portfolio/16.01.26/photo_2026-01-16_15-15-44.webp',
       'https://storage.yandexcloud.net/catalog-vfd/portfolio/16.01.26/photo_2026-01-16_15-22-50.webp',
-   
+
     ],
     productType: 'door',
-    series: 'Urban',
+    series: 'Urban/Урбан',
   },
      {
     id: '6',
@@ -113,22 +113,22 @@ export const portfolioWorks: PortfolioWork[] = [
       'https://storage.yandexcloud.net/catalog-vfd/portfolio/hilton/myimage%20(7).webp',
       'https://storage.yandexcloud.net/catalog-vfd/portfolio/hilton/myimage%20(8).webp',
       'https://storage.yandexcloud.net/catalog-vfd/portfolio/hilton/myimage%20(9).webp',
-  
+
     ],
     productType: 'partition',
-    series: 'Alum',
+    series: 'Alum/Алюм',
   },
     {
     id: '7',
     title: 'Установка скрытых дверей в коттеджном посёлке "Привилегия"',
-    description: 'Устанавливаются на скрытый короб в одной плоскости со стеной для создания «невидимой» конструкции. Универсальный короб Invisible подходит для монтажа дверей как прямого, так и обратного открывания. Монтируется на этапе черновых работ.                                   ',
+    description: 'Устанавливаются на скрытый короб в одной плоскости со стеной для создания «невидимой» конструкции. Универсальный короб Invisible/Инвизибл подходит для монтажа дверей как прямого, так и обратного открывания. Монтируется на этапе черновых работ.                                   ',
     location: 'Челябинск, "Привелегия"',
     date: '2026-01-5',
     images: [
       'https://storage.yandexcloud.net/catalog-vfd/portfolio/5.01.26/myimage%20(10).webp',
-      'https://storage.yandexcloud.net/catalog-vfd/portfolio/5.01.26/myimage%20(11).webp', 
+      'https://storage.yandexcloud.net/catalog-vfd/portfolio/5.01.26/myimage%20(11).webp',
     ],
     productType: 'door',
-    series: 'Invisible',
+    series: 'Invisible/скрытые',
   }
 ]

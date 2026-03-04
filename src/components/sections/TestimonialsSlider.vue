@@ -46,7 +46,7 @@ const reviews: ReviewCard[] = [
     rating: 5,
     text: 'Заказали двери, и остались очень довольны 👏 Шикарный дизайн, смотрятся намного дороже, чем их стоимость 👏 Спасибо менеджеру Надежде, помогла подобрать, подробно все проконсультировала 👍',
     image: 'https://storage.yandexcloud.net/catalog-vfd/review/myimage%20(13).webp',
-    projectType: 'Покрытие Emalex',
+    projectType: 'Покрытие Emalex/Эмалекс',
     location: 'Челябинск',
     date: '20 января 2024'
   },
@@ -79,7 +79,7 @@ const reviews: ReviewCard[] = [
     rating: 5,
     text: 'Отличные двери и фурнитура, наши партнеры более 10 лет. Быстрая доставка и много дверей в наличии. Рекомендуем',
     image: 'https://storage.yandexcloud.net/catalog-vfd/review/myimage%20(16).webp',
-    projectType: 'Двери Emalex',
+    projectType: 'Двери Emalex/Эмалекс',
     location: 'Челябинск',
     date: '26 октября 2024'
   },
@@ -90,7 +90,7 @@ const reviews: ReviewCard[] = [
     rating: 5,
     text: 'Выбор дверей большой. Как входных дверей, так и фурнитуры. Актуальные расцветки и модели с алюминиевыми кромками, приятные цены.',
     image: 'https://storage.yandexcloud.net/catalog-vfd/review/myimage%20(17).webp',
-    projectType: 'Двери Invisible',
+    projectType: 'Двери Invisible/скрытые',
     location: 'ЖК НИКС-сити',
     date: '8 августа 2024'
   }
@@ -214,7 +214,7 @@ onBeforeUnmount(() => {
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-gray-900">
           Отзывы клиентов
         </h2>
-        <p class="text-base sm:text-lg text-gray-600 mt-3 max-w-2xl mx-auto">
+        <p class="text-base sm:text-lg text-gray-600 mt-3 prose-subtitle mx-auto">
           Реальные истории наших клиентов — честно, без прикрас.
         </p>
       </div>
