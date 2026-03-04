@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview",
-    "ssg:build": "node scripts/ssg-build.js"
+    "prerender": "node scripts/prerender.js",
+    "sitemap": "node scripts/generate-sitemap.cjs",
+    "deploy": "npm run build && npm run prerender && npm run sitemap && npx gh-pages -d dist"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.95.3",
