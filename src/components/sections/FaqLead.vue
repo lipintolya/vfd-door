@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import AppSection from '@/components/layout/AppSection.vue'
 import AppContainer from '@/components/layout/AppContainer.vue'
 import TgIcon from '@/assets/icons/tg-icon.svg'
@@ -19,12 +19,43 @@ const faqs: FaqItem[] = [
   { id: 6, question: 'Как происходит монтаж?', answer: 'Монтаж выполняют наши специалисты с опытом. Чисто, аккуратно, по технологии.' },
 ]
 
-const activeFaqIds = ref<Set<number>>(new Set([1]))
+const activeFaqIds = ref<Set<number>>(new Set())
 
 const toggleFaq = (id: number) => {
   const set = activeFaqIds.value
   set.has(id) ? set.delete(id) : set.add(id)
 }
+
+/* ============================================
+   SCHEMA.ORG JSON-LD
+============================================ */
+const faqSchema = computed(() => ({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map(faq => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.answer,
+    },
+  })),
+}))
+
+let scriptElement: HTMLScriptElement | null = null
+
+onMounted(() => {
+  scriptElement = document.createElement('script')
+  scriptElement.type = 'application/ld+json'
+  scriptElement.textContent = JSON.stringify(faqSchema.value)
+  document.head.appendChild(scriptElement)
+})
+
+onBeforeUnmount(() => {
+  if (scriptElement) {
+    scriptElement.remove()
+  }
+})
 
 /* ============================================
    SWIPE HANDLERS
@@ -39,7 +70,6 @@ const handleTouchStart = (e: TouchEvent) => {
 const handleTouchEnd = (e: TouchEvent, id: number) => {
   if (!e.changedTouches?.[0]) return
   const dy = touchStartY.value - e.changedTouches[0].clientY
-  // Вертикальный свайп > 50px для открытия/закрытия
   if (Math.abs(dy) > 50) {
     toggleFaq(id)
   }
@@ -58,6 +88,45 @@ const handleTouchEnd = (e: TouchEvent, id: number) => {
         </p>
       </div>
 
+      <!-- 8 MARCH GREETING CARD -->
+      <div class="w-full max-w-4xl mx-auto mb-16">
+        <div class="relative rounded-3xl overflow-hidden border-2 border-pink-300 bg-gradient-to-br from-pink-50 via-rose-50 to-pink-100 shadow-xl">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
+            <!-- Image Column -->
+            <div class="relative h-64 md:h-auto overflow-hidden">
+              <img
+                src="https://storage.yandexcloud.net/catalog-vfd/8march/Frame%2021.jpg"
+                alt="Поздравление с 8 марта"
+                class="w-full h-full object-cover"
+                loading="lazy"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-pink-200/30 to-transparent md:hidden" />
+            </div>
+
+            <!-- Text Column -->
+            <div class="p-6 sm:p-8 lg:p-10 flex flex-col justify-center">
+              <h3 class="text-2xl sm:text-3xl font-bold text-pink-700 mb-4">
+                Дорогие дамы!
+              </h3>
+              <p class="text-base sm:text-lg text-pink-900 leading-relaxed mb-4">
+                От всей души поздравляем вас с праздником весны — 8 Марта!
+              </p>
+              <p class="text-sm sm:text-base text-pink-800 leading-relaxed mb-4">
+                Желаем вам счастья, здоровья, любви и прекрасного настроения.
+                Пусть каждый день приносит радость, улыбки и вдохновение,
+                а рядом всегда будут забота, тепло и внимание близких.
+              </p>
+              <p class="text-lg font-semibold text-pink-700">
+                С праздником! 🌷
+              </p>
+              <p class="text-sm text-pink-600 mt-2">
+                Ваш ВФД на Кашириных
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- FAQ BLOCK -->
       <div class="w-full max-w-none sm:max-w-3xl mx-auto space-y-4 mb-12">
         <div
@@ -71,31 +140,27 @@ const handleTouchEnd = (e: TouchEvent, id: number) => {
             class="w-full flex items-center justify-between px-4 sm:px-6 py-4 text-left hover:bg-zinc-800/50 transition-colors"
             @click="toggleFaq(item.id)"
           >
-            <span class="text-base sm:text-lg font-semibold text-white pr-4 wrap-break-wordword">
+            <span class="text-base sm:text-lg font-semibold text-white pr-4 wrap-break-word">
               {{ item.question }}
             </span>
+
+            <!-- Стрелка: вниз — закрыто, вверх — открыто -->
             <span
-              class="shrink-0 flex items-center justify-center w-6 h-6 rounded-full border-2 border-zinc-600 text-zinc-400 transition-all duration-300 group-hover:border-teal-500 group-hover:text-teal-400"
-              :class="activeFaqIds.has(item.id) ? 'rotate-45 border-teal-500 text-teal-400 bg-teal-500/10' : ''"
+              class="shrink-0 flex items-center justify-center w-6 h-6 text-zinc-400 transition-all duration-300 group-hover:text-teal-400"
+              :class="activeFaqIds.has(item.id) ? 'text-teal-400' : ''"
             >
               <svg
-                class="w-4 h-4"
+                class="w-5 h-5 transition-transform duration-300"
+                :class="activeFaqIds.has(item.id) ? '-rotate-180' : 'rotate-0'"
                 fill="none"
                 stroke="currentColor"
                 stroke-width="2.5"
                 viewBox="0 0 24 24"
               >
                 <path
-                  v-if="activeFaqIds.has(item.id)"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-                <path
-                  v-else
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M12 4v16m8-8H4"
+                  d="M19 9l-7 7-7-7"
                 />
               </svg>
             </span>
@@ -142,10 +207,3 @@ const handleTouchEnd = (e: TouchEvent, id: number) => {
     </AppContainer>
   </AppSection>
 </template>
-
-<style scoped>
-/* Плавная анимация для раскрытия/закрытия */
-.transition-all {
-  transition-property: all;
-}
-</style>

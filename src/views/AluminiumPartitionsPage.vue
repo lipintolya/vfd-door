@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount, reactive } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import AppSection from '@/components/layout/AppSection.vue'
 import AppContainer from '@/components/layout/AppContainer.vue'
 import Breadcrumbs from '@/components/ui/Breadcrumbs.vue'
-import { submitContactForm, formatPhone, isValidPhone } from '@/services/formSubmit'
+import FaqLead from '@/components/sections/FaqLead.vue'
 
 // Импорт данных и типов из отдельного файла
 import type {
@@ -29,7 +29,6 @@ import {
   colorOptions,
   portfolioProjects,
   processSteps,
-  faqItems,
   fillingOptions,
 } from '@/data/partitions'
 
@@ -62,60 +61,6 @@ const selectedColorName = ref<string>('')
 const isPortfolioModalOpen = ref<boolean>(false)
 const activePortfolioProjectIndex = ref<number>(0)
 const activePortfolioImageIndex = ref<number>(0)
-
-// FAQ state
-const activeFaqIds = ref<Set<number>>(new Set([1]))
-
-// Quick Contact Form
-const quickContact = reactive({
-  name: '',
-  phone: '',
-  isSubmitting: false,
-})
-
-const sendContactToTelegram = async (name: string, phone: string) => {
-  // Используем защищённый API вместо прямой отправки
-  const result = await submitContactForm({
-    name,
-    phone,
-    source: 'AluminiumPartitionsPage - Quick Contact',
-  })
-  
-  return result
-}
-
-const onQuickPhoneInput = (event: Event) => {
-  const target = event.target as HTMLInputElement
-  quickContact.phone = formatPhone(target.value)
-}
-
-const handleContactSubmit = async () => {
-  if (!quickContact.name.trim()) {
-    alert('Введите ваше имя')
-    return
-  }
-  if (!quickContact.phone.trim()) {
-    alert('Введите телефон')
-    return
-  }
-  if (!isValidPhone(quickContact.phone)) {
-    alert('Введите корректный номер')
-    return
-  }
-
-  quickContact.isSubmitting = true
-  const result = await sendContactToTelegram(quickContact.name, quickContact.phone)
-
-  if (result.success) {
-    alert('Спасибо! Мы вскоре свяжемся с вами')
-    quickContact.name = ''
-    quickContact.phone = ''
-  } else {
-    alert(result.error || 'Ошибка при отправке')
-  }
-
-  quickContact.isSubmitting = false
-}
 
 // Animations
 const visibleFeatures = ref<boolean>(false)
@@ -345,15 +290,6 @@ const nextPortfolioProject = (): void => {
 const prevPortfolioProject = (): void => {
   activePortfolioProjectIndex.value = (activePortfolioProjectIndex.value - 1 + portfolioProjects.length) % portfolioProjects.length
   activePortfolioImageIndex.value = 0
-}
-
-/* ============================================
-   FAQ FUNCTIONS
-   ============================================ */
-
-const toggleFaq = (id: number): void => {
-  const set = activeFaqIds.value
-  set.has(id) ? set.delete(id) : set.add(id)
 }
 
 /* ============================================
@@ -1454,153 +1390,7 @@ onBeforeUnmount(() => {
   </AppSection>
 
   <!-- FAQ SECTION -->
-  <AppSection>
-    <AppContainer>
-      <div class="mb-16 text-center">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-normal text-zinc-900 mb-4">
-          Ответы на вопросы
-        </h2>
-        <p class="text-base sm:text-lg text-zinc-700 max-w-2xl mx-auto">
-          Найдите ответ на ваш вопрос или оставьте заявку прямо сейчас
-        </p>
-      </div>
-
-      <div class="space-y-4 max-w-3xl mx-auto">
-        <div
-          v-for="item in faqItems"
-          :key="item.id"
-          class="group rounded-2xl border-2 border-zinc-300 bg-white hover:border-teal-600 hover:shadow-lg hover:shadow-teal-500/10 overflow-hidden transition-all duration-300"
-        >
-          <button
-            class="w-full flex items-center justify-between px-6 py-4 text-left hover:bg-zinc-50 transition-colors"
-            @click="toggleFaq(item.id)"
-          >
-            <span class="text-base sm:text-lg font-semibold text-zinc-900 pr-4">
-              {{ item.question }}
-            </span>
-            <span
-              class="shrink-0 flex items-center justify-center w-6 h-6 rounded-full border-2 border-zinc-400 text-zinc-600 transition-all duration-300 group-hover:border-teal-600 group-hover:text-teal-600"
-              :class="activeFaqIds.has(item.id) ? 'rotate-45 border-teal-600 text-teal-600 bg-teal-50' : ''"
-            >
-              <svg
-                class="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.5"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  v-if="activeFaqIds.has(item.id)"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-                <path
-                  v-else
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
-            </span>
-          </button>
-
-          <transition
-            enter-active-class="transition-all duration-300 ease-out"
-            leave-active-class="transition-all duration-300 ease-in"
-            enter-from-class="opacity-0 -translate-y-2"
-            enter-to-class="opacity-100 translate-y-0"
-            leave-from-class="opacity-100 translate-y-0"
-            leave-to-class="opacity-0 -translate-y-2"
-          >
-            <div v-if="activeFaqIds.has(item.id)" class="px-6 pb-4">
-              <div class="pt-3 border-t border-zinc-200">
-                <p class="text-sm sm:text-base text-zinc-700 leading-relaxed">
-                  {{ item.answer }}
-                </p>
-              </div>
-            </div>
-          </transition>
-        </div>
-
-        <!-- Contact Block with links -->
-        <div class="mt-8 p-8 rounded-3xl border-2 border-teal-600 bg-teal-50">
-          <h3 class="text-2xl font-normal text-zinc-900 mb-2">
-            Не нашли ответ?
-          </h3>
-          <p class="text-zinc-700 mb-6">
-            Свяжитесь с нашей командой прямо сейчас — мы ответим на все вопросы!
-          </p>
-          
-          <div class="space-y-4">
-  <!-- Quick Contact Links -->
-        <div class="flex flex-wrap gap-3 mb-6">
-          <a
-            href="https://t.me/vfddoors74"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-teal-600 hover:bg-teal-700 text-white text-sm sm:text-base transition-all font-semibold"
-          >
-            <img
-              src="@/assets/icons/tg-icon.svg"
-              alt="Telegram"
-              class="h-5 w-5"
-            />
-            Telegram
-          </a>
-        </div>
-      </div>
-
-
-            <!-- Divider -->
-            <div class="relative mb-6">
-              <div class="absolute inset-0 flex items-center">
-                <div class="w-full border-t border-teal-200"></div>
-              </div>
-              <div class="relative flex justify-center text-sm">
-                <span class="px-2 bg-teal-50 text-zinc-600 font-medium">или заполните форму</span>
-              </div>
-            </div>
-
-            <!-- Quick Contact Form -->
-            <form @submit.prevent="handleContactSubmit" class="space-y-3">
-              <input
-                v-model="quickContact.name"
-                type="text"
-                placeholder="Ваше имя"
-                required
-                class="w-full rounded-lg px-3 py-2 text-sm bg-white border-2 border-teal-200 text-zinc-900 placeholder:text-zinc-500 focus:outline-none focus:border-teal-600 transition-all"
-                :disabled="quickContact.isSubmitting"
-              />
-
-              <input
-                :value="quickContact.phone"
-                @input="onQuickPhoneInput"
-                type="tel"
-                placeholder="+7 (___) ___-__-__"
-                required
-                class="w-full rounded-lg px-3 py-2 text-sm bg-white border-2 border-teal-200 text-zinc-900 placeholder:text-zinc-500 focus:outline-none focus:border-teal-600 transition-all"
-                :disabled="quickContact.isSubmitting"
-              />
-
-              <button
-                type="submit"
-                class="w-full py-2 rounded-lg px-4 font-semibold text-white bg-teal-600 border-2 border-teal-600 transition-all duration-300 hover:bg-teal-700 hover:border-teal-700 active:bg-teal-800 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm"
-                :disabled="quickContact.isSubmitting"
-              >
-                <span v-if="quickContact.isSubmitting" class="flex items-center justify-center gap-2">
-                  <svg class="w-3 h-3 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                  </svg>
-                  Отправка...
-                </span>
-                <span v-else>Отправить контакты</span>
-              </button>
-            </form>
-          </div>
-        </div>
-    </AppContainer>
-  </AppSection>
+  <FaqLead />
   </div>
 </template>
 
