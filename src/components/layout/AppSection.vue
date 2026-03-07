@@ -17,11 +17,17 @@ const props = withDefaults(
   }
 )
 
-
+/**
+ * Единая система отступков для секций
+ * Mobile → Tablet → Desktop (4px baseline grid)
+ */
 const sizeClassMap: Record<SectionSize, string> = {
-  sm: 'py-4 sm:py-8 lg:py-12',
-  md: 'py-8 sm:py-12 lg:py-16',
-  lg: 'py-12 sm:py-16 lg:py-20',
+  // Small: компактные секции (Features, Testimonials)
+  sm: 'py-10 sm:py-16 lg:py-20',
+  // Medium: стандартные секции (Catalog, About)
+  md: 'py-14 sm:py-20 lg:py-24',
+  // Large:_hero и ключевые секции (Hero, Portfolio)
+  lg: 'py-20 sm:py-24 lg:py-32',
 }
 
 /**

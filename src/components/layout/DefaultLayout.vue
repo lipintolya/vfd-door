@@ -81,12 +81,11 @@ onBeforeUnmount(() => {
 }
 
 /* ===== Main ===== */
-/*важно: отступ сверху равен высоте header (переменная синхронизируется скриптом)*/
+/* Отступ сверху = высота header + 16px (1rem gap) */
 .layout-main {
   flex: 1;
   width: 100%;
-  padding-top: var(--header-height, 72px);
-  /* небольшая дополнительная страховка на очень маленьких viewport */
+  padding-top: calc(var(--header-height, 88px));
   box-sizing: border-box;
 }
 

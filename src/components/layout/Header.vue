@@ -7,6 +7,7 @@ import CloseIcon from '@/assets/icons/close.svg'
 
 
 const HEADER_HEIGHT = 72
+const HEADER_TOP_OFFSET = 16 // 1rem
 
 const LOGO = {
   url: new URL('@/assets/icons/logo.svg', import.meta.url).href,
@@ -87,13 +88,13 @@ const isOpen = computed(() => {
 
 const timeUntilClose = computed(() => {
   if (!isOpen.value) return null
-  
+
   const diff = closingTime.value.getTime() - now.value.getTime()
-  
+
   const hours = Math.floor(diff / (1000 * 60 * 60))
   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
   const seconds = Math.floor((diff % (1000 * 60)) / 1000)
-  
+
   return { hours, minutes, seconds }
 })
 
@@ -108,23 +109,19 @@ const timeUntilCloseText = computed(() => {
   return `${hoursStr} ${minStr} ${secStr}`.trim()
 })
 
-// Следующий рабочий день (сегодня или завтра)
 const nextWorkDay = computed(() => {
   const today = now.value.getDay()
   const schedule = workScheduleToday.value
   const currentHour = now.value.getHours()
-  
-  // Если сейчас выходной или после закрытия — следующий рабочий день завтра
+
   const isClosedToday = isWeekend.value || currentHour >= schedule.close
-  
-  // Определяем день недели следующего рабочего дня
+
   let nextDay = today + (isClosedToday ? 1 : 0)
   if (nextDay > 6) nextDay = 0
-  
+
   return nextDay
 })
 
-// Время открытия следующего рабочего дня
 const nextWorkDayOpenTime = computed(() => {
   const isWeekendNext = nextWorkDay.value === 0 || nextWorkDay.value === 6
   const schedule = isWeekendNext ? WORK_SCHEDULE.weekend : WORK_SCHEDULE.weekday
@@ -132,21 +129,17 @@ const nextWorkDayOpenTime = computed(() => {
   return `${hours}:00`
 })
 
-// Текст когда салон закрыт
 const closedMessage = computed(() => {
   const todaySchedule = workScheduleToday.value
   const currentHour = now.value.getHours()
-  
-  // Если сейчас выходной — открыт ли салон сегодня
+
   const isClosedForDay = isWeekend.value && (currentHour < todaySchedule.open || currentHour >= todaySchedule.close)
-  
-  // Если будний день, но уже закрыто
   const isClosedAfterHours = !isWeekend.value && currentHour >= todaySchedule.close
-  
+
   if (isClosedForDay || isClosedAfterHours) {
     return `Закрыто. Работаем завтра с ${nextWorkDayOpenTime.value}`
   }
-  
+
   return 'Закрыто'
 })
 
@@ -154,9 +147,11 @@ const closedMessage = computed(() => {
 const isActive = (path: string) => route.path === path
 
 const setHeaderVar = () => {
+  // ✅ Учитываем высоту хедера + отступ сверху (1rem = 16px)
+  // Это значение используется в app.vue как padding-top для <main>
   document.documentElement.style.setProperty(
     '--header-height',
-    `${HEADER_HEIGHT}px`
+    `${HEADER_HEIGHT + HEADER_TOP_OFFSET}px`
   )
 }
 
@@ -170,7 +165,6 @@ const onKeydown = (ev: KeyboardEvent) => {
     if (contactsOpen.value) closeContacts()
   }
 }
-
 
 const onClickOutside = (ev: MouseEvent) => {
   const target = ev.target as Node
@@ -194,7 +188,6 @@ const onClickOutside = (ev: MouseEvent) => {
   }
 }
 
-
 const openMobileMenu = () => {
   mobileOpen.value = true
   document.body.style.overflow = 'hidden'
@@ -209,13 +202,11 @@ const toggleMobileMenu = () => {
   mobileOpen.value ? closeMobileMenu() : openMobileMenu()
 }
 
-
 const onResize = () => {
   if (window.innerWidth >= 768 && mobileOpen.value) {
     closeMobileMenu()
   }
 }
-
 
 const openContacts = async () => {
   contactsOpen.value = true
@@ -242,7 +233,6 @@ const callPrimary = () => {
   window.location.href = `tel:${CONTACTS.phones[0].raw}`
 }
 
-
 const handleLogoLoad = () => {
   logoLoaded.value = true
 }
@@ -258,7 +248,7 @@ onMounted(() => {
   window.addEventListener('keydown', onKeydown)
   window.addEventListener('resize', onResize)
   document.addEventListener('click', onClickOutside, { capture: true })
-  
+
   timerId = setInterval(() => {
     now.value = new Date()
   }, 1000)
@@ -270,7 +260,7 @@ onUnmounted(() => {
   window.removeEventListener('resize', onResize)
   document.removeEventListener('click', onClickOutside, { capture: true })
   document.body.style.overflow = ''
-  
+
   if (timerId) {
     clearInterval(timerId)
   }
@@ -281,7 +271,7 @@ onUnmounted(() => {
   <header
     class="fixed inset-x-0 z-60"
     :style="{
-      top: `calc(env(safe-area-inset-top, 0px) + 1rem + (var(--has-banner, 1) * 40px))`,
+      top: 'calc(env(safe-area-inset-top, 0px) + 1rem)',
       paddingLeft: 'env(safe-area-inset-left)',
       paddingRight: 'env(safe-area-inset-right)',
     }"
@@ -321,7 +311,7 @@ onUnmounted(() => {
           </div>
 
           <span class="hidden sm:block text-sm font-bold tracking-wide">
-             ВФД НА КАШИРИНЫХ
+            ВФД НА КАШИРИНЫХ
           </span>
         </RouterLink>
 
@@ -420,7 +410,7 @@ onUnmounted(() => {
 
             <div>
               <div class="text-xs text-gray-500 mb-1">Адрес</div>
-              <div class="wrap-break-word text-gray-700">
+              <div class="break-words text-gray-700">
                 {{ CONTACTS.address }}
               </div>
             </div>
@@ -555,14 +545,13 @@ onUnmounted(() => {
 }
 
 .header-btn:hover {
-  background: rgb(20 184 166); 
+  background: rgb(20 184 166);
 }
 
 :focus-visible {
-  outline: 2px solid rgb(45 212 191); 
+  outline: 2px solid rgb(45 212 191);
   outline-offset: 3px;
 }
-
 
 .fade-slide-enter-active,
 .fade-slide-leave-active {

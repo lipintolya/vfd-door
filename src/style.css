@@ -1,76 +1,111 @@
 @import "tailwindcss";
 
 /* ==================================================
+   CSS CUSTOM PROPERTIES — DESIGN TOKENS
+   Единая система отступов и типографики
+================================================== */
+
+:root {
+  /* Spacing scale — основана на 4px baseline */
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-8: 2rem;      /* 32px */
+  --space-10: 2.5rem;   /* 40px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
+  --space-20: 5rem;     /* 80px */
+  --space-24: 6rem;     /* 96px */
+
+  /* Typography scale — модульная шкала 1.2 */
+  --text-xs: 0.75rem;     /* 12px */
+  --text-sm: 0.875rem;    /* 14px */
+  --text-base: 1rem;      /* 16px */
+  --text-lg: 1.125rem;    /* 18px */
+  --text-xl: 1.25rem;     /* 20px */
+  --text-2xl: 1.5rem;     /* 24px */
+  --text-3xl: 1.875rem;   /* 30px */
+  --text-4xl: 2.25rem;    /* 36px */
+  --text-5xl: 3rem;       /* 48px */
+
+  /* Line heights */
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+
+  /* Letter spacing */
+  --tracking-tight: -0.025em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.025em;
+
+  /* Section padding — единый стандарт */
+  --section-padding-y-sm: 2.5rem;    /* 40px mobile */
+  --section-padding-y-md: 3.5rem;    /* 56px mobile */
+  --section-padding-y-lg: 5rem;      /* 80px mobile */
+  --section-padding-y-sm-md: 4rem;   /* 64px tablet */
+  --section-padding-y-md-lg: 5rem;   /* 80px tablet */
+  --section-padding-y-lg-xl: 6.5rem; /* 104px desktop */
+
+  /* Component gaps */
+  --gap-section-header: var(--space-12);  /* 48px */
+  --gap-content-blocks: var(--space-8);   /* 32px */
+  --gap-card-grid: var(--space-6);        /* 24px */
+}
+
+/* ==================================================
    BASE
 ================================================== */
 
 html {
-  scroll-padding-top: var(--header-height, 0px);
+  scroll-padding-top: calc(var(--header-height, 88px) + var(--space-4));
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
-  /* Fallback шрифт если Google Fonts недоступен */
   font-family: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: rgb(24 24 27); /* zinc-900 */
 }
 
 /* ==================================================
    LAYOUT SYSTEM
 ================================================== */
 
-/* Контейнер сайта — ИСТИНА */
 .app-container {
   @apply mx-auto w-full px-4 sm:px-6 lg:px-8;
   max-width: 1280px;
 }
 
 /* ==================================================
-   TYPOGRAPHY — PROFESSIONAL STANDARD
-   Based on: UXPin, WCAG, Nielsen Norman Group
-   Used by: Vercel, Linear, Stripe, Tailwind UI
+   TYPOGRAPHY UTILITIES
 ================================================== */
 
-/* 
-  Hero/Section subtitle: 55-65 characters optimal for scanning
-  This is the "sweet spot" for hero sections — short enough to scan
-  in 2-3 lines, long enough to convey value proposition
-  ONLY for centered layouts (use with mx-auto)
-*/
+/* Prose widths — для читаемости */
 .prose-subtitle {
   max-width: 65ch;
 }
 
-/*
-  Body text: 66 characters — classic typography standard
-  Optimal for comfortable reading without eye fatigue
-  ONLY for centered layouts (use with mx-auto)
-*/
 .prose-body {
   max-width: 66ch;
 }
 
-/*
-  Narrow text: 45-50 characters for quotes, captions, testimonials
-  Creates visual rhythm and emphasis
-*/
 .prose-narrow {
   max-width: 50ch;
 }
 
-/*
-  Wide text: 70-75 characters for technical content, documentation
-  WCAG maximum for non-CJK languages
-*/
 .prose-wide {
   max-width: 75ch;
 }
 
-/* 
-  Left-aligned sections (Hero, Features, CatalogPreview)
-  No max-width constraint — text flows naturally within container
-*/
 .prose-left {
   max-width: none;
 }
@@ -78,7 +113,6 @@ body {
 /* ==================================================
    UI COMPONENTS
 ================================================== */
-
 
 .ui-button {
   @apply inline-flex items-center justify-center gap-2
@@ -91,7 +125,6 @@ body {
     select-none;
 }
 
-/* Primary */
 .ui-button--primary {
   @apply border-white/30
     bg-white/10
@@ -112,7 +145,6 @@ body {
     focus-visible:ring-offset-transparent;
 }
 
-/* Ghost */
 .ui-button--ghost {
   @apply border-white/20
     bg-transparent

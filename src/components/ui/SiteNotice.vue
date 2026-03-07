@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 
-const isVisible = ref(true)
+const isVisible = ref(false)
 const isDismissed = ref(false)
 
 const dismiss = () => {

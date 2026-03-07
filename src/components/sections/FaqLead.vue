@@ -77,58 +77,20 @@ const handleTouchEnd = (e: TouchEvent, id: number) => {
 </script>
 
 <template>
-  <AppSection size="lg" class="bg-zinc-900">
+  <AppSection size="md" class="bg-zinc-900">
     <AppContainer>
-      <div class="mb-16 text-center">
+      <!-- Header -->
+      <div class="text-center mb-12 sm:mb-16">
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-white mb-4 prose-subtitle mx-auto">
           Ответы на вопросы
         </h2>
-        <p class="text-base sm:text-lg text-zinc-400 prose-subtitle mx-auto">
+        <p class="text-base sm:text-lg text-zinc-400 prose-subtitle mx-auto max-w-2xl">
           Найдите ответ на ваш вопрос или свяжитесь с нами в Telegram
         </p>
       </div>
 
-      <!-- 8 MARCH GREETING CARD -->
-      <div class="w-full max-w-4xl mx-auto mb-16">
-        <div class="relative rounded-3xl overflow-hidden border-2 border-pink-300 bg-gradient-to-br from-pink-50 via-rose-50 to-pink-100 shadow-xl">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
-            <!-- Image Column -->
-            <div class="relative h-64 md:h-auto overflow-hidden">
-              <img
-                src="https://storage.yandexcloud.net/catalog-vfd/8march/Frame%2021.jpg"
-                alt="Поздравление с 8 марта"
-                class="w-full h-full object-cover"
-                loading="lazy"
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-pink-200/30 to-transparent md:hidden" />
-            </div>
-
-            <!-- Text Column -->
-            <div class="p-6 sm:p-8 lg:p-10 flex flex-col justify-center">
-              <h3 class="text-2xl sm:text-3xl font-bold text-pink-700 mb-4">
-                Дорогие дамы!
-              </h3>
-              <p class="text-base sm:text-lg text-pink-900 leading-relaxed mb-4">
-                От всей души поздравляем вас с праздником весны — 8 Марта!
-              </p>
-              <p class="text-sm sm:text-base text-pink-800 leading-relaxed mb-4">
-                Желаем вам счастья, здоровья, любви и прекрасного настроения.
-                Пусть каждый день приносит радость, улыбки и вдохновение,
-                а рядом всегда будут забота, тепло и внимание близких.
-              </p>
-              <p class="text-lg font-semibold text-pink-700">
-                С праздником! 🌷
-              </p>
-              <p class="text-sm text-pink-600 mt-2">
-                Ваш ВФД на Кашириных
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- FAQ BLOCK -->
-      <div class="w-full max-w-none sm:max-w-3xl mx-auto space-y-4 mb-12">
+      <div class="w-full max-w-3xl mx-auto space-y-4 mb-12 sm:mb-16">
         <div
           v-for="item in faqs"
           :key="item.id"
@@ -186,7 +148,7 @@ const handleTouchEnd = (e: TouchEvent, id: number) => {
       </div>
 
       <!-- CONTACT CTA BLOCK -->
-      <div class="w-full max-w-none sm:max-w-3xl mx-auto p-6 sm:p-8 rounded-3xl border-2 border-teal-600 bg-teal-50 text-center">
+      <div class="w-full max-w-3xl mx-auto p-6 sm:p-8 rounded-3xl border-2 border-teal-600 bg-teal-50 text-center">
         <h3 class="text-xl sm:text-2xl font-semibold text-zinc-900 mb-2">
           Не нашли ответ?
         </h3>
