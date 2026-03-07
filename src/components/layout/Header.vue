@@ -410,7 +410,7 @@ onUnmounted(() => {
 
             <div>
               <div class="text-xs text-gray-500 mb-1">Адрес</div>
-              <div class="break-words text-gray-700">
+              <div class="wrap-break-word text-gray-700">
                 {{ CONTACTS.address }}
               </div>
             </div>
