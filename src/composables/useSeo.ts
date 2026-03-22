@@ -152,16 +152,17 @@ export function useSeo(options: SeoOptions): void {
     image: ogImage,
   })
   
-  // Canonical URL
-  if (canonicalUrl) {
-    let link = document.querySelector('link[rel="canonical"]')
-    if (!link) {
-      link = document.createElement('link')
-      link.setAttribute('rel', 'canonical')
-      document.head.appendChild(link)
-    }
-    link.setAttribute('href', canonicalUrl)
+  // Canonical URL - всегда обновляем для SPA
+  let link = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null
+  if (!link) {
+    link = document.createElement('link')
+    link.setAttribute('rel', 'canonical')
+    document.head.appendChild(link)
   }
+  // Используем переданный URL или текущий путь без хеша
+  const href = window.location.href
+  const currentUrl = href.includes('#') ? href.slice(0, href.indexOf('#')) : href
+  link.href = canonicalUrl ?? currentUrl
 }
 
 /**

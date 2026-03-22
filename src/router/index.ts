@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 
+const BASE_URL = 'https://vfd74.ru'
+
 /**
  * Lazy loading для views — код сплиттинг по страницам
  * @see https://router.vuejs.org/guide/advanced/lazy-loading.html
@@ -79,6 +81,23 @@ router.beforeEach((to, from) => {
   if (to.path !== from.path && !to.hash) {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
+})
+
+/**
+ * Обновляем canonical URL после каждого перехода
+ */
+router.afterEach((to) => {
+  // Обновляем canonical URL для текущей страницы
+  let link = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null
+  if (!link) {
+    link = document.createElement('link')
+    link.setAttribute('rel', 'canonical')
+    document.head.appendChild(link)
+  }
+  
+  // Формируем полный URL для текущего маршрута
+  const canonicalUrl = `${BASE_URL}${to.path}`
+  link.href = canonicalUrl
 })
 
 export default router

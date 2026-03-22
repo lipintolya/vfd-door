@@ -6,6 +6,19 @@ Options -Indexes
   RewriteEngine On
   RewriteBase /
 
+  # Принудительный редирект на HTTPS
+  RewriteCond %{HTTPS} off
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Принудительный редирект на www (или без www - выберите один вариант)
+  # Вариант 1: с www
+  # RewriteCond %{HTTP_HOST} !^www\. [NC]
+  # RewriteRule ^(.*)$ https://www.%{HTTP_HOST}/$1 [R=301,L]
+  
+  # Вариант 2: без www (раскомментируйте если нужно)
+  # RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+  # RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
   # Если запрашивается index.html — ничего не делаем
   RewriteRule ^index\.html$ - [L]
 

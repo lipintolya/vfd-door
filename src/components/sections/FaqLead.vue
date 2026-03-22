@@ -2,7 +2,8 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import AppSection from '@/components/layout/AppSection.vue'
 import AppContainer from '@/components/layout/AppContainer.vue'
-import TgIcon from '@/assets/icons/tg-icon.svg'
+
+const VK_ICON_URL = 'https://storage.yandexcloud.net/catalog-vfd/icons/vk_logo.svg'
 
 interface FaqItem {
   id: number
@@ -81,11 +82,11 @@ const handleTouchEnd = (e: TouchEvent, id: number) => {
     <AppContainer>
       <!-- Header -->
       <div class="text-center mb-12 sm:mb-16">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-white mb-4 prose-subtitle mx-auto">
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-medium text-white mb-4 prose-subtitle mx-auto">
           Ответы на вопросы
         </h2>
         <p class="text-base sm:text-lg text-zinc-400 prose-subtitle mx-auto max-w-2xl">
-          Найдите ответ на ваш вопрос или свяжитесь с нами в Telegram
+          Найдите ответ на ваш вопрос или свяжитесь с нами ВКонтакте
         </p>
       </div>
 
@@ -149,7 +150,7 @@ const handleTouchEnd = (e: TouchEvent, id: number) => {
 
       <!-- CONTACT CTA BLOCK -->
       <div class="w-full max-w-3xl mx-auto p-6 sm:p-8 rounded-3xl border-2 border-teal-600 bg-teal-50 text-center">
-        <h3 class="text-xl sm:text-2xl font-semibold text-zinc-900 mb-2">
+        <h3 class="text-xl sm:text-2xl font-medium text-zinc-900 mb-2">
           Не нашли ответ?
         </h3>
         <p class="text-sm sm:text-base text-zinc-700 mb-6">
@@ -157,13 +158,13 @@ const handleTouchEnd = (e: TouchEvent, id: number) => {
         </p>
 
         <a
-          href="https://t.me/vfddoors74"
+          href="https://vk.com/vfddoors74"
           target="_blank"
           rel="noopener noreferrer"
           class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-teal-600 hover:bg-teal-700 text-white text-sm sm:text-base font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/30"
         >
-          <img :src="TgIcon" alt="Telegram" class="w-5 h-5" />
-          Написать в Telegram
+          <img :src="VK_ICON_URL" alt="ВКонтакте" class="w-5 h-5" />
+          Написать ВКонтакте
         </a>
       </div>
     </AppContainer>
