@@ -1,9 +1,10 @@
-import type { DoorSeriesBase } from '@/components/catalog/types'
+// Базовые серии для конфиг (латинские ключи)
+type PricingSeries = 'innova' | 'emalex' | 'urban' | 'linea' | 'invisible' | 'skinel' | 'atum' | 'atum_pro' | 'classic_art' | 'basic' | 'eco_shpon' | 'Атум' | 'Атум Про' | 'Бэйзик' | 'Классик Арт' | 'Эмалекс' | 'Урбан' | 'Иннова'
 
 export interface PricingConfig {
   globalMultiplier: number
   series: {
-    [key in DoorSeriesBase]?: {
+    [key in PricingSeries]?: {
       colorMultiplier: {
         white: number
         default: number
@@ -26,7 +27,7 @@ export const pricingConfig: PricingConfig = {
     innova: {
       colorMultiplier: {
         white: 1,
-        default: 1.2, // +20% ко всем цветам кроме white
+        default: 1.2,
       },
     },
     emalex: {
@@ -54,6 +55,36 @@ export const pricingConfig: PricingConfig = {
       },
     },
     skinel: {
+      colorMultiplier: {
+        white: 1,
+        default: 1,
+      },
+    },
+    atum: {
+      colorMultiplier: {
+        white: 1,
+        default: 1,
+      },
+    },
+    atum_pro: {
+      colorMultiplier: {
+        white: 1,
+        default: 1,
+      },
+    },
+    classic_art: {
+      colorMultiplier: {
+        white: 1,
+        default: 1,
+      },
+    },
+    basic: {
+      colorMultiplier: {
+        white: 1,
+        default: 1,
+      },
+    },
+    eco_shpon: {
       colorMultiplier: {
         white: 1,
         default: 1,

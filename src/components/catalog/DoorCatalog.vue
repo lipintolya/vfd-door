@@ -3,10 +3,8 @@ import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ProductCard from './ProductCard.vue'
 import catalogJson from '@/data/doors.json'
-import type { Door, Color, Tag, DoorSeries, DoorCover } from './types'
+import type { Door, Tag, DoorSeries, DoorCover } from './types'
 import Breadcrumbs from '@/components/ui/Breadcrumbs.vue'
-
-const DEFAULT_COLOR: Color = { name: 'Default', hex: '#ffffff', image: '' }
 
 interface Breadcrumb {
   label: string
@@ -14,50 +12,16 @@ interface Breadcrumb {
   isActive?: boolean
 }
 
-const seriesData = [
-  {
-    id: 'innova',
-    title: 'Innova/Иннова',
-    description: 'Инновационное износостойкое покрытие УФ отверждения STRONG FLEX',
-    image: 'https://storage.yandexcloud.net/catalog-vfd/covers/innova-cover.webp',
-  },
-  {
-    id: 'urban',
-    title: 'Urban/Урбан',
-    description: 'Каркасные двери с гладкой поверхностью в современном дизайне',
-    image: 'https://storage.yandexcloud.net/catalog-vfd/covers/urban-cover.webp',
-  },
-  {
-    id: 'emalex',
-    title: 'Emalex/Эмалекс',
-    description: 'Инновационный экошпон из Германии с защитным слоем лака',
-    image: 'https://storage.yandexcloud.net/catalog-vfd/covers/emalex-cover.webp',
-  },
-  {
-    id: 'linea',
-    title: 'Linea/Линеа',
-    description: 'Современные двери в эмалевом покрытии с фрезировкой элементов',
-    image: 'https://storage.yandexcloud.net/catalog-vfd/covers/linea-cover.webp',
-  },
-  {
-    id: 'invisible',
-    title: 'Invisible/скрытые',
-    description: 'Двери скрытого монтажа Invisible VFD с алюминиевым коробом',
-    image: 'https://storage.yandexcloud.net/catalog-vfd/covers/invisible-cover.webp',
-  },
-  {
-    id: 'skinel',
-    title: 'Skinel/Скинель',
-    description: 'Двери в эмалевом покрытии, стиль Арт Деко c лаконичной фрезировкой',
-    image: 'https://storage.yandexcloud.net/catalog-vfd/covers/skinel-cover.webp',
-  }
-]
-
 const router = useRouter()
 const route = useRoute()
 
 const doors = ref<Door[]>(catalogJson as Door[])
-const selectedColors = ref<Record<string, Color>>({})
+
+// Список серий из данных каталога
+const seriesList = computed(() => {
+  const seriesSet = new Set(doors.value.map(d => d.series))
+  return Array.from(seriesSet).sort((a, b) => a.localeCompare(b))
+})
 
 const tempFilters = ref({
   activeTags: new Set<Tag>(),
@@ -80,13 +44,10 @@ const appliedFilters = ref({
 const sortOption = ref<'price-asc' | 'price-desc' | 'name-asc' | 'name-desc' | 'series'>('price-asc')
 const isMobileFiltersOpen = ref(false)
 const currentPage = ref(1)
-const itemsPerPage = ref(12)
+const itemsPerPage = ref(21)
 const openFilterSections = ref<Set<string>>(new Set())
 
 onMounted(() => {
-  doors.value.forEach(door => {
-    if (door.id) selectedColors.value[door.id] = door.colors[0] ?? DEFAULT_COLOR
-  })
   initFiltersFromUrl()
 })
 
@@ -104,8 +65,8 @@ const initFiltersFromUrl = () => {
   appliedFilters.value = JSON.parse(JSON.stringify(tempFilters.value))
 }
 
-const isValidSeries = (seriesId: string): seriesId is DoorSeries =>
-  seriesData.some(series => series.id === seriesId || series.id.split('/')[0] === seriesId.split('/')[0])
+const isValidSeries = (seriesId: string): boolean =>
+  seriesList.value.includes(seriesId as any)
 
 const allTags = computed(() => Array.from(new Set(doors.value.flatMap(d => d.tags))).sort())
 const allCovers = computed(() => Array.from(new Set(doors.value.map(d => d.cover))).sort())
@@ -134,8 +95,7 @@ const getAppliedFilterCount = computed(() => {
 const hasFilterChanges = computed(() => JSON.stringify(tempFilters.value) !== JSON.stringify(appliedFilters.value))
 
 const activeSeriesTitle = computed(() => {
-  const series = seriesData.find(s => s.id === appliedFilters.value.series)
-  return series ? series.title : null
+  return appliedFilters.value.series || null
 })
 
 const breadcrumbs = computed<Breadcrumb[]>(() => {
@@ -160,8 +120,7 @@ const filteredDoors = computed<Door[]>(() => {
 
   if (appliedFilters.value.inStock) list = list.filter(d => d.tags.includes('в наличии'))
   if (appliedFilters.value.series) {
-    const baseSeries = appliedFilters.value.series.split('/')[0]
-    list = list.filter(d => d.series.split('/')[0] === baseSeries)
+    list = list.filter(d => d.series === appliedFilters.value.series)
   }
   if (appliedFilters.value.cover) list = list.filter(d => d.cover === appliedFilters.value.cover)
   if (appliedFilters.value.material) list = list.filter(d => d.material === appliedFilters.value.material)
@@ -192,12 +151,33 @@ const totalPages = computed(() => Math.ceil(filteredDoors.value.length / itemsPe
 const canGoPrev = computed(() => currentPage.value > 1)
 const canGoNext = computed(() => currentPage.value < totalPages.value)
 
+const visiblePages = computed<(number | string)[]>(() => {
+  const total = totalPages.value
+  const current = currentPage.value
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1)
+  const pages: (number | string)[] = []
+  if (current <= 4) {
+    for (let i = 1; i <= 5; i++) pages.push(i)
+    pages.push('...')
+    pages.push(total)
+  } else if (current >= total - 3) {
+    pages.push(1)
+    pages.push('...')
+    for (let i = total - 4; i <= total; i++) pages.push(i)
+  } else {
+    pages.push(1)
+    pages.push('...')
+    for (let i = current - 1; i <= current + 1; i++) pages.push(i)
+    pages.push('...')
+    pages.push(total)
+  }
+  return pages
+})
+
 const goToPage = (page: number) => {
   currentPage.value = Math.max(1, Math.min(page, totalPages.value))
 }
 
-const selectColor = (doorId:string,color:Color) => selectedColors.value[doorId]=color
-const getSelectedColor = (doorId:string) => selectedColors.value[doorId] ?? DEFAULT_COLOR
 const toggleFilterSection = (s:string) => openFilterSections.value.has(s) ? openFilterSections.value.delete(s) : openFilterSections.value.add(s)
 const toggleTempTagFilter = (tag:Tag) => tempFilters.value.activeTags.has(tag) ? tempFilters.value.activeTags.delete(tag) : tempFilters.value.activeTags.add(tag)
 
@@ -243,16 +223,8 @@ const applyFilters = () => {
     appliedFilters.value = JSON.parse(JSON.stringify(tempFilters.value))
     currentPage.value = 1
     updateUrlWithFilters()
-
-    if (appliedFilters.value.colorName) {
-      const sel = appliedFilters.value.colorName.toLowerCase().trim()
-      doors.value.forEach(d => {
-        const color = d.colors.find(c => c.name.toLowerCase().trim() === sel)
-        if (color) selectedColors.value[d.id] = color
-      })
-    }
     closeMobileFilters()
-  }, 300) // Увеличено с 100ms до 300ms для стабильности
+  }, 300)
 }
 
 const updateUrlWithFilters = () => {
@@ -271,12 +243,6 @@ const resetFilters = () => {
   appliedFilters.value = JSON.parse(JSON.stringify(tempFilters.value))
   currentPage.value=1
   router.replace({query:{}})
-  doors.value.forEach(d=>selectedColors.value[d.id]=d.colors[0]??DEFAULT_COLOR)
-}
-
-const selectSeries = (seriesId:DoorSeries) => {
-  tempFilters.value={ activeTags:new Set(), inStock:false, series:seriesId, cover:'', material:'', colorName:'' }
-  applyFilters()
 }
 
 const selectSeriesFilter = (seriesId: DoorSeries | '') => {
@@ -328,49 +294,6 @@ onUnmounted(() => {
         <Breadcrumbs :items="breadcrumbs" />
       </div>
 
-      <!-- SERIES BENTO GRID -->
-      <section class="mb-8 sm:mb-10 lg:mb-14">
-        <div class="mb-4 sm:mb-6 lg:mb-8">
-          <h2 class="text-2xl sm:text-3xl lg:text-4xl font-medium text-gray-900 mb-2">
-            Коллекции дверей
-          </h2>
-          <p class="text-sm sm:text-base text-gray-600">
-            Выберите коллекцию для просмотра доступных моделей
-          </p>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
-          <button
-            v-for="series in seriesData"
-            :key="series.id"
-            @click="selectSeries(series.id as DoorSeries)"
-            class="group relative rounded-xl sm:rounded-2xl lg:rounded-3xl overflow-hidden h-48 sm:h-64 lg:h-80 transition-all duration-300 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
-            :class="{'ring-2 ring-teal-600 ring-offset-2 sm:ring-4': appliedFilters.series === series.id }"
-          >
-            <div class="absolute inset-0">
-              <div
-                class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-                :style="{ backgroundImage: `url(${series.image})` }"
-              />
-              <div class="absolute inset-0 bg-linear-to-t from-black/90 via-black/30 to-transparent group-hover:via-black/50 transition-colors" />
-            </div>
-
-            <div class="relative z-10 h-full flex flex-col justify-end p-4 sm:p-6 lg:p-8 text-white">
-              <h3 class="text-lg sm:text-xl lg:text-2xl font-medium mb-1 sm:mb-2">{{ series.title }}</h3>
-              <p class="text-xs sm:text-sm lg:text-base text-white/90 line-clamp-2">{{ series.description }}</p>
-            </div>
-
-            <div v-if="appliedFilters.series === series.id"
-              class="absolute top-3 right-3 sm:top-4 sm:right-4 w-8 h-8 sm:w-10 sm:h-10 bg-teal-600 rounded-full flex items-center justify-center shadow-lg"
-            >
-              <svg class="w-4 h-4 sm:w-6 sm:h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-              </svg>
-            </div>
-          </button>
-        </div>
-      </section>
-
       <!-- HEADER WITH SORT -->
       <div class="mb-6 sm:mb-8 products-section scroll-mt-20">
         <div class="flex items-center justify-between flex-wrap gap-3 sm:gap-4 mb-4 sm:mb-6">
@@ -387,7 +310,7 @@ onUnmounted(() => {
           </div>
 
           <!-- MOBILE FILTER BUTTON -->
-          <button 
+          <button
             @click="openMobileFilters"
             class="lg:hidden flex items-center gap-2 px-4 py-2.5 bg-zinc-900 text-white rounded-lg font-medium text-sm hover:bg-zinc-800 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500"
           >
@@ -414,15 +337,15 @@ onUnmounted(() => {
         </div>
 
         <!-- MOBILE SORT -->
-        <div class="lg:hidden flex items-center gap-2 overflow-x-auto pb-2">
-          <button 
-            v-for="opt in ['price-asc', 'price-desc', 'name-asc']"
+        <div class="lg:hidden flex items-center gap-2 overflow-x-auto pb-2 -mx-4 px-4">
+          <button
+            v-for="opt in ['price-asc', 'price-desc', 'name-asc', 'name-desc', 'series']"
             :key="opt"
             @click="sortOption = opt as any"
-            class="px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors shrink-0"
-            :class="sortOption === opt ? 'bg-teal-600 text-white' : 'bg-gray-100 text-gray-900 hover:bg-gray-200'"
+            class="px-3.5 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition-colors shrink-0 min-h-[44px] flex items-center justify-center active:scale-95"
+            :class="sortOption === opt ? 'bg-teal-600 text-white shadow-sm' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
           >
-            {{ opt === 'price-asc' ? '₽ возр.' : opt === 'price-desc' ? '₽ убыв.' : opt === 'name-asc' ? 'А-Я' : 'Я-А' }}
+            {{ opt === 'price-asc' ? '₽ возр.' : opt === 'price-desc' ? '₽ убыв.' : opt === 'name-asc' ? 'А-Я' : opt === 'name-desc' ? 'Я-А' : 'Серия' }}
           </button>
         </div>
       </div>
@@ -430,206 +353,175 @@ onUnmounted(() => {
       <div class="flex flex-col lg:flex-row gap-6 lg:gap-8">
 
         <!-- DESKTOP FILTERS SIDEBAR -->
-        <aside class="hidden lg:block lg:w-72 xl:w-80 shrink-0">
-          <div class="sticky top-24 space-y-4 bg-linear-to-br from-zinc-900 to-zinc-800 rounded-2xl border border-zinc-700 p-6 shadow-lg">
-            <div class="pb-4 border-b border-zinc-700">
-              <h3 class="text-lg font-semibold text-white">Фильтры</h3>
+        <aside class="hidden lg:block lg:w-52 xl:w-60 shrink-0">
+          <div class="sticky top-24 space-y-3 bg-linear-to-br from-zinc-900 to-zinc-800 rounded-2xl border border-zinc-700 p-4 shadow-lg">
+            <div class="pb-3 border-b border-zinc-700">
+              <h3 class="text-base font-semibold text-white">Фильтры</h3>
             </div>
 
             <!-- FILTER: Series -->
-            <div class="border-b border-zinc-700 pb-4">
+            <div class="border-b border-zinc-700 pb-3">
               <button @click="toggleFilterSection('series')"
-                class="flex items-center justify-between w-full text-left py-2 group focus:outline-none">
-                <span class="font-medium text-white">Серия</span>
-                <svg class="w-5 h-5 text-zinc-400 transition-transform duration-200"
+                class="flex items-center justify-between w-full text-left py-1.5 group focus:outline-none">
+                <span class="font-medium text-white text-sm">Серия</span>
+                <svg class="w-4 h-4 text-zinc-400 transition-transform duration-200"
                      :class="{ 'rotate-180': openFilterSections.has('series') }"
                      fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
-              <div v-if="openFilterSections.has('series')" class="mt-3 space-y-1 max-h-64 overflow-y-auto">
+              <div v-if="openFilterSections.has('series')" class="mt-2 space-y-0.5 max-h-56 overflow-y-auto">
                 <button
                   @click="selectSeriesFilter('')"
-                  class="flex items-center justify-between w-full text-left py-2 px-3 rounded-lg hover:bg-zinc-700/50 transition-colors"
+                  class="w-full text-left py-1.5 px-2 rounded-lg hover:bg-zinc-700/50 transition-colors text-xs text-zinc-200"
                   :class="{ 'bg-teal-600/20 border border-teal-500/50': !tempFilters.series }"
                 >
-                  <span class="text-sm text-zinc-200">Все серии</span>
+                  Все серии
                 </button>
                 <button
-                  v-for="series in seriesData"
-                  :key="series.id"
-                  @click="selectSeriesFilter(series.id as DoorSeries)"
-                  class="flex items-center justify-between w-full text-left py-2 px-3 rounded-lg hover:bg-zinc-700/50 transition-colors"
-                  :class="{ 'bg-teal-600/20 border border-teal-500/50': tempFilters.series === series.id }"
+                  v-for="series in seriesList"
+                  :key="series"
+                  @click="selectSeriesFilter(series as DoorSeries)"
+                  class="w-full text-left py-1.5 px-2 rounded-lg hover:bg-zinc-700/50 transition-colors text-xs text-zinc-200"
+                  :class="{ 'bg-teal-600/20 border border-teal-500/50': tempFilters.series === series }"
                 >
-                  <span class="text-sm text-zinc-200">{{ series.title }}</span>
-                  <span v-if="tempFilters.series === series.id"
-                    class="w-4 h-4 bg-teal-600 rounded-full flex items-center justify-center shrink-0">
-                    <svg class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                    </svg>
-                  </span>
+                  {{ series }}
                 </button>
               </div>
             </div>
 
             <!-- FILTER: Cover -->
-            <div class="border-b border-zinc-700 pb-4">
+            <div class="border-b border-zinc-700 pb-3">
               <button @click="toggleFilterSection('cover')"
-                class="flex items-center justify-between w-full text-left py-2 group focus:outline-none">
-                <span class="font-medium text-white">Покрытие</span>
-                <svg class="w-5 h-5 text-zinc-400 transition-transform duration-200"
+                class="flex items-center justify-between w-full text-left py-1.5 group focus:outline-none">
+                <span class="font-medium text-white text-sm">Покрытие</span>
+                <svg class="w-4 h-4 text-zinc-400 transition-transform duration-200"
                      :class="{ 'rotate-180': openFilterSections.has('cover') }"
                      fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
-              <div v-if="openFilterSections.has('cover')" class="mt-3 space-y-1 max-h-64 overflow-y-auto">
+              <div v-if="openFilterSections.has('cover')" class="mt-2 space-y-0.5 max-h-56 overflow-y-auto">
                 <button
                   @click="selectCoverFilter('')"
-                  class="flex items-center justify-between w-full text-left py-2 px-3 rounded-lg hover:bg-zinc-700/50 transition-colors"
+                  class="w-full text-left py-1.5 px-2 rounded-lg hover:bg-zinc-700/50 transition-colors text-xs text-zinc-200"
                   :class="{ 'bg-teal-600/20 border border-teal-500/50': !tempFilters.cover }"
                 >
-                  <span class="text-sm text-zinc-200">Все покрытия</span>
+                  Все покрытия
                 </button>
                 <button
                   v-for="cover in allCovers"
                   :key="cover"
                   @click="selectCoverFilter(cover as DoorCover)"
-                  class="flex items-center justify-between w-full text-left py-2 px-3 rounded-lg hover:bg-zinc-700/50 transition-colors"
+                  class="w-full text-left py-1.5 px-2 rounded-lg hover:bg-zinc-700/50 transition-colors text-xs text-zinc-200"
                   :class="{ 'bg-teal-600/20 border border-teal-500/50': tempFilters.cover === cover }"
                 >
-                  <span class="text-sm text-zinc-200">{{ cover }}</span>
-                  <span v-if="tempFilters.cover === cover"
-                    class="w-4 h-4 bg-teal-600 rounded-full flex items-center justify-center shrink-0">
-                    <svg class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                    </svg>
-                  </span>
+                  {{ cover }}
                 </button>
               </div>
             </div>
 
             <!-- FILTER: Material -->
-            <div class="border-b border-zinc-700 pb-4">
+            <div class="border-b border-zinc-700 pb-3">
               <button @click="toggleFilterSection('material')"
-                class="flex items-center justify-between w-full text-left py-2 group focus:outline-none">
-                <span class="font-medium text-white">Материал</span>
-                <svg class="w-5 h-5 text-zinc-400 transition-transform duration-200"
+                class="flex items-center justify-between w-full text-left py-1.5 group focus:outline-none">
+                <span class="font-medium text-white text-sm">Материал</span>
+                <svg class="w-4 h-4 text-zinc-400 transition-transform duration-200"
                      :class="{ 'rotate-180': openFilterSections.has('material') }"
                      fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
-              <div v-if="openFilterSections.has('material')" class="mt-3 space-y-1 max-h-64 overflow-y-auto">
+              <div v-if="openFilterSections.has('material')" class="mt-2 space-y-0.5 max-h-56 overflow-y-auto">
                 <button
                   @click="selectMaterialFilter('')"
-                  class="flex items-center justify-between w-full text-left py-2 px-3 rounded-lg hover:bg-zinc-700/50 transition-colors"
+                  class="w-full text-left py-1.5 px-2 rounded-lg hover:bg-zinc-700/50 transition-colors text-xs text-zinc-200"
                   :class="{ 'bg-teal-600/20 border border-teal-500/50': !tempFilters.material }"
                 >
-                  <span class="text-sm text-zinc-200">Все материалы</span>
+                  Все материалы
                 </button>
                 <button
                   v-for="material in allMaterials"
                   :key="material"
                   @click="selectMaterialFilter(material)"
-                  class="flex items-center justify-between w-full text-left py-2 px-3 rounded-lg hover:bg-zinc-700/50 transition-colors"
+                  class="w-full text-left py-1.5 px-2 rounded-lg hover:bg-zinc-700/50 transition-colors text-xs text-zinc-200"
                   :class="{ 'bg-teal-600/20 border border-teal-500/50': tempFilters.material === material }"
                 >
-                  <span class="text-sm text-zinc-200">{{ material }}</span>
-                  <span v-if="tempFilters.material === material"
-                    class="w-4 h-4 bg-teal-600 rounded-full flex items-center justify-center shrink-0">
-                    <svg class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                    </svg>
-                  </span>
+                  {{ material }}
                 </button>
               </div>
             </div>
 
             <!-- FILTER: Color -->
-            <div class="border-b border-zinc-700 pb-4">
+            <div class="border-b border-zinc-700 pb-3">
               <button @click="toggleFilterSection('color')"
-                class="flex items-center justify-between w-full text-left py-2 group focus:outline-none">
-                <span class="font-medium text-white">Цвет</span>
-                <svg class="w-5 h-5 text-zinc-400 transition-transform duration-200"
+                class="flex items-center justify-between w-full text-left py-1.5 group focus:outline-none">
+                <span class="font-medium text-white text-sm">Цвет</span>
+                <svg class="w-4 h-4 text-zinc-400 transition-transform duration-200"
                      :class="{ 'rotate-180': openFilterSections.has('color') }"
                      fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
-              <div v-if="openFilterSections.has('color')" class="mt-3 space-y-1 max-h-64 overflow-y-auto">
+              <div v-if="openFilterSections.has('color')" class="mt-2 space-y-0.5 max-h-56 overflow-y-auto">
                 <button
                   @click="selectColorFilter('')"
-                  class="flex items-center justify-between w-full text-left py-2 px-3 rounded-lg hover:bg-zinc-700/50 transition-colors"
+                  class="w-full text-left py-1.5 px-2 rounded-lg hover:bg-zinc-700/50 transition-colors text-xs text-zinc-200"
                   :class="{ 'bg-teal-600/20 border border-teal-500/50': !tempFilters.colorName }"
                 >
-                  <span class="text-sm text-zinc-200">Все цвета</span>
+                  Все цвета
                 </button>
                 <button
                   v-for="color in allColors"
                   :key="color"
                   @click="selectColorFilter(color)"
-                  class="flex items-center justify-between w-full text-left py-2 px-3 rounded-lg hover:bg-zinc-700/50 transition-colors"
+                  class="w-full text-left py-1.5 px-2 rounded-lg hover:bg-zinc-700/50 transition-colors text-xs text-zinc-200"
                   :class="{ 'bg-teal-600/20 border border-teal-500/50': tempFilters.colorName === color }"
                 >
-                  <span class="text-sm text-zinc-200">{{ color }}</span>
-                  <span v-if="tempFilters.colorName === color"
-                    class="w-4 h-4 bg-teal-600 rounded-full flex items-center justify-center shrink-0">
-                    <svg class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                    </svg>
-                  </span>
+                  {{ color }}
                 </button>
               </div>
             </div>
 
             <!-- FILTER: Tags -->
-            <div class="border-b border-zinc-700 pb-4">
+            <div class="border-b border-zinc-700 pb-3">
               <button @click="toggleFilterSection('tags')"
-                class="flex items-center justify-between w-full text-left py-2 group focus:outline-none">
-                <span class="font-medium text-white">Теги</span>
-                <svg class="w-5 h-5 text-zinc-400 transition-transform duration-200"
+                class="flex items-center justify-between w-full text-left py-1.5 group focus:outline-none">
+                <span class="font-medium text-white text-sm">Теги</span>
+                <svg class="w-4 h-4 text-zinc-400 transition-transform duration-200"
                      :class="{ 'rotate-180': openFilterSections.has('tags') }"
                      fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
-              <div v-if="openFilterSections.has('tags')" class="mt-3 space-y-1 max-h-64 overflow-y-auto">
+              <div v-if="openFilterSections.has('tags')" class="mt-2 space-y-0.5 max-h-56 overflow-y-auto">
                 <button
                   v-for="tag in allTags" :key="tag"
                   @click="toggleTempTagFilter(tag)"
-                  class="flex items-center justify-between w-full text-left py-2 px-3 rounded-lg hover:bg-zinc-700/50 transition-colors"
+                  class="w-full text-left py-1.5 px-2 rounded-lg hover:bg-zinc-700/50 transition-colors text-xs text-zinc-200"
                   :class="{ 'bg-teal-600/20 border border-teal-500/50': tempFilters.activeTags.has(tag) }"
                 >
-                  <span class="text-sm text-zinc-200">{{ tag }}</span>
-                  <span v-if="tempFilters.activeTags.has(tag)"
-                    class="w-4 h-4 bg-teal-600 rounded-full flex items-center justify-center shrink-0">
-                    <svg class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                    </svg>
-                  </span>
+                  {{ tag }}
                 </button>
               </div>
             </div>
 
             <!-- FILTER: Stock -->
             <div>
-              <label class="flex items-center cursor-pointer py-2 px-3 rounded-lg hover:bg-zinc-700/50 transition-colors">
+              <label class="flex items-center cursor-pointer py-1.5 px-2 rounded-lg hover:bg-zinc-700/50 transition-colors">
                 <input type="checkbox" v-model="tempFilters.inStock"
-                  class="w-4 h-4 text-teal-600 rounded border-zinc-700 focus:ring-2 focus:ring-teal-500 focus:ring-offset-0 bg-zinc-800 accent-teal-600"/>
-                <span class="ml-3 text-sm text-zinc-200 font-medium">Только в наличии</span>
+                  class="w-3.5 h-3.5 mr-2 rounded border-zinc-600 text-teal-600 bg-zinc-700 focus:ring-teal-500 focus:ring-offset-0" />
+                <span class="text-xs text-zinc-200">В наличии</span>
               </label>
             </div>
 
-            <!-- FILTER ACTION BUTTONS -->
-            <div class="space-y-3 pt-4 border-t border-zinc-700">
+            <div class="space-y-2 pt-3 border-t border-zinc-700">
               <button v-if="hasFilterChanges" @click="applyFilters"
-                class="w-full py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-semibold text-sm transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/30 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                class="w-full py-2.5 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-semibold text-xs transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/30 focus:outline-none focus:ring-2 focus:ring-teal-500">
                 Применить
               </button>
               <button v-if="getAppliedFilterCount>0" @click="resetFilters"
-                class="w-full py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-300 rounded-lg font-semibold text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-red-500">
+                class="w-full py-2 bg-red-500/10 hover:bg-red-500/20 text-red-300 rounded-lg font-semibold text-xs transition-colors focus:outline-none focus:ring-2 focus:ring-red-500">
                 Сбросить
               </button>
             </div>
@@ -638,21 +530,21 @@ onUnmounted(() => {
 
         <!-- MOBILE FILTERS MODAL -->
         <Transition name="modal">
-          <div 
+          <div
             v-if="isMobileFiltersOpen"
             class="fixed inset-0 z-50 lg:hidden"
           >
-            <div 
+            <div
               class="absolute inset-0 bg-black/50 backdrop-blur-sm"
               @click="closeMobileFilters"
             />
-            
+
             <div class="absolute inset-y-0 right-0 w-full max-w-sm bg-linear-to-br from-zinc-900 to-zinc-800 shadow-2xl overflow-y-auto">
               <div class="sticky top-0 z-10 bg-zinc-900 border-b border-zinc-700 px-4 py-4 flex items-center justify-between">
                 <h3 class="text-lg font-semibold text-white">Фильтры</h3>
-                <button 
-                  @click="closeMobileFilters" 
-                  class="p-2 hover:bg-zinc-800 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500" 
+                <button
+                  @click="closeMobileFilters"
+                  class="p-2 hover:bg-zinc-800 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500"
                   aria-label="Закрыть фильтры"
                 >
                   <svg class="w-6 h-6 text-zinc-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -662,7 +554,132 @@ onUnmounted(() => {
               </div>
 
               <div class="p-4 space-y-4">
-                <!-- Same filters as desktop -->
+                <!-- Series -->
+                <div class="border-b border-zinc-700 pb-4">
+                  <button @click="toggleFilterSection('mobile-series')"
+                    class="flex items-center justify-between w-full text-left py-2 group">
+                    <span class="font-medium text-white">Серия</span>
+                    <svg class="w-5 h-5 text-zinc-400 transition-transform duration-200"
+                         :class="{ 'rotate-180': openFilterSections.has('mobile-series') }"
+                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  <div v-if="openFilterSections.has('mobile-series')" class="mt-3 space-y-1 max-h-64 overflow-y-auto">
+                    <button @click="selectSeriesFilter('')"
+                      class="w-full text-left py-2 px-3 rounded-lg hover:bg-zinc-700/50 transition-colors text-sm text-zinc-200"
+                      :class="{ 'bg-teal-600/20': !tempFilters.series }">
+                      Все серии
+                    </button>
+                    <button v-for="series in seriesList" :key="series" @click="selectSeriesFilter(series as DoorSeries)"
+                      class="w-full text-left py-2 px-3 rounded-lg hover:bg-zinc-700/50 transition-colors text-sm text-zinc-200"
+                      :class="{ 'bg-teal-600/20': tempFilters.series === series }">
+                      {{ series }}
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Cover -->
+                <div class="border-b border-zinc-700 pb-4">
+                  <button @click="toggleFilterSection('mobile-cover')"
+                    class="flex items-center justify-between w-full text-left py-2 group">
+                    <span class="font-medium text-white">Покрытие</span>
+                    <svg class="w-5 h-5 text-zinc-400 transition-transform duration-200"
+                         :class="{ 'rotate-180': openFilterSections.has('mobile-cover') }"
+                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  <div v-if="openFilterSections.has('mobile-cover')" class="mt-3 space-y-1 max-h-64 overflow-y-auto">
+                    <button @click="selectCoverFilter('')"
+                      class="w-full text-left py-2 px-3 rounded-lg hover:bg-zinc-700/50 transition-colors text-sm text-zinc-200"
+                      :class="{ 'bg-teal-600/20': !tempFilters.cover }">
+                      Все покрытия
+                    </button>
+                    <button v-for="cover in allCovers" :key="cover" @click="selectCoverFilter(cover as DoorCover)"
+                      class="w-full text-left py-2 px-3 rounded-lg hover:bg-zinc-700/50 transition-colors text-sm text-zinc-200"
+                      :class="{ 'bg-teal-600/20': tempFilters.cover === cover }">
+                      {{ cover }}
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Material -->
+                <div class="border-b border-zinc-700 pb-4">
+                  <button @click="toggleFilterSection('mobile-material')"
+                    class="flex items-center justify-between w-full text-left py-2 group">
+                    <span class="font-medium text-white">Материал</span>
+                    <svg class="w-5 h-5 text-zinc-400 transition-transform duration-200"
+                         :class="{ 'rotate-180': openFilterSections.has('mobile-material') }"
+                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  <div v-if="openFilterSections.has('mobile-material')" class="mt-3 space-y-1 max-h-64 overflow-y-auto">
+                    <button @click="selectMaterialFilter('')"
+                      class="w-full text-left py-2 px-3 rounded-lg hover:bg-zinc-700/50 transition-colors text-sm text-zinc-200"
+                      :class="{ 'bg-teal-600/20': !tempFilters.material }">
+                      Все материалы
+                    </button>
+                    <button v-for="material in allMaterials" :key="material" @click="selectMaterialFilter(material)"
+                      class="w-full text-left py-2 px-3 rounded-lg hover:bg-zinc-700/50 transition-colors text-sm text-zinc-200"
+                      :class="{ 'bg-teal-600/20': tempFilters.material === material }">
+                      {{ material }}
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Color -->
+                <div class="border-b border-zinc-700 pb-4">
+                  <button @click="toggleFilterSection('mobile-color')"
+                    class="flex items-center justify-between w-full text-left py-2 group">
+                    <span class="font-medium text-white">Цвет</span>
+                    <svg class="w-5 h-5 text-zinc-400 transition-transform duration-200"
+                         :class="{ 'rotate-180': openFilterSections.has('mobile-color') }"
+                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  <div v-if="openFilterSections.has('mobile-color')" class="mt-3 space-y-1 max-h-64 overflow-y-auto">
+                    <button @click="selectColorFilter('')"
+                      class="w-full text-left py-2 px-3 rounded-lg hover:bg-zinc-700/50 transition-colors text-sm text-zinc-200"
+                      :class="{ 'bg-teal-600/20': !tempFilters.colorName }">
+                      Все цвета
+                    </button>
+                    <button v-for="color in allColors" :key="color" @click="selectColorFilter(color)"
+                      class="w-full text-left py-2 px-3 rounded-lg hover:bg-zinc-700/50 transition-colors text-sm text-zinc-200"
+                      :class="{ 'bg-teal-600/20': tempFilters.colorName === color }">
+                      {{ color }}
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Tags -->
+                <div class="border-b border-zinc-700 pb-4">
+                  <button @click="toggleFilterSection('mobile-tags')"
+                    class="flex items-center justify-between w-full text-left py-2 group">
+                    <span class="font-medium text-white">Теги</span>
+                    <svg class="w-5 h-5 text-zinc-400 transition-transform duration-200"
+                         :class="{ 'rotate-180': openFilterSections.has('mobile-tags') }"
+                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  <div v-if="openFilterSections.has('mobile-tags')" class="mt-3 space-y-1 max-h-64 overflow-y-auto">
+                    <button v-for="tag in allTags" :key="tag" @click="toggleTempTagFilter(tag)"
+                      class="w-full text-left py-2 px-3 rounded-lg hover:bg-zinc-700/50 transition-colors text-sm text-zinc-200"
+                      :class="{ 'bg-teal-600/20': tempFilters.activeTags.has(tag) }">
+                      {{ tag }}
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Stock -->
+                <label class="flex items-center cursor-pointer py-2 px-3 rounded-lg hover:bg-zinc-700/50 transition-colors">
+                  <input type="checkbox" v-model="tempFilters.inStock"
+                    class="w-4 h-4 mr-3 rounded border-zinc-600 text-teal-600 bg-zinc-700 focus:ring-teal-500" />
+                  <span class="text-sm text-zinc-200">Только в наличии</span>
+                </label>
               </div>
 
               <div class="sticky bottom-0 bg-zinc-900 border-t border-zinc-700 p-4 space-y-3">
@@ -679,14 +696,13 @@ onUnmounted(() => {
           </div>
         </Transition>
 
-        <!-- PRODUCTS GRID - ✅ ОПТИМИЗИРОВАНО: 1 КОЛОННА НА МОБИЛКЕ, 2 НА ПЛАНШЕТЕ, 3 НА ПК -->
+        <!-- PRODUCTS GRID -->
         <div class="flex-1 min-w-0">
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 auto-rows-max items-stretch">
             <ProductCard
               v-for="door in paginatedDoors" :key="door.id"
               :door="door"
-              :modelValue="getSelectedColor(door.id)"
-              @update:modelValue="(color: Color) => selectColor(door.id, color)"
+              :modelValue="door.colors[0] ?? { name: '', hex: '#ccc' }"
             />
           </div>
 
@@ -703,38 +719,75 @@ onUnmounted(() => {
           </div>
 
           <!-- PAGINATION -->
-          <div v-if="totalPages > 1" class="mt-8 flex items-center justify-center gap-2">
-            <button
-              @click="goToPage(currentPage - 1)"
-              :disabled="!canGoPrev"
-              class="px-4 py-2 rounded-lg border-2 border-gray-300 text-gray-700 font-medium hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-            >
-              ← Назад
-            </button>
-            
-            <div class="flex items-center gap-1">
+          <div v-if="totalPages > 1" class="mt-8 sm:mt-10">
+            <!-- Mobile: scrollable page numbers -->
+            <div class="sm:hidden">
+              <div class="flex items-center justify-between mb-3">
+                <button
+                  @click="goToPage(currentPage - 1)"
+                  :disabled="!canGoPrev"
+                  class="flex items-center gap-1.5 px-4 py-3 rounded-xl border-2 border-gray-200 text-gray-700 font-medium disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-95 min-h-[48px] min-w-[48px] justify-center"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+                <span class="text-sm font-medium text-gray-500">
+                  {{ currentPage }} из {{ totalPages }}
+                </span>
+                <button
+                  @click="goToPage(currentPage + 1)"
+                  :disabled="!canGoNext"
+                  class="flex items-center gap-1.5 px-4 py-3 rounded-xl border-2 border-gray-200 text-gray-700 font-medium disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-95 min-h-[48px] min-w-[48px] justify-center"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
+              <div class="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4">
+                <button
+                  v-for="page in visiblePages"
+                  :key="page"
+                  @click="typeof page === 'number' && goToPage(page)"
+                  class="shrink-0 w-11 h-11 rounded-xl text-sm font-semibold transition-all active:scale-95 flex items-center justify-center min-w-[44px]"
+                  :class="page === currentPage
+                    ? 'bg-teal-600 text-white shadow-sm'
+                    : page === '...' ? 'text-gray-400 cursor-default' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+                >
+                  {{ page }}
+                </button>
+              </div>
+            </div>
+
+            <!-- Desktop: classic pagination -->
+            <div class="hidden sm:flex items-center justify-center gap-1.5">
               <button
-                v-for="page in totalPages"
+                @click="goToPage(currentPage - 1)"
+                :disabled="!canGoPrev"
+                class="px-4 py-2.5 rounded-lg border-2 border-gray-300 text-gray-700 font-medium hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all min-h-[44px]"
+              >
+                ← Назад
+              </button>
+              <button
+                v-for="page in visiblePages"
                 :key="page"
-                @click="goToPage(page)"
-                :class="[
-                  'w-10 h-10 rounded-lg font-medium transition-all',
-                  currentPage === page
-                    ? 'bg-teal-600 text-white shadow-lg shadow-teal-200'
-                    : 'border-2 border-gray-300 text-gray-700 hover:bg-gray-50'
-                ]"
+                @click="typeof page === 'number' && goToPage(page)"
+                class="w-10 h-10 rounded-lg text-sm font-semibold transition-all min-h-[44px] flex items-center justify-center"
+                :class="page === currentPage
+                  ? 'bg-teal-600 text-white shadow-sm'
+                  : page === '...' ? 'text-gray-400 cursor-default' : 'border-2 border-gray-300 text-gray-700 hover:bg-gray-50'"
               >
                 {{ page }}
               </button>
+              <button
+                @click="goToPage(currentPage + 1)"
+                :disabled="!canGoNext"
+                class="px-4 py-2.5 rounded-lg border-2 border-gray-300 text-gray-700 font-medium hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all min-h-[44px]"
+              >
+                Далее →
+              </button>
             </div>
-            
-            <button
-              @click="goToPage(currentPage + 1)"
-              :disabled="!canGoNext"
-              class="px-4 py-2 rounded-lg border-2 border-gray-300 text-gray-700 font-medium hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-            >
-              Вперёд →
-            </button>
           </div>
         </div>
       </div>
@@ -743,62 +796,25 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+/* Modal transitions */
 .modal-enter-active,
 .modal-leave-active {
-  transition: opacity 0.3s ease;
+  transition: opacity 0.2s ease;
 }
-
 .modal-enter-from,
 .modal-leave-to {
   opacity: 0;
 }
 
-.modal-enter-active > div:last-child,
-.modal-leave-active > div:last-child {
-  transition: transform 0.3s ease;
+/* Scrollbar for filter sections */
+.max-h-64::-webkit-scrollbar {
+  width: 4px;
 }
-
-.modal-enter-from > div:last-child {
-  transform: translateX(100%);
+.max-h-64::-webkit-scrollbar-track {
+  background: transparent;
 }
-
-.modal-leave-to > div:last-child {
-  transform: translateX(100%);
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-/* Prevent CLS from scrollbar appearing/disappearing */
-html {
-  scrollbar-gutter: stable;
-}
-
-.overflow-y-auto {
-  scrollbar-gutter: stable;
-}
-
-.overflow-y-auto::-webkit-scrollbar {
-  width: 6px;
-}
-
-.overflow-y-auto::-webkit-scrollbar-track {
-  background: #27272a;
-  border-radius: 3px;
-}
-
-.overflow-y-auto::-webkit-scrollbar-thumb {
-  background: #52525b;
-  border-radius: 3px;
-}
-
-.overflow-y-auto::-webkit-scrollbar-thumb:hover {
-  background: #71717a;
-}
-
-/* Optimize grid layout stability */
-.auto-rows-max {
-  grid-auto-rows: max-content;
+.max-h-64::-webkit-scrollbar-thumb {
+  background: rgba(113, 113, 122, 0.4);
+  border-radius: 2px;
 }
 </style>

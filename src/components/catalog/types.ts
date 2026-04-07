@@ -14,23 +14,49 @@ export type Tag =
 /* =========================
    Серии дверей
 ========================= */
-export type DoorSeriesBase =
+export type DoorSeries =
+  | 'Атум'
+  | 'Атум Про'
+  | 'Бэйзик'
+  | 'Классик Арт'
+  | 'Эмалекс'
+  | 'Урбан'
+  | 'Иннова'
+  | 'Atum'
+  | 'Atum Pro'
+  | 'Basic'
+  | 'Classic Art'
+  | 'Emalex'
+  | 'Urban'
   | 'innova'
   | 'emalex'
   | 'invisible'
   | 'urban'
   | 'linea'
   | 'skinel'
-
-export type DoorSeries = DoorSeriesBase | `${DoorSeriesBase}/${string}`
+  | 'atum'
+  | 'atum_pro'
+  | 'classic_art'
+  | 'basic'
+  | 'eco_shpon'
+  | 'Эко шпон'
+  | 'скрытые'
+  | 'Скрытые'
+  | 'Линеа'
+  | 'Скинель'
 
 /* =========================
    Тип покрытия
 ========================= */
 export type DoorCover =
-  | 'strong-flex'
+  | 'ПЭТ'
+  | 'Экошпон'
+  | 'Полипропилен'
   | 'emalex'
   | 'emal'
+  | 'под покраску'
+  | 'strong-flex'
+  | '3D экошпон'
 
 /* =========================
    Цвет

@@ -1,12 +1,49 @@
-import type { Door, Color, DoorSeriesBase } from '@/components/catalog/types'
+import type { Door, Color } from '@/components/catalog/types'
 import { pricingConfig } from '@/config/pricing'
 
 /**
- * Извлекает базовое название серии из формата "series/Серия" или возвращает как есть
+ * Маппинг русских названий серий на английские ключи
  */
-function getBaseSeries(series: string): DoorSeriesBase {
-  const base = series.split('/')[0] as string
-  return base as DoorSeriesBase
+const SERIES_KEY_MAP: Record<string, string> = {
+  'Иннова': 'innova',
+  'Эмалекс': 'emalex',
+  'Emalex': 'emalex',
+  'Скрытые': 'invisible',
+  'скрытые': 'invisible',
+  'Урбан': 'urban',
+  'Urban': 'urban',
+  'Линеа': 'linea',
+  'Скинель': 'skinel',
+  'Atum': 'atum',
+  'Atum Pro': 'atum_pro',
+  'Атум': 'atum',
+  'Атум Про': 'atum_pro',
+  'Classic Art': 'classic_art',
+  'Классик Арт': 'classic_art',
+  'Basic': 'basic',
+  'Бэйзик': 'basic',
+  'Эко шпон': 'eco_shpon',
+}
+
+type PricingKey = keyof typeof pricingConfig.series
+
+/**
+ * Извлекает базовое название серии для использования в pricingConfig
+ * Поддерживает как английские, так и русские названия
+ */
+function getBaseSeries(series: string): PricingKey {
+  // Проверяем, есть ли русское название в маппинге
+  const mapped = SERIES_KEY_MAP[series]
+  if (mapped && pricingConfig.series[mapped as PricingKey]) {
+    return mapped as PricingKey
+  }
+  // Для старых данных с форматом "series/Серия"
+  const base = series.split('/')[0] ?? series
+  const mappedBase = (SERIES_KEY_MAP as Record<string, string | undefined>)[base]
+  if (mappedBase && pricingConfig.series[mappedBase as PricingKey]) {
+    return mappedBase as PricingKey
+  }
+  return 'innova'
 }
 
 export function calculateDoorPrice(
@@ -22,7 +59,8 @@ export function calculateDoorPrice(
   const seriesRule = pricingConfig.series[baseSeries]
 
   if (seriesRule?.colorMultiplier && color) {
-    const isWhite = color.name.toLowerCase().includes('white')
+    const name = color.name.toLowerCase()
+    const isWhite = name.includes('white') || name.includes('белый') || name.includes('снежный') || name.includes('ice')
 
     colorMultiplier = isWhite
       ? seriesRule.colorMultiplier.white
@@ -30,27 +68,4 @@ export function calculateDoorPrice(
   }
 
   return Math.round(base * global * colorMultiplier)
-}
-
-export function calculateSetPrice(
-  door: Door,
-  color?: Color,
-  seriesMultipliers?: Record<string, number>
-): number {
-  const doorPrice = calculateDoorPrice(door, color)
-
-  const defaultMultipliers: Record<string, number> = {
-    innova: 1.5,
-    emalex: 2,
-    invisible: 2,
-    urban: 1.7,
-    linea: 1.85,
-    skinel: 2
-  }
-
-  const multipliers = seriesMultipliers ?? defaultMultipliers
-  const baseSeries = getBaseSeries(door.series)
-  const multiplier = multipliers[baseSeries] ?? 1.8
-
-  return Math.round(doorPrice * multiplier)
 }

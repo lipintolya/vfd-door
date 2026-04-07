@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import type { Door, Color, DoorSeries } from './types'
+import type { Door, Color } from './types'
 import { useSeriesTheme } from './theme/useSeriesTheme'
-import { calculateDoorPrice, calculateSetPrice } from '@/services/pricing'
+import { calculateDoorPrice } from '@/services/pricing'
 
 interface Props {
   door: Door
@@ -12,14 +12,8 @@ interface Props {
 
 const props = defineProps<Props>()
 
-interface Emits {
-  (e: 'update:modelValue', color: Color): void
-}
-
-const emit = defineEmits<Emits>()
-
 const router = useRouter()
-const seriesTheme = useSeriesTheme(props.door.series as DoorSeries)
+const seriesTheme = useSeriesTheme(props.door.series)
 
 // Маппинг покрытий для отображения
 const COVER_NAMES: Record<string, string> = {
@@ -38,34 +32,6 @@ const isQuickViewOpen = ref(false)
 const imageLoaded = ref(false)
 const imageError = ref(false)
 const isHovering = ref(false)
-const passiveSupported = ref(false)
-
-// Получаем изображение для текущего цвета
-const currentQuickViewImage = computed(() => {
-  if (props.modelValue?.image) {
-    return props.modelValue.image
-  }
-  return currentImage.value || ''
-})
-// NOTE: colorsScrollContainer removed - using native browser scrolling
-
-interface TouchState {
-  startX: number
-  startY: number
-  startTime: number
-  isSwiping: boolean
-}
-
-const touchState = ref<TouchState>({
-  startX: 0,
-  startY: 0,
-  startTime: 0,
-  isSwiping: false
-})
-
-const SWIPE_THRESHOLD = 60
-const SWIPE_VELOCITY_THRESHOLD = 0.3
-const MAX_SWIPE_TIME = 300
 
 const TAG_STYLES: Record<string, string> = {
   'акция': 'bg-red-50 text-red-700 ring-1 ring-red-200',
@@ -99,24 +65,6 @@ const doorPrice = computed<number>(() => {
   }
 })
 
-const setPrice = computed<number>(() => {
-  try {
-    return calculateSetPrice(props.door, props.modelValue) ?? 0
-  } catch (error) {
-    console.error('[ProductCard] Set price calculation error:', error)
-    return 0
-  }
-})
-
-const hasMultipleColors = computed(() => {
-  return props.door.colors && props.door.colors.length > 1
-})
-
-const currentColorIndex = computed(() => {
-  if (!hasMultipleColors.value) return 0
-  return props.door.colors.findIndex(c => c?.name === props.modelValue?.name)
-})
-
 const formatPrice = (value: number): string => {
   if (!value || typeof value !== 'number') return 'Цена по запросу'
   return new Intl.NumberFormat('ru-RU', {
@@ -132,17 +80,7 @@ const getTagClass = (tag: string): string => {
   return TAG_STYLES[normalized] || 'bg-zinc-100 text-zinc-700 ring-1 ring-zinc-200'
 }
 
-const handleSelectColor = (color: Color, event?: Event): void => {
-  if (event) {
-    event.stopPropagation()
-  }
-  if (!color || color.name === props.modelValue?.name) return
-  emit('update:modelValue', color)
-}
-
 const navigateToProduct = (): void => {
-  if (touchState.value.isSwiping) return
-  
   const { id, series, cover } = props.door
   if (!id || !series || !cover) {
     console.error('[ProductCard] Missing required navigation data')
@@ -156,24 +94,6 @@ const navigateToProduct = (): void => {
 }
 
 const handleImageError = (): void => {
-  // Попытка использовать fallback изображение серии
-  if (!imageError.value) {
-    const fallbackImage = seriesTheme.value?.fallbackImage
-    if (fallbackImage && fallbackImage !== props.modelValue?.image) {
-      // Пробуем загрузить fallback
-      const img = new Image()
-      img.onload = () => {
-        imageError.value = false
-        imageLoaded.value = true
-      }
-      img.onerror = () => {
-        imageError.value = true
-        imageLoaded.value = false
-      }
-      img.src = fallbackImage
-      return
-    }
-  }
   imageError.value = true
   imageLoaded.value = false
 }
@@ -182,120 +102,14 @@ const handleImageLoad = (): void => {
   imageLoaded.value = true
   imageError.value = false
 }
-
-const onTouchStart = (e: TouchEvent): void => {
-  const touch = e.touches?.[0]
-  if (!touch || !hasMultipleColors.value) return
-  
-  touchState.value = {
-    startX: touch.clientX,
-    startY: touch.clientY,
-    startTime: Date.now(),
-    isSwiping: false
-  }
-}
-
-const onTouchMove = (e: TouchEvent): void => {
-  if (!hasMultipleColors.value) return
-  
-  const touch = e.touches?.[0]
-  if (!touch) return
-  
-  const deltaX = Math.abs(touch.clientX - touchState.value.startX)
-  const deltaY = Math.abs(touch.clientY - touchState.value.startY)
-  
-  if (deltaX > 10 && deltaX > deltaY) {
-    touchState.value.isSwiping = true
-    e.preventDefault()
-  }
-}
-
-const onTouchEnd = (e: TouchEvent): void => {
-  if (!hasMultipleColors.value || !touchState.value.isSwiping) {
-    touchState.value.isSwiping = false
-    return
-  }
-  
-  const touch = e.changedTouches?.[0]
-  if (!touch) {
-    touchState.value.isSwiping = false
-    return
-  }
-  
-  const deltaX = touch.clientX - touchState.value.startX
-  const deltaY = touch.clientY - touchState.value.startY
-  const deltaTime = Date.now() - touchState.value.startTime
-  const velocity = Math.abs(deltaX) / deltaTime
-  
-  if (Math.abs(deltaY) > Math.abs(deltaX)) {
-    touchState.value.isSwiping = false
-    return
-  }
-  
-  const isValidSwipe = 
-    Math.abs(deltaX) >= SWIPE_THRESHOLD || 
-    (velocity >= SWIPE_VELOCITY_THRESHOLD && deltaTime <= MAX_SWIPE_TIME)
-  
-  if (isValidSwipe) {
-    changeColor(deltaX < 0 ? 1 : -1)
-  }
-  
-  touchState.value.isSwiping = false
-}
-
-const onTouchCancel = (): void => {
-  touchState.value.isSwiping = false
-}
-
-const changeColor = (direction: number): void => {
-  const colors = props.door.colors
-  if (!colors || colors.length <= 1) return
-  
-  const currentIdx = currentColorIndex.value
-  if (currentIdx === -1) return
-  
-  const newIndex = (currentIdx + direction + colors.length) % colors.length
-  const newColor = colors[newIndex]
-  
-  if (newColor) {
-    handleSelectColor(newColor)
-  }
-}
-
-onMounted(() => {
-  try {
-    const opts = Object.defineProperty({}, 'passive', {
-      get() {
-        passiveSupported.value = true
-        return true
-      }
-    })
-    window.addEventListener('test', () => {}, opts)
-    window.removeEventListener('test', () => {}, opts)
-  } catch (e) {
-    passiveSupported.value = false
-  }
-})
-
-onUnmounted(() => {
-  // Cleanup if needed
-})
 </script>
 
 <template>
   <article
     class="product-card group relative h-full flex flex-col rounded-2xl bg-white shadow-sm ring-1 ring-zinc-900/5
            transition-all duration-300 ease-out cursor-pointer
-           hover:shadow-lg hover:ring-zinc-900/10"
-    :class="{
-      'hover:-translate-y-0.5': !touchState.isSwiping,
-      'active:scale-[0.98]': touchState.isSwiping
-    }"
+           hover:shadow-lg hover:ring-zinc-900/10 hover:-translate-y-0.5"
     @click="navigateToProduct"
-    @touchstart.passive="onTouchStart"
-    @touchmove="onTouchMove"
-    @touchend="onTouchEnd"
-    @touchcancel="onTouchCancel"
     @mouseenter="isHovering = true"
     @mouseleave="isHovering = false"
   >
@@ -326,18 +140,18 @@ onUnmounted(() => {
     </div>
 
     <!-- Image Section - ОПТИМИЗИРОВАНО ДЛЯ МОБИЛКИ -->
-    <div class="relative w-full px-3 sm:px-4">
+    <div class="relative w-full px-2 sm:px-4">
       <div
-        class="relative w-full h-64 sm:aspect-3/4
-               bg-linear-to-br from-zinc-50 to-zinc-100/50 rounded-xl 
+        class="relative w-full h-48 sm:h-64 lg:aspect-3/4
+               bg-linear-to-br from-zinc-50 to-zinc-100/50 rounded-xl
                flex items-center justify-center overflow-hidden"
       >
         <!-- Loading State -->
-        <div 
-          v-if="!imageLoaded && !imageError && currentImage" 
+        <div
+          v-if="!imageLoaded && !imageError && currentImage"
           class="absolute inset-0 flex items-center justify-center bg-zinc-50/80 backdrop-blur-sm"
         >
-          <div class="w-10 h-10 border-3 border-zinc-200 border-t-teal-500 rounded-full animate-spin" />
+          <div class="w-8 h-8 sm:w-10 sm:h-10 border-2 sm:border-3 border-zinc-200 border-t-teal-500 rounded-full animate-spin" />
         </div>
 
         <!-- Image -->
@@ -345,11 +159,11 @@ onUnmounted(() => {
           v-if="currentImage && !imageError"
           :src="currentImage"
           :alt="props.door.name"
-          class="w-full h-full object-contain p-3 sm:p-4 transition-transform duration-500 ease-out"
+          class="w-full h-full object-contain p-2 sm:p-4 transition-transform duration-500 ease-out"
           :class="{
             'opacity-0 scale-95': !imageLoaded,
             'opacity-100 scale-100': imageLoaded,
-            'group-hover:scale-105': !touchState.isSwiping && isHovering
+            'group-hover:scale-105': isHovering
           }"
           loading="lazy"
           decoding="async"
@@ -371,35 +185,23 @@ onUnmounted(() => {
           </svg>
         </button>
 
-        <!-- Quick View Button - Mobile (всегда видна) -->
-        <button
-          class="sm:hidden absolute top-3 right-3 w-9 h-9 flex items-center justify-center rounded-full bg-white/95 backdrop-blur-sm text-zinc-700 shadow-md focus:outline-none focus:ring-2 focus:ring-teal-500"
-          @click.stop="isQuickViewOpen = true"
-          aria-label="Быстрый просмотр"
-        >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-          </svg>
-        </button>
-
         <!-- Error State -->
-        <div 
-          v-if="!currentImage || imageError" 
+        <div
+          v-if="!currentImage || imageError"
           class="flex flex-col items-center justify-center text-zinc-400 p-6 text-center"
         >
-          <svg 
-            class="w-12 h-12 mb-2" 
-            fill="none" 
-            stroke="currentColor" 
+          <svg
+            class="w-10 h-10 sm:w-12 sm:h-12 mb-2"
+            fill="none"
+            stroke="currentColor"
             viewBox="0 0 24 24"
             aria-hidden="true"
           >
-            <path 
-              stroke-linecap="round" 
-              stroke-linejoin="round" 
-              stroke-width="1.5" 
-              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" 
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
             />
           </svg>
           <span class="text-xs font-medium">
@@ -410,19 +212,16 @@ onUnmounted(() => {
     </div>
 
     <!-- Content Section -->
-    <div class="flex flex-col flex-1 p-3 sm:p-5 gap-2 sm:gap-3">
+    <div class="flex flex-col flex-1 p-2.5 sm:p-5 gap-1.5 sm:gap-3">
       <!-- Title -->
-        <h3 class="font-semibold text-sm sm:text-base text-zinc-900 leading-snug line-clamp-3 min-h-[3.75rem] sm:min-h-[4.5rem]">
+        <h3 class="font-semibold text-xs sm:text-base text-zinc-900 leading-snug line-clamp-2 min-h-10 sm:min-h-18">
           {{ props.door.name }}
         </h3>
 
         <!-- Pricing -->
-        <div class="space-y-0.5">
-          <p class="text-base sm:text-lg font-bold text-zinc-900">
+        <div>
+          <p class="text-sm sm:text-lg font-bold text-zinc-900">
             {{ formatPrice(doorPrice) }} <span class="text-xs font-medium text-zinc-500">за полотно</span>
-          </p>
-          <p class="text-xs text-zinc-500">
-            {{ formatPrice(setPrice) }} <span class="font-medium">за комплект</span>
           </p>
         </div>
 
@@ -430,24 +229,24 @@ onUnmounted(() => {
       <div @click.stop>
         <button
           type="button"
-          class="inline-flex items-center gap-1 text-xs sm:text-sm font-medium text-zinc-600 
-                 hover:text-teal-600 transition-colors focus:outline-none focus-visible:ring-1 
+          class="inline-flex items-center gap-1 text-xs font-medium text-zinc-600
+                 hover:text-teal-600 transition-colors focus:outline-none focus-visible:ring-1
                  focus-visible:ring-teal-500 rounded px-0.5 py-0.5"
           @click="isMaterialOpen = !isMaterialOpen"
         >
           <span>Материал</span>
-          <svg 
+          <svg
             class="w-3 h-3 transition-transform duration-200"
             :class="{ 'rotate-180': isMaterialOpen }"
-            fill="none" 
-            stroke="currentColor" 
+            fill="none"
+            stroke="currentColor"
             viewBox="0 0 24 24"
             aria-hidden="true"
           >
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
           </svg>
         </button>
-        
+
         <Transition
           enter-active-class="transition-all duration-200 ease-out"
           leave-active-class="transition-all duration-150 ease-in"
@@ -456,115 +255,43 @@ onUnmounted(() => {
           leave-from-class="opacity-100 translate-y-0"
           leave-to-class="opacity-0 -translate-y-0.5"
         >
-          <p v-show="isMaterialOpen" class="mt-1 text-xs sm:text-sm text-zinc-700 leading-relaxed">
+          <p v-show="isMaterialOpen" class="mt-1 text-xs text-zinc-700 leading-relaxed">
             {{ props.door.material }}
           </p>
         </Transition>
       </div>
 
-      <!-- Colors Container - ОПТИМИЗИРОВАНО ДЛЯ МОБИЛКИ И CLS -->
-      <div class="mt-auto pt-1 sm:pt-2 border-t border-zinc-200" @click.stop>
-        <p class="text-xs text-zinc-500 mb-2.5 px-3 sm:px-5 pt-2">
-          Цвет: <span class="font-medium text-zinc-700">{{ props.modelValue.name }}</span>
-        </p>
-        
-        <!-- Color Buttons Container (prevent clipping on mobile) -->
-        <div class="overflow-visible">
-          <!-- Desktop: Grid of colors -->
-          <div class="hidden sm:flex flex-wrap gap-2 sm:gap-2.5 px-3 sm:px-5 pb-3">
-            <button
-              v-for="color in props.door.colors"
-              :key="color.name"
-              type="button"
-              class="relative w-8 h-8 sm:w-9 sm:h-9 rounded-full transition-all duration-200 shrink-0
-                     focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-teal-500
-                     hover:scale-110"
-              :style="{
-                backgroundColor: color.hex,
-                boxShadow: props.modelValue.name === color.name 
-                  ? `0 0 0 2px white, 0 0 0 3.5px ${accent}`
-                  : '0 1px 3px rgba(0, 0, 0, 0.1)'
-              }"
-              :title="color.name"
-              :aria-label="`Выбрать цвет ${color.name}`"
-              :aria-pressed="props.modelValue.name === color.name"
-              @click="(e) => handleSelectColor(color, e)"
-            >
-              <svg
-                v-if="props.modelValue.name === color.name"
-                class="absolute inset-0 m-auto w-4 h-4 text-white drop-shadow pointer-events-none"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                aria-hidden="true"
-              >
-                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-              </svg>
-            </button>
-          </div>
-
-          <!-- Mobile: Horizontal scroll with larger buttons (no clipping) -->
+      <!-- Color Display -->
+      <div class="mt-auto pt-1 sm:pt-2 border-t border-zinc-200">
+        <div class="flex items-center gap-1.5 px-2 sm:px-5 pb-2 pt-1">
           <div
-            v-if="hasMultipleColors"
-            class="sm:hidden flex gap-2.5 overflow-x-auto pb-3 pl-3 pr-6 py-3 scroll-smooth overflow-visible"
-            @click.stop
-          >
-            <button
-              v-for="color in props.door.colors"
-              :key="color.name"
-              type="button"
-              class="relative w-11 h-11 rounded-full transition-all duration-200 shrink-0
-                     focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-teal-500
-                     active:scale-95 overflow-visible"
-              :style="{
-                backgroundColor: color.hex,
-                boxShadow: props.modelValue.name === color.name
-                  ? `0 0 0 2.5px white, 0 0 0 4px ${accent}`
-                  : '0 2px 8px rgba(0, 0, 0, 0.15)'
-              }"
-              :title="color.name"
-              :aria-label="`Выбрать цвет ${color.name}`"
-              :aria-pressed="props.modelValue.name === color.name"
-              @click="(e) => handleSelectColor(color, e)"
-            >
-              <svg
-                v-if="props.modelValue.name === color.name"
-                class="absolute inset-0 m-auto w-5 h-5 text-white drop-shadow pointer-events-none"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                aria-hidden="true"
-              >
-                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-              </svg>
-            </button>
-          </div>
-
-          <!-- Fallback for single color -->
-          <div v-if="!hasMultipleColors" class="text-xs text-zinc-400 px-3 sm:px-5 pb-3">
-            Доступен только в этом цвете
-          </div>
+            class="w-4 h-4 rounded-full shrink-0"
+            :style="{ backgroundColor: props.modelValue.hex, boxShadow: '0 1px 3px rgba(0,0,0,0.15)' }"
+          />
+          <span class="text-xs text-zinc-500 truncate">{{ props.modelValue.name }}</span>
         </div>
       </div>
 
       <!-- Specifications Toggle -->
-      <div class="pt-2 sm:pt-3 border-t border-zinc-200" @click.stop>
+      <div class="pt-1.5 sm:pt-3 border-t border-zinc-200" @click.stop>
         <button
           type="button"
-          class="inline-flex items-center gap-1 text-xs sm:text-sm font-medium text-zinc-700 
-                 hover:text-zinc-900 transition-colors focus:outline-none focus-visible:ring-1 
+          class="inline-flex items-center gap-1 text-xs font-medium text-zinc-700
+                 hover:text-zinc-900 transition-colors focus:outline-none focus-visible:ring-1
                  focus-visible:ring-teal-500 rounded px-0.5 py-0.5"
           @click="isDetailsOpen = !isDetailsOpen"
         >
-          <svg 
+          <svg
             class="w-3 h-3 transition-transform duration-200"
             :class="{ 'rotate-180': isDetailsOpen }"
-            fill="none" 
-            stroke="currentColor" 
+            fill="none"
+            stroke="currentColor"
             viewBox="0 0 24 24"
             aria-hidden="true"
           >
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
           </svg>
-          <span>{{ isDetailsOpen ? 'Скрыть' : 'Показать' }} характеристики</span>
+          <span>{{ isDetailsOpen ? 'Скрыть' : 'Характеристики' }}</span>
         </button>
 
         <Transition
@@ -609,7 +336,6 @@ onUnmounted(() => {
         <div
           class="relative bg-white rounded-2xl sm:rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
           @click.stop
-          @touchstart.stop
         >
           <!-- Close Button -->
           <button
@@ -625,8 +351,8 @@ onUnmounted(() => {
           <!-- Image Container -->
           <div class="w-full h-[70vh] sm:h-[80vh] bg-zinc-50 flex items-center justify-center p-6 sm:p-10">
             <img
-              v-if="currentQuickViewImage && !imageError"
-              :src="currentQuickViewImage"
+              v-if="currentImage && !imageError"
+              :src="currentImage"
               :alt="props.door.name"
               class="max-w-full max-h-full object-contain"
               loading="eager"
@@ -697,13 +423,13 @@ button {
 /* Fixed heights to prevent CLS */
 @media (max-width: 640px) {
   .product-card h3 {
-    min-height: 3.75rem; /* min-h-[3.75rem] for line-clamp-3 */
+    min-height: 2.5rem; /* min-h-10 for mobile */
   }
 }
 
 @media (min-width: 641px) {
   .product-card h3 {
-    min-height: 4.5rem; /* min-h-[4.5rem] for line-clamp-3 */
+    min-height: 4.5rem; /* min-h-[4.5rem] for desktop */
   }
 }
 
