@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="yandex-verification" content="b030b4edecf534b8" />
+
+    <!-- Preload critical resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Hide app until Vue is ready (prevent FOUC) -->
+    <style>
+      #app { opacity: 0; transition: opacity 0.15s ease-in; }
+      #app[data-ready="true"] { opacity: 1; }
+      body { margin: 0; padding: 0; background: #fff; }
+    </style>
+
+    <!-- ==========================================
+         FAVICON (Production Ready)
+    ========================================== -->
+    <!-- Standard favicon -->
+    <link rel="icon" href="/favicons/favicon.ico" sizes="any" />
+    
+    <!-- SVG favicon for modern browsers -->
+    <link rel="icon" type="image/svg+xml" href="/favicons/favicon.svg" />
+    
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="/favicons/apple-touch-icon.png" />
+    
+    <!-- Safari Pinned Tab -->
+    <link rel="mask-icon" href="/favicons/favicon.svg" color="#0d9488" />
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/favicons/site.webmanifest" />
+    
+    <!-- Theme Color for mobile browsers -->
+    <meta name="theme-color" content="#0d9488" />
+    <meta name="msapplication-TileColor" content="#0d9488" />
+    <meta name="msapplication-config" content="/favicons/site.webmanifest" />
+
+    <!-- ==========================================
+         SEO & META (Optimized for Chelyabinsk)
+    ========================================== -->
+    <title>Межкомнатные и входные двери в Челябинске | VFD на Кашириных</title>
+    
+    <!-- Preload критических ресурсов -->
+    <link rel="preconnect" href="https://vfd74.ru" crossorigin>
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="dns-prefetch" href="https://mc.yandex.ru">
+    <link rel="dns-prefetch" href="https://storage.yandexcloud.net">
+    
+    <meta name="description" content="Фирменный салон ВФД на Кашириных в Челябинске: межкомнатные и входные двери от производителя, алюминиевые перегородки. Более 80 образцов в шоуруме на Братьев Кашириных. Замер, доставка, монтаж. Гарантия 1 год от фабрики." />
+    <meta name="keywords" content="межкомнатные двери Челябинск, входные двери Челябинск, алюминиевые перегородки, двери от производителя, VFD, ВФД, Владимирская фабрика салон дверей, двери на Кашириных, купить двери Челябинск, двери эконом класса, двери премиум класса, раздвижные двери, двери-невидимки, перегородки для офиса, замер дверей Челябинск, установка дверей" />
+    <meta name="author" content="VFD Кашириных" />
+    <meta name="robots" content="index, follow" />
+    <meta name="geo.region" content="RU-CHE" />
+    <meta name="geo.placename" content="Челябинск" />
+    <meta name="geo.position" content="55.1644;61.4368" />
+    <meta name="ICBM" content="55.1644, 61.4368" />
+
+    <!-- Yandex verification -->
+    <meta name="yandex-verification" content="b030b4edecf534b8" />
+    
+    <!-- Google verification -->
+    <meta name="google-site-verification" content="3rFDzdFpWCtVmLla_cbR1AJewmaizT8hBRkKH4PgTAE" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://vfd74.ru/" />
+    <meta property="og:site_name" content="VFD Doors" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:title" content="Межкомнатные и входные двери в Челябинске | VFD на Кашириных" />
+    <meta property="og:description" content="Фирменный салон VFD Doors: межкомнатные и входные двери, алюминиевые перегородки. Замер, доставка, монтаж в Челябинске." />
+    <meta property="og:image" content="https://vfd74.ru/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://vfd74.ru/" />
+    <meta property="twitter:title" content="Межкомнатные и входные двери в Челябинске | VFD" />
+    <meta property="twitter:description" content="Фирменный салон VFD Doors: межкомнатные и входные двери, алюминиевые перегородки в Челябинске" />
+    <meta property="twitter:image" content="https://vfd74.ru/og-image.jpg" />
+
+    <!-- ==========================================
+         SCHEMA.ORG - LOCAL BUSINESS
+    ========================================== -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "VFD Doors - межкомнатные и входные двери в Челябинске",
+      "description": "Фирменный салон VFD Doors на Братьев Кашириных в Челябинске. Межкомнатные и входные двери от производителя, алюминиевые перегородки. Более 500 образцов в шоуруме. Замер, доставка, профессиональный монтаж. Гарантия 2 года на продукцию и 1 год на монтаж.",
+      "url": "https://vfd74.ru",
+      "telephone": "+7 (351) 225-00-00",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "ул. Братьев Кашириных, 101",
+        "addressLocality": "Челябинск",
+        "addressRegion": "Челябинская область",
+        "postalCode": "454080",
+        "addressCountry": "RU"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 55.1644,
+        "longitude": 61.4368
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          "opens": "09:00",
+          "closes": "19:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "10:00",
+          "closes": "16:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Sunday",
+          "opens": "10:00",
+          "closes": "16:00"
+        }
+      ],
+      "priceRange": "₽₽",
+      "image": "https://vfd74.ru/og-image.jpg",
+      "areaServed": {
+        "@type": "City",
+        "name": "Челябинск"
+      },
+      "sameAs": [
+        "https://t.me/vfddoors74",
+        "https://t.me/vfddoors174"
+      ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "127",
+        "bestRating": "5",
+        "worstRating": "1"
+      }
+    }
+    </script>
+
+    <!-- ==========================================
+         SCHEMA.ORG - PRODUCTS
+    ========================================== -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Межкомнатные двери VFD",
+      "description": "Межкомнатные двери от производителя в Челябинске. Более 80 моделей в наличии.",
+      "brand": {
+        "@type": "Brand",
+        "name": "VFD"
+      },
+      "offers": {
+        "@type": "AggregateOffer",
+        "priceCurrency": "RUB",
+        "lowPrice": "2990",
+        "highPrice": "25000",
+        "offerCount": "80"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "89"
+      },
+      "availability": "https://schema.org/InStock",
+      "areaServed": {
+        "@type": "City",
+        "name": "Челябинск"
+      }
+    }
+    </script>
+
+    <!-- ==========================================
+         GOOGLE FONTS (с fallback для РФ)
+    ========================================== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Основной шрифт с fallback на системные -->
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Резервный шрифт для РФ -->
+    <style>
+      /* Fallback шрифты если Google Fonts недоступен */
+      @font-face {
+        font-family: 'Rubik Fallback';
+        src: local('Arial');
+        ascent-override: 95%;
+        descent-override: 25%;
+        line-gap-override: 0%;
+        size-adjust: 105%;
+      }
+    </style>
+
+    <!-- ==========================================
+         YANDEX METRICA
+    ========================================== -->
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+      (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+      })(window, document,'script','https://mc.yandex.ru/metrika/tag.js', 'ym');
+
+      // Инициализация после загрузки страницы
+      window.addEventListener('load', function() {
+        try {
+          ym(106993554, 'init', {
+            clickmap: true,
+            trackLinks: true,
+            accurateTrackBounce: true,
+            webvisor: true,
+            trackHash: true,
+            ecommerce: 'dataLayer'
+          });
+          
+          // Отправка данных о просмотре страницы (для SPA)
+          if (window.location.hash) {
+            ym(106993554, 'hit', window.location.href);
+          }
+        } catch (e) {
+          console.warn('Yandex.Metrika initialization failed:', e);
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <!-- Yandex Metrika counter -->
+    <noscript><div><img src="https://mc.yandex.ru/watch/106993554" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+    
+    <!-- Обработка ошибок загрузки ресурсов -->
+    <script>
+      // Если Google Fonts не загрузился через 3 секунды, используем fallback
+      setTimeout(function() {
+        if (document.fonts && !document.fonts.check('16px Rubik')) {
+          document.documentElement.style.setProperty('--font-fallback', 'Arial, sans-serif');
+        }
+      }, 3000);
+      
+      // Ловим ошибки загрузки внешних ресурсов
+      window.addEventListener('error', function(e) {
+        // Тихо игнорируем ошибки внешних ресурсов (шрифты, метрика)
+        if (e.target && (e.target.src.includes('fonts.') || e.target.src.includes('mc.yandex.'))) {
+          e.preventDefault();
+        }
+      }, true);
+
+      // Show app when ready
+      window.addEventListener('load', function() {
+        document.getElementById('app').setAttribute('data-ready', 'true');
+      });
+    </script>
+    
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
