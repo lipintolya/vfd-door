@@ -41,7 +41,7 @@ const appliedFilters = ref({
   colorName: '',
 })
 
-const sortOption = ref<'price-asc' | 'price-desc' | 'name-asc' | 'name-desc' | 'series'>('price-asc')
+const sortOption = ref<'price-asc' | 'price-desc' | 'name-asc' | 'name-desc' | 'series' | 'priority'>('priority')
 const isMobileFiltersOpen = ref(false)
 const currentPage = ref(1)
 const itemsPerPage = ref(21)
@@ -131,6 +131,29 @@ const filteredDoors = computed<Door[]>(() => {
 
   return list.sort((a,b) => {
     switch(sortOption.value) {
+      case 'priority': {
+        // Приоритет: Эмалекс(в наличии) → Иннова → Классик Арт(Эмаль) → остальное по цене
+        const seriesPriority: Record<string, number> = {
+          'Эмалекс': 1,
+          'Иннова': 2,
+          'Классик Арт': 3,
+          'Атум': 4,
+          'Атум Про': 5,
+          'Урбан': 6,
+          'Бэйзик': 7,
+        }
+        const aStock = a.tags.includes('в наличии') ? 0 : 1
+        const bStock = b.tags.includes('в наличии') ? 0 : 1
+        const aPrio = seriesPriority[a.series] ?? 99
+        const bPrio = seriesPriority[b.series] ?? 99
+        // Сначала — Эмалекс в наличии
+        if (aPrio === 1 && aStock === 0 && bPrio !== 1) return -1
+        if (bPrio === 1 && bStock === 0 && aPrio !== 1) return 1
+        // Внутри Эмалекс — сначала в наличии
+        if (aPrio === 1 && bPrio === 1) return aStock - bStock || (a.price ?? 0) - (b.price ?? 0)
+        // Остальные — по приоритету серии, затем по цене
+        return aPrio - bPrio || (a.price ?? 0) - (b.price ?? 0)
+      }
       case 'price-asc': return (a.price ?? 0) - (b.price ?? 0)
       case 'price-desc': return (b.price ?? 0) - (a.price ?? 0)
       case 'name-asc': return a.name.localeCompare(b.name)
@@ -327,6 +350,7 @@ onUnmounted(() => {
           <div class="hidden lg:flex items-center gap-2">
             <span class="text-sm font-medium text-gray-600">Сортировка:</span>
             <select v-model="sortOption" class="px-3 py-2 bg-white border-2 border-gray-200 rounded-lg text-sm font-medium text-gray-900 focus:outline-none focus:border-teal-500 transition-colors hover:border-gray-300">
+              <option value="priority">⭐ По популярности</option>
               <option value="price-asc">Цена: по возрастанию</option>
               <option value="price-desc">Цена: по убыванию</option>
               <option value="name-asc">Название: А-Я</option>
@@ -339,13 +363,13 @@ onUnmounted(() => {
         <!-- MOBILE SORT -->
         <div class="lg:hidden flex items-center gap-2 overflow-x-auto pb-2 -mx-4 px-4">
           <button
-            v-for="opt in ['price-asc', 'price-desc', 'name-asc', 'name-desc', 'series']"
+            v-for="opt in ['priority', 'price-asc', 'price-desc', 'name-asc']"
             :key="opt"
             @click="sortOption = opt as any"
             class="px-3.5 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition-colors shrink-0 min-h-[44px] flex items-center justify-center active:scale-95"
             :class="sortOption === opt ? 'bg-teal-600 text-white shadow-sm' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
           >
-            {{ opt === 'price-asc' ? '₽ возр.' : opt === 'price-desc' ? '₽ убыв.' : opt === 'name-asc' ? 'А-Я' : opt === 'name-desc' ? 'Я-А' : 'Серия' }}
+            {{ opt === 'priority' ? '⭐ По популярности' : opt === 'price-asc' ? '₽ возр.' : opt === 'price-desc' ? '₽ убыв.' : 'А-Я' }}
           </button>
         </div>
       </div>
