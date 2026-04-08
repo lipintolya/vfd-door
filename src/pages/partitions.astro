@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="Алюминиевые перегородки в Челябинске — VFD Doors"
+  description="Алюминиевые перегородки для офиса и коммерческих помещений. Проектирование, монтаж. VFD Doors Челябинск."
+>
+  <Fragment slot="header"><Header /></Fragment>
+
+  <div class="max-w-5xl mx-auto px-4 py-12 sm:py-16 lg:py-20">
+    <nav class="mb-6 text-sm text-zinc-500">
+      <a href="/" class="hover:text-zinc-900">Главная</a>
+      <span class="mx-2">/</span>
+      <span class="text-zinc-900">Перегородки</span>
+    </nav>
+
+    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-zinc-900 mb-4 sm:mb-6">
+      Алюминиевые перегородки
+    </h1>
+    <p class="text-lg text-zinc-600 leading-relaxed max-w-3xl">
+      Проектирование и монтаж алюминиевых перегородок для офисов, коммерческих помещений и общественных пространств.
+    </p>
+
+    <div class="mt-8 sm:mt-12 grid sm:grid-cols-3 gap-4 sm:gap-6">
+      {[
+        { title: 'Офисные', desc: 'Зонирование рабочих пространств, переговорных, зон отдыха' },
+        { title: 'Коммерческие', desc: 'Перегородки для магазинов, ресторанов, салонов красоты' },
+        { title: 'Сантехнические', desc: 'Сантехнические кабины и разделительные перегородки' },
+      ].map(item => (
+        <div class="p-5 sm:p-6 rounded-2xl border border-zinc-200 bg-white">
+          <div class="font-semibold text-zinc-900 mb-2">{item.title}</div>
+          <div class="text-sm text-zinc-500">{item.desc}</div>
+        </div>
+      ))}
+    </div>
+
+    <div class="mt-10 sm:mt-14 bg-zinc-50 rounded-2xl p-5 sm:p-8 border border-zinc-200">
+      <h2 class="text-lg sm:text-xl font-semibold text-zinc-900 mb-4">Почему VFD?</h2>
+      <ul class="space-y-2 text-zinc-700 text-sm sm:text-base">
+        <li>✓ Собственное производство</li>
+        <li>✓ Проектирование под ваш объект</li>
+        <li>✓ Профессиональный монтаж</li>
+        <li>✓ Гарантия на работу и материалы</li>
+      </ul>
+      <div class="mt-6">
+        <a href="https://t.me/vfddoors74" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-6 py-3 rounded-full bg-zinc-900 text-white font-semibold hover:bg-teal-600 transition-colors text-sm sm:text-base">
+          Получить расчёт
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <Fragment slot="footer"><Footer /></Fragment>
+</BaseLayout>

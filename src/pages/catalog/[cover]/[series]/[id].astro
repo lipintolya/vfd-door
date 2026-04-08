@@ -1,0 +1,147 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import Header from '../../../../components/Header.astro';
+import Footer from '../../../../components/Footer.astro';
+import doors from '../../../../data/doors.json';
+
+export async function getStaticPaths() {
+  return doors.map(door => ({
+    params: { cover: door.cover, series: door.series, id: door.id },
+    props: { door },
+  }));
+}
+
+const { door } = Astro.props;
+const related = doors.filter(d => d.series === door.series && d.id !== door.id).slice(0, 4);
+
+const title = `${door.name} — купить в Челябинске`;
+const description = `${door.name} (${door.series}). Межкомнатная дверь от производителя в Челябинске. Цена: ${door.price.toLocaleString('ru-RU')} ₽. Замер, доставка, монтаж.`;
+---
+
+<BaseLayout title={title} description={description} image={door.colors?.[0]?.image}>
+  <Fragment slot="header"><Header /></Fragment>
+
+  <div class="max-w-7xl mx-auto px-4 pt-8 sm:pt-12 lg:pt-16 pb-12 sm:pb-16">
+    <!-- Breadcrumbs -->
+    <nav class="mb-4 sm:mb-6 text-sm text-zinc-500">
+      <a href="/" class="hover:text-zinc-900">Главная</a>
+      <span class="mx-2">/</span>
+      <a href="/catalog" class="hover:text-zinc-900">Каталог</a>
+      <span class="mx-2">/</span>
+      <a href={`/catalog?series=${encodeURIComponent(door.series)}`} class="hover:text-zinc-900">{door.series}</a>
+      <span class="mx-2">/</span>
+      <span class="text-zinc-900">{door.name}</span>
+    </nav>
+
+    <!-- Title -->
+    <h1 class="text-xl sm:text-3xl font-medium text-zinc-900 mb-1.5 sm:mb-2">{door.name}</h1>
+    <div class="flex flex-wrap items-center gap-2 text-sm text-zinc-500 mb-6 sm:mb-8">
+      <span class="font-medium text-teal-600">{door.series}</span>
+      <span>•</span>
+      <span>{door.material}</span>
+      <span class="hidden sm:inline">•</span>
+      <span class="hidden sm:inline">Покрытие: {door.cover}</span>
+    </div>
+
+    <!-- Gallery + Purchase Panel -->
+    <div class="grid lg:grid-cols-12 gap-6 sm:gap-8 mb-10 sm:mb-14">
+      <!-- Gallery -->
+      <div class="lg:col-span-7">
+        <div class="relative bg-zinc-50 rounded-2xl overflow-hidden aspect-[4/5] sm:aspect-4/3">
+          <img
+            src={door.colors?.[0]?.image || ''}
+            alt={door.name}
+            class="w-full h-full object-contain p-4 sm:p-8"
+          />
+        </div>
+        {door.colors && door.colors.length > 0 && (
+          <div class="mt-4 sm:mt-6">
+            <div class="flex items-center gap-3">
+              <span class="w-5 h-5 sm:w-6 sm:h-6 rounded-full inline-block shadow" style={`background-color:${door.colors[0].hex}`}></span>
+              <span class="text-sm text-zinc-600">{door.colors[0].name}</span>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <!-- Purchase Panel -->
+      <div class="lg:col-span-5">
+        <div class="sticky top-24 bg-white rounded-2xl border border-zinc-200 shadow-lg p-4 sm:p-8">
+          <div class="mb-4 sm:mb-6 pb-4 sm:pb-6 border-b border-zinc-100">
+            <p class="text-xs sm:text-sm text-zinc-500 mb-1">Цена за полотно</p>
+            <p class="text-2xl sm:text-4xl font-bold text-zinc-900">{door.price.toLocaleString('ru-RU')} ₽</p>
+          </div>
+
+          <!-- Sizes -->
+          <div class="mb-4 sm:mb-6">
+            <p class="text-sm font-semibold text-zinc-900 mb-2">Размеры (мм)</p>
+            <div class="text-sm text-zinc-600">
+              <span>Высота: {door.sizes?.height?.join(', ') || '2000'}</span>
+              <span class="block">Ширина: {door.sizes?.width?.join(', ') || '600, 700, 800, 900'}</span>
+            </div>
+          </div>
+
+          <a
+            href={`https://t.me/vfddoors74?text=${encodeURIComponent(`Заявка на расчёт:\n${door.name}\nЦвет: ${door.colors?.[0]?.name || ''}\n\n${door.price.toLocaleString('ru-RU')} ₽`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center justify-center w-full h-12 sm:h-14 rounded-full bg-zinc-900 text-white font-semibold text-sm sm:text-base hover:bg-teal-600 transition-colors"
+          >
+            Отправить на расчёт
+          </a>
+          <p class="text-xs text-zinc-500 text-center mt-2 sm:mt-3">Менеджер свяжется для уточнения деталей</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Description & Specs -->
+    <div class="bg-zinc-50 py-8 sm:py-16 rounded-2xl px-4 sm:px-8 mb-8 sm:mb-14">
+      <div class="grid lg:grid-cols-12 gap-6 sm:gap-12">
+        <div class="lg:col-span-7">
+          <h2 class="text-lg sm:text-2xl font-medium text-zinc-900 mb-3 sm:mb-6">Описание</h2>
+          <p class="text-zinc-700 leading-relaxed text-sm sm:text-base">
+            {door.name} — модель из серии {door.series}. Дверь выполнена из {door.material?.replace('Cосновый брус, ', '').replace('MDF, ', '') || door.material} с покрытием {door.cover}.
+            Идеально подходит для жилых и коммерческих помещений.
+          </p>
+          <ul class="mt-4 space-y-2 text-sm text-zinc-600">
+            <li class="flex items-center gap-2"><span class="text-teal-600">✓</span> Премиальное качество материалов</li>
+            <li class="flex items-center gap-2"><span class="text-teal-600">✓</span> Современный дизайн</li>
+            <li class="flex items-center gap-2"><span class="text-teal-600">✓</span> Долговечность и простота в уходе</li>
+          </ul>
+        </div>
+        <div class="lg:col-span-5">
+          <h2 class="text-lg sm:text-2xl font-medium text-zinc-900 mb-3 sm:mb-6">Характеристики</h2>
+          <div class="bg-white rounded-2xl border border-zinc-200 overflow-hidden divide-y divide-zinc-100">
+            <div class="flex justify-between px-4 sm:px-5 py-3 text-sm"><span class="text-zinc-500">Серия</span><span class="font-semibold">{door.series}</span></div>
+            <div class="flex justify-between px-4 sm:px-5 py-3 text-sm"><span class="text-zinc-500">Модель</span><span class="font-semibold">{door.model}</span></div>
+            <div class="flex justify-between px-4 sm:px-5 py-3 text-sm"><span class="text-zinc-500">Покрытие</span><span class="font-semibold">{door.cover}</span></div>
+            <div class="flex justify-between px-4 sm:px-5 py-3 text-sm"><span class="text-zinc-500">Высота</span><span class="font-semibold">{door.sizes?.height?.join(', ') || '—'} мм</span></div>
+            <div class="flex justify-between px-4 sm:px-5 py-3 text-sm"><span class="text-zinc-500">Ширина</span><span class="font-semibold">{door.sizes?.width?.join(', ') || '—'} мм</span></div>
+            {door.glasses?.length > 0 && <div class="flex justify-between px-4 sm:px-5 py-3 text-sm"><span class="text-zinc-500">Стёкла</span><span class="font-semibold">{door.glasses.join(', ')}</span></div>}
+            {door.tags?.includes('в наличии') && <div class="px-4 sm:px-5 py-3 text-sm text-teal-600 font-medium">✓ В наличии</div>}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Related Products -->
+    {related.length > 0 && (
+      <div class="py-8 sm:py-12">
+        <h2 class="text-lg sm:text-2xl font-medium text-zinc-900 mb-4 sm:mb-6">Похожие модели</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5">
+          {related.map(rp => (
+            <a href={`/catalog/${encodeURIComponent(rp.cover)}/${encodeURIComponent(rp.series)}/${rp.id}`} class="group block">
+              <div class="bg-zinc-50 rounded-2xl overflow-hidden aspect-[3/4] mb-2 transition-shadow group-hover:shadow-lg">
+                <img src={rp.colors?.[0]?.image || ''} alt={rp.name} class="w-full h-full object-contain p-3 transition-transform group-hover:scale-105" loading="lazy" />
+              </div>
+              <div class="text-xs text-zinc-500">{rp.series}</div>
+              <div class="font-semibold text-zinc-900 text-sm group-hover:text-teal-600 transition-colors line-clamp-2">{rp.name}</div>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+
+  <Fragment slot="footer"><Footer /></Fragment>
+</BaseLayout>

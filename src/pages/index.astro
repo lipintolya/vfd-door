@@ -1,0 +1,172 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import doors from '../data/doors.json';
+
+const seriesList = [...new Set(doors.map(d => d.series))];
+const featuredDoors = doors.filter(d => d.tags?.includes('в наличии')).slice(0, 12);
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "VFD Doors — межкомнатные и входные двери в Челябинске",
+  "description": "Фирменный салон VFD Doors на Братьев Кашириных в Челябинске. Межкомнатные и входные двери от производителя, алюминиевые перегородки.",
+  "url": "https://vfd74.ru",
+  "telephone": "+7 (351) 225-00-00",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "ул. Братьев Кашириных, 131Б",
+    "addressLocality": "Челябинск",
+    "addressRegion": "Челябинская область",
+    "postalCode": "454080",
+    "addressCountry": "RU"
+  },
+  "geo": { "@type": "GeoCoordinates", "latitude": 55.1644, "longitude": 61.4368 },
+  "openingHoursSpecification": [
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "10:00", "closes": "20:00" },
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Saturday","Sunday"], "opens": "10:00", "closes": "18:00" }
+  ],
+  "priceRange": "₽₽",
+  "areaServed": { "@type": "City", "name": "Челябинск" },
+  "sameAs": ["https://t.me/vfddoors74", "https://t.me/vfddoors174"]
+};
+---
+
+<BaseLayout
+  title="Межкомнатные и входные двери в Челябинске | VFD на Кашириных"
+  description="Фирменный салон ВФД на Кашириных в Челябинске: межкомнатные и входные двери от производителя, алюминиевые перегородки. Более 80 образцов в шоуруме. Замер, доставка, монтаж."
+>
+  <Fragment slot="header"><Header /></Fragment>
+
+  <!-- Hero -->
+  <section class="relative overflow-hidden bg-gradient-to-br from-zinc-50 to-white">
+    <div class="max-w-7xl mx-auto px-4 py-16 sm:py-24 lg:py-32">
+      <div class="max-w-3xl">
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-zinc-900 leading-tight">
+          Межкомнатные и входные двери в&nbsp;Челябинске
+        </h1>
+        <p class="mt-4 sm:mt-6 text-lg sm:text-xl text-zinc-600 leading-relaxed">
+          Фирменный салон VFD на Братьев Кашириных. Двери от производителя с замером, доставкой и монтажом.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <a href="/catalog" class="inline-flex items-center px-6 py-3 rounded-full bg-zinc-900 text-white font-semibold hover:bg-teal-600 transition-colors text-sm sm:text-base">
+            Смотреть каталог
+          </a>
+          <a href="tel:+79000297888" class="inline-flex items-center px-6 py-3 rounded-full border-2 border-zinc-200 text-zinc-900 font-semibold hover:border-teal-600 hover:text-teal-600 transition-colors text-sm sm:text-base">
+            Позвонить
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Series -->
+  <section class="max-w-7xl mx-auto px-4 py-12 sm:py-16">
+    <h2 class="text-xl sm:text-2xl font-semibold text-zinc-900 mb-6 sm:mb-8">Серии дверей</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+      {seriesList.map(series => {
+        const count = doors.filter(d => d.series === series).length;
+        const cover = doors.find(d => d.series === series)?.cover || '';
+        return (
+          <a
+            href={`/catalog?series=${encodeURIComponent(series)}`}
+            class="group block p-4 sm:p-6 rounded-2xl border border-zinc-200 bg-white hover:shadow-lg hover:border-teal-200 transition-all"
+          >
+            <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center mb-3 text-lg font-bold group-hover:bg-teal-600 group-hover:text-white transition-colors">
+              {series.charAt(0)}
+            </div>
+            <div class="font-semibold text-zinc-900 group-hover:text-teal-600 transition-colors">{series}</div>
+            <div class="text-xs text-zinc-500 mt-0.5">{count} моделей</div>
+            {cover && <div class="text-xs text-zinc-400 mt-1">{cover}</div>}
+          </a>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- Featured Products -->
+  {featuredDoors.length > 0 && (
+    <section class="bg-zinc-50 py-12 sm:py-16">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="flex items-center justify-between mb-6 sm:mb-8">
+          <h2 class="text-xl sm:text-2xl font-semibold text-zinc-900">В наличии</h2>
+          <a href="/catalog" class="text-sm font-medium text-teal-600 hover:text-teal-700">Все двери →</a>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
+          {featuredDoors.map(door => (
+            <a
+              href={`/catalog/${encodeURIComponent(door.cover)}/${encodeURIComponent(door.series)}/${door.id}`}
+              class="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all"
+            >
+              <div class="aspect-[4/5] bg-zinc-50 overflow-hidden">
+                <img
+                  src={door.colors?.[0]?.image || ''}
+                  alt={door.name}
+                  class="w-full h-full object-contain p-3 sm:p-5 transition-transform group-hover:scale-105"
+                  loading="lazy"
+                />
+              </div>
+              <div class="p-3 sm:p-4">
+                <div class="text-xs text-zinc-500 mb-0.5">{door.series}</div>
+                <div class="font-semibold text-zinc-900 text-sm group-hover:text-teal-600 transition-colors line-clamp-2 leading-snug">{door.name}</div>
+                <div class="mt-2 text-sm font-bold text-zinc-900">{door.price.toLocaleString('ru-RU')} ₽</div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Advantages -->
+  <section class="max-w-7xl mx-auto px-4 py-12 sm:py-16">
+    <h2 class="text-xl sm:text-2xl font-semibold text-zinc-900 mb-6 sm:mb-8">Почему выбирают нас</h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {[
+        { title: 'От производителя', desc: 'Прямые поставки с фабрики без посредников' },
+        { title: 'Замер бесплатно', desc: 'Выезд мастера по Челябинску и области' },
+        { title: 'Монтаж', desc: 'Профессиональная установка с гарантией' },
+        { title: '80+ образцов', desc: 'Шоурум на Братьев Кашириных, 131Б' },
+      ].map(item => (
+        <div class="p-5 sm:p-6 rounded-2xl border border-zinc-200 bg-white">
+          <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center mb-3 text-lg">✓</div>
+          <div class="font-semibold text-zinc-900 mb-1">{item.title}</div>
+          <div class="text-sm text-zinc-500">{item.desc}</div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="bg-zinc-50 py-12 sm:py-16">
+    <div class="max-w-3xl mx-auto px-4">
+      <h2 class="text-xl sm:text-2xl font-semibold text-zinc-900 mb-6 sm:mb-8">Частые вопросы</h2>
+      {[
+        { q: 'Сколько стоит замер?', a: 'Замер бесплатный по Челябинску и пригороду.' },
+        { q: 'Какой срок изготовления?', a: 'Двери в наличии — от 1 дня. Под заказ — 2–4 недели.' },
+        { q: 'Есть ли гарантия?', a: 'Да, гарантия 1 год на продукцию и 1 год на монтаж.' },
+        { q: 'Доставляете в область?', a: 'Да, доставка по Челябинской области и соседним регионам.' },
+      ].map(faq => (
+        <details class="group bg-white rounded-xl border border-zinc-200 mb-3">
+          <summary class="flex items-center justify-between cursor-pointer p-4 sm:p-5 font-medium text-zinc-900 list-none">
+            {faq.q}
+            <svg class="w-5 h-5 text-zinc-400 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </summary>
+          <div class="px-4 sm:px-5 pb-4 sm:pb-5 text-sm text-zinc-600">{faq.a}</div>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <Fragment slot="footer"><Footer /></Fragment>
+
+  <script define:vars={{schema}}>
+    const s = document.createElement('script');
+    s.type = 'application/ld+json';
+    s.textContent = JSON.stringify(schema);
+    document.head.appendChild(s);
+  </script>
+</BaseLayout>

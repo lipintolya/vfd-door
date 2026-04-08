@@ -1,0 +1,96 @@
+---
+import ViewTransitions from '@astrojs/view-transitions';
+
+export interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  image?: string;
+  type?: string;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  canonical = Astro.url.href,
+  image = '/og-image.jpg',
+  type = 'website',
+  noindex = false,
+} = Astro.props;
+
+const siteTitle = 'VFD Doors — межкомнатные и входные двери в Челябинске';
+const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
+const siteImage = image.startsWith('http') ? image : `https://vfd74.ru${image}`;
+---
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="VFD Doors" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={siteImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonical} />
+    <meta property="twitter:title" content={fullTitle} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={siteImage} />
+
+    <!-- Geo -->
+    <meta name="geo.region" content="RU-CHE" />
+    <meta name="geo.placename" content="Челябинск" />
+    <meta name="geo.position" content="55.1644;61.4368" />
+    <meta name="ICBM" content="55.1644, 61.4368" />
+
+    <!-- Verifications -->
+    <meta name="yandex-verification" content="b030b4edecf534b8" />
+    <meta name="google-site-verification" content="3rFDzdFpWCtVmLla_cbR1AJewmaizT8hBRkKH4PgTAE" />
+
+    <!-- Favicons -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#0d9488" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+    <style is:global>
+      @import "tailwindcss";
+      :root {
+        --font-sans: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      }
+      html { font-family: var(--font-sans); }
+      body { margin: 0; padding: 0; }
+    </style>
+  </head>
+  <body class="min-h-screen flex flex-col bg-white text-gray-900">
+    <slot name="header" />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <slot name="footer" />
+  </body>
+</html>

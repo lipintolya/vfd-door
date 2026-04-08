@@ -1,0 +1,105 @@
+---
+const links = [
+  { href: '/', label: 'Главная' },
+  { href: '/catalog', label: 'Каталог' },
+  { href: '/about', label: 'О нас' },
+  { href: '/portfolio', label: 'Портфолио' },
+  { href: '/partitions', label: 'Перегородки' },
+];
+
+const phones = [
+  { raw: '+79000297888', label: '+7 (900) 029-78-88' },
+  { raw: '+79630807888', label: '+7 (963) 080-78-88' },
+];
+---
+
+<header class="fixed inset-x-0 top-4 z-50 px-4" style="padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex items-center justify-between rounded-full bg-white/90 backdrop-blur-md shadow-sm border px-5 sm:px-6 py-3">
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-2.5 sm:gap-3 shrink-0">
+        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-zinc-700 to-zinc-900 text-white flex items-center justify-center text-xs font-bold">
+          ВФД
+        </div>
+        <span class="hidden sm:block text-sm font-bold tracking-wide">ВФД НА КАШИРИНЫХ</span>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex gap-7 text-sm">
+        {links.map(link => (
+          <a
+            href={link.href}
+            class="text-gray-600 hover:text-gray-900 font-medium transition-colors"
+            class:list={[Astro.url.pathname === link.href && 'text-black font-semibold']}
+          >
+            {link.label}
+          </a>
+        ))}
+      </nav>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-3">
+        <!-- Socials -->
+        <div class="hidden sm:flex gap-2.5">
+          <a href="https://t.me/vfddoors174" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
+            <img src="https://storage.yandexcloud.net/catalog-vfd/icons/tg_logo.svg" class="w-6 h-6" alt="Telegram" />
+          </a>
+          <a href="https://vk.com/vfddoors174" target="_blank" rel="noopener noreferrer" aria-label="VK">
+            <img src="https://storage.yandexcloud.net/catalog-vfd/icons/vk_logo.svg" class="w-6 h-6" alt="VK" />
+          </a>
+        </div>
+
+        <!-- CTA -->
+        <a href="tel:+79000297888" class="hidden sm:inline-flex items-center px-4 py-2 rounded-full bg-zinc-900 text-white text-sm font-semibold hover:bg-teal-600 transition-colors">
+          Позвонить
+        </a>
+
+        <!-- Mobile burger -->
+        <button id="mobile-menu-btn" class="md:hidden w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors" aria-label="Меню">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Menu Overlay -->
+<div id="mobile-menu" class="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm hidden">
+  <div class="fixed left-4 right-4 top-20 bg-white rounded-2xl shadow-xl p-4 mx-auto max-w-sm">
+    <div class="flex justify-between items-center mb-4">
+      <span class="font-bold text-lg">Меню</span>
+      <button id="mobile-menu-close" class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-100" aria-label="Закрыть">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    <nav class="flex flex-col gap-1">
+      {links.map(link => (
+        <a
+          href={link.href}
+          class="px-4 py-3 rounded-xl text-base font-medium text-gray-700 hover:bg-gray-50"
+          class:list={[Astro.url.pathname === link.href && 'bg-gray-100 text-black']}
+        >
+          {link.label}
+        </a>
+      ))}
+      <div class="pt-3 border-t mt-2">
+        {phones.map(p => (
+          <a href={`tel:${p.raw}`} class="block text-center py-3 font-semibold text-gray-900">{p.label}</a>
+        ))}
+      </div>
+    </nav>
+  </div>
+</div>
+
+<script is:inline>
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  const close = document.getElementById('mobile-menu-close');
+  btn?.addEventListener('click', () => menu?.classList.remove('hidden'));
+  close?.addEventListener('click', () => menu?.classList.add('hidden'));
+  menu?.addEventListener('click', (e) => { if (e.target === menu) menu.classList.add('hidden'); });
+</script>

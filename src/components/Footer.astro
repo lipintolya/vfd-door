@@ -1,0 +1,62 @@
+---
+const links = [
+  { href: '/', label: 'Главная' },
+  { href: '/catalog', label: 'Каталог' },
+  { href: '/about', label: 'О нас' },
+  { href: '/portfolio', label: 'Портфолио' },
+  { href: '/partitions', label: 'Перегородки' },
+];
+---
+
+<footer class="bg-zinc-900 text-zinc-300 mt-auto">
+  <div class="max-w-7xl mx-auto px-4 py-10 sm:py-14">
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8">
+      <!-- Brand -->
+      <div class="col-span-2 sm:col-span-1">
+        <div class="flex items-center gap-2.5 mb-3">
+          <div class="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center text-white text-xs font-bold">ВФД</div>
+          <span class="font-bold text-white">VFD Doors</span>
+        </div>
+        <p class="text-sm text-zinc-400">Фирменный салон на Братьев Кашириных в Челябинске</p>
+      </div>
+
+      <!-- Nav -->
+      <div>
+        <h3 class="text-sm font-semibold text-white mb-3">Навигация</h3>
+        <ul class="space-y-2">
+          {links.map(link => (
+            <li><a href={link.href} class="text-sm hover:text-white transition-colors">{link.label}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Contacts -->
+      <div>
+        <h3 class="text-sm font-semibold text-white mb-3">Контакты</h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="tel:+79000297888" class="hover:text-white transition-colors">+7 (900) 029-78-88</a></li>
+          <li><a href="tel:+79630807888" class="hover:text-white transition-colors">+7 (963) 080-78-88</a></li>
+          <li><a href="mailto:vfddoors74@mail.ru" class="hover:text-white transition-colors">vfddoors74@mail.ru</a></li>
+        </ul>
+      </div>
+
+      <!-- Address -->
+      <div>
+        <h3 class="text-sm font-semibold text-white mb-3">Адрес</h3>
+        <p class="text-sm text-zinc-400">
+          Челябинск,<br />
+          ул. Братьев Кашириных, 131Б<br />
+          <span class="text-zinc-500 text-xs">Пн–Пт: 10–20, Сб–Вс: 10–18</span>
+        </p>
+        <div class="flex gap-2.5 mt-3">
+          <a href="https://t.me/vfddoors174" target="_blank" rel="noopener" class="text-zinc-400 hover:text-white transition-colors text-sm">Telegram</a>
+          <a href="https://vk.com/vfddoors174" target="_blank" rel="noopener" class="text-zinc-400 hover:text-white transition-colors text-sm">VK</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-8 pt-6 border-t border-zinc-700 text-center text-xs text-zinc-500">
+      &copy; {new Date().getFullYear()} VFD Doors. Все права защищены.
+    </div>
+  </div>
+</footer>
