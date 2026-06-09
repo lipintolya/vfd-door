@@ -1,0 +1,5 @@
+Host beget-vfd74
+  HostName 84.54.29.186
+  User root
+  IdentityFile ~/.ssh/id_ed25519
+  IdentitiesOnly yes

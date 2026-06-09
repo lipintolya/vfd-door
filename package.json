@@ -11,7 +11,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "prerender": "astro build --experimental-rebalance-chunks",
-    "sitemap": "echo 'Sitemap generation handled by astro-sitemap integration'"
+    "sitemap": "echo 'Sitemap generation handled by astro-sitemap integration'",
+    "deploy": "git push production main"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
