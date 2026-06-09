@@ -1,0 +1,38 @@
+---
+/**
+ * src/pages/index.astro — Главная страница
+ * Header больше не нужен здесь — он подключён в BaseLayout.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro'
+import HeroSlider from '../components/home/HeroSlider.vue'
+import Features from '../components/home/Features.vue'
+import CatalogCategories from '../components/home/CatalogCategories.vue'
+import Promo from '../components/home/Promo.vue'
+import Faq from '../components/home/Faq.vue'
+import { faqs } from '../components/home/faq-data'
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+}
+---
+
+<BaseLayout
+  title="Двери ВФД на Кашириных — Салон дверей в Челябинске"
+  description="Фирменный салон дверей и алюминиевых перегородок на Братьев Кашириных 131Б. Работаем с 2014 года."
+  structuredData={faqSchema}
+>
+  <HeroSlider client:load />
+  <Features client:visible />
+  <CatalogCategories client:visible />
+  <Promo client:idle />
+  <Faq client:idle />
+</BaseLayout>

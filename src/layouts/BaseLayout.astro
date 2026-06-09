@@ -1,0 +1,82 @@
+---
+import '../styles/global.css'
+import Header from '../components/layout/Header.vue'
+import Footer from '../components/layout/Footer.vue'
+
+interface Props {
+  title?:       string
+  description?: string
+  ogImage?:     string
+  noIndex?:     boolean
+  canonical?:   string
+  structuredData?: Record<string, unknown> | Record<string, unknown>[]
+}
+
+const {
+  title       = 'Двери ВФД на Кашириных — Салон дверей в Челябинске',
+  description = 'Фирменный салон дверей и алюминиевых перегородок на Братьев Кашириных 131Б. Работаем с 2014 года.',
+  ogImage     = 'https://storage.yandexcloud.net/catalog-vfd/renders/hero-cover.webp',
+  noIndex     = false,
+  canonical,
+  structuredData,
+} = Astro.props
+
+const canonicalUrl = canonical
+const structuredDataJson = structuredData
+  ? JSON.stringify(structuredData).replace(/</g, '\\u003c')
+  : null
+---
+
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content={description} />
+    {noIndex && <meta name="robots" content="noindex, nofollow" />}
+
+    <meta property="og:title"       content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image"       content={ogImage} />
+    <meta property="og:type"        content="website" />
+    <meta property="og:locale"      content="ru_RU" />
+    <meta name="theme-color"        content="#f8f9fa" />
+    {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+
+    <title>{title}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="preload" as="image"
+      href="https://storage.yandexcloud.net/catalog-vfd/renders/hero-cover.webp"
+      fetchpriority="high"
+    />
+    {structuredDataJson && (
+      <script type="application/ld+json" set:html={structuredDataJson} />
+    )}
+  </head>
+
+  <body class="min-h-screen flex flex-col">
+
+    <!-- Header: только клиент, без hydration mismatch -->
+    <Header client:only="vue" />
+
+    <main
+      id="main-content"
+      class="flex-1 relative overflow-x-hidden"
+      style="padding-top: var(--header-height, 88px)"
+    >
+      <slot />
+    </main>
+
+    <!-- Footer: модальное окно требует Vue -->
+    <Footer client:only="vue" />
+
+  </body>
+</html>

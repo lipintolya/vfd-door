@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import AboutSection from '../components/about/AboutSection.vue'
+
+
+const localBusinessSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Store',  
+  name: 'Салон дверей ВФД',
+  description:
+    'Фирменный салон входных и межкомнатных дверей, алюминиевых перегородок в Челябинске. Работаем с 2014 года. Официальный дилер одного из ведущих производителей дверей в России.',
+  url: 'https://vfd74.ru',
+  telephone: '+79630807888',
+  email: 'vfddoors74@mail.ru',
+  
+  
+  sameAs: [
+    'https://vk.com/vfddoors74',        
+    'https://t.me/vfddoors174',
+    'https://max.ru/id452402308842_biz',         
+    'https://2gis.ru/chelyabinsk/firm/70000001093506304',
+    'https://yandex.ru/maps/-/CPwenX08',
+  ],
+  
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'ул. Братьев Кашириных, 131Б',
+    addressLocality: 'Челябинск',
+    postalCode: '454128',
+    addressCountry: 'RU',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 55.172825,   
+    longitude: 61.306669,
+  },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      opens: '10:00',
+      closes: '20:00',
+    },
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: 'Saturday',
+      opens: '11:00',
+      closes: '16:00',
+    },
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: 'Sunday',
+      opens: 'Closed',
+    },
+  ],
+  foundingDate: '2014',
+  priceRange: '₽₽',
+  
+
+  acceptsPaymentMethod: ['Cash', 'CreditCard', 'DebitCard'],
+}
+---
+
+<BaseLayout
+  title="О нас — Салон дверей ВФД в Челябинске"
+  description="Салон дверей ВФД работает в Челябинске с 2014 года. Официальный дилер межкомнатных и входных дверей. Адрес: ул. Братьев Кашириных, 131Б. Реквизиты, оплата, руководство."
+  structuredData={localBusinessSchema}
+>
+  <AboutSection client:visible />
+</BaseLayout>

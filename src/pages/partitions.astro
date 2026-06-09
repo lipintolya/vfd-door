@@ -1,0 +1,15 @@
+---
+/**
+ * src/pages/partitions.astro
+ * Страница алюминиевых перегородок и систем открывания (в разработке)
+ */
+import BaseLayout from '../layouts/BaseLayout.astro'
+import UnderConstruction from '../components/ui/UnderConstruction.vue'
+
+const title = 'Алюминиевые перегородки и системы — ВФД в Челябинске'
+const description = 'Алюминиевые перегородки, раздвижные системы и стеклянные конструкции от Владимирской фабрики дверей. Консультация и монтаж в Челябинске.'
+---
+
+<BaseLayout title={title} description={description}>
+  <UnderConstruction client:visible />
+</BaseLayout>

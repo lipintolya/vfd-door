@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import ContactsSection from '../components/contacts/ContactsSection.vue'
+import { companyLegalInfo } from '../lib/contacts-data'
+
+const title = 'Контакты салона ВФД в Челябинске'
+const description =
+  'Контакты фирменного салона дверей ВФД на Братьев Кашириных, 131Б. Телефон, email, часы работы, реквизиты согласно РФ. Консультации по дверям и перегородкам.'
+
+const localBusinessSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: 'Салон ВФД (Владимирская фабрика дверей)',
+  image: 'https://storage.yandexcloud.net/catalog-vfd/logo.webp',
+  description: companyLegalInfo.activity.description,
+  telephone: companyLegalInfo.contacts.phone.map((p) => p.raw),
+  email: companyLegalInfo.contacts.email,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'ул. Братьев Кашириных, 131Б',
+    addressLocality: 'Челябинск',
+    addressRegion: 'Челябинская область',
+    postalCode: '454000',
+    addressCountry: 'RU',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 55.152157,
+    longitude: 61.306669,
+  },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      opens: '10:00',
+      closes: '20:00',
+    },
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: 'Saturday',
+      opens: '11:00',
+      closes: '16:00',
+    },
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: 'Sunday',
+      opens: 'Closed',
+      closes: 'Closed',
+    },
+  ],
+  url: 'https://vfd74.ru/contacts',
+  foundingDate: '2014',
+  priceRange: '₽₽',
+  acceptsPaymentMethod: ['Cash', 'CreditCard', 'DebitCard'],
+  sameAs: [
+    'https://wa.me/79000297888',
+    'https://t.me/vfd74',
+  ],
+}
+---
+
+<BaseLayout title={title} description={description} structuredData={localBusinessSchema}>
+  <ContactsSection client:visible />
+</BaseLayout>

@@ -1,0 +1,28 @@
+{
+  "name": "vfd-astro",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "prerender": "astro build --experimental-rebalance-chunks",
+    "sitemap": "echo 'Sitemap generation handled by astro-sitemap integration'"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.3",
+    "@astrojs/vue": "^6.0.1",
+    "@supabase/supabase-js": "^2.106.0",
+    "@tailwindcss/vite": "^4.3.0",
+    "astro": "^6.4.4",
+    "tailwindcss": "^4.3.0",
+    "vue": "^3.5.34"
+  },
+  "devDependencies": {
+    "supabase": "^2.100.0"
+  }
+}

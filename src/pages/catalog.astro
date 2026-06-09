@@ -1,0 +1,178 @@
+---
+/**
+ * src/pages/catalog.astro
+ * Данные грузятся на сервере — полный JOIN через Supabase.
+ * Фильтрация — клиентская (Vue island), без перезагрузки страницы.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Breadcrumbs from '../components/ui/Breadcrumbs.astro'
+import CatalogClient from '../components/catalog/CatalogClient.vue'
+import { supabase } from '../lib/supabase'
+
+/* ── Все модели с цветами, сериями и покрытиями ── */
+const { data, error } = await supabase
+  .from('model_colors')
+  .select(`
+    price_rrp,
+    photo_url,
+    colors (
+      id,
+      name,
+      hex_preview,
+      coating_id,
+      coatings ( id, name, slug )
+    ),
+    models (
+      id,
+      name,
+      has_glass,
+      series (
+        id,
+        name,
+        slug,
+        coating_id,
+        coatings ( id, name, slug )
+      )
+    )
+  `)
+  .order('price_rrp', { ascending: true })
+
+if (error) console.error('Supabase error:', error.message)
+
+/* ── Типы ── */
+interface CardItem {
+  id:          string
+  name:        string
+  series:      string
+  seriesSlug:  string
+  coating:     string
+  coatingSlug: string
+  colorName:   string
+  colorHex:    string
+  photo:       string
+  price:       number | null
+  hasGlass:    boolean
+}
+
+const normalizeHexColor = (value: string | null | undefined) => {
+  const normalized = (value ?? '')
+    .trim()
+    .replaceAll('С', 'C')
+    .replaceAll('с', 'c')
+
+  return /^#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/.test(normalized)
+    ? normalized
+    : '#cccccc'
+}
+
+/* ── Нормализуем: 1 модель = 1 карточка (первый цвет) ── */
+const cards: CardItem[] = []
+const seen = new Set<string>()
+
+for (const row of (data ?? [])) {
+  const model   = row.models as any
+  const color   = row.colors as any
+  if (!model || !color) continue
+  if (seen.has(model.id)) continue
+  seen.add(model.id)
+
+  const series  = model?.series  as any
+  const coating = series?.coatings ?? color?.coatings as any
+
+  cards.push({
+    id:          model.id,
+    name:        model.name,
+    series:      series?.name   ?? '—',
+    seriesSlug:  series?.slug   ?? '',
+    coating:     coating?.name  ?? '—',
+    coatingSlug: coating?.slug  ?? '',
+    colorName:   color.name,
+    colorHex:    normalizeHexColor(color.hex_preview),
+    photo:       row.photo_url  ?? '',
+    price:       row.price_rrp  ?? null,
+    hasGlass:    model.has_glass ?? false,
+  })
+}
+
+/* ── Уникальные опции для фильтров ── */
+const allSeries = [...new Map(
+  cards
+    .filter(c => c.seriesSlug)
+    .map(c => [c.seriesSlug, { label: c.series, value: c.seriesSlug }])
+).values()]
+
+const allCoatings = [...new Map(
+  cards
+    .filter(c => c.coatingSlug)
+    .map(c => [c.coatingSlug, { label: c.coating, value: c.coatingSlug }])
+).values()]
+
+const allColors = [...new Map(
+  cards
+    .filter(c => c.colorName)
+    .map(c => [c.colorName, { label: c.colorName, value: c.colorName, color: c.colorHex }])
+).values()]
+
+/* ── Начальные фильтры из URL ── */
+const urlSeries  = Astro.url.searchParams.get('series')  ?? ''
+const urlCoating = Astro.url.searchParams.get('coating') ?? ''
+const urlColor   = Astro.url.searchParams.get('color')   ?? ''
+
+const canonicalUrl = Astro.site ? new URL('/catalog', Astro.site).href : undefined
+const breadcrumbItems = [
+  { label: 'Главная', href: '/' },
+  { label: 'Каталог' },
+]
+
+const structuredData = canonicalUrl ? [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: breadcrumbItems.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.label,
+      item: item.href ? new URL(item.href, canonicalUrl).href : canonicalUrl,
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Каталог дверей ВФД на Кашириных',
+    description: 'Каталог межкомнатных и входных дверей с ценами, сериями, покрытиями и цветами.',
+    url: canonicalUrl,
+    numberOfItems: cards.length,
+  },
+] : undefined
+---
+
+<BaseLayout
+  title="Каталог дверей — ВФД на Кашириных"
+  description="Каталог межкомнатных и входных дверей с ценами. Серии Иннова, Линеа и другие. Салон ВФД в Челябинске."
+  canonical={canonicalUrl}
+  structuredData={structuredData}
+>
+  {error && (
+    <div class="container pt-8">
+      <div class="rounded-2xl bg-red-50 border border-red-100 px-5 py-4 text-red-700 text-sm">
+        Ошибка загрузки каталога: {error.message}
+      </div>
+    </div>
+  )}
+
+  <div class="section catalog-page">
+    <div class="container">
+      <Breadcrumbs items={breadcrumbItems} />
+      <CatalogClient
+        client:load
+        cards={cards}
+        series={allSeries}
+        coatings={allCoatings}
+        colors={allColors}
+        initialSeries={urlSeries}
+        initialCoating={urlCoating}
+        initialColor={urlColor}
+      />
+    </div>
+  </div>
+</BaseLayout>

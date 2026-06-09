@@ -1,0 +1,363 @@
+<script setup lang="ts">
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+
+const SLIDER_INTERVAL_MS = 9000
+const SWIPE_THRESHOLD    = 50
+
+interface Slide {
+  id:          number
+  image:       string
+  title:       string
+  subtitle:    string
+  description: string
+  cta?:        string
+  ctaHref?:    string
+}
+
+const slides: Slide[] = [
+  {
+    id: 1,
+    image: 'https://storage.yandexcloud.net/catalog-vfd/renders/hero-cover.webp',
+    title: 'Двери прямо с фабрики',
+    subtitle: 'Выставка с новинками',
+    description: 'Фирменный салон интерьерных решений на Братьев Кашириных в Челябинске',
+    cta: 'Смотреть каталог',
+    ctaHref: '/catalog',
+  },
+  {
+    id: 2,
+    image: 'https://storage.yandexcloud.net/catalog-vfd/covers/innova-1.webp',
+    title: 'Серия «Иннова» уже в салоне',
+    subtitle: 'Не оставляет отпечатков пальцев',
+    description: 'Новинка в инновационном покрытии ПЭТ',
+    cta: 'Смотреть каталог',
+    ctaHref: '/catalog',
+  },
+  {
+    id: 3,
+    image: 'https://storage.yandexcloud.net/catalog-vfd/covers/linea-1.webp',
+    title: 'Серия «Линеа» уже в салоне',
+    subtitle: 'Современный дизайн по доступной цене',
+    description: 'Светостойкая эмаль с фрезерованными элементами и алюминиевым декором',
+    cta: 'Смотреть каталог',
+    ctaHref: '/catalog',
+  },
+]
+
+/* ── Slider state ── */
+const activeIndex = ref(0)
+const touchStartX = ref(0)
+const touchStartY = ref(0)
+const isPaused    = ref(false)
+
+const currentSlide = computed(() => slides[activeIndex.value] ?? slides[0])
+
+let timer: ReturnType<typeof setInterval> | null = null
+
+const next  = () => { activeIndex.value = (activeIndex.value + 1) % slides.length }
+const prev  = () => { activeIndex.value = (activeIndex.value - 1 + slides.length) % slides.length }
+const stop  = () => { if (timer !== null) { clearInterval(timer); timer = null } }
+const start = () => { stop(); timer = setInterval(next, SLIDER_INTERVAL_MS) }
+
+const goTo = (i: number) => { activeIndex.value = i; start() }
+
+const onMouseEnter = () => { isPaused.value = true;  stop() }
+const onMouseLeave = () => { isPaused.value = false; start() }
+
+const onTouchStart = (e: TouchEvent) => {
+  if (!e.touches[0]) return
+  touchStartX.value = e.touches[0].clientX
+  touchStartY.value = e.touches[0].clientY
+  stop()
+}
+
+const onTouchEnd = (e: TouchEvent) => {
+  if (!e.changedTouches[0]) return
+  const dx = touchStartX.value - e.changedTouches[0].clientX
+  const dy = touchStartY.value - e.changedTouches[0].clientY
+  if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > SWIPE_THRESHOLD) {
+    dx > 0 ? next() : prev()
+  }
+  setTimeout(start, 400)
+}
+
+const onKeyDown = (e: KeyboardEvent) => {
+  if (e.key === 'ArrowLeft')  { prev(); start() }
+  if (e.key === 'ArrowRight') { next(); start() }
+}
+
+onMounted(() => {
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  if (!prefersReduced) start()
+})
+onUnmounted(stop)
+</script>
+
+<template>
+  <section class="section">
+    <div class="container">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6" style="min-height: 520px">
+
+        <!-- ══ HERO SLIDER ══ -->
+        <div
+          class="lg:col-span-7 relative overflow-hidden rounded-3xl min-h-96 lg:h-auto"
+          role="region"
+          aria-label="Слайдер акций и новинок"
+          aria-roledescription="carousel"
+          tabindex="0"
+          @touchstart.passive="onTouchStart"
+          @touchend="onTouchEnd"
+          @mouseenter="onMouseEnter"
+          @mouseleave="onMouseLeave"
+          @keydown="onKeyDown"
+        >
+          <!-- Backgrounds -->
+          <div class="absolute inset-0">
+            <!-- First slide - optimized for LCP -->
+            <img
+              v-if="activeIndex === 0"
+              :src="slides[0].image"
+              alt=""
+              fetchpriority="high"
+              loading="eager"
+              decoding="sync"
+              class="absolute inset-0 w-full h-full object-cover object-center"
+              aria-hidden="true"
+            />
+            
+            <!-- Other slides -->
+            <div
+              v-for="(slide, i) in slides"
+              v-show="i === activeIndex && i !== 0"
+              :key="slide.id"
+              class="absolute inset-0 bg-cover bg-center will-change-opacity"
+              :style="{ backgroundImage: `url(${slide.image})` }"
+              role="img"
+              :aria-label="slide.title"
+            />
+          </div>
+
+          <!-- Overlay -->
+          <div class="absolute inset-0 bg-linear-to-t from-black/70 via-black/35 to-black/10" aria-hidden="true" />
+
+          <!-- Content -->
+          <div class="relative z-10 flex h-full items-end min-h-96 lg:min-h-0">
+            <div class="p-6 sm:p-8 lg:p-10 max-w-2xl text-white pb-16" aria-live="polite" aria-atomic="true">
+              <p class="text-xs uppercase tracking-widest text-white/60 mb-2">
+                {{ currentSlide.subtitle }}
+              </p>
+              <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 leading-tight">
+                {{ currentSlide.title }}
+              </h1>
+              <p class="text-sm sm:text-base text-white/85 mb-6 leading-relaxed">
+                {{ currentSlide.description }}
+              </p>
+              <a
+                v-if="currentSlide.cta && currentSlide.ctaHref"
+                :href="currentSlide.ctaHref"
+                class="bento-cta"
+              >
+                {{ currentSlide.cta }}
+                <svg class="bento-cta__icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Dots -->
+          <div
+            class="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 flex gap-2"
+            role="tablist"
+            aria-label="Навигация слайдера"
+          >
+            <button
+              v-for="(slide, i) in slides"
+              :key="i"
+              type="button"
+              role="tab"
+              :aria-label="`Слайд ${i + 1}: ${slide.title}`"
+              :aria-selected="i === activeIndex"
+              class="dot"
+              :class="i === activeIndex ? 'dot-active' : ''"
+              @click="goTo(i)"
+            />
+          </div>
+        </div>
+
+        <!-- ══ RIGHT BENTO ══ -->
+        <div class="lg:col-span-5 grid grid-rows-2 gap-5 lg:gap-6">
+
+          <!-- Перегородки -->
+          <div class="relative overflow-hidden rounded-3xl min-h-56">
+            <img
+              src="https://storage.yandexcloud.net/catalog-vfd/covers/alum-hero.webp"
+              alt=""
+              loading="lazy"
+              decoding="async"
+              class="absolute inset-0 w-full h-full object-cover object-center"
+              aria-hidden="true"
+            />
+            <div class="absolute inset-0 bg-linear-to-t from-black/70 via-black/35 to-transparent" aria-hidden="true" />
+            <div class="relative z-10 h-full p-6 flex flex-col justify-end text-white min-h-56">
+              <p class="text-xs uppercase tracking-widest text-white/60 mb-1">Дизайнерские решения</p>
+              <h3 class="text-xl font-bold mb-2 leading-snug">
+                Алюминиевые перегородки и системы открывания
+              </h3>
+              <p class="text-sm text-white/80 mb-4">
+                Изготовление в течение 45 дней после оформления заказа
+              </p>
+              <a href="/partitions" class="bento-cta">
+                Узнать больше
+                <svg class="bento-cta__icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Bottom row -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 lg:gap-6">
+
+            <!-- О компании -->
+            <div class="rounded-2xl bg-linear-to-br from-gray-800 to-teal-700 p-6 text-white flex flex-col justify-between min-h-44">
+              <div>
+                <p class="text-xs uppercase tracking-widest text-white/50 mb-1">Салон ВФД на Кашириных</p>
+                <h4 class="font-bold text-base mb-2 leading-snug">Полный цикл: от замера до монтажа</h4>
+                <p class="text-sm text-white/75">Работаем в Челябинске с 2014 года</p>
+              </div>
+              <a href="/about" class="bento-cta mt-4">
+                Подробнее
+                <svg class="bento-cta__icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+
+            <!-- Портфолио -->
+            <div class="relative overflow-hidden rounded-2xl min-h-44">
+              <img
+                src="https://storage.yandexcloud.net/catalog-vfd/covers/ourworks.webp"
+                alt=""
+                loading="lazy"
+                decoding="async"
+                class="absolute inset-0 w-full h-full object-cover object-center"
+                aria-hidden="true"
+              />
+              <div class="absolute inset-0 bg-black/55" aria-hidden="true" />
+              <div class="relative z-10 h-full p-6 flex flex-col justify-between text-white min-h-44">
+                <div>
+                  <p class="text-xs uppercase tracking-widest text-white/60 mb-1">Портфолио</p>
+                  <h4 class="font-bold text-base leading-snug mb-1">Фотоотчёты с объектов</h4>
+                  <p class="text-sm text-white/75">Живые фото с монтажей — помогут определиться с выбором</p>
+                </div>
+                <a href="/portfolio" class="bento-cta mt-4">
+                  Смотреть
+                  <svg class="bento-cta__icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</template>
+
+<style scoped>
+/* ════ SLIDER OPTIMIZATION ════ */
+/* Container optimization for LCP */
+.lg\:col-span-7 {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 520px;
+}
+
+/* First slide - optimized for LCP (no transition delay) */
+[fetchpriority="high"] {
+  display: block;
+}
+
+/* Other slides - with smooth transition */
+.will-change-opacity {
+  will-change: opacity;
+  transition: opacity 1000ms ease-in-out;
+}
+
+/* Pill-кнопка для bento-карточек — идентична features-card__cta,
+   но на тёмном фоне: border и текст белые, hover заливает белым с тёмным текстом */
+.bento-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  align-self: flex-start;
+  padding: 0.55rem 1.1rem;
+  border-radius: 9999px;
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  background: transparent;
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color 200ms ease-out,
+    border-color     200ms ease-out,
+    color            200ms ease-out,
+    transform        200ms ease-out;
+}
+.bento-cta:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #fff;
+  transform: translateY(-1px);
+}
+.bento-cta:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+.bento-cta__icon {
+  width: 0.875rem;
+  height: 0.875rem;
+  flex-shrink: 0;
+  transition: transform 200ms ease-out;
+}
+.bento-cta:hover .bento-cta__icon {
+  transform: translateX(2px);
+}
+
+/* Dots navigation */
+.dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background-color 300ms ease-out, transform 200ms ease-out;
+}
+.dot:hover {
+  background: rgba(255, 255, 255, 0.6);
+  transform: scale(1.2);
+}
+.dot-active {
+  background: #fff;
+  transform: scale(1.3);
+}
+.dot:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bento-cta,
+  .bento-cta__icon,
+  .dot,
+  .will-change-opacity {
+    transition: none;
+  }
+}
+</style>
