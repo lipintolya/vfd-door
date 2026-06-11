@@ -13,12 +13,12 @@ import {
 ============================================================ */
 const sectionRef = useTemplateRef<HTMLElement>('sectionEl')
 const visible = ref(false)
-const jsReady = ref(false)
 
 let observer: IntersectionObserver | null = null
 
 onMounted(() => {
-  jsReady.value = true
+  // Помечаем <html> что JS загружен — анимации только после этого
+  document.documentElement.classList.add('js-loaded')
 
   const el = sectionRef.value
   if (!el) return
@@ -91,7 +91,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div ref="sectionEl" class="about-page" :class="{ 'js-ready': jsReady }">
+  <div ref="sectionEl" class="about-page">
 
     <!-- ======================================================
          HERO
@@ -601,7 +601,7 @@ onBeforeUnmount(() => {
     transform 700ms ease;
 }
 
-.js-ready .hero-grid:not(.is-visible) {
+:global(.js-loaded) .hero-grid:not(.is-visible) {
   opacity: 0;
   transform: translateY(30px);
 }
@@ -905,7 +905,7 @@ onBeforeUnmount(() => {
     transform 700ms ease;
 }
 
-.js-ready .director-layout:not(.is-visible) {
+:global(.js-loaded) .director-layout:not(.is-visible) {
   opacity: 0;
   transform: translateY(20px);
 }
