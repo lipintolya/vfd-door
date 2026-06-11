@@ -80,8 +80,8 @@ const toggleFaq = (id: number) => {
           Свяжитесь с нами — поможем с выбором и проконсультируем.
         </p>
 
-        <a href="tel:+79000297888" class="faq-cta-button inline-flex items-center gap-2 justify-center">
-          <img src="/svg/phone-call.svg" alt="" class="w-4 h-4" />
+        <a href="tel:+79000297888" class="btn btn-primary inline-flex items-center gap-2">
+          <img src="/svg/w_phone.svg" alt="" class="w-4 h-4 shrink-0" />
           Позвонить
         </a>
       </div>

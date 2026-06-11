@@ -13,10 +13,13 @@ import {
 ============================================================ */
 const sectionRef = useTemplateRef<HTMLElement>('sectionEl')
 const visible = ref(false)
+const jsReady = ref(false)
 
 let observer: IntersectionObserver | null = null
 
 onMounted(() => {
+  jsReady.value = true
+
   const el = sectionRef.value
   if (!el) return
 
@@ -32,9 +35,7 @@ onMounted(() => {
         observer?.disconnect()
       }
     },
-    {
-      threshold: 0.08,
-    }
+    { threshold: 0.05 }
   )
 
   observer.observe(el)
@@ -90,7 +91,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div ref="sectionEl" class="about-page">
+  <div ref="sectionEl" class="about-page" :class="{ 'js-ready': jsReady }">
 
     <!-- ======================================================
          HERO
@@ -129,7 +130,7 @@ onBeforeUnmount(() => {
 
             <div class="hero-actions">
               <a href="tel:+79630807888" class="hero-btn hero-btn--primary inline-flex items-center gap-2">
-                <img src="/svg/phone-call.svg" alt="" class="w-4 h-4" />
+                <img src="/svg/w_phone.svg" alt="" class="w-4 h-4 shrink-0" />
                 Позвонить
               </a>
 
@@ -423,7 +424,20 @@ onBeforeUnmount(() => {
             class="payment-card"
           >
             <div class="payment-card__top">
-              <div class="payment-card__dot" />
+              <div class="payment-card__icon">
+                <img
+                  :src="
+                    method.icon === 'cash'     ? '/svg/w_cash_icon.svg'      :
+                    method.icon === 'card'     ? '/svg/w_bank_card.svg'      :
+                    method.icon === 'transfer' ? '/svg/w_transaction_icon.svg' :
+                    '/svg/w_sbp.svg'
+                  "
+                  :alt="method.title"
+                  class="payment-card__icon-img"
+                  width="28"
+                  height="28"
+                />
+              </div>
             </div>
 
             <h3 class="payment-card__title">
@@ -536,7 +550,7 @@ onBeforeUnmount(() => {
 <style scoped>
 .about-page {
   background: #ffffff;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 /* ============================================================
@@ -582,12 +596,14 @@ onBeforeUnmount(() => {
   grid-template-columns: 1fr 1.1fr;
   gap: 4rem;
   align-items: center;
-
-  opacity: 0;
-  transform: translateY(30px);
   transition:
     opacity 700ms ease,
     transform 700ms ease;
+}
+
+.js-ready .hero-grid:not(.is-visible) {
+  opacity: 0;
+  transform: translateY(30px);
 }
 
 .hero-grid.is-visible {
@@ -884,12 +900,14 @@ onBeforeUnmount(() => {
   grid-template-columns: 380px 1fr;
   gap: 4rem;
   align-items: center;
-
-  opacity: 0;
-  transform: translateY(20px);
   transition:
     opacity 700ms ease,
     transform 700ms ease;
+}
+
+.js-ready .director-layout:not(.is-visible) {
+  opacity: 0;
+  transform: translateY(20px);
 }
 
 .director-layout.is-visible {
@@ -1035,14 +1053,24 @@ onBeforeUnmount(() => {
 }
 
 .payment-card__top {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
-.payment-card__dot {
-  width: 1rem;
-  height: 1rem;
-  border-radius: 999px;
-  background: #14b8a6;
+.payment-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.875rem;
+  background: linear-gradient(135deg, #0d9488, #14b8a6);
+  flex-shrink: 0;
+}
+
+.payment-card__icon-img {
+  width: 1.625rem;
+  height: 1.625rem;
+  object-fit: contain;
 }
 
 .payment-card__title {

@@ -6,6 +6,8 @@ import CatalogGrid from './CatalogGrid.vue'
 import CatalogPagination from './CatalogPagination.vue'
 import type { CatalogCardItem, CatalogFilterOption, CatalogSort } from './types'
 
+const mobileFiltersOpen = ref(false)
+
 /* ============================================================
    Props
    ============================================================ */
@@ -163,7 +165,26 @@ watch(
     </div>
 
     <div class="catalog-layout">
+
+      <!-- Mobile filter toggle -->
+      <button
+        type="button"
+        class="catalog-filters-toggle"
+        :class="{ 'is-active': hasActiveFilters }"
+        @click="mobileFiltersOpen = !mobileFiltersOpen"
+      >
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" class="w-4 h-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 4h18M7 10h10M11 16h2" />
+        </svg>
+        <span>{{ mobileFiltersOpen ? 'Скрыть фильтры' : 'Показать фильтры' }}</span>
+        <span v-if="hasActiveFilters" class="catalog-filters-toggle__badge">
+          {{ [activeSeries, activeCoating, activeColor, glassOnly, searchQuery].filter(Boolean).length }}
+        </span>
+      </button>
+
       <CatalogFilters
+        class="catalog-filters-panel"
+        :class="{ 'is-mobile-open': mobileFiltersOpen }"
         v-model:active-series="activeSeries"
         v-model:active-coating="activeCoating"
         v-model:active-color="activeColor"

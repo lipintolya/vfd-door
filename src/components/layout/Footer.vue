@@ -101,16 +101,16 @@ onUnmounted(() => {
               Работаем с 2014 года.
             </p>
             <!-- Socials -->
-            <div class="flex gap-3 mt-5" role="list" aria-label="Социальные сети">
+            <div class="flex gap-4 mt-5" role="list" aria-label="Социальные сети">
               <div role="listitem">
                 <a
-                  href="https://vk.com/vfddoors174"
+                  href="https://vk.com/vfddoors74"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="ВКонтакте (открывается в новой вкладке)"
-                  class="opacity-50 hover:opacity-100 transition-opacity duration-200 block"
+                  class="opacity-60 hover:opacity-100 transition-opacity duration-200 block"
                 >
-                  <img src="https://storage.yandexcloud.net/catalog-vfd/icons/vk_logo.svg" alt="" class="w-7 h-7" width="28" height="28" />
+                  <img src="/svg/w_vk.svg" alt="" class="w-6 h-6" width="24" height="24" />
                 </a>
               </div>
               <div role="listitem">
@@ -119,9 +119,20 @@ onUnmounted(() => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Telegram (открывается в новой вкладке)"
-                  class="opacity-50 hover:opacity-100 transition-opacity duration-200 block"
+                  class="opacity-60 hover:opacity-100 transition-opacity duration-200 block"
                 >
-                  <img src="https://storage.yandexcloud.net/catalog-vfd/icons/tg_logo.svg" alt="" class="w-7 h-7" width="28" height="28" />
+                  <img src="/svg/w_tg_logo.svg" alt="" class="w-6 h-6" width="24" height="24" />
+                </a>
+              </div>
+              <div role="listitem">
+                <a
+                  href="https://max.ru/id452402308842_biz"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Max (открывается в новой вкладке)"
+                  class="opacity-60 hover:opacity-100 transition-opacity duration-200 block"
+                >
+                  <img src="/svg/w_max.svg" alt="" class="w-6 h-6" width="24" height="24" />
                 </a>
               </div>
             </div>
@@ -196,7 +207,12 @@ onUnmounted(() => {
                     flex flex-col sm:flex-row gap-3
                     sm:items-center sm:justify-between
                     text-xs text-white/40">
-          <span>© {{ year }} VFD. Все права защищены.</span>
+          <span>
+            © {{ year }} VFD. Все права защищены.
+            <a href="/privacy" class="text-white/60 hover:text-white transition-colors duration-200 ml-3">
+              Политика конфиденциальности
+            </a>
+          </span>
           <span>
             Разработка —
             <a

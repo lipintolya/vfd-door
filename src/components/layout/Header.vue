@@ -230,8 +230,8 @@ onUnmounted(() => {
       <div
         class="flex items-center justify-between rounded-full border px-5 py-3 transition-all duration-300"
         :class="scrolled
-          ? 'bg-white/90 backdrop-blur-md border-gray-200'
-          : 'bg-gray-50/85 backdrop-blur-sm border-gray-200/60'"
+          ? 'bg-white/95 backdrop-blur-md border-gray-200 shadow-[0_4px_20px_rgba(0,0,0,0.10)]'
+          : 'bg-white/88 backdrop-blur-sm border-gray-200'"
       >
 
         <!-- Logo -->

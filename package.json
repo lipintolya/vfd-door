@@ -17,6 +17,7 @@
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
     "@astrojs/vue": "^6.0.1",
+    "@fontsource-variable/onest": "^5.2.11",
     "@supabase/supabase-js": "^2.106.0",
     "@tailwindcss/vite": "^4.3.0",
     "astro": "^6.4.4",

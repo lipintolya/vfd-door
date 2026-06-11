@@ -17,8 +17,8 @@
                 href="tel:+79000297888"
                 class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors group"
               >
-                <div class="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center shrink-0 group-hover:bg-teal-200 transition-colors">
-                  <img src="/svg/phone-call.svg" alt="" class="w-5 h-5" />
+                <div class="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0 group-hover:bg-teal-600 transition-colors">
+                  <img src="/svg/w_phone.svg" alt="" class="w-5 h-5" />
                 </div>
                 <div>
                   <p class="font-semibold text-gray-900 group-hover:text-teal-600 transition-colors">+7 (900) 029-78-88</p>
@@ -29,8 +29,8 @@
                 href="tel:+79630807888"
                 class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors group"
               >
-                <div class="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center shrink-0 group-hover:bg-teal-200 transition-colors">
-                  <img src="/svg/phone-call.svg" alt="" class="w-5 h-5" />
+                <div class="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0 group-hover:bg-teal-600 transition-colors">
+                  <img src="/svg/w_phone.svg" alt="" class="w-5 h-5" />
                 </div>
                 <div>
                   <p class="font-semibold text-gray-900 group-hover:text-teal-600 transition-colors">+7 (963) 080-78-88</p>
@@ -47,11 +47,8 @@
               href="mailto:vfddoors74@mail.ru"
               class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors group"
             >
-              <div class="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center shrink-0 group-hover:bg-teal-200 transition-colors">
-                <svg class="w-5 h-5 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                </svg>
+              <div class="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0 group-hover:bg-teal-600 transition-colors">
+                <img src="/svg/w_mail_logo.svg" alt="" class="w-5 h-5" />
               </div>
               <div>
                 <p class="font-semibold text-gray-900 group-hover:text-teal-600 transition-colors">vfddoors74@mail.ru</p>
