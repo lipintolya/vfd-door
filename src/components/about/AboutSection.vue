@@ -19,6 +19,8 @@ let observer: IntersectionObserver | null = null
 onMounted(() => {
   const el = sectionRef.value
 
+  window.addEventListener('keydown', handleKeydown)
+
   if (
     !el ||
     window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -53,7 +55,10 @@ onMounted(() => {
   observer.observe(el)
 })
 
-onBeforeUnmount(() => observer?.disconnect())
+onBeforeUnmount(() => {
+  observer?.disconnect()
+  window.removeEventListener('keydown', handleKeydown)
+})
 
 /* ============================================================
    Lightbox
@@ -72,34 +77,20 @@ const closeLightbox = () => {
 
 const prevImage = () => {
   if (lightboxIndex.value === null) return
-
-  lightboxIndex.value =
-    (lightboxIndex.value - 1 + galleryImages.length) %
-    galleryImages.length
+  lightboxIndex.value = (lightboxIndex.value - 1 + galleryImages.length) % galleryImages.length
 }
 
 const nextImage = () => {
   if (lightboxIndex.value === null) return
-
-  lightboxIndex.value =
-    (lightboxIndex.value + 1) % galleryImages.length
+  lightboxIndex.value = (lightboxIndex.value + 1) % galleryImages.length
 }
 
 const handleKeydown = (e: KeyboardEvent) => {
   if (lightboxIndex.value === null) return
-
   if (e.key === 'Escape') closeLightbox()
   if (e.key === 'ArrowLeft') prevImage()
   if (e.key === 'ArrowRight') nextImage()
 }
-
-onMounted(() => {
-  window.addEventListener('keydown', handleKeydown)
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('keydown', handleKeydown)
-})
 </script>
 
 <template>
@@ -400,6 +391,9 @@ onBeforeUnmount(() => {
               :src="img.src"
               :alt="img.alt"
               loading="lazy"
+              decoding="async"
+              width="480"
+              height="600"
             />
 
             <span class="gallery-card__overlay">
@@ -438,12 +432,7 @@ onBeforeUnmount(() => {
             <div class="payment-card__top">
               <div class="payment-card__icon">
                 <img
-                  :src="
-                    method.icon === 'cash'     ? '/svg/w_cash_icon.svg'      :
-                    method.icon === 'card'     ? '/svg/w_bank_card.svg'      :
-                    method.icon === 'transfer' ? '/svg/w_transaction_icon.svg' :
-                    '/svg/w_sbp.svg'
-                  "
+                  :src="method.iconPath"
                   :alt="method.title"
                   class="payment-card__icon-img"
                   width="28"
@@ -543,6 +532,7 @@ onBeforeUnmount(() => {
           :src="galleryImages[lightboxIndex]?.src"
           :alt="galleryImages[lightboxIndex]?.alt"
           class="lightbox-image"
+          decoding="async"
         />
 
         <button

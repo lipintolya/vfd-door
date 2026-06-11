@@ -77,24 +77,24 @@ export const paymentMethods = [
     id: 1,
     title: 'Наличные',
     description: 'Оплата наличными в салоне для оформления заказа',
-    icon: 'cash',
+    iconPath: '/svg/w_cash_icon.svg',
   },
   {
     id: 2,
     title: 'Банковская карта',
     description: 'Оплата картами Visa, Mastercard, МИР через терминал в салоне',
-    icon: 'card',
+    iconPath: '/svg/w_bank_card.svg',
   },
   {
     id: 3,
     title: 'Безналичный расчёт',
     description: 'Оплата по счёту для юридических лиц и ИП без НДС',
-    icon: 'transfer',
+    iconPath: '/svg/w_transaction_icon.svg',
   },
   {
     id: 4,
     title: 'QR-код СБП',
     description: 'Быстрая оплата через Систему быстрых платежей по QR-коду',
-    icon: 'qr',
+    iconPath: '/svg/w_sbp.svg',
   },
 ]
