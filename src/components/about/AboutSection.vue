@@ -17,16 +17,28 @@ const visible = ref(false)
 let observer: IntersectionObserver | null = null
 
 onMounted(() => {
-  // Помечаем <html> что JS загружен — анимации только после этого
-  document.documentElement.classList.add('js-loaded')
-
   const el = sectionRef.value
-  if (!el) return
 
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  if (
+    !el ||
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  ) {
     visible.value = true
+    document.documentElement.classList.add('js-loaded')
     return
   }
+
+  // Элемент уже в зоне видимости (страница О нас — контент сразу на экране)
+  const rect = el.getBoundingClientRect()
+  if (rect.top < window.innerHeight) {
+    visible.value = true
+    document.documentElement.classList.add('js-loaded')
+    return
+  }
+
+  // Элемент ниже fold — анимируем при появлении
+  visible.value = false
+  document.documentElement.classList.add('js-loaded')
 
   observer = new IntersectionObserver(
     ([entry]) => {
@@ -773,9 +785,7 @@ onBeforeUnmount(() => {
 .floating-card {
   position: absolute;
 
-  backdrop-filter: blur(16px);
-
-  background: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.96);
 
   border: 1px solid rgba(255,255,255,0.5);
 
