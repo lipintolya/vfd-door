@@ -14,19 +14,19 @@ const SOCIAL_NETWORKS = [
     name: 'VK',
     label: 'ВКонтакте',
     url: 'https://vk.com/vfddoors74',
-    icon: '/svg/w_vk.svg',
+    icon: '/svg/b_vk_logo.svg',
   },
   {
     name: 'Telegram',
     label: 'Telegram',
     url: 'https://t.me/vfddoors174',
-    icon: '/svg/w_tg_logo.svg',
+    icon: '/svg/b_tg_logo.svg',
   },
   {
     name: 'MAX',
     label: 'Max',
     url: 'https://max.ru/id452402308842_biz',
-    icon: '/svg/w_max.svg',
+    icon: '/svg/b_max_logo.svg',
   },
 ] as const
 
