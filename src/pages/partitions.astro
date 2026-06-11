@@ -1,20 +1,1223 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
-import PartitionsPage from '../components/partitions/PartitionsPage.vue'
 import Breadcrumbs from '../components/ui/Breadcrumbs.astro'
 
-const title = 'Алюминиевые перегородки и системы — ВФД в Челябинске'
-const description = 'Алюминиевые перегородки, раздвижные системы и стеклянные конструкции от Владимирской фабрики дверей. Замер и проект бесплатно. Монтаж в Челябинске.'
+const title       = 'Алюминиевые перегородки GRAFIA — ВФД Челябинск'
+const description = 'Раздвижные и распашные алюминиевые перегородки из профилей GRAFIA отечественного производства. Замер бесплатно. Монтаж по Челябинску. Срок изготовления 45 рабочих дней.'
+
+const canonicalUrl = Astro.site ? new URL('/partitions', Astro.site).href : undefined
 
 const breadcrumbItems = [
-  { label: 'Главная', href: '/' },
+  { label: 'Главная',        href: '/' },
   { label: 'Перегородки' },
+]
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type':    'Service',
+  name:        'Алюминиевые перегородки GRAFIA',
+  description,
+  url:         canonicalUrl,
+  provider: {
+    '@type': 'LocalBusiness',
+    name:    'Салон дверей ВФД',
+    telephone: '+79000297888',
+    address: {
+      '@type':          'PostalAddress',
+      streetAddress:    'ул. Братьев Кашириных, 131Б',
+      addressLocality:  'Челябинск',
+      addressCountry:   'RU',
+    },
+  },
+}
+
+const tracks = [
+  {
+    num:   '1 трек',
+    title: 'Одна направляющая',
+    desc:  'Для небольших проёмов с одним или двумя полотнами. Монтируется перед проёмом — к стене или к потолку.',
+    variants: [
+      'Одно полотно — сдвигается в сторону вдоль стены',
+      'Два полотна — расходятся от центра в противоположные стороны',
+    ],
+  },
+  {
+    num:   '2 трека',
+    title: 'Двойная направляющая',
+    desc:  'Для небольших и средних проёмов. До четырёх полотен. Крепление к стене или к потолку.',
+    variants: [
+      'Каскадное открывание обоих полотен в одну сторону',
+      'Одно полотно движется, крайние — стационарны',
+      'Открывание по центру — полотна расходятся в стороны',
+    ],
+  },
+  {
+    num:   '3 трека',
+    title: 'Тройная направляющая',
+    desc:  'Для средних и больших проёмов. До шести полотен. Крепление только к потолку.',
+    variants: [
+      '3 полотна — каскад, проём открывается на ширину двух',
+      '6 полотен — две группы по три, открываются от центра',
+    ],
+  },
+]
+
+const mountings = [
+  {
+    icon: '⬆',
+    title: 'Скрытое (к потолку)',
+    desc:  'Направляющая утапливается в потолочную нишу. Максимально минималистичный вид — профиль не видно.',
+  },
+  {
+    icon: '▲',
+    title: 'Открытое к потолку',
+    desc:  'Направляющая крепится к поверхности потолка. Монтаж без штробления и сложных работ.',
+  },
+  {
+    icon: '◀',
+    title: 'К стене',
+    desc:  'Крепление к боковой стене для 1 и 2 тректовых систем. Простая установка, не требует монтажа в потолок.',
+  },
+]
+
+const modelSectional = ['V01', 'V02', 'V03', 'R01', 'R02', 'R03']
+const modelOverlay   = ['R00','R01','R02','R03','R04','R05','R06','R07','R08','R09','R10','R11','R12','R13','R14','R15','R21','R22','R23','R24','R25','R26']
+
+const colors = [
+  { name: 'Black Sand',       hex: '#1c1a18' },
+  { name: 'Black Matt',       hex: '#111111' },
+  { name: 'Dark Brown Matt',  hex: '#3d2b1f' },
+  { name: 'Grafit Matt',      hex: '#3a3c40' },
+  { name: 'Champagne Matt',   hex: '#e8dfc4' },
+  { name: 'Bronze',           hex: '#7c5c35' },
+  { name: 'Bronze Light',     hex: '#a07848' },
+  { name: 'Old Gold Matt',    hex: '#c9a040' },
+  { name: 'Gold Matt',        hex: '#d4b04a' },
+  { name: 'Chrome',           hex: '#c0c4cc' },
+  { name: 'White 9003 Matt',  hex: '#f2f2f2' },
+  { name: 'White 9010 Matt',  hex: '#f5f4ef' },
+  { name: 'White 9003 Sand',  hex: '#e8e4d8' },
+]
+
+const glasses = [
+  {
+    group: 'Прозрачные',
+    items: ['Transporente Clearvision', 'Transporente', 'Transporente Bronzo', 'Transporente Grafite'],
+  },
+  {
+    group: 'Матовые / Сатин',
+    items: ['Satinato Bianco', 'Satinato Bronza', 'Satinato Grafite', 'Line 01'],
+  },
+  {
+    group: 'Зеркальные',
+    items: ['Mirror', 'Mirror Grey', 'Mirror Bronze'],
+  },
+  {
+    group: 'Солнцезащитные',
+    items: ['STOPSOL Transporente', 'STOPSOL Bronzo', 'STOPSOL Grafite'],
+  },
+]
+
+const advantages = [
+  {
+    icon: '⬡',
+    title: 'Профили GRAFIA',
+    text: 'Отечественное производство. Анодированные или порошковые — не ржавеют, не деформируются. Индивидуальная окраска по RAL/NCS.',
+  },
+  {
+    icon: '◈',
+    title: 'Закалённое стекло',
+    text: 'Толщина 4, 6 и 8 мм. Прозрачное, матовое, тонированное, зеркальное, солнцезащитное. Безопасно при ударе.',
+  },
+  {
+    icon: '⇄',
+    title: 'Сборно-разборная конструкция',
+    text: 'Легко демонтируется при необходимости. Не требует капитального ремонта при перепланировке.',
+  },
+  {
+    icon: '◎',
+    title: 'Замер и проект',
+    text: 'Бесплатный выезд специалиста. Чертёж и смета в течение рабочего дня. Нестандартные размеры и скошенные потолки.',
+  },
+  {
+    icon: '⟐',
+    title: 'Монтаж под ключ',
+    text: 'Профессиональная бригада по Челябинску и области. Соблюдение сроков и чистота после работ.',
+  },
+  {
+    icon: '◷',
+    title: '45 рабочих дней',
+    text: 'Срок изготовления от момента последнего согласования. Доставка по Челябинску включена в стоимость.',
+  },
+]
+
+const steps = [
+  { num: '01', title: 'Заявка',  text: 'Позвоните или напишите — опишите задачу, пришлите фото или чертёж.' },
+  { num: '02', title: 'Замер',   text: 'Бесплатный выезд специалиста на объект в Челябинске.' },
+  { num: '03', title: 'Проект',  text: 'Чертёж, спецификация и коммерческое предложение за 1 рабочий день.' },
+  { num: '04', title: 'Монтаж', text: 'Производство 45 рабочих дней, доставка и профессиональная установка.' },
 ]
 ---
 
-<BaseLayout title={title} description={description}>
-  <div class="container" style="padding-top: clamp(1.5rem, 3vw, 2rem)">
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonicalUrl}
+  structuredData={structuredData}
+>
+  <div class="container" style="padding-top: clamp(1rem, 2vw, 1.5rem)">
     <Breadcrumbs items={breadcrumbItems} />
   </div>
-  <PartitionsPage client:load />
+
+  <!-- ══════════════════════════════════════
+       HERO
+  ══════════════════════════════════════ -->
+  <section class="pt-hero">
+    <div class="container">
+      <div class="pt-hero__inner">
+
+        <div class="pt-hero__content">
+          <span class="pt-badge">Официальный партнёр VFD</span>
+          <h1 class="pt-hero__title">
+            Алюминиевые<br />перегородки
+          </h1>
+          <p class="pt-hero__desc">
+            Раздвижные и распашные перегородки из профилей&nbsp;
+            <strong>GRAFIA</strong> отечественного производства.
+            Качественно новый подход к зонированию — минималистичный дизайн,
+            повышенная прочность, сборно-разборная конструкция.
+          </p>
+
+          <div class="pt-hero__stats">
+            <div class="pt-hero__stat">
+              <span class="pt-hero__stat-value">45</span>
+              <span class="pt-hero__stat-label">дней изготовление</span>
+            </div>
+            <div class="pt-hero__stat-sep" aria-hidden="true"></div>
+            <div class="pt-hero__stat">
+              <span class="pt-hero__stat-value">3</span>
+              <span class="pt-hero__stat-label">типа направляющих</span>
+            </div>
+            <div class="pt-hero__stat-sep" aria-hidden="true"></div>
+            <div class="pt-hero__stat">
+              <span class="pt-hero__stat-value">13+</span>
+              <span class="pt-hero__stat-label">цветов профиля</span>
+            </div>
+          </div>
+
+          <div class="pt-hero__cta">
+            <a href="tel:+79000297888" class="btn btn-primary">Получить расчёт</a>
+            <a href="/contacts" class="btn btn-ghost">Контакты</a>
+          </div>
+        </div>
+
+        <!-- Место для фото -->
+        <div class="pt-hero__visual">
+          <div class="pt-img-placeholder">
+            <span>Фото перегородки</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       ЧТО ТАКОЕ СИСТЕМЫ GRAFIA
+  ══════════════════════════════════════ -->
+  <section class="section pt-about">
+    <div class="container">
+      <div class="pt-about__inner">
+        <div class="pt-about__text">
+          <h2 class="pt-section-title">Система GRAFIA</h2>
+          <p class="pt-about__lead">
+            Алюминиевые перегородки с остеклением — современный подход к зонированию
+            без капитального ремонта. Профили GRAFIA производятся в России, прошли
+            сертификацию и отличаются повышенной прочностью при минимальной ширине рамы.
+          </p>
+          <ul class="pt-about__list">
+            <li>Раздвижные и распашные системы под любой проём</li>
+            <li>Закалённое стекло 4, 6 и 8 мм — прозрачное, матовое, зеркальное</li>
+            <li>Возможность демонтажа без следов при перепланировке</li>
+            <li>Окраска профиля по RAL/NCS под любой интерьер</li>
+            <li>Высота полотна до 5 м при секционном декоре</li>
+          </ul>
+        </div>
+        <div class="pt-about__visual">
+          <div class="pt-img-placeholder pt-img-placeholder--tall">
+            <span>Фото монтажа</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       ТИПЫ РАЗДВИЖЕНИЯ
+  ══════════════════════════════════════ -->
+  <section class="section pt-tracks">
+    <div class="container">
+      <div class="pt-section-header">
+        <h2 class="pt-section-title">Типы раздвижения</h2>
+        <p class="pt-section-sub">
+          Количество тектов (направляющих) определяет возможные конфигурации
+          и максимальное число полотен в системе
+        </p>
+      </div>
+
+      <div class="pt-tracks__grid">
+        {tracks.map((t) => (
+          <div class="pt-track-card">
+            <div class="pt-track-card__num">{t.num}</div>
+
+            <div class="pt-track-card__visual">
+              <div class="pt-img-placeholder pt-img-placeholder--card">
+                <span>Схема {t.num}</span>
+              </div>
+            </div>
+
+            <div class="pt-track-card__body">
+              <h3 class="pt-track-card__title">{t.title}</h3>
+              <p class="pt-track-card__desc">{t.desc}</p>
+              <ul class="pt-track-card__variants">
+                {t.variants.map((v) => <li>{v}</li>)}
+              </ul>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       ТИПЫ КРЕПЛЕНИЯ
+  ══════════════════════════════════════ -->
+  <section class="section pt-mount">
+    <div class="container">
+      <div class="pt-section-header">
+        <h2 class="pt-section-title">Типы крепления</h2>
+        <p class="pt-section-sub">
+          Способ крепления выбирается в зависимости от конструкции перекрытий и числа треков
+        </p>
+      </div>
+
+      <div class="pt-mount__grid">
+        {mountings.map((m) => (
+          <div class="pt-mount-card">
+            <div class="pt-mount-card__icon" aria-hidden="true">{m.icon}</div>
+            <h3 class="pt-mount-card__title">{m.title}</h3>
+            <p class="pt-mount-card__desc">{m.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       МОДЕЛЬНЫЙ РЯД СТВОРОК
+  ══════════════════════════════════════ -->
+  <section class="section pt-models">
+    <div class="container">
+      <div class="pt-section-header">
+        <h2 class="pt-section-title">Модельный ряд створок</h2>
+        <p class="pt-section-sub">
+          Два типа декора — секционный и накладной. Оба допускают эксклюзивные заказы
+        </p>
+      </div>
+
+      <div class="pt-models__grid">
+
+        <div class="pt-model-block">
+          <div class="pt-model-block__head">
+            <h3 class="pt-model-block__title">Секционный декор</h3>
+            <p class="pt-model-block__desc">
+              Разделяет стекло на несколько частей, придаёт конструкции дополнительное
+              усиление. Позволяет изготавливать полотна высотой до&nbsp;5&nbsp;м.
+            </p>
+          </div>
+          <div class="pt-model-block__visual">
+            <div class="pt-img-placeholder pt-img-placeholder--model">
+              <span>Фото секционного декора</span>
+            </div>
+          </div>
+          <div class="pt-model-block__tags">
+            {modelSectional.map(m => <span class="pt-model-tag">{m}</span>)}
+          </div>
+        </div>
+
+        <div class="pt-model-block">
+          <div class="pt-model-block__head">
+            <h3 class="pt-model-block__title">Накладной декор</h3>
+            <p class="pt-model-block__desc">
+              Декоративные накладки на стекло. Выбор из каталога или изготовление
+              эксклюзивной модели по вашему эскизу.
+            </p>
+          </div>
+          <div class="pt-model-block__visual">
+            <div class="pt-img-placeholder pt-img-placeholder--model">
+              <span>Фото накладного декора</span>
+            </div>
+          </div>
+          <div class="pt-model-block__tags">
+            {modelOverlay.map(m => <span class="pt-model-tag">{m}</span>)}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       ЦВЕТОВЫЕ РЕШЕНИЯ ПРОФИЛЯ
+  ══════════════════════════════════════ -->
+  <section class="section pt-palette">
+    <div class="container">
+      <div class="pt-section-header">
+        <h2 class="pt-section-title">Цветовые решения профиля</h2>
+        <p class="pt-section-sub">
+          Профили окрашены порошковой полимерной краской. Возможна индивидуальная
+          окраска по&nbsp;каталогу RAL&nbsp;/&nbsp;NCS под ваш интерьер
+        </p>
+      </div>
+
+      <div class="pt-palette__grid">
+        {colors.map(c => (
+          <div class="pt-swatch">
+            <span
+              class="pt-swatch__color"
+              style={`background:${c.hex}`}
+              aria-hidden="true"
+            />
+            <span class="pt-swatch__name">{c.name}</span>
+          </div>
+        ))}
+      </div>
+
+      <p class="pt-palette__note">
+        Возможна индивидуальная окраска по любому оттенку RAL или NCS — обсуждается при заказе
+      </p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       ЗАПОЛНЕНИЕ ПЕРЕГОРОДОК
+  ══════════════════════════════════════ -->
+  <section class="section pt-glass">
+    <div class="container">
+      <div class="pt-section-header">
+        <h2 class="pt-section-title">Заполнение перегородок</h2>
+        <p class="pt-section-sub">
+          Закалённые стёкла повышенной прочности (4, 6 и 8&nbsp;мм) и рифлёные без закалки.
+          Возможна установка зеркала вместо стекла
+        </p>
+      </div>
+
+      <div class="pt-glass__grid">
+        {glasses.map(g => (
+          <div class="pt-glass-card">
+            <h3 class="pt-glass-card__group">{g.group}</h3>
+            <ul class="pt-glass-card__list">
+              {g.items.map(item => <li>{item}</li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      <div class="pt-glass__specs">
+        <div class="pt-glass__spec">
+          <span class="pt-glass__spec-value">4 мм</span>
+          <span class="pt-glass__spec-label">базовая толщина</span>
+        </div>
+        <div class="pt-glass__spec">
+          <span class="pt-glass__spec-value">6 мм</span>
+          <span class="pt-glass__spec-label">стандарт</span>
+        </div>
+        <div class="pt-glass__spec">
+          <span class="pt-glass__spec-value">8 мм</span>
+          <span class="pt-glass__spec-label">усиленное</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       ПРЕИМУЩЕСТВА (тёмная секция)
+  ══════════════════════════════════════ -->
+  <section class="section pt-adv">
+    <div class="container">
+      <div class="pt-section-header pt-section-header--light">
+        <h2 class="pt-section-title pt-section-title--light">Почему выбирают нас</h2>
+        <p class="pt-section-sub pt-section-sub--light">
+          Официальный партнёр VFD в Челябинске. Опыт с 2014 года
+        </p>
+      </div>
+
+      <div class="pt-adv__grid">
+        {advantages.map(a => (
+          <div class="pt-adv-card">
+            <span class="pt-adv-card__icon" aria-hidden="true">{a.icon}</span>
+            <h3 class="pt-adv-card__title">{a.title}</h3>
+            <p class="pt-adv-card__text">{a.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       ЭТАПЫ РАБОТЫ
+  ══════════════════════════════════════ -->
+  <section class="section pt-steps">
+    <div class="container">
+      <div class="pt-section-header">
+        <h2 class="pt-section-title">Как мы работаем</h2>
+        <p class="pt-section-sub">
+          От первого звонка до готовой перегородки — чётко и прозрачно
+        </p>
+      </div>
+
+      <div class="pt-steps__grid">
+        {steps.map((s, i) => (
+          <div class="pt-step">
+            <div class="pt-step__num">{s.num}</div>
+            <h3 class="pt-step__title">{s.title}</h3>
+            <p class="pt-step__text">{s.text}</p>
+            {i < steps.length - 1 && (
+              <div class="pt-step__arrow" aria-hidden="true">→</div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       CTA
+  ══════════════════════════════════════ -->
+  <section class="pt-cta">
+    <div class="container">
+      <div class="pt-cta__inner">
+        <div class="pt-cta__text">
+          <h2 class="pt-cta__title">Рассчитаем стоимость бесплатно</h2>
+          <p class="pt-cta__desc">
+            Позвоните или напишите — специалист выедет на замер, составит проект
+            и коммерческое предложение за один рабочий день
+          </p>
+        </div>
+        <div class="pt-cta__actions">
+          <a href="tel:+79000297888" class="btn btn-primary">
+            +7 (900) 029-78-88
+          </a>
+          <a href="/contacts" class="btn pt-cta__outline">
+            Написать нам
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </BaseLayout>
+
+<style>
+/* ═══════════════════════════════════════
+   SHARED
+═══════════════════════════════════════ */
+.pt-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.875rem;
+  border-radius: 9999px;
+  background: rgba(20, 184, 166, 0.12);
+  border: 1px solid rgba(20, 184, 166, 0.3);
+  color: #2dd4bf;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+
+.pt-section-header {
+  margin-bottom: clamp(1.75rem, 3vw, 2.5rem);
+  max-width: 640px;
+}
+
+.pt-section-header--center {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.pt-section-title {
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: #0f172a;
+  margin: 0 0 0.5rem;
+}
+
+.pt-section-title--light { color: #fff; }
+
+.pt-section-sub {
+  font-size: 1rem;
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.pt-section-sub--light { color: #94a3b8; }
+
+/* image placeholder */
+.pt-img-placeholder {
+  width: 100%;
+  aspect-ratio: 4/3;
+  background: #f1f5f9;
+  border: 2px dashed #e2e8f0;
+  border-radius: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  font-size: 0.875rem;
+  font-style: italic;
+}
+.pt-img-placeholder--tall  { aspect-ratio: 3/4; }
+.pt-img-placeholder--card  { aspect-ratio: 16/9; }
+.pt-img-placeholder--model { aspect-ratio: 4/3; }
+
+/* ═══════════════════════════════════════
+   HERO
+═══════════════════════════════════════ */
+.pt-hero {
+  background: #0f172a;
+  padding: clamp(3rem, 6vw, 5rem) 0 clamp(3.5rem, 6vw, 6rem);
+}
+
+.pt-hero__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+@media (max-width: 860px) {
+  .pt-hero__inner { grid-template-columns: 1fr; gap: 2.5rem; }
+}
+
+.pt-hero__title {
+  font-size: clamp(2.75rem, 6vw, 5rem);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+  color: #fff;
+  margin: 0 0 1.25rem;
+}
+
+.pt-hero__desc {
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  color: #94a3b8;
+  line-height: 1.65;
+  margin: 0 0 2rem;
+}
+
+.pt-hero__desc strong { color: #e2e8f0; font-weight: 600; }
+
+.pt-hero__stats {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.pt-hero__stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.pt-hero__stat-value {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #14b8a6;
+  line-height: 1;
+}
+
+.pt-hero__stat-label {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-top: 0.125rem;
+}
+
+.pt-hero__stat-sep {
+  width: 1px;
+  height: 2.5rem;
+  background: rgba(255,255,255,0.1);
+}
+
+.pt-hero__cta {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.pt-hero__visual {
+  position: relative;
+}
+
+.pt-hero__visual .pt-img-placeholder {
+  aspect-ratio: 3/4;
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(255,255,255,0.1);
+  color: #475569;
+  border-radius: 1.5rem;
+}
+
+/* ═══════════════════════════════════════
+   ABOUT
+═══════════════════════════════════════ */
+.pt-about { background: #fff; }
+
+.pt-about__inner {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 4rem;
+  align-items: center;
+}
+
+@media (max-width: 860px) {
+  .pt-about__inner { grid-template-columns: 1fr; gap: 2rem; }
+}
+
+.pt-about__lead {
+  font-size: 1.0625rem;
+  color: #374151;
+  line-height: 1.7;
+  margin: 0 0 1.25rem;
+}
+
+.pt-about__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.pt-about__list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  font-size: 0.9375rem;
+  color: #374151;
+  line-height: 1.5;
+}
+
+.pt-about__list li::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #14b8a6;
+  flex-shrink: 0;
+  margin-top: 0.5rem;
+}
+
+/* ═══════════════════════════════════════
+   TRACKS
+═══════════════════════════════════════ */
+.pt-tracks { background: #f8fafc; }
+
+.pt-tracks__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 860px) {
+  .pt-tracks__grid { grid-template-columns: 1fr; }
+}
+
+.pt-track-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 200ms ease, transform 200ms ease;
+}
+
+.pt-track-card:hover {
+  box-shadow: 0 8px 28px rgba(0,0,0,0.09);
+  transform: translateY(-3px);
+}
+
+.pt-track-card__num {
+  background: #0f172a;
+  color: #14b8a6;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.625rem 1.25rem;
+}
+
+.pt-track-card__visual {
+  padding: 1rem 1rem 0;
+}
+
+.pt-track-card__body {
+  padding: 1.125rem 1.25rem 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.pt-track-card__title {
+  font-size: 1.0625rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.pt-track-card__desc {
+  font-size: 0.875rem;
+  color: #64748b;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.pt-track-card__variants {
+  list-style: none;
+  padding: 0;
+  margin: 0.25rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.pt-track-card__variants li {
+  font-size: 0.8125rem;
+  color: #475569;
+  padding-left: 1rem;
+  position: relative;
+  line-height: 1.4;
+}
+
+.pt-track-card__variants li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: #14b8a6;
+  font-weight: 700;
+}
+
+/* ═══════════════════════════════════════
+   MOUNTING
+═══════════════════════════════════════ */
+.pt-mount { background: #fff; }
+
+.pt-mount__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 680px) {
+  .pt-mount__grid { grid-template-columns: 1fr; }
+}
+
+.pt-mount-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 1.25rem;
+  padding: 1.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.pt-mount-card:hover {
+  border-color: #14b8a6;
+  box-shadow: 0 4px 16px rgba(20,184,166,0.1);
+}
+
+.pt-mount-card__icon {
+  font-size: 1.5rem;
+  color: #14b8a6;
+  line-height: 1;
+}
+
+.pt-mount-card__title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.pt-mount-card__desc {
+  font-size: 0.875rem;
+  color: #64748b;
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════
+   MODELS
+═══════════════════════════════════════ */
+.pt-models { background: #f8fafc; }
+
+.pt-models__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 680px) {
+  .pt-models__grid { grid-template-columns: 1fr; }
+}
+
+.pt-model-block {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 1.5rem;
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.pt-model-block__head { display: flex; flex-direction: column; gap: 0.5rem; }
+
+.pt-model-block__title {
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.pt-model-block__desc {
+  font-size: 0.875rem;
+  color: #64748b;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.pt-model-block__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.pt-model-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.625rem;
+  background: #f0fdfa;
+  border: 1px solid #ccfbf1;
+  border-radius: 0.5rem;
+  color: #0f766e;
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: monospace;
+}
+
+/* ═══════════════════════════════════════
+   PALETTE
+═══════════════════════════════════════ */
+.pt-palette { background: #fff; }
+
+.pt-palette__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.pt-swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pt-swatch__color {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 0.875rem;
+  border: 1px solid rgba(0,0,0,0.06);
+  display: block;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.pt-swatch__name {
+  font-size: 0.7rem;
+  color: #64748b;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.pt-palette__note {
+  text-align: center;
+  font-size: 0.875rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════
+   GLASS
+═══════════════════════════════════════ */
+.pt-glass { background: #f8fafc; }
+
+.pt-glass__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.pt-glass-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  padding: 1.25rem;
+}
+
+.pt-glass-card__group {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #14b8a6;
+  margin: 0 0 0.75rem;
+}
+
+.pt-glass-card__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.pt-glass-card__list li {
+  font-size: 0.8125rem;
+  color: #374151;
+  padding: 0.25rem 0;
+  border-bottom: 1px solid #f1f5f9;
+  line-height: 1.4;
+}
+
+.pt-glass-card__list li:last-child { border-bottom: none; }
+
+.pt-glass__specs {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.pt-glass__spec {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.pt-glass__spec-value {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #0f172a;
+  line-height: 1;
+}
+
+.pt-glass__spec-label {
+  font-size: 0.8125rem;
+  color: #64748b;
+}
+
+/* ═══════════════════════════════════════
+   ADVANTAGES (dark)
+═══════════════════════════════════════ */
+.pt-adv {
+  background: #0f172a;
+}
+
+.pt-adv__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+@media (max-width: 860px) {
+  .pt-adv__grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+  .pt-adv__grid { grid-template-columns: 1fr; }
+}
+
+.pt-adv-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: border-color 200ms ease, background 200ms ease;
+}
+
+.pt-adv-card:hover {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(20,184,166,0.3);
+}
+
+.pt-adv-card__icon {
+  font-size: 1.375rem;
+  color: #14b8a6;
+  line-height: 1;
+}
+
+.pt-adv-card__title {
+  font-size: 0.9375rem;
+  font-weight: 800;
+  color: #f1f5f9;
+  margin: 0;
+}
+
+.pt-adv-card__text {
+  font-size: 0.875rem;
+  color: #94a3b8;
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════
+   STEPS
+═══════════════════════════════════════ */
+.pt-steps { background: #fff; }
+
+.pt-steps__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  position: relative;
+}
+
+@media (max-width: 680px) {
+  .pt-steps__grid { grid-template-columns: 1fr; }
+}
+
+.pt-step {
+  padding: 1.75rem 1.25rem;
+  position: relative;
+  border-right: 1px solid #e5e7eb;
+}
+
+.pt-step:last-child { border-right: none; }
+
+@media (max-width: 680px) {
+  .pt-step { border-right: none; border-bottom: 1px solid #e5e7eb; }
+  .pt-step:last-child { border-bottom: none; }
+}
+
+.pt-step__num {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #14b8a6;
+  margin-bottom: 1rem;
+  font-family: monospace;
+}
+
+.pt-step__title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.5rem;
+}
+
+.pt-step__text {
+  font-size: 0.875rem;
+  color: #64748b;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.pt-step__arrow {
+  display: none;
+  position: absolute;
+  right: -0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.25rem;
+  color: #14b8a6;
+  z-index: 1;
+  background: #fff;
+  padding: 0 4px;
+}
+
+@media (min-width: 681px) {
+  .pt-step__arrow { display: block; }
+}
+
+/* ═══════════════════════════════════════
+   CTA
+═══════════════════════════════════════ */
+.pt-cta {
+  background: linear-gradient(135deg, #0d9488 0%, #14b8a6 50%, #0f766e 100%);
+  padding: clamp(3rem, 5vw, 4.5rem) 0;
+}
+
+.pt-cta__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.pt-cta__title {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 900;
+  color: #fff;
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.pt-cta__desc {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.8);
+  line-height: 1.6;
+  margin: 0;
+  max-width: 480px;
+}
+
+.pt-cta__actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.pt-cta__outline {
+  background: transparent;
+  color: #fff;
+  border: 1.5px solid rgba(255,255,255,0.55);
+  border-radius: var(--radius-btn);
+  padding: 0.6rem 1.4rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 200ms ease, border-color 200ms ease;
+}
+
+.pt-cta__outline:hover {
+  background: rgba(255,255,255,0.15);
+  border-color: #fff;
+}
+</style>
