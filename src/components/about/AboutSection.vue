@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, useTemplateRef, nextTick } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import {
   companyInfo,
   director,
@@ -7,64 +7,6 @@ import {
   requisites,
   paymentMethods,
 } from './about-data'
-
-/* ============================================================
-   Entrance animation
-============================================================ */
-const sectionRef = useTemplateRef<HTMLElement>('sectionEl')
-const visible = ref(false)
-
-let observer: IntersectionObserver | null = null
-
-/* ============================================================
-   Lightbox keyboard handler (declared early — used in onMounted)
-============================================================ */
-const handleKeydown = (e: KeyboardEvent) => {
-  if (lightboxIndex.value === null) return
-  if (e.key === 'Escape') closeLightbox()
-  if (e.key === 'ArrowLeft') prevImage()
-  if (e.key === 'ArrowRight') nextImage()
-}
-
-onMounted(async () => {
-  window.addEventListener('keydown', handleKeydown)
-
-  const el = sectionRef.value
-  if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    visible.value = true
-    return
-  }
-
-  // Страница О нас — контент сразу на экране, показываем без анимации
-  const rect = el.getBoundingClientRect()
-  if (rect.top < window.innerHeight) {
-    visible.value = true
-    // Добавляем js-loaded ПОСЛЕ того как Vue обновит DOM (nextTick)
-    await nextTick()
-    document.documentElement.classList.add('js-loaded')
-    return
-  }
-
-  // Элемент ниже fold — анимируем при появлении
-  document.documentElement.classList.add('js-loaded')
-
-  observer = new IntersectionObserver(
-    ([entry]) => {
-      if (entry?.isIntersecting) {
-        visible.value = true
-        observer?.disconnect()
-      }
-    },
-    { threshold: 0.05 }
-  )
-
-  observer.observe(el)
-})
-
-onBeforeUnmount(() => {
-  observer?.disconnect()
-  window.removeEventListener('keydown', handleKeydown)
-})
 
 /* ============================================================
    Lightbox
@@ -90,10 +32,20 @@ const nextImage = () => {
   if (lightboxIndex.value === null) return
   lightboxIndex.value = (lightboxIndex.value + 1) % galleryImages.length
 }
+
+const handleKeydown = (e: KeyboardEvent) => {
+  if (lightboxIndex.value === null) return
+  if (e.key === 'Escape') closeLightbox()
+  if (e.key === 'ArrowLeft') prevImage()
+  if (e.key === 'ArrowRight') nextImage()
+}
+
+onMounted(() => window.addEventListener('keydown', handleKeydown))
+onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown))
 </script>
 
 <template>
-  <div ref="sectionEl" class="about-page">
+  <div class="about-page">
 
     <!-- ======================================================
          HERO
@@ -101,10 +53,7 @@ const nextImage = () => {
     <section class="about-hero section section--lg">
       <div class="container">
 
-        <div
-          class="hero-grid"
-          :class="{ 'is-visible': visible }"
-        >
+        <div class="hero-grid">
 
           <!-- LEFT -->
           <div class="hero-content">
@@ -223,7 +172,7 @@ const nextImage = () => {
 
         <header
           class="section-header"
-          :class="{ 'is-visible': visible }"
+          
         >
           <p class="section-eyebrow">
             Пространство салона
@@ -309,10 +258,7 @@ const nextImage = () => {
     <section class="section section--lg">
       <div class="container">
 
-        <div
-          class="director-layout"
-          :class="{ 'is-visible': visible }"
-        >
+        <div class="director-layout">
 
           <div class="director-photo-wrap">
             <img
@@ -597,19 +543,6 @@ const nextImage = () => {
   grid-template-columns: 1fr 1.1fr;
   gap: 4rem;
   align-items: center;
-  transition:
-    opacity 700ms ease,
-    transform 700ms ease;
-}
-
-:global(.js-loaded) .hero-grid:not(.is-visible) {
-  opacity: 0;
-  transform: translateY(30px);
-}
-
-.hero-grid.is-visible {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 .hero-badge {
@@ -899,19 +832,6 @@ const nextImage = () => {
   grid-template-columns: 380px 1fr;
   gap: 4rem;
   align-items: center;
-  transition:
-    opacity 700ms ease,
-    transform 700ms ease;
-}
-
-:global(.js-loaded) .director-layout:not(.is-visible) {
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-.director-layout.is-visible {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 .director-photo-wrap {
