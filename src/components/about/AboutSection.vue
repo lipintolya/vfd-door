@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, useTemplateRef } from 'vue'
+import { ref, onMounted, onBeforeUnmount, useTemplateRef, nextTick } from 'vue'
 import {
   companyInfo,
   director,
@@ -16,30 +16,36 @@ const visible = ref(false)
 
 let observer: IntersectionObserver | null = null
 
-onMounted(() => {
-  const el = sectionRef.value
+/* ============================================================
+   Lightbox keyboard handler (declared early — used in onMounted)
+============================================================ */
+const handleKeydown = (e: KeyboardEvent) => {
+  if (lightboxIndex.value === null) return
+  if (e.key === 'Escape') closeLightbox()
+  if (e.key === 'ArrowLeft') prevImage()
+  if (e.key === 'ArrowRight') nextImage()
+}
 
+onMounted(async () => {
   window.addEventListener('keydown', handleKeydown)
 
-  if (
-    !el ||
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  ) {
+  const el = sectionRef.value
+  if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     visible.value = true
-    document.documentElement.classList.add('js-loaded')
     return
   }
 
-  // Элемент уже в зоне видимости (страница О нас — контент сразу на экране)
+  // Страница О нас — контент сразу на экране, показываем без анимации
   const rect = el.getBoundingClientRect()
   if (rect.top < window.innerHeight) {
     visible.value = true
+    // Добавляем js-loaded ПОСЛЕ того как Vue обновит DOM (nextTick)
+    await nextTick()
     document.documentElement.classList.add('js-loaded')
     return
   }
 
   // Элемент ниже fold — анимируем при появлении
-  visible.value = false
   document.documentElement.classList.add('js-loaded')
 
   observer = new IntersectionObserver(
@@ -83,13 +89,6 @@ const prevImage = () => {
 const nextImage = () => {
   if (lightboxIndex.value === null) return
   lightboxIndex.value = (lightboxIndex.value + 1) % galleryImages.length
-}
-
-const handleKeydown = (e: KeyboardEvent) => {
-  if (lightboxIndex.value === null) return
-  if (e.key === 'Escape') closeLightbox()
-  if (e.key === 'ArrowLeft') prevImage()
-  if (e.key === 'ArrowRight') nextImage()
 }
 </script>
 
