@@ -174,7 +174,7 @@ onBeforeUnmount(() => {
               loading="lazy"
               decoding="async"
               width="400"
-              height="280"
+              height="300"
             />
             <div class="features-card__stat">
               <span class="features-card__stat-num">{{ feature.stat }}</span>
@@ -325,7 +325,7 @@ onBeforeUnmount(() => {
 .features-card__media {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
   background: linear-gradient(135deg, #f0fdfa, #e6f7f5);
   flex-shrink: 0;
