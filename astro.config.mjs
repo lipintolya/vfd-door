@@ -14,5 +14,21 @@ export default defineConfig({
     plugins: [tailwindcss()]
   },
 
-  integrations: [vue(), sitemap()]
+  integrations: [
+    vue(),
+    sitemap({
+      filter: (page) =>
+        page !== 'https://vfd74.ru/privacy/' && page !== 'https://vfd74.ru/privacy',
+      serialize(item) {
+        const u = item.url
+        if (u === 'https://vfd74.ru/' || u === 'https://vfd74.ru') {
+          return { ...item, changefreq: 'weekly', priority: 1.0 }
+        }
+        if (/\/(catalog|about|contacts|partitions)\/?$/.test(u)) {
+          return { ...item, changefreq: 'weekly', priority: 0.8 }
+        }
+        return { ...item, changefreq: 'monthly', priority: 0.6 }
+      },
+    }),
+  ]
 });

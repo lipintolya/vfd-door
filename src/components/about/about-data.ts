@@ -62,14 +62,10 @@ export const galleryImages = [
 ]
 
 export const requisites = {
-  legalName: 'ИП Липина Надежда Анатольевна',
-  inn: '-',
-  ogrnip: '-',
-  legalAddress: '-',
-  bankName: '-',
-  bik: '-',
-  checkingAccount: '-',
-  correspondentAccount: '-',
+  legalName:    'ИП Липина Надежда Анатольевна',
+  inn:          '452402308842',
+  ogrnip:       '323745600047178',
+  legalAddress: 'г. Челябинск, ул. Братьев Кашириных, 131Б',
 }
 
 export const paymentMethods = [

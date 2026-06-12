@@ -94,6 +94,15 @@ body {
   padding-bottom: clamp(2.5rem, 4vw, 3.5rem);
 }
 
+.breadcrumb-bar {
+  padding-top: clamp(2.5rem, 4vw, 3.5rem);
+}
+
+/* Секция сразу после крошек — убираем дублирующий отступ сверху */
+.breadcrumb-bar + .section {
+  padding-top: clamp(1rem, 2vw, 1.5rem);
+}
+
 /* ── Buttons ── */
 .btn {
   display: inline-flex;

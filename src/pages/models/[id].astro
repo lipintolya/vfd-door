@@ -121,7 +121,18 @@ const breadcrumbs = [
   { label: model.name },
 ]
 
-const structuredData = {
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: breadcrumbs.map((item, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: item.label,
+    ...(item.href ? { item: new URL(item.href, Astro.site!).href } : {}),
+  })),
+}
+
+const structuredData = [breadcrumbSchema, {
   '@context': 'https://schema.org',
   '@type':    'Product',
   name:        model.name,
@@ -140,7 +151,7 @@ const structuredData = {
         }
       : {}),
   },
-}
+}]
 ---
 
 <BaseLayout
@@ -150,10 +161,14 @@ const structuredData = {
   ogImage={colors[0]?.photo || undefined}
   structuredData={structuredData}
 >
-  <div class="section product-page">
+  <div class="breadcrumb-bar">
     <div class="container">
       <Breadcrumbs items={breadcrumbs} />
+    </div>
+  </div>
 
+  <div class="section product-page">
+    <div class="container">
       <div class="product-layout">
 
         <!-- ── Фото + выбор цвета (Vue island) ── -->
@@ -223,8 +238,8 @@ const structuredData = {
               Уточните наличие нужного цвета и размера у менеджера салона
             </p>
             <div class="product-contact__cta">
-              <a href="tel:+79000297888" class="btn btn-primary">
-                +7 (900) 029-78-88
+              <a href="https://t.me/vfddoors74" target="_blank" rel="noopener" class="btn btn-primary">
+                Написать в Telegram
               </a>
               <a href="/contacts" class="btn btn-outline">Контакты</a>
             </div>

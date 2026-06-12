@@ -80,9 +80,8 @@ const toggleFaq = (id: number) => {
           Свяжитесь с нами — поможем с выбором и проконсультируем.
         </p>
 
-        <a href="tel:+79000297888" class="btn btn-primary inline-flex items-center gap-2">
-          <img src="/svg/w_phone.svg" alt="" class="w-4 h-4 shrink-0" />
-          Позвонить
+        <a href="https://t.me/vfddoors74" target="_blank" rel="noopener" class="btn btn-primary">
+          Написать в Telegram
         </a>
       </div>
 

@@ -92,7 +92,7 @@
                 <img src="https://storage.yandexcloud.net/catalog-vfd/icons/vk_logo.svg" alt="ВКонтакте" class="w-6 h-6" />
               </a>
               <a
-                href="https://t.me/vfddoors174"
+                href="https://t.me/vfddoors74"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors"

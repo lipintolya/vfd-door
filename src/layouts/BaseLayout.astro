@@ -2,28 +2,32 @@
 import '../styles/global.css'
 import Header from '../components/layout/Header.vue'
 import Footer from '../components/layout/Footer.vue'
+import YandexMetrika from '../components/analytics/YandexMetrika.astro'
+import AnnouncementBar from '../components/ui/AnnouncementBar.astro'
 
 interface Props {
-  title?:       string
-  description?: string
-  ogImage?:     string
-  noIndex?:     boolean
-  canonical?:   string
+  title?:         string
+  description?:   string
+  ogImage?:       string
+  noIndex?:       boolean
+  canonical?:     string
   structuredData?: Record<string, unknown> | Record<string, unknown>[]
-  preloadHero?: boolean
+  preloadHero?:   boolean
+  preloadImage?:  string
 }
 
 const {
-  title       = 'Двери ВФД на Кашириных — Салон дверей в Челябинске',
-  description = 'Фирменный салон дверей и алюминиевых перегородок на Братьев Кашириных 131Б. Работаем с 2014 года.',
-  ogImage     = 'https://storage.yandexcloud.net/catalog-vfd/renders/hero-cover.webp',
-  noIndex     = false,
+  title        = 'Двери ВФД на Кашириных — Салон дверей в Челябинске',
+  description  = 'Фирменный салон дверей и алюминиевых перегородок на Братьев Кашириных 131Б. Работаем с 2014 года.',
+  ogImage      = 'https://storage.yandexcloud.net/catalog-vfd/renders/hero-cover.webp',
+  noIndex      = false,
   canonical,
   structuredData,
-  preloadHero = false,
+  preloadHero  = false,
+  preloadImage,
 } = Astro.props
 
-const canonicalUrl = canonical
+const effectiveCanonical = canonical ?? (Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined)
 const structuredDataJson = structuredData
   ? JSON.stringify(structuredData).replace(/</g, '\\u003c')
   : null
@@ -35,21 +39,35 @@ const structuredDataJson = structuredData
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content={description} />
-    {noIndex && <meta name="robots" content="noindex, nofollow" />}
+    {noIndex ? <meta name="robots" content="noindex, nofollow" /> : <meta name="robots" content="index, follow" />}
 
-    <meta property="og:title"       content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:image"       content={ogImage} />
-    <meta property="og:type"        content="website" />
-    <meta property="og:locale"      content="ru_RU" />
-    <meta name="theme-color"        content="#f8f9fa" />
-    {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
-    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    <meta property="og:title"        content={title} />
+    <meta property="og:description"  content={description} />
+    <meta property="og:image"        content={ogImage} />
+    <meta property="og:image:width"  content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:type"         content="website" />
+    <meta property="og:locale"       content="ru_RU" />
+    <meta property="og:site_name"    content="Салон дверей ВФД" />
+    <meta name="theme-color"         content="#f8f9fa" />
+
+    <meta name="twitter:card"        content="summary_large_image" />
+    <meta name="twitter:title"       content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image"       content={ogImage} />
+
+    {effectiveCanonical && <meta property="og:url" content={effectiveCanonical} />}
+    {effectiveCanonical && <link rel="canonical" href={effectiveCanonical} />}
 
     <title>{title}</title>
 
+    <YandexMetrika />
+
     <link rel="preconnect" href="https://storage.yandexcloud.net" />
     <link rel="dns-prefetch" href="https://storage.yandexcloud.net" />
+
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/onest-cyrillic-wght-normal.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/onest-latin-wght-normal.woff2" crossorigin />
 
     {preloadHero && (
       <link
@@ -57,6 +75,9 @@ const structuredDataJson = structuredData
         href="https://storage.yandexcloud.net/catalog-vfd/renders/hero-cover.webp"
         fetchpriority="high"
       />
+    )}
+    {preloadImage && (
+      <link rel="preload" as="image" href={preloadImage} fetchpriority="high" />
     )}
     {structuredDataJson && (
       <script type="application/ld+json" is:inline set:html={structuredDataJson} />
@@ -73,6 +94,7 @@ const structuredDataJson = structuredData
       class="flex-1 relative overflow-x-hidden"
       style="padding-top: var(--header-height, 88px)"
     >
+      <AnnouncementBar />
       <slot />
     </main>
 

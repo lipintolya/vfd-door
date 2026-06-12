@@ -84,7 +84,7 @@ onBeforeUnmount(() => observer?.disconnect())
   <section class="part-hero">
     <div class="absolute inset-0" aria-hidden="true">
       <img
-        src="https://storage.yandexcloud.net/catalog-vfd/covers/alum-hero.webp"
+        src="https://storage.yandexcloud.net/catalog-vfd/alum/alum-1.webp"
         alt=""
         class="w-full h-full object-cover object-center"
         loading="eager"
@@ -162,7 +162,7 @@ onBeforeUnmount(() => observer?.disconnect())
               decoding="async"
               width="480"
               height="270"
-              @error="($event.target as HTMLImageElement).closest('.features-card__media')!.style.background='linear-gradient(135deg,#f0fdfa,#e6f7f5)'"
+              @error="($event.target as HTMLImageElement).closest<HTMLElement>('.features-card__media')!.style.background='linear-gradient(135deg,#f0fdfa,#e6f7f5)'"
             />
             <div class="features-card__stat">
               <span class="features-card__stat-num">{{ cat.stat }}</span>

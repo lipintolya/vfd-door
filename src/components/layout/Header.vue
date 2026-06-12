@@ -19,7 +19,7 @@ const SOCIAL_NETWORKS = [
   {
     name: 'Telegram',
     label: 'Telegram',
-    url: 'https://t.me/vfddoors174',
+    url: 'https://t.me/vfddoors74',
     icon: '/svg/b_tg_logo.svg',
   },
   {

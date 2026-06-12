@@ -115,7 +115,7 @@ onUnmounted(() => {
               </div>
               <div role="listitem">
                 <a
-                  href="https://t.me/vfddoors174"
+                  href="https://t.me/vfddoors74"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Telegram (открывается в новой вкладке)"

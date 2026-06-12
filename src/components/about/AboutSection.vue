@@ -80,9 +80,8 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown))
             </p>
 
             <div class="hero-actions">
-              <a href="tel:+79630807888" class="hero-btn hero-btn--primary inline-flex items-center gap-2">
-                <img src="/svg/w_phone.svg" alt="" class="w-4 h-4 shrink-0" />
-                Позвонить
+              <a href="https://t.me/vfddoors74" target="_blank" rel="noopener" class="hero-btn hero-btn--primary">
+                Написать в Telegram
               </a>
 
               <a
@@ -431,16 +430,6 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown))
           <div class="requisites-row">
             <span>ОГРНИП</span>
             <strong>{{ requisites.ogrnip }}</strong>
-          </div>
-
-          <div class="requisites-row">
-            <span>Банк</span>
-            <strong>{{ requisites.bankName }}</strong>
-          </div>
-
-          <div class="requisites-row">
-            <span>БИК</span>
-            <strong>{{ requisites.bik }}</strong>
           </div>
 
         </div>

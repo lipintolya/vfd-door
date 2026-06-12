@@ -160,9 +160,14 @@ const structuredData = canonicalUrl ? [
     </div>
   )}
 
-  <div class="section catalog-page">
+  <div class="breadcrumb-bar">
     <div class="container">
       <Breadcrumbs items={breadcrumbItems} />
+    </div>
+  </div>
+
+  <div class="section catalog-page">
+    <div class="container">
       <CatalogClient
         client:load
         cards={cards}

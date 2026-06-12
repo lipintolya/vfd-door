@@ -85,8 +85,7 @@ const normalizeHex = (hex: string) => {
 
     <!-- CTA -->
     <div class="color-picker__cta">
-      <a href="tel:+79000297888" class="btn btn-primary">Позвонить в салон</a>
-      <a href="/contacts" class="btn btn-outline">Написать нам</a>
+      <a href="https://t.me/vfddoors74" target="_blank" rel="noopener" class="btn btn-primary">Написать в Telegram</a>
     </div>
   </div>
 </template>
