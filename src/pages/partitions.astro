@@ -885,6 +885,13 @@ const steps = [
     var videos = document.querySelectorAll('.pt-autoplay-video')
     if (!videos.length || !('IntersectionObserver' in window)) return
 
+    // Плавное появление видео — только когда реально начало играть
+    videos.forEach(function (v) {
+      v.addEventListener('playing', function () {
+        v.classList.add('pt-video-ready')
+      })
+    })
+
     // Кнопка повтора: показывается после окончания, скрывается при клике
     videos.forEach(function (v) {
       var btn = v.parentElement && v.parentElement.querySelector('.pt-pivot-replay')
@@ -1214,6 +1221,14 @@ const steps = [
 }
 @media (max-width: 760px) {
   .pt-pivot-grid { grid-template-columns: 1fr; }
+}
+
+.pt-autoplay-video {
+  opacity: 0;
+  transition: opacity 700ms ease;
+}
+.pt-autoplay-video.pt-video-ready {
+  opacity: 1;
 }
 
 .pt-pivot-replay {
