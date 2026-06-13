@@ -991,12 +991,12 @@ const steps = [
     var videos = document.querySelectorAll('.pt-autoplay-video')
     if (!videos.length || !('IntersectionObserver' in window)) return
 
-    // Плавное появление контейнера — только когда видео реально начало играть
+    // Плавное появление контейнера — как только первый кадр готов
     videos.forEach(function (v) {
-      v.addEventListener('playing', function () {
+      v.addEventListener('loadeddata', function () {
         var wrap = v.closest('.pt-video-wrap')
         if (wrap) wrap.classList.add('pt-video-ready')
-      })
+      }, { once: true })
     })
 
     // Кнопка повтора: показывается после окончания, скрывается при клике
