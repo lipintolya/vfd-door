@@ -36,7 +36,7 @@ const CONTACTS = {
     { raw: '+79630807888', label: '+7 (963) 080-78-88' },
   ],
   address: 'Челябинск, ул. Братьев Кашириных, 131Б (вход с ул. Чичерина)',
-  worktime: 'Пн–Пт: 10:00–20:00  ·  Сб: 11:00–16:00  ·  Вс: выходной',
+  worktime: 'Пн–Пт: 10:00–20:00  ·  Сб: 11:00–16:00  ·  Вс: по предварительной записи',
   email: 'vfddoors74@mail.ru',
 } as const
 
@@ -114,14 +114,18 @@ const closedMessage = computed(() => {
   tomorrow.setDate(tomorrow.getDate() + 1)
   const tomorrowSchedule = getScheduleForDay(tomorrow)
   
+  // Если сегодня воскресенье
+  if (schedule.value === WORK_SCHEDULE.sunday) {
+    const nextOpen = WORK_SCHEDULE.weekday.open
+    return `Вс: по предварительной записи · Откроемся завтра в ${String(nextOpen).padStart(2, '0')}:00`
+  }
+
   if (tomorrowSchedule === WORK_SCHEDULE.sunday) {
-    // Завтра воскресенье (закрыто)
-    const dayAfter = new Date(tomorrow)
-    dayAfter.setDate(dayAfter.getDate() + 1)
+    // Завтра воскресенье — следующий рабочий день в пн
     const nextOpen = WORK_SCHEDULE.weekday.open
     return `Закрыто · Откроемся в пн в ${String(nextOpen).padStart(2, '0')}:00`
   }
-  
+
   const nextOpen = tomorrowSchedule.open
   return `Закрыто · Откроемся завтра в ${String(nextOpen).padStart(2, '0')}:00`
 })
