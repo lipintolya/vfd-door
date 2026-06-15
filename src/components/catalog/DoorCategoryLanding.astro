@@ -1,0 +1,356 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import Breadcrumbs from '../ui/Breadcrumbs.astro'
+import type { DoorCategory, CategoryAdvantage } from '../../data/door-categories'
+
+interface Props { data: DoorCategory }
+const { data } = Astro.props
+
+const canonicalUrl = Astro.site ? new URL(`/catalog/${data.slug}`, Astro.site).href : undefined
+
+const breadcrumbItems = [
+  { label: 'Главная',  href: '/' },
+  { label: 'Каталог',  href: '/catalog' },
+  { label: data.h1 },
+]
+
+const structuredData = canonicalUrl ? [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: breadcrumbItems.map((item, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: item.label,
+      ...(item.href ? { item: new URL(item.href, canonicalUrl).href } : {}),
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: data.faq.map(f => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: data.h1,
+    serviceType: 'Изготовление и монтаж дверей',
+    areaServed: { '@type': 'City', name: 'Челябинск' },
+    provider: {
+      '@type': 'LocalBusiness',
+      name: 'Фирменный салон дверей ВФД на Кашириных',
+      telephone: '+79000297888',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'ул. Братьев Кашириных, 131Б',
+        addressLocality: 'Челябинск',
+        addressCountry: 'RU',
+      },
+    },
+  },
+] : undefined
+
+// Карта иконок (stroke, currentColor)
+const icons: Record<CategoryAdvantage['icon'], string> = {
+  wall:    '<rect x="4" y="3" width="16" height="18" rx="1"/><path d="M15 12h.01"/>',
+  frame:   '<rect x="3" y="3" width="18" height="18" rx="1"/><rect x="7" y="7" width="10" height="10" rx="1"/>',
+  brush:   '<path d="M4 4h12v6H4z"/><path d="M10 10v3a2 2 0 0 0 2 2 2 2 0 0 1 2 2v3"/>',
+  space:   '<path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/>',
+  ruler:   '<path d="M3 7l4-4 14 14-4 4z"/><path d="M7 7l2 2M11 5l2 2M9 11l2 2M13 9l2 2"/>',
+  factory: '<path d="M3 21V9l6 4V9l6 4V5l6 16z"/><path d="M3 21h18"/>',
+  shield:  '<path d="M12 3l8 3v6c0 4-3 7-8 9-5-2-8-5-8-9V6z"/>',
+  thermo:  '<path d="M12 14V4a2 2 0 0 0-4 0v10a4 4 0 1 0 4 0z"/>',
+  lock:    '<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  sound:   '<path d="M11 5 6 9H3v6h3l5 4z"/><path d="M16 9a3 3 0 0 1 0 6"/>',
+}
+const PHONE = '+79000297888'
+const TG    = 'https://t.me/vfddoors74'
+---
+
+<BaseLayout
+  title={data.title}
+  description={data.description}
+  canonical={canonicalUrl}
+  structuredData={structuredData}
+>
+  <div class="breadcrumb-bar">
+    <div class="container">
+      <Breadcrumbs items={breadcrumbItems} />
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="section bg-white">
+    <div class="container">
+      <div class="dc-hero">
+        <p class="dc-hero__eyebrow">{data.eyebrow}</p>
+        <h1 class="dc-hero__title">{data.h1}</h1>
+        <p class="dc-hero__lead">{data.heroLead}</p>
+        {data.priceFrom && <p class="dc-hero__price">{data.priceFrom}</p>}
+        <div class="dc-hero__cta">
+          <a href={TG} target="_blank" rel="noopener" class="btn btn-ghost">Получить расчёт</a>
+          <a href={`tel:${PHONE}`} class="btn btn-ghost">Позвонить</a>
+          <a href="/contacts" class="btn btn-ghost">Контакты</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ВВЕДЕНИЕ -->
+  <section class="section bg-white">
+    <div class="container">
+      <div class="dc-intro">
+        <div class="dc-intro__body">
+          <h2 class="dc-h2">{data.introTitle}</h2>
+          {data.intro.map(p => <p class="dc-p">{p}</p>)}
+        </div>
+        <div class="dc-intro__media">
+          {data.introImage ? (
+            <img src={data.introImage} alt={data.h1} loading="lazy" decoding="async" width="640" height="800" />
+          ) : (
+            <div class="dc-ph" role="img" aria-label={`Изображение: ${data.h1}`}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" set:html={icons.wall} />
+              <span>Фото · {data.eyebrow}</span>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ПРЕИМУЩЕСТВА -->
+  <section class="section pt-tint">
+    <div class="container">
+      <h2 class="dc-h2 dc-h2--center">{data.advTitle}</h2>
+      <div class="dc-adv">
+        {data.advantages.map(a => (
+          <article class="dc-adv__card">
+            <span class="dc-adv__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" set:html={icons[a.icon]} />
+            </span>
+            <h3 class="dc-adv__title">{a.title}</h3>
+            <p class="dc-adv__text">{a.text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ВАРИАНТЫ -->
+  <section class="section bg-white">
+    <div class="container">
+      <h2 class="dc-h2 dc-h2--center">{data.varTitle}</h2>
+      <div class="dc-var">
+        {data.variants.map((v, i) => (
+          <div class="dc-var__item">
+            <span class="dc-var__num">{String(i + 1).padStart(2, '0')}</span>
+            <div>
+              <h3 class="dc-var__title">{v.title}</h3>
+              <p class="dc-var__text">{v.text}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section pt-tint">
+    <div class="container">
+      <h2 class="dc-h2 dc-h2--center">Частые вопросы</h2>
+      <div class="dc-faq">
+        {data.faq.map(f => (
+          <details class="dc-faq__item">
+            <summary class="dc-faq__q">
+              <span>{f.q}</span>
+              <svg class="dc-faq__chev" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </summary>
+            <p class="dc-faq__a">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section bg-white">
+    <div class="container">
+      <div class="dc-cta">
+        <div>
+          <h2 class="dc-cta__title">{data.ctaTitle}</h2>
+          <p class="dc-cta__text">{data.ctaText}</p>
+        </div>
+        <div class="dc-cta__btns">
+          <a href={TG} target="_blank" rel="noopener" class="btn btn-ghost">Получить расчёт</a>
+          <a href={`tel:${PHONE}`} class="btn btn-ghost">Позвонить</a>
+        </div>
+      </div>
+
+      <!-- Внутренняя перелинковка -->
+      <nav class="dc-related" aria-label="Смежные разделы">
+        <a href="/catalog">Каталог межкомнатных дверей</a>
+        <a href="/partitions">Алюминиевые перегородки</a>
+        <a href="/contacts">Контакты салона на Кашириных</a>
+      </nav>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .dc-h2 {
+    margin: 0 0 1rem;
+    font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+  .dc-h2--center { text-align: center; margin-bottom: clamp(1.75rem, 3.5vw, 2.75rem); }
+  .dc-p {
+    margin: 0 0 1rem;
+    color: #475569;
+    font-size: clamp(0.9375rem, 1.4vw, 1.0625rem);
+    line-height: 1.75;
+  }
+
+  /* ── Hero ── */
+  .dc-hero {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1.75rem;
+    padding: clamp(2rem, 5vw, 4rem);
+    color: #fff;
+    background:
+      radial-gradient(120% 120% at 85% 0%, rgba(20,184,166,0.28), transparent 55%),
+      linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #0f766e 140%);
+  }
+  .dc-hero__eyebrow {
+    margin: 0 0 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #5eead4;
+  }
+  .dc-hero__title {
+    margin: 0;
+    font-size: clamp(2rem, 5.5vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+  }
+  .dc-hero__lead {
+    margin: 1rem 0 0;
+    max-width: 46rem;
+    font-size: clamp(0.9375rem, 1.6vw, 1.0625rem);
+    line-height: 1.65;
+    color: rgba(255,255,255,0.78);
+  }
+  .dc-hero__price {
+    margin: 1rem 0 0;
+    font-size: clamp(1.125rem, 2vw, 1.5rem);
+    font-weight: 800;
+    color: #5eead4;
+  }
+  .dc-hero__cta { display: flex; flex-wrap: wrap; gap: 0.625rem; margin-top: 1.75rem; }
+
+  /* ── Intro 2-col ── */
+  .dc-intro {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: center;
+  }
+  .dc-intro__media { border-radius: 1.5rem; overflow: hidden; }
+  .dc-intro__media > img { display: block; width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4/5; border: 1px solid #e2e8f0; border-radius: inherit; }
+  .dc-ph {
+    aspect-ratio: 4/5;
+    border-radius: inherit;
+    border: 1px solid #d8f0ec;
+    display: grid;
+    place-items: center;
+    gap: 0.75rem;
+    color: #0d9488;
+    background:
+      radial-gradient(120% 80% at 80% 0%, rgba(20,184,166,0.14), transparent 60%),
+      linear-gradient(135deg, #fff 0%, #f0fdfa 55%, #e6f7f5 100%);
+  }
+  .dc-ph > svg { width: clamp(3rem, 7vw, 4.5rem); height: clamp(3rem, 7vw, 4.5rem); }
+  .dc-ph > span { font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #5b8a83; }
+
+  /* ── Преимущества ── */
+  .dc-adv { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(0.875rem, 2vw, 1.25rem); }
+  .dc-adv__card {
+    padding: clamp(1.25rem, 2.5vw, 1.75rem);
+    border-radius: 1.25rem;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    transition: border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
+  }
+  .dc-adv__card:hover { border-color: #99f6e4; box-shadow: 0 8px 24px rgba(13,148,136,0.10); transform: translateY(-3px); }
+  .dc-adv__icon {
+    display: grid; place-items: center;
+    width: 3rem; height: 3rem; margin-bottom: 0.875rem;
+    border-radius: 0.9rem; background: #f0fdfa; border: 1px solid #ccfbf1; color: #0d9488;
+  }
+  .dc-adv__icon > svg { width: 1.5rem; height: 1.5rem; }
+  .dc-adv__title { margin: 0 0 0.4rem; font-size: 1.0625rem; font-weight: 800; color: #0f172a; }
+  .dc-adv__text { margin: 0; font-size: 0.875rem; color: #64748b; line-height: 1.6; }
+
+  /* ── Варианты ── */
+  .dc-var { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(0.875rem, 2vw, 1.5rem); max-width: 60rem; margin: 0 auto; }
+  .dc-var__item { display: flex; gap: 1rem; padding: 1.25rem 1.375rem; border-radius: 1.25rem; background: #f8fafc; border: 1px solid #eef2f7; }
+  .dc-var__num { flex-shrink: 0; font-size: 1.125rem; font-weight: 800; color: #14b8a6; font-variant-numeric: tabular-nums; }
+  .dc-var__title { margin: 0 0 0.3rem; font-size: 1rem; font-weight: 800; color: #0f172a; }
+  .dc-var__text { margin: 0; font-size: 0.875rem; color: #64748b; line-height: 1.55; }
+
+  /* ── FAQ ── */
+  .dc-faq { max-width: 52rem; margin: 0 auto; display: flex; flex-direction: column; gap: 0.75rem; }
+  .dc-faq__item { border: 1px solid #e2e8f0; border-radius: 1rem; background: #fff; overflow: hidden; }
+  .dc-faq__q {
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    padding: 1.05rem 1.375rem; cursor: pointer; list-style: none;
+    font-size: clamp(0.9375rem, 1.4vw, 1.0625rem); font-weight: 700; color: #0f172a;
+  }
+  .dc-faq__q::-webkit-details-marker { display: none; }
+  .dc-faq__chev { width: 1.25rem; height: 1.25rem; color: #14b8a6; flex-shrink: 0; transition: transform 220ms ease; }
+  .dc-faq__item[open] .dc-faq__chev { transform: rotate(180deg); }
+  .dc-faq__a { margin: 0; padding: 0 1.375rem 1.25rem; color: #475569; font-size: 0.9375rem; line-height: 1.7; }
+
+  /* ── CTA ── */
+  .dc-cta {
+    display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap;
+    padding: clamp(1.75rem, 4vw, 2.75rem);
+    border-radius: 1.5rem; color: #fff;
+    background: linear-gradient(135deg, #0d9488 0%, #14b8a6 60%, #0f766e 100%);
+    box-shadow: 0 8px 32px rgba(13,148,136,0.28);
+  }
+  .dc-cta__title { margin: 0 0 0.35rem; font-size: clamp(1.375rem, 3vw, 2rem); font-weight: 800; letter-spacing: -0.02em; }
+  .dc-cta__text { margin: 0; max-width: 34rem; font-size: 0.9375rem; line-height: 1.6; color: rgba(255,255,255,0.85); }
+  .dc-cta__btns { display: flex; gap: 0.625rem; flex-wrap: wrap; flex-shrink: 0; }
+
+  /* ── Перелинковка ── */
+  .dc-related { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; margin-top: clamp(1.5rem, 3vw, 2.25rem); }
+  .dc-related > a {
+    font-size: 0.875rem; font-weight: 600; color: #0d9488; text-decoration: none;
+    padding: 0.5rem 1rem; border-radius: 9999px; border: 1px solid #ccfbf1; background: #f0fdfa;
+    transition: background 150ms ease, border-color 150ms ease;
+  }
+  .dc-related > a:hover { background: #ccfbf1; border-color: #5eead4; }
+
+  /* ── Адаптив ── */
+  @media (max-width: 900px) { .dc-adv { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 768px) {
+    .dc-intro { grid-template-columns: 1fr; }
+    .dc-intro__media { order: -1; }
+    .dc-var { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) { .dc-adv { grid-template-columns: 1fr; } }
+</style>
