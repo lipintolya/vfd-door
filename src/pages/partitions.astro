@@ -2,20 +2,30 @@
 import BaseLayout from '../layouts/BaseLayout.astro'
 import Breadcrumbs from '../components/ui/Breadcrumbs.astro'
 import PhotoLightbox from '../components/ui/PhotoLightbox.vue'
+import DoorLeafViewer from '../components/partitions/DoorLeafViewer.vue'
 
-const BASE = 'https://storage.yandexcloud.net/catalog-vfd/alum'
-const imgs = {
-  hero:      `${BASE}/alum-1.webp`,
-  about:     `${BASE}/alum-2.webp`,
-  sectional: `${BASE}/alum-3.webp`,
-}
+import SectionHeading from '../components/partitions/SectionHeading.astro'
+import FeatureList from '../components/partitions/FeatureList.astro'
+import SwatchGrid from '../components/partitions/SwatchGrid.astro'
+import ProjectCase from '../components/partitions/ProjectCase.astro'
+import BenefitsShowcase from '../components/partitions/BenefitsShowcase.astro'
+import ReplayButton from '../components/partitions/ReplayButton.astro'
+import IconArrowRight from '../components/ui/icons/IconArrowRight.astro'
+import IconTelegram from '../components/ui/icons/IconTelegram.astro'
+import IconExpand from '../components/ui/icons/IconExpand.astro'
+
+import {
+  imgs, heroStats, tracks, mountings, colorSwatches, glassSwatches,
+  partitionBenefits, steps, sectionalModels, sectionalDecor, overlayModels, overlayDecor, cases,
+} from '../data/partitions'
+import '../styles/partitions.css'
 
 const title       = 'Алюминиевые перегородки GRAFIA — ВФД Челябинск'
 const description = 'Раздвижные и распашные алюминиевые перегородки из профилей GRAFIA. Замер бесплатно. Монтаж по Челябинску. Срок изготовления 45 рабочих дней.'
 const canonicalUrl = Astro.site ? new URL('/partitions', Astro.site).href : undefined
 
 const breadcrumbItems = [
-  { label: 'Главная',    href: '/' },
+  { label: 'Главная', href: '/' },
   { label: 'Перегородки' },
 ]
 
@@ -37,103 +47,6 @@ const structuredData = {
     },
   },
 }
-
-const heroStats = [
-  { val: '45',  lbl: 'дней изготовление', desc: 'С момента согласования до монтажа' },
-  { val: '3',   lbl: 'типа направляющих', desc: '1, 2 или 3 трека на выбор'          },
-  { val: '13+', lbl: 'цветов профиля',    desc: 'Порошковые и анодированные',         cta: 'Рассчитать', href: 'https://t.me/vfddoors74' },
-]
-
-const INFO = 'https://storage.yandexcloud.net/catalog-vfd/alum_info'
-
-const tracks = [
-  {
-    num:     '1 трек',
-    title:   'Одна направляющая',
-    desc:    'Для небольших проёмов с 1–2 полотнами. Монтаж к стене или потолку.',
-    stat:    '1–2', statLbl: 'полотна',
-    items:   ['Одно полотно — уходит вдоль стены', 'Два полотна — расходятся от центра'],
-    imgs: [
-      { src: `${INFO}/alum-first.webp`,  alt: '1 трек — пример интерьера' },
-      { src: `${INFO}/1_scheme.webp`,    alt: 'Схема 1 трека'             },
-      { src: `${INFO}/one_track.webp`,   alt: 'Направляющая 1 трека'     },
-    ],
-  },
-  {
-    num:     '2 трека',
-    title:   'Двойная направляющая',
-    desc:    'Небольшие и средние проёмы. До четырёх полотен. Крепление к стене или потолку.',
-    stat:    '2–4', statLbl: 'полотна',
-    items:   ['Каскад в одну сторону', 'Крайние стационарны — движутся центральные', 'Открывание от центра в обе стороны'],
-    imgs: [
-      { src: `${INFO}/alum-second.webp`, alt: '2 трека — пример интерьера' },
-      { src: `${INFO}/2_scheme.webp`,    alt: 'Схема 2 треков'             },
-      { src: `${INFO}/two_track.webp`,   alt: 'Направляющая 2 треков'     },
-    ],
-  },
-  {
-    num:     '3 трека',
-    title:   'Тройная направляющая',
-    desc:    'Средние и большие проёмы. До шести полотен. Крепление только к потолку.',
-    stat:    '3–6', statLbl: 'полотен',
-    items:   ['3 полотна — каскад, проём на ширину двух', '6 полотен — две группы от центра'],
-    imgs: [
-      { src: `${INFO}/alum-third.webp`,  alt: '3 трека — пример интерьера' },
-      { src: `${INFO}/3_scheme.webp`,    alt: 'Схема 3 треков'             },
-      { src: `${INFO}/three_track.webp`, alt: 'Направляющая 3 треков'     },
-    ],
-  },
-]
-
-const mountings = [
-  { n: '01', title: 'Скрытое к потолку',  desc: 'Направляющая утапливается в нишу — профиль не виден. Минималистичный вид без видимых деталей крепления.',  img: `${INFO}/typeofwork/type1.webp` },
-  { n: '02', title: 'Открытое к потолку', desc: 'Направляющая крепится к поверхности потолка. Быстрый монтаж без штробления.',              img: `${INFO}/typeofwork/type2.webp` },
-  { n: '03', title: 'К стене',            desc: 'Для 1 и 2-трековых систем. Простая установка, не требует работ с потолком.',               img: `${INFO}/typeofwork/type3.webp` },
-]
-
-const modelSectional = ['V01', 'V02', 'V03', 'R01', 'R02', 'R03']
-const modelOverlay   = ['R00','R01','R02','R03','R04','R05','R06','R07','R08',
-                        'R09','R10','R11','R12','R13','R14','R15','R21','R22',
-                        'R23','R24','R25','R26']
-
-const colors = [
-  { name: 'Black Sand',      hex: '#1c1a18' },
-  { name: 'Black Matt',      hex: '#111111' },
-  { name: 'Dark Brown Matt', hex: '#3d2b1f' },
-  { name: 'Grafit Matt',     hex: '#3a3c40' },
-  { name: 'Champagne Matt',  hex: '#e8dfc4' },
-  { name: 'Bronze',          hex: '#7c5c35' },
-  { name: 'Bronze Light',    hex: '#a07848' },
-  { name: 'Old Gold Matt',   hex: '#c9a040' },
-  { name: 'Gold Matt',       hex: '#d4b04a' },
-  { name: 'Chrome',          hex: '#c0c4cc' },
-  { name: 'White 9003 Matt', hex: '#f2f2f2' },
-  { name: 'White 9010 Matt', hex: '#f5f4ef' },
-  { name: 'White 9003 Sand', hex: '#e8e4d8' },
-]
-
-const glasses = [
-  { group: 'Прозрачные',      items: ['Transporente Clearvision', 'Transporente', 'Transporente Bronzo', 'Transporente Grafite'] },
-  { group: 'Матовые / Сатин', items: ['Satinato Bianco', 'Satinato Bronza', 'Satinato Grafite', 'Line 01'] },
-  { group: 'Зеркальные',      items: ['Mirror', 'Mirror Grey', 'Mirror Bronze'] },
-  { group: 'Солнцезащитные',  items: ['STOPSOL Transporente', 'STOPSOL Bronzo', 'STOPSOL Grafite'] },
-]
-
-const advantages = [
-  { title: 'Профили GRAFIA',            text: 'Отечественное производство. Анодированные или порошковые — не ржавеют, не деформируются. Индивидуальная окраска по RAL/NCS.' },
-  { title: 'Закалённое стекло',         text: 'Толщина 4, 6 и 8 мм. Прозрачное, матовое, тонированное, зеркальное, солнцезащитное. Безопасно при ударе.' },
-  { title: 'Сборно-разборная система',  text: 'Легко демонтируется при перепланировке без следов на стенах и полу.' },
-  { title: 'Замер и проект',            text: 'Бесплатный выезд специалиста. Чертёж и смета за 1 рабочий день.' },
-  { title: 'Монтаж под ключ',           text: 'Профессиональная бригада по Челябинску и области. Чистота после работ.' },
-  { title: 'Срок 45 рабочих дней',      text: 'С момента последнего согласования. Доставка по Челябинску включена.' },
-]
-
-const steps = [
-  { num: '01', title: 'Заявка',  text: 'Позвоните или напишите — описание, фото, чертёж.' },
-  { num: '02', title: 'Замер',   text: 'Бесплатный выезд специалиста на объект.' },
-  { num: '03', title: 'Проект',  text: 'Чертёж, спецификация и КП за 1 рабочий день.' },
-  { num: '04', title: 'Монтаж',  text: 'Производство 45 дней, доставка и установка.' },
-]
 ---
 
 <BaseLayout
@@ -150,31 +63,24 @@ const steps = [
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════
-       HERO — Bento: большая карточка + 3 стата
-  ═══════════════════════════════════════════ -->
-  <section class="section" style="background:#fff">
+  <!-- HERO — Bento: большая карточка + 3 стата -->
+  <section class="section bg-white">
     <div class="container">
       <div class="pt-hero-bento">
 
-        <!-- Главная карточка — фото + текст -->
-        <div class="col-start-1 row-span-full relative rounded-3xl overflow-hidden min-h-110 flex flex-col justify-end" style="background:#0f172a">
+        <div class="col-start-1 row-span-full relative rounded-3xl overflow-hidden min-h-110 flex flex-col justify-end bg-ink">
           <img
             class="absolute inset-0 w-full h-full object-cover object-center"
             src={imgs.hero}
             alt="Алюминиевые раздвижные перегородки GRAFIA в современном интерьере"
-            width="1920"
-            height="1080"
-            loading="eager"
-            decoding="async"
-            fetchpriority="high"
+            width="1920" height="1080" loading="eager" decoding="async" fetchpriority="high"
           />
           <div class="absolute inset-0" aria-hidden="true" style="background:linear-gradient(to top,rgba(0,0,0,0.72) 0%,rgba(0,0,0,0.35) 55%,rgba(0,0,0,0.08) 100%)"></div>
           <div class="relative z-10 p-[clamp(1.5rem,3vw,2.5rem)]">
-            <p class="block mb-3 text-xs font-black tracking-widest uppercase" style="color:rgba(255,255,255,0.55)">Официальный партнёр VFD</p>
-            <h1 class="m-0 text-white font-black leading-none text-[clamp(2.25rem,5vw,3.75rem)]" style="letter-spacing:-0.04em">Алюминиевые<br />перегородки</h1>
-            <p class="mt-3 mb-0 text-[0.9375rem] leading-relaxed max-w-125" style="color:rgba(255,255,255,0.78)">
-              Раздвижные и распашные системы из профилей&nbsp;<strong style="color:#fff;font-weight:600">GRAFIA</strong>&nbsp;—
+            <p class="block mb-3 text-xs font-black tracking-widest uppercase text-white/55">Официальный партнёр VFD</p>
+            <h1 class="m-0 text-white font-black leading-none text-[clamp(2.25rem,5vw,3.75rem)] tracking-[-0.04em]">Алюминиевые<br />перегородки</h1>
+            <p class="mt-3 mb-0 text-[0.9375rem] leading-relaxed max-w-125 text-white/78">
+              Раздвижные и распашные системы из профилей&nbsp;<strong class="text-white font-semibold">GRAFIA</strong>&nbsp;—
               отечественное производство, минималистичный дизайн, сборно-разборная конструкция.
             </p>
             <div class="flex gap-2.5 flex-wrap mt-5">
@@ -184,20 +90,17 @@ const steps = [
           </div>
         </div>
 
-        <!-- 3 мини-стата -->
         {heroStats.map(s => (
-          <div class="pt-hero-stat rounded-3xl flex flex-col justify-between p-5" style="background:var(--color-fg)">
+          <div class="pt-hero-stat rounded-3xl flex flex-col justify-between p-5 bg-(--color-fg)">
             <div>
-              <span class="block font-black leading-none text-[clamp(2rem,3.2vw,2.5rem)]" style="color:#2dd4bf;letter-spacing:-0.04em">{s.val}</span>
+              <span class="block font-black leading-none text-[clamp(2rem,3.2vw,2.5rem)] text-teal-400 tracking-[-0.04em]">{s.val}</span>
               <span class="block text-sm font-semibold text-white mt-1 leading-snug">{s.lbl}</span>
               <span class="block text-xs text-white/50 leading-snug mt-1">{s.desc}</span>
             </div>
             {s.cta && (
               <a href={s.href} target="_blank" rel="noopener" class="pt-stat-cta mt-3">
                 {s.cta}
-                <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
+                <IconArrowRight size={12} />
               </a>
             )}
           </div>
@@ -207,16 +110,14 @@ const steps = [
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════
-       О СИСТЕМЕ — 2 col: текст | фото
-  ═══════════════════════════════════════════ -->
-  <section class="section" style="background:#fff">
+  <!-- О СИСТЕМЕ — текст | видео -->
+  <section class="section bg-white">
     <div class="container">
       <div class="pt-about__grid">
 
         <div class="rounded-3xl border border-slate-200 bg-white shadow-sm p-[clamp(1.5rem,3vw,2.25rem)] flex flex-col justify-center">
           <p class="block mb-3 text-xs font-black tracking-widest uppercase text-teal-700">Система GRAFIA</p>
-          <h2 class="mb-4 text-slate-900 text-[clamp(2rem,4.5vw,3rem)] font-extrabold leading-[1.1] tracking-tight">Современный подход к зонированию</h2>
+          <h2 class="mb-4 text-ink text-[clamp(2rem,4.5vw,3rem)] font-extrabold leading-[1.1] tracking-tight">Современный подход к зонированию</h2>
           <p class="mb-5 text-slate-600 text-[clamp(0.9375rem,1.5vw,1.0625rem)] leading-relaxed">
             Алюминиевые перегородки с остеклением — без капитального ремонта и без сноса стен.
             Профили GRAFIA производятся в России, прошли сертификацию и отличаются
@@ -231,126 +132,70 @@ const steps = [
           </ul>
           <a href="tel:+79000297888" class="pt-pill">
             Узнать стоимость
-            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" width="14" height="14">
-              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+            <IconArrowRight />
           </a>
         </div>
 
         <div class="pt-video-wrap rounded-3xl border border-slate-200 bg-slate-900 shadow-sm overflow-hidden min-h-105 p-0 relative">
           <video
             class="pt-autoplay-video absolute inset-0 w-full h-full object-cover object-center"
-            preload="none"
-            muted
-            playsinline
+            preload="none" muted playsinline
             aria-label="Анимация открытия алюминиевых перегородок GRAFIA"
           >
             <source data-src="https://storage.yandexcloud.net/catalog-vfd/video/alum_animation.mp4" type="video/mp4" />
           </video>
-          <button class="pt-pivot-replay" type="button" aria-label="Воспроизвести снова">
-            <span class="pt-pivot-play-btn">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <polygon points="7,4 20,12 7,20" fill="white"/>
-              </svg>
-            </span>
-          </button>
+          <ReplayButton />
         </div>
 
       </div>
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════
-       СИСТЕМА PIVOT — Bento: видео | текст
-  ═══════════════════════════════════════════ -->
-  <section class="section" style="background:#fff">
+  <!-- СИСТЕМА PIVOT — видео | текст -->
+  <section class="section bg-white">
     <div class="container">
       <div class="pt-pivot-grid">
 
-        <!-- Видео + атрибуция -->
         <div class="flex flex-col gap-2">
           <div class="pt-video-wrap relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-800 aspect-9/16">
             <video
               class="pt-autoplay-video absolute inset-0 w-full h-full object-cover"
-              preload="none"
-              muted
-              playsinline
+              preload="none" muted playsinline
               aria-label="Демонстрация работы алюминиевой двери на системе PIVOT"
             >
               <source data-src="https://storage.yandexcloud.net/catalog-vfd/video/pivot_system.mp4" type="video/mp4" />
             </video>
-            <!-- Бейдж -->
-            <div
-              class="absolute top-3 left-3 flex flex-col rounded-xl px-3 py-1.5 pointer-events-none"
-              style="background:rgba(15,23,42,0.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)"
-            >
-              <span class="text-[0.8125rem] font-black tracking-[0.08em] leading-tight" style="color:#5eead4">PIVOT</span>
-              <span class="text-[0.625rem] font-semibold leading-tight" style="color:#94a3b8">система открывания</span>
+            <div class="absolute top-3 left-3 flex flex-col rounded-xl px-3 py-1.5 pointer-events-none bg-slate-900/72 backdrop-blur-sm">
+              <span class="text-[0.8125rem] font-black tracking-[0.08em] leading-tight text-teal-300">PIVOT</span>
+              <span class="text-[0.625rem] font-semibold leading-tight text-slate-400">система открывания</span>
             </div>
-            <!-- Кнопка повтора — появляется после окончания ролика -->
-            <button class="pt-pivot-replay" type="button" aria-label="Воспроизвести снова">
-              <span class="pt-pivot-play-btn">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <polygon points="7,4 20,12 7,20" fill="white"/>
-                </svg>
-              </span>
-            </button>
+            <ReplayButton />
           </div>
 
-          <!-- Атрибуция источника -->
-          <a
-            href="https://t.me/VFD_Design"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex items-center justify-center gap-1.5 no-underline group"
-          >
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"
-                 class="text-slate-400 group-hover:text-teal-500 transition-colors duration-200 shrink-0"
-                 aria-hidden="true">
-              <path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/>
-            </svg>
+          <a href="https://t.me/VFD_Design" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-1.5 no-underline group">
+            <IconTelegram class="text-slate-400 group-hover:text-teal-500 transition-colors duration-200 shrink-0" />
             <span class="text-[0.6875rem] text-slate-400 group-hover:text-teal-500 transition-colors duration-200">
               Видео: <span class="font-semibold">ВФД Дизайн</span>
             </span>
           </a>
         </div>
 
-        <!-- Текстовая карточка -->
         <div class="rounded-3xl border border-slate-200 bg-white shadow-sm flex flex-col p-[clamp(1.25rem,2.5vw,2rem)]">
           <p class="block mb-3 text-xs font-black tracking-widest uppercase text-teal-700">Специальное решение</p>
-          <h2
-            class="mb-3 font-extrabold leading-tight tracking-tight"
-            style="color:#0f172a;font-size:clamp(1.625rem,3vw,2.25rem)"
-          >
-            Система PIVOT
-          </h2>
+          <h2 class="mb-3 text-ink font-extrabold leading-tight tracking-tight text-[clamp(1.625rem,3vw,2.25rem)]">Система PIVOT</h2>
           <p class="mb-5 text-slate-600 text-[clamp(0.9375rem,1.5vw,1.0625rem)] leading-relaxed">
             Алюминиевая дверь на системе PIVOT — современное и практичное решение для дома или офиса.
           </p>
-          <ul class="list-none p-0 mb-6 flex flex-col gap-3">
-            <li class="flex items-start gap-2.5 text-[0.9375rem] leading-relaxed" style="color:#374151">
-              <svg class="shrink-0 mt-0.75" width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                <circle cx="10" cy="10" r="10" fill="#14b8a6"/>
-                <path d="M5.5 10.5l3 3 6-6.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              Легко открывается, экономит место и обеспечивает плавное движение
-            </li>
-            <li class="flex items-start gap-2.5 text-[0.9375rem] leading-relaxed" style="color:#374151">
-              <svg class="shrink-0 mt-0.75" width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                <circle cx="10" cy="10" r="10" fill="#14b8a6"/>
-                <path d="M5.5 10.5l3 3 6-6.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              Закалённое стекло повышает безопасность и сохраняет естественное освещение
-            </li>
-          </ul>
+          <FeatureList
+            class="mb-6"
+            items={[
+              'Легко открывается, экономит место и обеспечивает плавное движение',
+              'Закалённое стекло повышает безопасность и сохраняет естественное освещение',
+            ]}
+          />
           <a
-            href="https://crm.vfd.ru/~ogWix"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2.5 self-start px-5 py-3 rounded-xl no-underline
-                   text-sm font-bold border border-slate-200 bg-slate-50 text-slate-900
-                   hover:border-teal-400 hover:bg-teal-50"
-            style="transition:border-color 200ms ease,background 200ms ease,box-shadow 200ms ease"
+            href="https://crm.vfd.ru/~ogWix" target="_blank" rel="noopener noreferrer"
+            class="inline-flex items-center gap-2.5 self-start px-5 py-3 rounded-xl no-underline text-sm font-bold border border-slate-200 bg-slate-50 text-ink hover:border-teal-400 hover:bg-teal-50 transition-colors duration-200"
           >
             <svg viewBox="0 0 24 24" fill="none" width="18" height="18" aria-hidden="true" class="text-teal-600 shrink-0">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
@@ -364,362 +209,17 @@ const steps = [
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════
-       СТАЦИОНАРНЫЕ ПЕРЕГОРОДКИ — текст | слайдер
-  ═══════════════════════════════════════════ -->
-  <section class="section" style="background:#fff">
+  <!-- РЕАЛИЗОВАННЫЕ ПРОЕКТЫ: Стационарные · Waldorf · Лахта -->
+  {cases.map(c => <ProjectCase data={c} />)}
+
+  <!-- ТИПЫ НАПРАВЛЯЮЩИХ -->
+  <section class="section bg-white">
     <div class="container">
-      <div class="pt-stat-grid">
-
-        <!-- Текстовая карточка (LEFT) -->
-        <div class="rounded-3xl border border-slate-200 bg-white shadow-sm flex flex-col p-[clamp(1.25rem,2.5vw,2rem)]">
-          <p class="block mb-3 text-xs font-black tracking-widest uppercase text-teal-700">Стильное зонирование пространства</p>
-          <h2 class="mb-3 font-extrabold leading-tight tracking-tight"
-              style="color:#0f172a;font-size:clamp(1.625rem,3vw,2.25rem)">
-            Стационарные стеклянные перегородки
-          </h2>
-          <p class="mb-5 text-slate-600 text-[clamp(0.9375rem,1.5vw,1.0625rem)] leading-relaxed">
-            Стационарные перегородки из алюминиевого профиля и стекла — современное решение для зонирования
-            квартир, частных домов и коммерческих помещений. В данном проекте конструкции были изготовлены
-            для гардеробной и душевой, обеспечив удобное разделение пространства без утяжеления интерьера.
-          </p>
-          <ul class="list-none p-0 mb-5 flex flex-col gap-3">
-            <li class="flex items-start gap-2.5 text-[0.9375rem] leading-relaxed" style="color:#374151">
-              <svg class="shrink-0 mt-0.75" width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="10" fill="#14b8a6"/><path d="M5.5 10.5l3 3 6-6.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Идеально подходят для гардеробных и душевых зон
-            </li>
-            <li class="flex items-start gap-2.5 text-[0.9375rem] leading-relaxed" style="color:#374151">
-              <svg class="shrink-0 mt-0.75" width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="10" fill="#14b8a6"/><path d="M5.5 10.5l3 3 6-6.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Сохраняют естественное освещение помещений
-            </li>
-            <li class="flex items-start gap-2.5 text-[0.9375rem] leading-relaxed" style="color:#374151">
-              <svg class="shrink-0 mt-0.75" width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="10" fill="#14b8a6"/><path d="M5.5 10.5l3 3 6-6.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Изготавливаются по индивидуальным размерам
-            </li>
-            <li class="flex items-start gap-2.5 text-[0.9375rem] leading-relaxed" style="color:#374151">
-              <svg class="shrink-0 mt-0.75" width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="10" fill="#14b8a6"/><path d="M5.5 10.5l3 3 6-6.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Широкий выбор профилей, стекла и вариантов отделки
-            </li>
-          </ul>
-          <p class="text-[0.9375rem] leading-relaxed mb-0" style="color:#475569">
-            Мы производим алюминиевые перегородки для любых задач: от жилых интерьеров до офисных пространств.
-            Выполняем полный цикл работ — от замера и проектирования до изготовления и монтажа.
-          </p>
-
-          <!-- CTA -->
-          <div class="mt-auto pt-5 border-t border-slate-100">
-            <p class="text-[0.6875rem] font-bold uppercase tracking-widest mb-3" style="color:#94a3b8">
-              Заказать расчёт проекта
-            </p>
-            <div class="flex gap-2 flex-wrap">
-              <a href="https://vk.com/vfddoors74" target="_blank" rel="noopener noreferrer"
-                 class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl no-underline
-                        text-[0.8125rem] font-semibold text-white hover:opacity-90 transition-opacity duration-200"
-                 style="background:#0f172a">
-                <img src="/svg/w_vk.svg" alt="" width="15" height="15" aria-hidden="true" />
-                ВКонтакте
-              </a>
-              <a href="https://t.me/vfddoors74" target="_blank" rel="noopener noreferrer"
-                 class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl no-underline
-                        text-[0.8125rem] font-semibold text-white hover:opacity-90 transition-opacity duration-200"
-                 style="background:#0f172a">
-                <img src="/svg/w_tg_logo.svg" alt="" width="15" height="15" aria-hidden="true" />
-                Telegram
-              </a>
-              <a href="https://max.ru/id452402308842_biz" target="_blank" rel="noopener noreferrer"
-                 class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl no-underline
-                        text-[0.8125rem] font-semibold text-white hover:opacity-90 transition-opacity duration-200"
-                 style="background:#0f172a">
-                <img src="/svg/w_max.svg" alt="" width="15" height="15" aria-hidden="true" />
-                Max
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Фото-слайдер (RIGHT) -->
-        <div class="h-full">
-          <div class="relative rounded-3xl overflow-hidden bg-slate-100 pt-stat-slider h-full">
-            <!-- Лента изображений -->
-            <div class="pt-stat-slides">
-              <img
-                src="https://storage.yandexcloud.net/catalog-vfd/stationar_alum/stationar_1.webp"
-                alt="Стационарные алюминиевые перегородки — проект для гардеробной"
-                class="pt-stat-slide"
-                loading="lazy"
-                decoding="async"
-                width="1080"
-                height="1920"
-              />
-              <img
-                src="https://storage.yandexcloud.net/catalog-vfd/stationar_alum/stationar_2.webp"
-                alt="Стеклянная перегородка для душевой зоны"
-                class="pt-stat-slide"
-                loading="lazy"
-                decoding="async"
-                width="1080"
-                height="1920"
-              />
-              <img
-                src="https://storage.yandexcloud.net/catalog-vfd/stationar_alum/stationar_3.webp"
-                alt="Готовый интерьер со стационарными алюминиевыми перегородками"
-                class="pt-stat-slide"
-                loading="lazy"
-                decoding="async"
-                width="1080"
-                height="1920"
-              />
-            </div>
-            <!-- Стрелки -->
-            <button class="pt-stat-arrow pt-stat-prev" type="button" aria-label="Предыдущее фото">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M15 18l-6-6 6-6" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
-            <button class="pt-stat-arrow pt-stat-next" type="button" aria-label="Следующее фото">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M9 18l6-6-6-6" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
-            <!-- Точки -->
-            <div class="pt-stat-dots" aria-hidden="true">
-              <span class="pt-stat-dot is-active"></span>
-              <span class="pt-stat-dot"></span>
-              <span class="pt-stat-dot"></span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════════════════════════
-       WALDORF ASTORIA — слайдер | текст
-  ═══════════════════════════════════════════ -->
-  <section class="section" style="background:#fff">
-    <div class="container">
-      <div class="pt-hotel-grid">
-
-        <!-- Фото-слайдер (LEFT) -->
-        <div class="h-full">
-          <div class="relative rounded-3xl overflow-hidden bg-slate-900 pt-stat-slider pt-hotel-slider h-full">
-            <div class="pt-stat-slides" id="pt-hotel-slides">
-              <img src="https://storage.yandexcloud.net/catalog-vfd/stationar_alum/hotel1.webp"  alt="Перегородки для отеля Waldorf Astoria Minsk — фото 1"  class="pt-stat-slide" loading="lazy" decoding="async" width="1080" height="1920" />
-              <img src="https://storage.yandexcloud.net/catalog-vfd/stationar_alum/hotel2.webp"  alt="Перегородки для отеля Waldorf Astoria Minsk — фото 2"  class="pt-stat-slide" loading="lazy" decoding="async" width="1080" height="1920" />
-              <img src="https://storage.yandexcloud.net/catalog-vfd/stationar_alum/hotel3.webp"  alt="Перегородки для отеля Waldorf Astoria Minsk — фото 3"  class="pt-stat-slide" loading="lazy" decoding="async" width="1080" height="1920" />
-              <img src="https://storage.yandexcloud.net/catalog-vfd/stationar_alum/hotel4.webp"  alt="Перегородки для отеля Waldorf Astoria Minsk — фото 4"  class="pt-stat-slide" loading="lazy" decoding="async" width="1080" height="1920" />
-              <img src="https://storage.yandexcloud.net/catalog-vfd/stationar_alum/hotel5.webp"  alt="Перегородки для отеля Waldorf Astoria Minsk — фото 5"  class="pt-stat-slide" loading="lazy" decoding="async" width="1080" height="1920" />
-              <img src="https://storage.yandexcloud.net/catalog-vfd/stationar_alum/hotel6.webp"  alt="Перегородки для отеля Waldorf Astoria Minsk — фото 6"  class="pt-stat-slide" loading="lazy" decoding="async" width="1080" height="1920" />
-              <img src="https://storage.yandexcloud.net/catalog-vfd/stationar_alum/hotel7.webp"  alt="Перегородки для отеля Waldorf Astoria Minsk — фото 7"  class="pt-stat-slide" loading="lazy" decoding="async" width="1080" height="1920" />
-              <img src="https://storage.yandexcloud.net/catalog-vfd/stationar_alum/hotel8.webp"  alt="Перегородки для отеля Waldorf Astoria Minsk — фото 8"  class="pt-stat-slide" loading="lazy" decoding="async" width="1080" height="1920" />
-              <img src="https://storage.yandexcloud.net/catalog-vfd/stationar_alum/hotel9.webp"  alt="Перегородки для отеля Waldorf Astoria Minsk — фото 9"  class="pt-stat-slide" loading="lazy" decoding="async" width="1080" height="1920" />
-              <img src="https://storage.yandexcloud.net/catalog-vfd/stationar_alum/hotel10.webp" alt="Перегородки для отеля Waldorf Astoria Minsk — фото 10" class="pt-stat-slide" loading="lazy" decoding="async" width="1080" height="1920" />
-            </div>
-            <!-- Стрелки -->
-            <button class="pt-stat-arrow pt-hotel-prev" type="button" aria-label="Предыдущее фото">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 18l-6-6 6-6" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            <button class="pt-stat-arrow pt-hotel-next" type="button" aria-label="Следующее фото">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 18l6-6-6-6" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            <!-- Счётчик -->
-            <div class="pt-hotel-counter" aria-live="polite">
-              <span class="pt-hotel-cur">1</span>
-              <span style="color:rgba(255,255,255,0.35)">/</span>
-              <span>10</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Текстовая карточка (RIGHT) -->
-        <div class="rounded-3xl border border-slate-200 bg-white shadow-sm flex flex-col p-[clamp(1.25rem,2.5vw,2rem)]">
-          <!-- Eyebrow-badge -->
-          <div class="inline-flex items-center gap-1.5 mb-3 self-start">
-            <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[0.6875rem] font-black tracking-widest uppercase"
-                  style="background:#fef3c7;color:#b45309;border:1px solid #fde68a">
-              Специальный проект
-            </span>
-          </div>
-          <h2 class="mb-3 font-extrabold leading-tight tracking-tight"
-              style="color:#0f172a;font-size:clamp(1.5rem,2.8vw,2.125rem)">
-            Перегородки для отеля<br/>Waldorf Astoria Minsk
-          </h2>
-          <p class="mb-5 text-slate-600 text-[clamp(0.9375rem,1.5vw,1.0625rem)] leading-relaxed">
-            В рамках реализации интерьера премиального отеля Waldorf Astoria Minsk были изготовлены стеклянные перегородки
-            для душевых кабин и санузлов. Проект выполнен нашими партнёрами — компанией ВФД Дизайн (Беларусь),
-            специализирующейся на производстве современных алюминиевых и стеклянных конструкций.
-          </p>
-          <p class="mb-5 text-slate-600 text-[clamp(0.9375rem,1.5vw,1.0625rem)] leading-relaxed">
-            Для данного объекта были разработаны индивидуальные инженерные и дизайнерские решения с учётом высоких
-            требований гостиничной индустрии к безопасности, долговечности и комфорту эксплуатации.
-          </p>
-          <ul class="list-none p-0 mb-4 flex flex-col gap-2.5">
-            <li class="flex items-start gap-2.5 text-[0.875rem] leading-relaxed" style="color:#374151">
-              <svg class="shrink-0 mt-0.75" width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="10" fill="#14b8a6"/><path d="M5.5 10.5l3 3 6-6.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Усиленные алюминиевые каркасы для максимальной жёсткости конструкции
-            </li>
-            <li class="flex items-start gap-2.5 text-[0.875rem] leading-relaxed" style="color:#374151">
-              <svg class="shrink-0 mt-0.75" width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="10" fill="#14b8a6"/><path d="M5.5 10.5l3 3 6-6.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Закалённое стекло повышенной прочности и безопасности
-            </li>
-            <li class="flex items-start gap-2.5 text-[0.875rem] leading-relaxed" style="color:#374151">
-              <svg class="shrink-0 mt-0.75" width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="10" fill="#14b8a6"/><path d="M5.5 10.5l3 3 6-6.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Герметичные соединения и надёжная система уплотнителей
-            </li>
-            <li class="flex items-start gap-2.5 text-[0.875rem] leading-relaxed" style="color:#374151">
-              <svg class="shrink-0 mt-0.75" width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="10" fill="#14b8a6"/><path d="M5.5 10.5l3 3 6-6.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Износостойкие покрытия для интенсивной ежедневной эксплуатации
-            </li>
-            <li class="flex items-start gap-2.5 text-[0.875rem] leading-relaxed" style="color:#374151">
-              <svg class="shrink-0 mt-0.75" width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="10" fill="#14b8a6"/><path d="M5.5 10.5l3 3 6-6.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Продуманные решения по вентиляции и обслуживанию
-            </li>
-          </ul>
-          <p class="text-[0.875rem] leading-relaxed" style="color:#475569">
-            Каждый элемент конструкции был адаптирован под особенности объекта и требования заказчика.
-            Такой подход позволяет создавать долговечные перегородки для отелей, жилых комплексов, коммерческих
-            и частных интерьеров, сохраняя высокий уровень эстетики и функциональности.
-          </p>
-          <p class="text-[0.875rem] leading-relaxed mb-0" style="color:#475569">
-            Реализуем проекты любой сложности — от индивидуальных интерьерных решений до масштабных коммерческих объектов.
-          </p>
-
-          <!-- Attribution -->
-          <div class="mt-auto pt-4 border-t border-slate-100">
-            <a href="https://t.me/VFD_Design" target="_blank" rel="noopener noreferrer"
-               class="inline-flex items-center gap-1.5 no-underline group">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"
-                   class="text-slate-400 group-hover:text-teal-500 transition-colors duration-200 shrink-0">
-                <path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/>
-              </svg>
-              <span class="text-[0.6875rem] text-slate-400 group-hover:text-teal-500 transition-colors duration-200">
-                Источник: <span class="font-semibold">ВФД Дизайн</span>
-              </span>
-            </a>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════════════════════════
-       ЖК ЛАХТА ПАРК — текст | слайдер
-  ═══════════════════════════════════════════ -->
-  <section class="section" style="background:#f8fafc">
-    <div class="container">
-      <div class="pt-lahta-grid">
-
-        <!-- Текстовая карточка (LEFT) -->
-        <div class="rounded-3xl border border-slate-200 bg-white shadow-sm flex flex-col p-[clamp(1.25rem,2.5vw,2rem)]">
-          <!-- Eyebrow-badge -->
-          <div class="inline-flex items-center gap-1.5 mb-3 self-start">
-            <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[0.6875rem] font-black tracking-widest uppercase"
-                  style="background:#f0fdfa;color:#0f766e;border:1px solid #ccfbf1">
-              Реализованный проект
-            </span>
-          </div>
-          <h2 class="mb-3 font-extrabold leading-tight tracking-tight"
-              style="color:#0f172a;font-size:clamp(1.5rem,2.8vw,2.125rem)">
-            ЖК Лахта парк,<br/>Санкт-Петербург
-          </h2>
-          <p class="mb-5 text-slate-600 text-[clamp(0.9375rem,1.5vw,1.0625rem)] leading-relaxed">
-            Раздвижные алюминиевые перегородки для квартиры в ЖК Лахта парк — проект выполнен по авторскому дизайну
-            Веры Никитиной. Лаконичная минималистичная концепция: тонкий профиль, максимум стекла и воздуха,
-            чёткие линии без лишних деталей.
-          </p>
-          <p class="mb-5 text-slate-600 text-[clamp(0.9375rem,1.5vw,1.0625rem)] leading-relaxed">
-            Алюминиевые системы позволили зонировать пространство без потери естественного освещения.
-            Стеклянные заполнения в тонком профиле сохраняют ощущение открытости и визуальную связь между зонами —
-            квартира остаётся единым пространством с гибким делением.
-          </p>
-          <ul class="list-none p-0 mb-4 flex flex-col gap-2.5">
-            <li class="flex items-start gap-2.5 text-[0.875rem] leading-relaxed" style="color:#374151">
-              <svg class="shrink-0 mt-0.75" width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="10" fill="#14b8a6"/><path d="M5.5 10.5l3 3 6-6.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Тонкий алюминиевый профиль — минимум металла, максимум стекла
-            </li>
-            <li class="flex items-start gap-2.5 text-[0.875rem] leading-relaxed" style="color:#374151">
-              <svg class="shrink-0 mt-0.75" width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="10" fill="#14b8a6"/><path d="M5.5 10.5l3 3 6-6.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Раздвижная система с плавным ходом и мягкими доводчиками
-            </li>
-            <li class="flex items-start gap-2.5 text-[0.875rem] leading-relaxed" style="color:#374151">
-              <svg class="shrink-0 mt-0.75" width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="10" fill="#14b8a6"/><path d="M5.5 10.5l3 3 6-6.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Прозрачное или матовое стекло — под концепцию дизайнера
-            </li>
-            <li class="flex items-start gap-2.5 text-[0.875rem] leading-relaxed" style="color:#374151">
-              <svg class="shrink-0 mt-0.75" width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="10" fill="#14b8a6"/><path d="M5.5 10.5l3 3 6-6.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Индивидуальные размеры под нестандартные проёмы
-            </li>
-            <li class="flex items-start gap-2.5 text-[0.875rem] leading-relaxed" style="color:#374151">
-              <svg class="shrink-0 mt-0.75" width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="10" fill="#14b8a6"/><path d="M5.5 10.5l3 3 6-6.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Порошковое покрытие профиля в любом цвете RAL
-            </li>
-          </ul>
-          <p class="text-[0.875rem] leading-relaxed mb-0" style="color:#475569">
-            Дизайнер интерьера: <strong style="color:#0f172a">Вера Никитина</strong>
-          </p>
-
-          <!-- Attribution -->
-          <div class="mt-auto pt-4 border-t border-slate-100">
-            <a href="https://t.me/VFD_Design/167" target="_blank" rel="noopener noreferrer"
-               class="inline-flex items-center gap-1.5 no-underline group">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"
-                   class="text-slate-400 group-hover:text-teal-500 transition-colors duration-200 shrink-0">
-                <path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/>
-              </svg>
-              <span class="text-[0.6875rem] text-slate-400 group-hover:text-teal-500 transition-colors duration-200">
-                Источник: <span class="font-semibold">ВФД Дизайн</span>
-              </span>
-            </a>
-          </div>
-        </div>
-
-        <!-- Фото-слайдер (RIGHT) -->
-        <div class="h-full">
-          <div class="relative rounded-3xl overflow-hidden bg-slate-900 pt-stat-slider pt-lahta-slider h-full">
-            <div class="pt-stat-slides" id="pt-lahta-slides">
-              <img src="https://storage.yandexcloud.net/catalog-vfd/alum/saint_p_alum/tg1.webp"  alt="ЖК Лахта парк — алюминиевые перегородки, фото 1"  class="pt-stat-slide" loading="lazy" decoding="async" width="1080" height="1920" />
-              <img src="https://storage.yandexcloud.net/catalog-vfd/alum/saint_p_alum/tg2.webp"  alt="ЖК Лахта парк — алюминиевые перегородки, фото 2"  class="pt-stat-slide" loading="lazy" decoding="async" width="1080" height="1920" />
-              <img src="https://storage.yandexcloud.net/catalog-vfd/alum/saint_p_alum/tg3.webp"  alt="ЖК Лахта парк — алюминиевые перегородки, фото 3"  class="pt-stat-slide" loading="lazy" decoding="async" width="1080" height="1920" />
-              <img src="https://storage.yandexcloud.net/catalog-vfd/alum/saint_p_alum/tg4.webp"  alt="ЖК Лахта парк — алюминиевые перегородки, фото 4"  class="pt-stat-slide" loading="lazy" decoding="async" width="1080" height="1920" />
-              <img src="https://storage.yandexcloud.net/catalog-vfd/alum/saint_p_alum/tg5.webp"  alt="ЖК Лахта парк — алюминиевые перегородки, фото 5"  class="pt-stat-slide" loading="lazy" decoding="async" width="1080" height="1920" />
-              <img src="https://storage.yandexcloud.net/catalog-vfd/alum/saint_p_alum/tg6.webp"  alt="ЖК Лахта парк — алюминиевые перегородки, фото 6"  class="pt-stat-slide" loading="lazy" decoding="async" width="1080" height="1920" />
-              <img src="https://storage.yandexcloud.net/catalog-vfd/alum/saint_p_alum/tg7.webp"  alt="ЖК Лахта парк — алюминиевые перегородки, фото 7"  class="pt-stat-slide" loading="lazy" decoding="async" width="1080" height="1920" />
-              <img src="https://storage.yandexcloud.net/catalog-vfd/alum/saint_p_alum/tg8.webp"  alt="ЖК Лахта парк — алюминиевые перегородки, фото 8"  class="pt-stat-slide" loading="lazy" decoding="async" width="1080" height="1920" />
-              <img src="https://storage.yandexcloud.net/catalog-vfd/alum/saint_p_alum/tg9.webp"  alt="ЖК Лахта парк — алюминиевые перегородки, фото 9"  class="pt-stat-slide" loading="lazy" decoding="async" width="1080" height="1920" />
-              <img src="https://storage.yandexcloud.net/catalog-vfd/alum/saint_p_alum/tg10.webp" alt="ЖК Лахта парк — алюминиевые перегородки, фото 10" class="pt-stat-slide" loading="lazy" decoding="async" width="1080" height="1920" />
-            </div>
-            <!-- Стрелки -->
-            <button class="pt-stat-arrow pt-hotel-prev" type="button" aria-label="Предыдущее фото">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 18l-6-6 6-6" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            <button class="pt-stat-arrow pt-hotel-next" type="button" aria-label="Следующее фото">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 18l6-6-6-6" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            <!-- Счётчик -->
-            <div class="pt-hotel-counter" aria-live="polite">
-              <span class="pt-hotel-cur">1</span>
-              <span style="color:rgba(255,255,255,0.35)">/</span>
-              <span>10</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════════════════════════
-       ТИПЫ РАЗДВИЖЕНИЯ — 3 равные карточки
-  ═══════════════════════════════════════════ -->
-  <section class="section" style="background:#fff">
-    <div class="container">
-      <header class="mb-[clamp(2rem,4vw,3rem)]">
-        <p class="block mb-3 text-xs font-black tracking-widest uppercase text-teal-700">Раздвижные системы</p>
-        <h2 class="mb-4 text-slate-900 text-[clamp(2rem,4.5vw,3rem)] font-extrabold leading-[1.1] tracking-tight">Типы направляющих</h2>
-        <p class="text-slate-500 text-base leading-relaxed max-w-140">Количество треков определяет конфигурацию и максимальное число полотен</p>
-      </header>
+      <SectionHeading
+        eyebrow="Раздвижные системы"
+        title="Типы направляющих"
+        subtitle="Количество треков определяет конфигурацию и максимальное число полотен"
+      />
       <div class="pt-3col">
         {tracks.map(t => (
           <article class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden flex flex-col p-0">
@@ -729,34 +229,30 @@ const steps = [
                   <img src={img.src} alt={img.alt} class="pt-stat-slide" loading="lazy" decoding="async" width="800" height="450" />
                 ))}
               </div>
-              <!-- Стрелки -->
               <button class="pt-stat-arrow pt-stat-prev" type="button" aria-label="Предыдущее фото">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 18l-6-6 6-6" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </button>
               <button class="pt-stat-arrow pt-stat-next" type="button" aria-label="Следующее фото">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 18l6-6-6-6" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </button>
-              <!-- Точки -->
               <div class="pt-stat-dots">
                 {t.imgs.map((_, i) => (
                   <button class={`pt-stat-dot${i === 0 ? ' is-active' : ''}`} type="button" aria-label={`Фото ${i + 1}`} />
                 ))}
               </div>
-              <!-- Expand-иконка (hint) -->
               <div class="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10">
-                <div class="w-8 h-8 rounded-full flex items-center justify-center" style="background:rgba(15,23,42,0.55);backdrop-filter:blur(4px)">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                <div class="w-8 h-8 rounded-full flex items-center justify-center bg-slate-900/55 backdrop-blur-xs text-white">
+                  <IconExpand size={13} />
                 </div>
               </div>
-              <!-- Бейдж полотна -->
-              <div class="absolute bottom-3 right-3 flex flex-col items-end px-2.5 py-1.5 rounded-xl leading-tight" style="background:rgba(15,23,42,0.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)">
-                <b class="text-xl font-black tracking-tight" style="color:#5eead4">{t.stat}</b>
-                <span class="text-[0.6rem] font-semibold whitespace-nowrap" style="color:#94a3b8">{t.statLbl}</span>
+              <div class="absolute bottom-3 right-3 flex flex-col items-end px-2.5 py-1.5 rounded-xl leading-tight bg-slate-900/82 backdrop-blur-sm">
+                <b class="text-xl font-black tracking-tight text-teal-300">{t.stat}</b>
+                <span class="text-[0.6rem] font-semibold whitespace-nowrap text-slate-400">{t.statLbl}</span>
               </div>
             </div>
             <div class="p-[clamp(1.1rem,2vw,1.375rem)] flex flex-col gap-[0.45rem] flex-1">
               <p class="m-0 text-[0.7rem] font-black tracking-widest uppercase text-teal-600">{t.num}</p>
-              <h3 class="m-0 text-base font-extrabold text-slate-900">{t.title}</h3>
+              <h3 class="m-0 text-base font-extrabold text-ink">{t.title}</h3>
               <p class="m-0 text-sm text-slate-500 leading-relaxed">{t.desc}</p>
               <ul class="list-none p-0 mt-1 flex flex-col gap-1 pt-track-card__list">
                 {t.items.map(v => <li>{v}</li>)}
@@ -768,44 +264,35 @@ const steps = [
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════
-       КРЕПЛЕНИЕ — 3 карточки
-  ═══════════════════════════════════════════ -->
-  <section class="section" style="background:radial-gradient(ellipse 70% 50% at 50% 0%,color-mix(in srgb,#14b8a6 8%,transparent),transparent),#f8f9fa">
+  <!-- ТИПЫ КРЕПЛЕНИЯ -->
+  <section class="section pt-tint">
     <div class="container">
-      <header class="mb-[clamp(2rem,4vw,3rem)]">
-        <p class="block mb-3 text-xs font-black tracking-widest uppercase text-teal-700">Конструкция</p>
-        <h2 class="mb-4 text-slate-900 text-[clamp(2rem,4.5vw,3rem)] font-extrabold leading-[1.1] tracking-tight">Типы крепления</h2>
-        <p class="text-slate-500 text-base leading-relaxed max-w-140">Способ крепления выбирается в зависимости от конструкции перекрытий</p>
-      </header>
+      <SectionHeading
+        eyebrow="Конструкция"
+        title="Типы крепления"
+        subtitle="Способ крепления выбирается в зависимости от конструкции перекрытий"
+      />
       <div class="pt-3col">
         {mountings.map(m => (
           <div class="rounded-3xl border border-slate-200 bg-white shadow-sm overflow-hidden flex flex-col">
             <button
               class="relative w-full aspect-square overflow-hidden group cursor-zoom-in border-0 p-0 bg-transparent"
-              data-lb-src={m.img}
-              data-lb-alt={m.title}
-              type="button"
-              aria-label={`Открыть фото: ${m.title}`}
+              data-lb-src={m.img} data-lb-alt={m.title} type="button" aria-label={`Открыть фото: ${m.title}`}
             >
               <img
-                src={m.img}
-                alt={m.title}
+                src={m.img} alt={m.title}
                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                loading="lazy"
-                decoding="async"
-                width="800"
-                height="450"
+                loading="lazy" decoding="async" width="800" height="450"
               />
-              <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200" style="background:rgba(15,23,42,0.28)">
-                <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:rgba(255,255,255,0.18);backdrop-filter:blur(6px)">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+              <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-slate-900/28">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center bg-white/20 backdrop-blur-[6px] text-white">
+                  <IconExpand size={16} />
                 </div>
               </div>
             </button>
             <div class="p-6 flex flex-col gap-2">
               <span class="text-[0.7rem] font-extrabold tracking-widest uppercase text-teal-700 font-mono">{m.n}</span>
-              <h3 class="m-0 text-base font-extrabold text-slate-900">{m.title}</h3>
+              <h3 class="m-0 text-base font-extrabold text-ink">{m.title}</h3>
               <p class="m-0 text-sm text-slate-500 leading-snug">{m.desc}</p>
             </div>
           </div>
@@ -814,146 +301,73 @@ const steps = [
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════
-       МОДЕЛЬНЫЙ РЯД — Bento: фото | текстовая карта
-  ═══════════════════════════════════════════ -->
-  <section class="section" style="background:#fff">
+  <!-- МОДЕЛЬНЫЙ РЯД СТВОРОК -->
+  <section class="section bg-white">
     <div class="container">
-      <header class="mb-[clamp(2rem,4vw,3rem)]">
-        <p class="block mb-3 text-xs font-black tracking-widest uppercase text-teal-700">Ассортимент</p>
-        <h2 class="mb-4 text-slate-900 text-[clamp(2rem,4.5vw,3rem)] font-extrabold leading-[1.1] tracking-tight">Модельный ряд створок</h2>
-        <p class="text-slate-500 text-base leading-relaxed max-w-140">Два типа декора. Эксклюзивные модели — по вашему эскизу</p>
-      </header>
-      <div class="pt-models-bento">
-
-        <!-- Фото карточка — Секционный декор -->
-        <div class="pt-card relative rounded-2xl overflow-hidden" style="background:#0f172a;min-height:400px;display:flex;flex-direction:column;justify-content:flex-end">
-          <img
-            class="absolute inset-0 w-full h-full object-cover"
-            src={imgs.sectional}
-            alt="Перегородка GRAFIA с секционным декором"
-            width="800"
-            height="600"
-            loading="lazy"
-            decoding="async"
-          />
-          <div class="absolute inset-0" aria-hidden="true" style="background:linear-gradient(to top,rgba(4,6,11,0.78) 0%,rgba(15,23,42,0.2) 55%,transparent 100%)"></div>
-          <div class="absolute bottom-0 left-0 right-0 p-[clamp(1.25rem,2.5vw,2rem)] z-10 flex flex-col gap-3">
-            <h3 class="m-0 text-[clamp(1.1rem,2.2vw,1.4rem)] font-extrabold text-white leading-tight">Секционный декор</h3>
-            <p class="m-0 text-[0.875rem] leading-[1.55]" style="color:rgba(255,255,255,0.78)">Разделяет стекло на несколько частей — усиление конструкции. Полотна до&nbsp;5&nbsp;м.</p>
-            <div class="flex flex-wrap gap-1.5">
-              {modelSectional.map(m => <span class="inline-flex items-center px-2.5 py-0.5 bg-white/10 border border-white/20 rounded-lg text-white text-xs font-bold font-mono">{m}</span>)}
-            </div>
-          </div>
-        </div>
-
-        <!-- Текстовая карточка — Накладной декор -->
-        <div class="pt-card p-[clamp(1.25rem,2.5vw,1.75rem)] flex flex-col">
-          <p class="block mb-3 text-xs font-black tracking-widest uppercase text-teal-700">Накладной декор</p>
-          <h3 class="mb-3 text-slate-900 text-[clamp(1.125rem,2vw,1.375rem)] font-extrabold leading-tight tracking-tight">Декоративные накладки на стекло</h3>
-          <p class="mb-5 text-slate-600 text-[clamp(0.9375rem,1.5vw,1.0625rem)] leading-relaxed">
-            Выбор из каталога или эксклюзивная модель по вашему эскизу.
-            Большой модельный ряд — от минималистичных до декоративных.
-          </p>
-          <div class="flex flex-wrap gap-1.5 mt-2">
-            {modelOverlay.map(m => <span class="inline-flex items-center px-2.5 py-0.5 bg-teal-50 border border-teal-100 rounded-lg text-teal-700 text-xs font-bold font-mono">{m}</span>)}
-          </div>
-          <!-- placeholder для фото накладного декора -->
-          <div class="pt-placeholder pt-placeholder--sm" aria-hidden="true">
-            <span>Фото накладного декора</span>
-          </div>
-        </div>
-
+      <SectionHeading
+        eyebrow="Ассортимент"
+        title="Модельный ряд створок"
+        subtitle="Секционный и накладной декор — варианты разбивки и оформления стекла"
+      />
+      <DoorLeafViewer client:visible models={sectionalModels} decor={sectionalDecor} />
+      <div class="mt-[clamp(2rem,4vw,3rem)]">
+        <DoorLeafViewer client:visible models={overlayModels} decor={overlayDecor} />
       </div>
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════
-       ЦВЕТА ПРОФИЛЯ
-  ═══════════════════════════════════════════ -->
-  <section class="section" style="background:radial-gradient(ellipse 70% 50% at 50% 0%,color-mix(in srgb,#14b8a6 8%,transparent),transparent),#f8f9fa">
+  <!-- ЦВЕТА ПРОФИЛЯ -->
+  <section class="section pt-tint">
     <div class="container">
-      <header class="mb-[clamp(2rem,4vw,3rem)]">
-        <p class="block mb-3 text-xs font-black tracking-widest uppercase text-teal-700">Отделка</p>
-        <h2 class="mb-4 text-slate-900 text-[clamp(2rem,4.5vw,3rem)] font-extrabold leading-[1.1] tracking-tight">Цветовые решения профиля</h2>
-        <p class="text-slate-500 text-base leading-relaxed max-w-140">Порошковая полимерная окраска. Индивидуальный цвет по RAL/NCS</p>
-      </header>
-      <div class="grid gap-4" style="grid-template-columns:repeat(auto-fill,minmax(80px,1fr))">
-        {colors.map(c => (
-          <div class="flex flex-col items-center gap-2">
-            <span class="w-full aspect-square rounded-2xl border border-black/[0.07] block shadow-md" style={`background:${c.hex}`} aria-hidden="true"></span>
-            <span class="text-[0.65rem] text-slate-500 text-center leading-tight">{c.name}</span>
-          </div>
-        ))}
-      </div>
+      <SectionHeading
+        eyebrow="Отделка"
+        title="Цветовые решения профиля"
+        subtitle="Профили окрашены порошковой полимерной краской, что обеспечивает идеальный внешний вид и гарантирует стойкость покрытия. Можно выбрать индивидуальную покраску, подходящую под ваш интерьер, по&nbsp;RAL/NCS."
+      />
+      <SwatchGrid items={colorSwatches} variant="square" />
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════
-       ОСТЕКЛЕНИЕ
-  ═══════════════════════════════════════════ -->
-  <section class="section" style="background:#fff">
+  <!-- ОСТЕКЛЕНИЕ -->
+  <section class="section bg-white">
     <div class="container">
-      <header class="mb-[clamp(2rem,4vw,3rem)]">
-        <p class="block mb-3 text-xs font-black tracking-widest uppercase text-teal-700">Остекление</p>
-        <h2 class="mb-4 text-slate-900 text-[clamp(2rem,4.5vw,3rem)] font-extrabold leading-[1.1] tracking-tight">Заполнение перегородок</h2>
-        <p class="text-slate-500 text-base leading-relaxed max-w-140">Закалённые стёкла 4, 6 и 8&nbsp;мм повышенной прочности. Возможна установка зеркала</p>
-      </header>
-      <div class="pt-glass-bento">
-        {glasses.map(g => (
-          <div class="pt-card p-5 flex flex-col">
-            <p class="text-[0.7rem] font-extrabold tracking-widest uppercase text-teal-700 mb-3">{g.group}</p>
-            <ul class="list-none p-0 m-0">
-              {g.items.map(item => <li class="text-[0.8125rem] text-slate-700 py-1.5 border-b border-slate-50 last:border-0 leading-snug">{item}</li>)}
-            </ul>
-          </div>
-        ))}
-        <div class="pt-card rounded-xl bg-slate-50 border border-slate-100 p-5 flex flex-col gap-3">
-          <p class="block mb-0 text-xs font-black tracking-widest uppercase text-teal-700">Толщина</p>
-          <div class="flex flex-col gap-3">
-            {[['4 мм', 'базовое'], ['6 мм', 'стандарт'], ['8 мм', 'усиленное']].map(([v, l]) => (
-              <div class="flex flex-col">
-                <b class="text-[1.75rem] font-black text-slate-900 leading-none" style="letter-spacing:-0.03em">{v}</b>
-                <span class="text-xs text-slate-500 mt-0.5">{l}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      <SectionHeading
+        eyebrow="Остекление"
+        title="Заполнение перегородок"
+        subtitle="Закалённые стёкла 4, 6 и 8&nbsp;мм повышенной прочности. Возможна установка зеркала"
+      />
+      <SwatchGrid items={glassSwatches} variant="portrait" />
+      <p class="pt-swatch-note">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M12 11v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <circle cx="12" cy="7.75" r="1.1" fill="currentColor"/>
+        </svg>
+        Наличие отдельных цветов и фактур стекла уточняйте у менеджера.
+      </p>
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════
-       ПРЕИМУЩЕСТВА — Bento 3+3 карточки
-  ═══════════════════════════════════════════ -->
-  <section class="section" style="background:radial-gradient(ellipse 70% 50% at 50% 0%,color-mix(in srgb,#14b8a6 8%,transparent),transparent),#f8f9fa">
+  <!-- ПРЕИМУЩЕСТВА АЛЮМИНИЕВЫХ ПЕРЕГОРОДОК -->
+  <section class="section pt-tint">
     <div class="container">
-      <header class="mb-[clamp(2rem,4vw,3rem)]">
-        <p class="block mb-3 text-xs font-black tracking-widest uppercase text-teal-700">Почему выбирают нас</p>
-        <h2 class="mb-4 text-slate-900 text-[clamp(2rem,4.5vw,3rem)] font-extrabold leading-[1.1] tracking-tight">Официальный партнёр VFD в Челябинске</h2>
-        <p class="text-slate-500 text-base leading-relaxed max-w-140">Работаем с 2014 года. Опыт монтажа — более 20&nbsp;лет</p>
-      </header>
-      <ul class="grid grid-cols-1 md:grid-cols-3 gap-[clamp(0.85rem,1.8vw,1.25rem)] p-0 m-0 list-none" role="list">
-        {advantages.map(a => (
-          <li class="pt-card rounded-2xl border border-slate-200 bg-white p-6 flex flex-col gap-2.5">
-            <h3 class="m-0 text-[0.9375rem] font-extrabold text-slate-900">{a.title}</h3>
-            <p class="m-0 text-sm text-slate-500 leading-relaxed">{a.text}</p>
-          </li>
-        ))}
-      </ul>
+      <SectionHeading
+        eyebrow="Преимущества"
+        title="Преимущества алюминиевых перегородок"
+        subtitle="Почему алюминий — оптимальный материал для современных перегородок: прочность, долговечность и эстетика без компромиссов."
+      />
+      <BenefitsShowcase items={partitionBenefits} />
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════
-       КАК МЫ РАБОТАЕМ
-  ═══════════════════════════════════════════ -->
-  <section class="section" style="background:#fff">
+  <!-- КАК МЫ РАБОТАЕМ -->
+  <section class="section bg-white">
     <div class="container">
-      <header class="mb-[clamp(2rem,4vw,3rem)]">
-        <p class="block mb-3 text-xs font-black tracking-widest uppercase text-teal-700">Процесс</p>
-        <h2 class="mb-4 text-slate-900 text-[clamp(2rem,4.5vw,3rem)] font-extrabold leading-[1.1] tracking-tight">Как мы работаем</h2>
-        <p class="text-slate-500 text-base leading-relaxed max-w-140">От первого звонка до готовой перегородки — чётко и прозрачно</p>
-      </header>
+      <SectionHeading
+        eyebrow="Процесс"
+        title="Как мы работаем"
+        subtitle="От первого звонка до готовой перегородки — чётко и прозрачно"
+      />
       <ol class="pt-steps-grid" role="list">
         {steps.map(s => (
           <li class="pt-step">
@@ -966,15 +380,13 @@ const steps = [
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════
-       CTA
-  ═══════════════════════════════════════════ -->
-  <section class="section" style="background:radial-gradient(ellipse 70% 50% at 50% 0%,color-mix(in srgb,#14b8a6 8%,transparent),transparent),#f8f9fa">
+  <!-- CTA -->
+  <section class="section pt-tint">
     <div class="container">
-      <div class="rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6 flex-wrap p-[clamp(2rem,4vw,3rem)]" style="background:linear-gradient(135deg,#0d9488 0%,#14b8a6 60%,#0f766e 100%);box-shadow:0 8px 32px rgba(13,148,136,0.28)">
+      <div class="rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6 flex-wrap p-[clamp(2rem,4vw,3rem)] text-white" style="background:linear-gradient(135deg,#0d9488 0%,#14b8a6 60%,#0f766e 100%);box-shadow:0 8px 32px rgba(13,148,136,0.28)">
         <div class="flex flex-col gap-1 flex-1 min-w-60">
-          <h2 class="m-0 text-[clamp(1.375rem,3vw,2rem)] font-extrabold text-white" style="letter-spacing:-0.02em">Рассчитаем стоимость бесплатно</h2>
-          <p class="m-0 text-sm leading-relaxed max-w-120" style="color:rgba(255,255,255,0.82)">
+          <h2 class="m-0 text-[clamp(1.375rem,3vw,2rem)] font-extrabold text-white tracking-[-0.02em]">Рассчитаем стоимость бесплатно</h2>
+          <p class="m-0 text-sm leading-relaxed max-w-120 text-white/82">
             Специалист выедет на замер, составит проект и коммерческое предложение за один рабочий день
           </p>
         </div>
@@ -1003,9 +415,7 @@ const steps = [
     videos.forEach(function (v) {
       var btn = v.parentElement && v.parentElement.querySelector('.pt-pivot-replay')
       if (!btn) return
-      v.addEventListener('ended', function () {
-        btn.classList.add('is-visible')
-      })
+      v.addEventListener('ended', function () { btn.classList.add('is-visible') })
       btn.addEventListener('click', function () {
         btn.classList.remove('is-visible')
         v.currentTime = 0
@@ -1017,13 +427,11 @@ const steps = [
       entries.forEach(function (entry) {
         var v = entry.target
         if (entry.isIntersecting) {
-          // Lazy-load src при первом появлении в viewport
           var source = v.querySelector('source[data-src]')
           if (source && !source.getAttribute('src')) {
             source.setAttribute('src', source.getAttribute('data-src'))
             v.load()
           }
-          // Не запускаем если уже закончился (ждём клика на replay)
           if (!v.ended) v.play().catch(function () {})
         } else {
           if (!v.ended) v.pause()
@@ -1045,8 +453,8 @@ const steps = [
     var slides  = container.querySelector('.pt-stat-slides')
     var dots    = container.querySelectorAll('.pt-stat-dot')
     var counter = container.querySelector('.pt-hotel-cur')
-    var prev    = container.querySelector('.pt-stat-prev, .pt-hotel-prev')
-    var next    = container.querySelector('.pt-stat-next, .pt-hotel-next')
+    var prev    = container.querySelector('.pt-stat-prev')
+    var next    = container.querySelector('.pt-stat-next')
     var total   = counter
       ? container.querySelectorAll('.pt-stat-slide').length
       : dots.length
@@ -1067,7 +475,7 @@ const steps = [
 
     var startX = 0
     container.addEventListener('touchstart', function (e) { startX = e.touches[0].clientX }, { passive: true })
-    container.addEventListener('touchend',   function (e) {
+    container.addEventListener('touchend', function (e) {
       var dx = e.changedTouches[0].clientX - startX
       if (Math.abs(dx) > 40) goTo(dx < 0 ? cur + 1 : cur - 1)
     }, { passive: true })
@@ -1075,18 +483,16 @@ const steps = [
     if (withLightbox) {
       var slideImgs = container.querySelectorAll('.pt-stat-slide')
       container.addEventListener('click', function (e) {
-        if (e.target.closest('.pt-stat-dot, .pt-stat-prev, .pt-stat-next, .pt-hotel-prev, .pt-hotel-next')) return
-        var imgs = Array.from(slideImgs).map(function (img) {
-          return { src: img.src, alt: img.alt }
-        })
+        if (e.target.closest('.pt-stat-dot, .pt-stat-prev, .pt-stat-next')) return
+        var imgs = Array.from(slideImgs).map(function (img) { return { src: img.src, alt: img.alt } })
         openLightbox(imgs, cur)
       })
     }
   }
 
-  initSlider(document.querySelector('.pt-stat-slider:not(.pt-hotel-slider):not(.pt-lahta-slider)'))
-  initSlider(document.querySelector('.pt-hotel-slider'))
-  initSlider(document.querySelector('.pt-lahta-slider'))
+  // Слайдеры проектов (стационар/отель/Лахта) — без лайтбокса; треки — с лайтбоксом.
+  // Перебор по классу: новый кейс/слайдер подхватывается автоматически.
+  document.querySelectorAll('.pt-stat-slider').forEach(function (s) { initSlider(s) })
   document.querySelectorAll('.pt-track-slider').forEach(function (s) { initSlider(s, true) })
 
   // ── Лайтбокс для одиночных фото (крепления) ──
@@ -1095,402 +501,19 @@ const steps = [
       openLightbox([{ src: btn.dataset.lbSrc, alt: btn.dataset.lbAlt }], 0)
     })
   })
+
+  // ── Лайтбокс-галереи для swatch-сеток (цвета профиля, остекление) ──
+  document.querySelectorAll('.pt-swatch-grid').forEach(function (grid) {
+    var cards  = grid.querySelectorAll('.pt-swatch-card')
+    var images = Array.prototype.map.call(cards, function (card) {
+      var img = card.querySelector('img')
+      return { src: img.src, alt: img.alt }
+    })
+    cards.forEach(function (card, i) {
+      card.addEventListener('click', function () { openLightbox(images, i) })
+    })
+  })
 </script>
 
   <PhotoLightbox client:only="vue" />
 </BaseLayout>
-
-<style>
-/* Universal card shell */
-.pt-card {
-  border-radius: 1.5rem;
-  border: 1px solid #e2e8f0;
-  background: #fff;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-  transition: border-color 220ms ease, box-shadow 220ms ease;
-}
-.pt-card:hover {
-  border-color: color-mix(in srgb, #14b8a6 35%, #e2e8f0);
-  box-shadow: 0 12px 32px rgba(0,0,0,0.1);
-}
-
-/* 3-column grid */
-.pt-3col {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(0.85rem, 1.8vw, 1.25rem);
-}
-@media (max-width: 900px) { .pt-3col { grid-template-columns: 1fr; } }
-
-/* Pill CTA */
-.pt-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.55rem 1.1rem;
-  border-radius: 9999px;
-  border: 1.5px solid #14b8a6;
-  background: transparent;
-  color: #0d9488;
-  font-size: 0.8125rem;
-  font-weight: 700;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: background 200ms ease, color 200ms ease, transform 200ms ease;
-}
-.pt-pill:hover { background: #14b8a6; color: #fff; transform: translateY(-1px); }
-
-/* Bullet list */
-.pt-list {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 1.75rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.55rem;
-}
-.pt-list li {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.6rem;
-  font-size: 0.9375rem;
-  color: #374151;
-  line-height: 1.5;
-}
-.pt-list li::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #14b8a6;
-  flex-shrink: 0;
-  margin-top: 0.5rem;
-}
-
-/* Media placeholder */
-.pt-placeholder {
-  width: 100%;
-  aspect-ratio: 16/9;
-  background: linear-gradient(135deg, #f0fdfa, #e6f7f5);
-  border-radius: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #94a3b8;
-  font-size: 0.8125rem;
-  font-style: italic;
-}
-.pt-placeholder--sm { aspect-ratio: 4/3; margin-top: 1.25rem; }
-
-/* ═══════════════════════════════════════════════════════
-   HERO BENTO
-═══════════════════════════════════════════════════════ */
-.pt-hero-bento {
-  display: grid;
-  grid-template-columns: 1fr 240px;
-  grid-template-rows: repeat(3, minmax(0, 1fr));
-  gap: clamp(0.75rem, 1.5vw, 1rem);
-  min-height: 520px;
-}
-
-/* Stat cards */
-.pt-hero-stat {
-  grid-column: 2;
-}
-.pt-stat-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  align-self: flex-start;
-  padding: 0.375rem 0.875rem;
-  border-radius: 9999px;
-  border: 1.5px solid rgba(255,255,255,0.4);
-  background: transparent;
-  color: #fff;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: background 200ms ease-out, border-color 200ms ease-out, transform 200ms ease-out;
-}
-.pt-stat-cta:hover {
-  background: rgba(255,255,255,0.12);
-  border-color: rgba(255,255,255,0.65);
-  transform: translateY(-1px);
-}
-.pt-stat-cta svg { flex-shrink: 0; }
-@media (max-width: 760px) {
-  .pt-hero-bento {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    min-height: auto;
-  }
-  .pt-hero-stat { grid-column: 1; padding: 1rem 1.25rem; }
-}
-
-/* ═══════════════════════════════════════════════════════
-   ABOUT
-═══════════════════════════════════════════════════════ */
-.pt-about__grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(0.85rem, 1.8vw, 1.25rem);
-  align-items: stretch;
-}
-@media (max-width: 760px) { .pt-about__grid { grid-template-columns: 1fr; } }
-
-/* ═══════════════════════════════════════════════════════
-   TRACKS — list bullets only
-═══════════════════════════════════════════════════════ */
-.pt-track-card__list li {
-  font-size: 0.8125rem;
-  color: #64748b;
-  padding-left: 1rem;
-  position: relative;
-  line-height: 1.4;
-}
-.pt-track-card__list li::before { content: '—'; position: absolute; left: 0; color: #14b8a6; font-weight: 700; }
-
-/* ═══════════════════════════════════════════════════════
-   MODELS BENTO
-═══════════════════════════════════════════════════════ */
-.pt-models-bento {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: clamp(0.85rem, 1.8vw, 1.25rem);
-  align-items: stretch;
-  min-height: 420px;
-}
-@media (max-width: 760px) { .pt-models-bento { grid-template-columns: 1fr; } }
-
-/* ═══════════════════════════════════════════════════════
-   GLASS BENTO
-═══════════════════════════════════════════════════════ */
-.pt-glass-bento {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr) 200px;
-  gap: clamp(0.85rem, 1.8vw, 1.25rem);
-  align-items: stretch;
-}
-@media (max-width: 1100px) { .pt-glass-bento { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 560px)  { .pt-glass-bento { grid-template-columns: 1fr; } }
-
-/* ═══════════════════════════════════════════════════════
-   STEPS
-═══════════════════════════════════════════════════════ */
-.pt-steps-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  border: 1px solid #e2e8f0;
-  border-radius: 1.5rem;
-  overflow: hidden;
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-@media (max-width: 680px) { .pt-steps-grid { grid-template-columns: 1fr; } }
-.pt-step { padding: 1.75rem 1.5rem; border-right: 1px solid #e2e8f0; }
-.pt-step:last-child { border-right: none; }
-@media (max-width: 680px) {
-  .pt-step { border-right: none; border-bottom: 1px solid #e2e8f0; }
-  .pt-step:last-child { border-bottom: none; }
-}
-.pt-step__num  { display: block; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.12em; color: #0d9488; margin-bottom: 1rem; font-family: monospace; }
-.pt-step__title { margin: 0 0 0.5rem; font-size: 1rem; font-weight: 800; color: #0f172a; }
-.pt-step__text  { margin: 0; font-size: 0.875rem; color: #64748b; line-height: 1.55; }
-
-/* ═══════════════════════════════════════════════════════
-   CTA ghost button
-═══════════════════════════════════════════════════════ */
-.pt-cta-ghost {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.6rem 1.4rem;
-  border-radius: 9999px;
-  background: transparent;
-  color: #fff;
-  border: 1.5px solid rgba(255,255,255,0.55);
-  font-size: 0.875rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: background 200ms ease, border-color 200ms ease;
-}
-.pt-cta-ghost:hover { background: rgba(255,255,255,0.15); border-color: #fff; }
-
-/* ═══════════════════════════════════════════════════════
-   PIVOT — grid + replay button
-═══════════════════════════════════════════════════════ */
-.pt-pivot-grid {
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: clamp(1rem, 2vw, 1.5rem);
-  align-items: stretch;
-}
-@media (max-width: 760px) {
-  .pt-pivot-grid { grid-template-columns: 1fr; }
-}
-
-.pt-video-wrap {
-  opacity: 0;
-  transition: opacity 600ms ease;
-}
-.pt-video-wrap.pt-video-ready {
-  opacity: 1;
-}
-
-.pt-pivot-replay {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0,0,0,0.28);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 300ms ease;
-}
-.pt-pivot-replay.is-visible { opacity: 1; pointer-events: auto; }
-
-.pt-pivot-play-btn {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border: 1.5px solid rgba(255,255,255,0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 200ms ease, transform 200ms ease;
-}
-.pt-pivot-replay:hover .pt-pivot-play-btn {
-  background: rgba(255,255,255,0.28);
-  transform: scale(1.1);
-}
-
-/* ── Стационарные перегородки ── */
-.pt-stat-grid {
-  display: grid;
-  grid-template-columns: 1fr 280px;
-  gap: clamp(1rem, 2vw, 1.5rem);
-  align-items: stretch;
-}
-@media (max-width: 760px) {
-  .pt-stat-grid { grid-template-columns: 1fr; }
-  .pt-stat-grid > :first-child { order: 2; }
-  .pt-stat-grid > :last-child  { order: 1; }
-}
-
-.pt-stat-slider { cursor: pointer; min-height: 380px; }
-
-.pt-stat-slides {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  transition: transform 420ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.pt-stat-slide {
-  flex: 0 0 100%;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  user-select: none;
-  pointer-events: none;
-}
-
-.pt-stat-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(15, 23, 42, 0.52);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background 200ms ease, transform 200ms ease;
-  z-index: 2;
-}
-.pt-stat-arrow:hover { background: rgba(15, 23, 42, 0.78); transform: translateY(-50%) scale(1.08); }
-.pt-stat-prev { left: 10px; }
-.pt-stat-next { right: 10px; }
-
-.pt-stat-dots {
-  position: absolute;
-  bottom: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 6px;
-  z-index: 2;
-}
-
-.pt-stat-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.45);
-  transition: background 250ms ease, transform 250ms ease;
-}
-.pt-stat-dot.is-active {
-  background: #fff;
-  transform: scale(1.35);
-}
-
-/* ── Waldorf Astoria hotel project ── */
-.pt-hotel-grid {
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: clamp(1rem, 2vw, 1.5rem);
-  align-items: stretch;
-}
-@media (max-width: 760px) {
-  .pt-hotel-grid { grid-template-columns: 1fr; }
-}
-
-.pt-hotel-prev { left: 10px; }
-.pt-hotel-next { right: 10px; }
-
-/* ── ЖК Лахта парк project ── */
-.pt-lahta-grid {
-  display: grid;
-  grid-template-columns: 1fr 280px;
-  gap: clamp(1rem, 2vw, 1.5rem);
-  align-items: stretch;
-}
-@media (max-width: 760px) {
-  .pt-lahta-grid { grid-template-columns: 1fr; }
-}
-
-.pt-hotel-counter {
-  position: absolute;
-  bottom: 12px;
-  right: 12px;
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  padding: 3px 10px;
-  border-radius: 9999px;
-  background: rgba(15, 23, 42, 0.52);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  font-size: 0.6875rem;
-  font-weight: 700;
-  color: #fff;
-  pointer-events: none;
-}
-</style>

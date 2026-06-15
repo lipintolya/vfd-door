@@ -1,0 +1,46 @@
+---
+import IconChevron from '../ui/icons/IconChevron.astro'
+import type { SlideImage } from '../../data/partitions'
+
+interface Props {
+  images:     SlideImage[]
+  tone?:      'dark' | 'light'
+  indicator?: 'dots' | 'counter'
+  class?:     string
+}
+const { images, tone = 'dark', indicator = 'counter', class: cls = '' } = Astro.props
+---
+<div
+  class:list={[
+    'relative rounded-3xl overflow-hidden h-full pt-stat-slider',
+    tone === 'dark' ? 'bg-slate-900' : 'bg-slate-100',
+    cls,
+  ]}
+>
+  <div class="pt-stat-slides">
+    {images.map(img => (
+      <img src={img.src} alt={img.alt} class="pt-stat-slide" loading="lazy" decoding="async" width="1080" height="1920" />
+    ))}
+  </div>
+
+  <button class="pt-stat-arrow pt-stat-prev" type="button" aria-label="Предыдущее фото">
+    <IconChevron dir="left" />
+  </button>
+  <button class="pt-stat-arrow pt-stat-next" type="button" aria-label="Следующее фото">
+    <IconChevron dir="right" />
+  </button>
+
+  {indicator === 'counter' ? (
+    <div class="pt-hotel-counter" aria-live="polite">
+      <span class="pt-hotel-cur">1</span>
+      <span class="text-white/35">/</span>
+      <span>{images.length}</span>
+    </div>
+  ) : (
+    <div class="pt-stat-dots">
+      {images.map((_, i) => (
+        <button class:list={['pt-stat-dot', i === 0 && 'is-active']} type="button" aria-label={`Перейти к фото ${i + 1}`} />
+      ))}
+    </div>
+  )}
+</div>

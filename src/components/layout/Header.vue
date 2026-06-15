@@ -110,18 +110,26 @@ const timeUntilCloseText = computed(() => {
 })
 
 const closedMessage = computed(() => {
-  const tomorrow = new Date(now.value)
-  tomorrow.setDate(tomorrow.getDate() + 1)
-  const tomorrowSchedule = getScheduleForDay(tomorrow)
-  
-  // Если сегодня воскресенье
-  if (schedule.value === WORK_SCHEDULE.sunday) {
+  const h = now.value.getHours()
+  const s = schedule.value
+
+  // Воскресенье (особый режим — по предварительной записи)
+  if (s === WORK_SCHEDULE.sunday) {
     const nextOpen = WORK_SCHEDULE.weekday.open
     return `Вс: по предварительной записи · Откроемся завтра в ${String(nextOpen).padStart(2, '0')}:00`
   }
 
+  // Ещё не наступило время открытия сегодня
+  if (h < s.open) {
+    return `Закрыто · Откроемся сегодня в ${String(s.open).padStart(2, '0')}:00`
+  }
+
+  // Уже закрылись — смотрим на завтра
+  const tomorrow = new Date(now.value)
+  tomorrow.setDate(tomorrow.getDate() + 1)
+  const tomorrowSchedule = getScheduleForDay(tomorrow)
+
   if (tomorrowSchedule === WORK_SCHEDULE.sunday) {
-    // Завтра воскресенье — следующий рабочий день в пн
     const nextOpen = WORK_SCHEDULE.weekday.open
     return `Закрыто · Откроемся в пн в ${String(nextOpen).padStart(2, '0')}:00`
   }
@@ -342,10 +350,12 @@ onUnmounted(() => {
                         v-for="p in CONTACTS.phones"
                         :key="p.raw"
                         :href="`tel:${p.raw}`"
-                        class="flex items-center gap-2 font-semibold text-gray-800 hover:text-teal-600
+                        class="flex items-center gap-2.5 font-semibold text-gray-800 hover:text-teal-600
                                transition-colors duration-200 py-0.5"
                       >
-                        <img src="/svg/phone-call.svg" alt="" class="w-4 h-4 shrink-0" />
+                        <div class="w-7 h-7 rounded-full bg-teal-500 flex items-center justify-center shrink-0">
+                          <img src="/svg/w_phone.svg" alt="" class="w-3.5 h-3.5" />
+                        </div>
                         {{ p.label }}
                       </a>
                     </div>
@@ -392,14 +402,13 @@ onUnmounted(() => {
                       </a>
                     </div>
 
-                    <button
-                      type="button"
-                      class="btn btn-primary w-full justify-center inline-flex items-center gap-2"
-                      @click="callPrimary"
+                    <a
+                      href="/contacts"
+                      class="btn btn-primary w-full justify-center inline-flex items-center"
+                      @click="closeContacts"
                     >
-                      <img src="/svg/phone-call.svg" alt="" class="w-4 h-4" />
-                      Позвонить
-                    </button>
+                      Перейти к контактам
+                    </a>
 
                   </div>
                 </div>
