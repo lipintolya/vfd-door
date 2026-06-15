@@ -9,6 +9,7 @@ import FeatureList from '../components/partitions/FeatureList.astro'
 import SwatchGrid from '../components/partitions/SwatchGrid.astro'
 import ProjectCase from '../components/partitions/ProjectCase.astro'
 import BenefitsShowcase from '../components/partitions/BenefitsShowcase.astro'
+import ProcessSteps from '../components/partitions/ProcessSteps.astro'
 import ReplayButton from '../components/partitions/ReplayButton.astro'
 import IconArrowRight from '../components/ui/icons/IconArrowRight.astro'
 import IconTelegram from '../components/ui/icons/IconTelegram.astro'
@@ -366,17 +367,9 @@ const structuredData = {
       <SectionHeading
         eyebrow="Процесс"
         title="Как мы работаем"
-        subtitle="От первого звонка до готовой перегородки — чётко и прозрачно"
+        subtitle="От первого обращения в фирменный салон ВФД на Кашириных до готовой перегородки в Челябинске — чётко и прозрачно"
       />
-      <ol class="pt-steps-grid" role="list">
-        {steps.map(s => (
-          <li class="pt-step">
-            <span class="pt-step__num">{s.num}</span>
-            <h3 class="pt-step__title">{s.title}</h3>
-            <p class="pt-step__text">{s.text}</p>
-          </li>
-        ))}
-      </ol>
+      <ProcessSteps items={steps} />
     </div>
   </section>
 
