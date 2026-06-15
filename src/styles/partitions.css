@@ -316,6 +316,28 @@
 .pt-step__text  { margin: 0; font-size: 0.875rem; color: #64748b; line-height: 1.55; }
 
 /* ═══════════════════════════════════════════════════════
+   Полезные материалы — подзаголовок
+═══════════════════════════════════════════════════════ */
+.pt-dl-head {
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+  padding-top: clamp(1.5rem, 3vw, 2.25rem);
+  border-top: 1px solid #e2e8f0;
+}
+.pt-dl-head__title {
+  margin: 0 0 0.3rem;
+  font-size: clamp(1.125rem, 2vw, 1.375rem);
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+}
+.pt-dl-head__sub {
+  margin: 0;
+  font-size: clamp(0.875rem, 1.3vw, 0.9375rem);
+  color: #64748b;
+  line-height: 1.55;
+}
+
+/* ═══════════════════════════════════════════════════════
    CTA block
 ═══════════════════════════════════════════════════════ */
 .pt-cta {

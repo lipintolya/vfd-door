@@ -10,6 +10,7 @@ import SwatchGrid from '../components/partitions/SwatchGrid.astro'
 import ProjectCase from '../components/partitions/ProjectCase.astro'
 import BenefitsShowcase from '../components/partitions/BenefitsShowcase.astro'
 import ProcessSteps from '../components/partitions/ProcessSteps.astro'
+import Downloads from '../components/partitions/Downloads.astro'
 import SectionNav from '../components/partitions/SectionNav.astro'
 import ReplayButton from '../components/partitions/ReplayButton.astro'
 import IconArrowRight from '../components/ui/icons/IconArrowRight.astro'
@@ -375,6 +376,12 @@ const structuredData = {
         subtitle="От первого обращения в фирменный салон ВФД на Кашириных до готовой перегородки в Челябинске — чётко и прозрачно"
       />
       <ProcessSteps items={steps} />
+
+      <div class="pt-dl-head">
+        <h3 class="pt-dl-head__title">Полезные материалы</h3>
+        <p class="pt-dl-head__sub">Подготовьтесь к замеру заранее — скачайте бланк и требования к проёму</p>
+      </div>
+      <Downloads />
     </div>
   </section>
 
