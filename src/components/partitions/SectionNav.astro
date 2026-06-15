@@ -93,9 +93,9 @@ const items = [
 <script>
   ;(function () {
     const nav = document.getElementById('pt-snav')
-    if (!nav) return
+    if (!(nav instanceof HTMLElement)) return
 
-    function onScroll() {
+    const onScroll = () => {
       const show = window.scrollY > 380
       nav.classList.toggle('pt-snav--visible', show)
       nav.setAttribute('aria-hidden', show ? 'false' : 'true')
@@ -113,8 +113,7 @@ const items = [
             links.forEach((l) => {
               l.classList.toggle('pt-snav--active', l.dataset.snav === e.target.id)
             })
-            const activeLink = nav.querySelector('.pt-snav--active')
-            activeLink?.scrollIntoView({ inline: 'nearest', block: 'nearest' })
+            nav.querySelector('.pt-snav--active')?.scrollIntoView({ inline: 'nearest', block: 'nearest' })
           })
         },
         { rootMargin: '-15% 0px -75% 0px' },
