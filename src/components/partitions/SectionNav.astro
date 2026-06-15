@@ -26,6 +26,17 @@ const items = [
           </li>
         ))}
       </ul>
+      <button
+        id="pt-snav-close"
+        class="pt-snav__close"
+        type="button"
+        aria-label="Скрыть навигационное меню"
+        title="Скрыть навигационное меню"
+      >
+        <svg viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
     </div>
   </div>
 </nav>
@@ -88,6 +99,33 @@ const items = [
     background: #0d9488;
     color: #fff;
   }
+
+  /* Пилюля: flex чтобы кнопка закрытия прижималась вправо */
+  .pt-snav__pill {
+    display: flex;
+    align-items: center;
+  }
+  .pt-snav__list { flex: 1; min-width: 0; }
+
+  .pt-snav__close {
+    flex-shrink: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 9999px;
+    border: none;
+    background: transparent;
+    color: #94a3b8;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    margin-left: 0.25rem;
+    transition: background 150ms ease, color 150ms ease;
+  }
+  .pt-snav__close svg { width: 0.75rem; height: 0.75rem; }
+  .pt-snav__close:hover {
+    background: #fee2e2;
+    color: #ef4444;
+  }
 </style>
 
 <script>
@@ -95,12 +133,25 @@ const items = [
     const nav = document.getElementById('pt-snav')
     if (!(nav instanceof HTMLElement)) return
 
+    let dismissed = sessionStorage.getItem('pt-snav-dismissed') === '1'
+
     const onScroll = () => {
+      if (dismissed) return
       const show = window.scrollY > 380
       nav.classList.toggle('pt-snav--visible', show)
       nav.setAttribute('aria-hidden', show ? 'false' : 'true')
     }
     window.addEventListener('scroll', onScroll, { passive: true })
+
+    const closeBtn = document.getElementById('pt-snav-close')
+    if (closeBtn instanceof HTMLElement) {
+      closeBtn.addEventListener('click', () => {
+        dismissed = true
+        sessionStorage.setItem('pt-snav-dismissed', '1')
+        nav.classList.remove('pt-snav--visible')
+        nav.setAttribute('aria-hidden', 'true')
+      })
+    }
 
     const links = Array.from(nav.querySelectorAll<HTMLAnchorElement>('[data-snav]'))
     const ids = ['pt-profiles', 'pt-colors', 'pt-glass', 'pt-benefits', 'pt-process', 'pt-projects']
