@@ -376,16 +376,28 @@ const structuredData = {
   <!-- CTA -->
   <section class="section pt-tint">
     <div class="container">
-      <div class="rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6 flex-wrap p-[clamp(2rem,4vw,3rem)] text-white" style="background:linear-gradient(135deg,#0d9488 0%,#14b8a6 60%,#0f766e 100%);box-shadow:0 8px 32px rgba(13,148,136,0.28)">
-        <div class="flex flex-col gap-1 flex-1 min-w-60">
+      <div class="pt-cta" style="background:linear-gradient(135deg,#0d9488 0%,#14b8a6 60%,#0f766e 100%);box-shadow:0 8px 32px rgba(13,148,136,0.28)">
+        <div class="pt-cta__text">
           <h2 class="m-0 text-[clamp(1.375rem,3vw,2rem)] font-extrabold text-white tracking-[-0.02em]">Рассчитаем стоимость бесплатно</h2>
-          <p class="m-0 text-sm leading-relaxed max-w-120 text-white/82">
+          <p class="m-0 text-sm leading-relaxed text-white/82">
             Специалист выедет на замер, составит проект и коммерческое предложение за один рабочий день
           </p>
         </div>
-        <div class="flex gap-3 flex-wrap shrink-0">
-          <a href="https://t.me/vfddoors74" target="_blank" rel="noopener" class="btn btn-ghost">Получить расчёт</a>
-          <a href="/contacts" class="pt-cta-ghost">Написать нам</a>
+        <div class="pt-cta__media">
+          <img
+            src="https://storage.yandexcloud.net/catalog-vfd/alum/rener-2.webp"
+            alt=""
+            role="presentation"
+            class="pt-cta__img"
+            loading="lazy"
+            decoding="async"
+            width="600"
+            height="400"
+          />
+          <div class="pt-cta__btns">
+            <a href="https://t.me/vfddoors74" target="_blank" rel="noopener" class="btn btn-ghost">Получить расчёт</a>
+            <a href="/contacts" class="pt-cta-ghost">Написать нам</a>
+          </div>
         </div>
       </div>
     </div>
