@@ -1,0 +1,137 @@
+---
+const items = [
+  { id: 'pt-profiles', label: 'Профили' },
+  { id: 'pt-colors',   label: 'Цвета' },
+  { id: 'pt-glass',    label: 'Остекление' },
+  { id: 'pt-benefits', label: 'Преимущества' },
+  { id: 'pt-process',  label: 'Процесс' },
+  { id: 'pt-projects', label: 'Проекты' },
+]
+---
+
+<nav
+  id="pt-snav"
+  class="pt-snav"
+  aria-label="Разделы страницы"
+  aria-hidden="true"
+>
+  <div class="container">
+    <ul class="pt-snav__list" role="list">
+      {items.map(it => (
+        <li>
+          <a
+            href={`#${it.id}`}
+            class="pt-snav__link"
+            data-snav={it.id}
+          >
+            {it.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</nav>
+
+<style>
+  .pt-snav {
+    position: fixed;
+    top: var(--header-height, 88px);
+    left: 0;
+    right: 0;
+    z-index: 45;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    opacity: 0;
+    transform: translateY(-6px);
+    pointer-events: none;
+    transition: opacity 220ms ease, transform 220ms ease;
+  }
+  .pt-snav.pt-snav--visible {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+
+  .pt-snav__list {
+    list-style: none;
+    margin: 0;
+    padding: 0.375rem 0;
+    display: flex;
+    gap: 0.25rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .pt-snav__list::-webkit-scrollbar { display: none; }
+
+  .pt-snav__link {
+    display: inline-block;
+    padding: 0.3rem 0.875rem;
+    border-radius: 9999px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #64748b;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 150ms ease, color 150ms ease;
+  }
+  .pt-snav__link:hover { background: #f0fdfa; color: #0d9488; }
+  .pt-snav__link.pt-snav--active { background: #0d9488; color: #fff; }
+</style>
+
+<script>
+  ;(function () {
+    var nav = document.getElementById('pt-snav')
+    if (!nav) return
+
+    // Показываем после прокрутки мимо hero (~400px)
+    function onScroll() {
+      var show = window.scrollY > 380
+      nav.classList.toggle('pt-snav--visible', show)
+      nav.setAttribute('aria-hidden', show ? 'false' : 'true')
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+
+    // Подсвечиваем активный раздел
+    var links = nav.querySelectorAll('[data-snav]')
+    var ids = ['pt-profiles', 'pt-colors', 'pt-glass', 'pt-benefits', 'pt-process', 'pt-projects']
+
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) {
+              links.forEach(function (l) {
+                l.classList.toggle('pt-snav--active', l.dataset.snav === e.target.id)
+              })
+              // Прокручиваем активный пункт в видимую часть нав-бара
+              var activeLink = nav.querySelector('.pt-snav--active')
+              if (activeLink) {
+                activeLink.scrollIntoView({ inline: 'nearest', block: 'nearest' })
+              }
+            }
+          })
+        },
+        { rootMargin: '-15% 0px -75% 0px' }
+      )
+      ids.forEach(function (id) {
+        var el = document.getElementById(id)
+        if (el) io.observe(el)
+      })
+    }
+
+    // Плавный скролл к разделу с учётом хедера + нав-бара
+    links.forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        e.preventDefault()
+        var target = document.getElementById(this.dataset.snav)
+        if (!target) return
+        var offset = (parseInt(getComputedStyle(document.documentElement)
+          .getPropertyValue('--header-height')) || 88) + 48
+        var top = target.getBoundingClientRect().top + window.scrollY - offset
+        window.scrollTo({ top: top, behavior: 'smooth' })
+      })
+    })
+  })()
+</script>

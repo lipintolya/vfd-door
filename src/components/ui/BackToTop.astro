@@ -1,0 +1,71 @@
+---
+---
+<button
+  id="btt-btn"
+  aria-label="Наверх — прокрутить страницу в начало"
+  title="Наверх"
+>
+  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2.2"
+          stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+
+<style>
+  #btt-btn {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 9999px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10);
+    color: #0f172a;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    opacity: 0;
+    transform: translateY(10px) scale(0.9);
+    pointer-events: none;
+    transition: opacity 220ms ease, transform 220ms ease,
+                background 150ms ease, border-color 150ms ease, color 150ms ease;
+    z-index: 48;
+  }
+  #btt-btn svg { width: 1.125rem; height: 1.125rem; }
+
+  #btt-btn.btt-visible {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+  #btt-btn:hover {
+    background: #f0fdfa;
+    border-color: #5eead4;
+    color: #0d9488;
+    box-shadow: 0 6px 20px rgba(13, 148, 136, 0.18);
+  }
+  #btt-btn:active { transform: scale(0.94); }
+
+  /* На мобиле немного выше cookie-баннера если он появляется */
+  @media (max-width: 640px) {
+    #btt-btn { bottom: 1.25rem; right: 1rem; }
+  }
+</style>
+
+<script>
+  ;(function () {
+    var btn = document.getElementById('btt-btn')
+    if (!btn) return
+
+    function onScroll() {
+      btn.classList.toggle('btt-visible', window.scrollY > 400)
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+
+    btn.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    })
+  })()
+</script>

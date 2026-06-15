@@ -4,6 +4,7 @@ import Header from '../components/layout/Header.vue'
 import Footer from '../components/layout/Footer.vue'
 import YandexMetrika from '../components/analytics/YandexMetrika.astro'
 import AnnouncementBar from '../components/ui/AnnouncementBar.astro'
+import BackToTop from '../components/ui/BackToTop.astro'
 
 interface Props {
   title?:         string
@@ -108,6 +109,8 @@ const structuredDataJson = structuredData
 
     <!-- Footer: модальное окно требует Vue -->
     <Footer client:only="vue" />
+
+    <BackToTop />
 
     <!-- Баннер согласия с обработкой данных (ФЗ-152) -->
     <div id="cookie-banner" style="display:none;position:fixed;bottom:1.25rem;left:50%;transform:translateX(-50%);z-index:9999;width:calc(100% - 2rem);max-width:720px;">

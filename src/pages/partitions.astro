@@ -10,6 +10,7 @@ import SwatchGrid from '../components/partitions/SwatchGrid.astro'
 import ProjectCase from '../components/partitions/ProjectCase.astro'
 import BenefitsShowcase from '../components/partitions/BenefitsShowcase.astro'
 import ProcessSteps from '../components/partitions/ProcessSteps.astro'
+import SectionNav from '../components/partitions/SectionNav.astro'
 import ReplayButton from '../components/partitions/ReplayButton.astro'
 import IconArrowRight from '../components/ui/icons/IconArrowRight.astro'
 import IconTelegram from '../components/ui/icons/IconTelegram.astro'
@@ -58,6 +59,8 @@ const structuredData = {
   preloadImage={imgs.hero}
   structuredData={structuredData}
 >
+  <SectionNav />
+
   <div class="breadcrumb-bar">
     <div class="container">
       <Breadcrumbs items={breadcrumbItems} />
@@ -211,7 +214,9 @@ const structuredData = {
   </section>
 
   <!-- РЕАЛИЗОВАННЫЕ ПРОЕКТЫ: Стационарные · Waldorf · Лахта -->
-  {cases.map(c => <ProjectCase data={c} />)}
+  <div id="pt-projects">
+    {cases.map(c => <ProjectCase data={c} />)}
+  </div>
 
   <!-- ТИПЫ НАПРАВЛЯЮЩИХ -->
   <section class="section bg-white">
@@ -303,7 +308,7 @@ const structuredData = {
   </section>
 
   <!-- МОДЕЛЬНЫЙ РЯД СТВОРОК -->
-  <section class="section bg-white">
+  <section id="pt-profiles" class="section bg-white">
     <div class="container">
       <SectionHeading
         eyebrow="Ассортимент"
@@ -318,7 +323,7 @@ const structuredData = {
   </section>
 
   <!-- ЦВЕТА ПРОФИЛЯ -->
-  <section class="section pt-tint">
+  <section id="pt-colors" class="section pt-tint">
     <div class="container">
       <SectionHeading
         eyebrow="Отделка"
@@ -330,7 +335,7 @@ const structuredData = {
   </section>
 
   <!-- ОСТЕКЛЕНИЕ -->
-  <section class="section bg-white">
+  <section id="pt-glass" class="section bg-white">
     <div class="container">
       <SectionHeading
         eyebrow="Остекление"
@@ -350,7 +355,7 @@ const structuredData = {
   </section>
 
   <!-- ПРЕИМУЩЕСТВА АЛЮМИНИЕВЫХ ПЕРЕГОРОДОК -->
-  <section class="section pt-tint">
+  <section id="pt-benefits" class="section pt-tint">
     <div class="container">
       <SectionHeading
         eyebrow="Преимущества"
@@ -362,7 +367,7 @@ const structuredData = {
   </section>
 
   <!-- КАК МЫ РАБОТАЕМ -->
-  <section class="section bg-white">
+  <section id="pt-process" class="section bg-white">
     <div class="container">
       <SectionHeading
         eyebrow="Процесс"
