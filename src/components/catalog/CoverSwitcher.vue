@@ -152,9 +152,22 @@ const activeId = ref<CoverId>('modern')
 .csw-thumb--on .csw-thumb__name { color: #fff; }
 
 /* ── Responsive ── */
+/* На мобильном — переключатель наверх, чтобы не налезал на CTA-кнопки */
+@media (max-width: 640px) {
+  /* Привязываем и left, и right — ширина свитчера = коробка hero, вылезти не может */
+  .csw-switcher {
+    top: 0.75rem;
+    bottom: auto;
+    left: 0.75rem;
+    right: 0.75rem;
+  }
+  .csw-switcher__row { flex-wrap: wrap; justify-content: flex-end; }
+}
 @media (max-width: 520px) {
-  .csw-thumb { width: 4.25rem; }
-  .csw-thumb__img { height: 2.75rem; }
+  .csw-thumb { width: 3.5rem; }
+  .csw-thumb__img { height: 2.25rem; }
+  .csw-switcher__label { font-size: 0.625rem; letter-spacing: 0.06em; }
+  .csw-thumb__name { font-size: 0.5rem; padding: 0.2rem 0.25rem 0.24rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
