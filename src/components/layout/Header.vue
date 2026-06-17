@@ -48,6 +48,11 @@ const NAV_LINKS = [
   { href: '/contacts',   label: 'Контакты' },
 ] as const
 
+const CATALOG_DROPDOWN = [
+  { href: '/catalog',               label: 'Все двери',      desc: 'Межкомнатные' },
+  { href: '/catalog/skrytye-dveri', label: 'Скрытые двери', desc: 'Скрытый монтаж' },
+] as const
+
 const WORK_SCHEDULE = {
   weekday: { open: 10, close: 20 },  // Пн-Пт: 10:00-20:00
   saturday: { open: 11, close: 16 }, // Сб: 11:00-16:00
@@ -60,6 +65,8 @@ const WORK_SCHEDULE = {
 const scrolled     = ref(false)
 const mobileOpen   = ref(false)
 const contactsOpen = ref(false)
+const catalogOpen  = ref(false)
+let   catalogTimer: ReturnType<typeof setTimeout> | null = null
 const logoLoaded   = ref(false)
 const logoError    = ref(false)
 const now          = ref(new Date())
@@ -187,6 +194,9 @@ const openMobileMenu   = () => { mobileOpen.value = true;  document.body.style.o
 const closeMobileMenu  = () => { mobileOpen.value = false; document.body.style.overflow = '' }
 const toggleMobileMenu = () => mobileOpen.value ? closeMobileMenu() : openMobileMenu()
 
+const openCatalog  = () => { if (catalogTimer !== null) clearTimeout(catalogTimer); catalogOpen.value = true }
+const closeCatalog = () => { catalogTimer = setTimeout(() => { catalogOpen.value = false }, 150) }
+
 const openContacts = async () => {
   contactsOpen.value = true
   await nextTick()
@@ -221,9 +231,9 @@ onUnmounted(() => {
   window.removeEventListener('keydown', onKeydown)
   window.removeEventListener('resize',  onResize)
   document.removeEventListener('click', onClickOutside, { capture: true })
-  // Гарантируем сброс overflow при размонтировании (напр. при HMR)
   document.body.style.overflow = ''
   if (timerId !== null) clearInterval(timerId)
+  if (catalogTimer !== null) clearTimeout(catalogTimer)
 })
 </script>
 
@@ -285,18 +295,74 @@ onUnmounted(() => {
 
         <!-- Desktop nav -->
         <nav class="hidden md:flex gap-7 text-sm" aria-label="Основная навигация">
-          <a
-            v-for="link in NAV_LINKS"
-            :key="link.href"
-            :href="link.href"
-            class="transition-colors duration-200"
-            :class="isActive(link.href)
-              ? 'text-gray-900 font-semibold'
-              : 'text-gray-500 hover:text-gray-900'"
-            :aria-current="isActive(link.href) ? 'page' : undefined"
-          >
-            {{ link.label }}
-          </a>
+          <template v-for="link in NAV_LINKS" :key="link.href">
+
+            <!-- Обычная ссылка -->
+            <a
+              v-if="link.href !== '/catalog'"
+              :href="link.href"
+              class="transition-colors duration-200"
+              :class="isActive(link.href)
+                ? 'text-gray-900 font-semibold'
+                : 'text-gray-500 hover:text-gray-900'"
+              :aria-current="isActive(link.href) ? 'page' : undefined"
+            >{{ link.label }}</a>
+
+            <!-- Каталог с дропдауном -->
+            <div
+              v-else
+              class="relative"
+              @mouseenter="openCatalog"
+              @mouseleave="closeCatalog"
+              @focusin="openCatalog"
+              @focusout="closeCatalog"
+            >
+              <a
+                :href="link.href"
+                class="flex items-center gap-0.5 transition-colors duration-200"
+                :class="currentPath.startsWith('/catalog')
+                  ? 'text-gray-900 font-semibold'
+                  : 'text-gray-500 hover:text-gray-900'"
+                :aria-current="isActive(link.href) ? 'page' : undefined"
+                :aria-haspopup="true"
+                :aria-expanded="catalogOpen"
+              >
+                {{ link.label }}
+                <svg
+                  class="w-3.5 h-3.5 transition-transform duration-200"
+                  :class="{ 'rotate-180': catalogOpen }"
+                  viewBox="0 0 24 24" fill="none"
+                  aria-hidden="true"
+                >
+                  <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </a>
+
+              <Transition name="fade-slide">
+                <div
+                  v-if="catalogOpen"
+                  class="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-52 rounded-2xl
+                         bg-white border border-gray-100 shadow-lg shadow-black/5 p-1.5 z-50"
+                  role="menu"
+                  aria-label="Категории каталога"
+                >
+                  <a
+                    v-for="item in CATALOG_DROPDOWN"
+                    :key="item.href"
+                    :href="item.href"
+                    class="flex flex-col px-3.5 py-2.5 rounded-xl hover:bg-gray-50
+                           transition-colors duration-150 text-left"
+                    role="menuitem"
+                    @click="catalogOpen = false"
+                  >
+                    <span class="text-sm font-semibold text-gray-900">{{ item.label }}</span>
+                    <span class="text-xs text-gray-400 mt-0.5">{{ item.desc }}</span>
+                  </a>
+                </div>
+              </Transition>
+            </div>
+
+          </template>
         </nav>
 
         <!-- Actions -->
@@ -475,14 +541,25 @@ onUnmounted(() => {
               <a
                 :href="link.href"
                 class="block px-4 py-3 rounded-xl transition-colors text-base font-medium"
-                :class="isActive(link.href)
-                  ? 'bg-gray-100 text-gray-900'
-                  : 'hover:bg-gray-50 text-gray-600'"
+                :class="currentPath.startsWith(link.href) && link.href !== '/'
+                    ? 'bg-gray-100 text-gray-900'
+                    : isActive(link.href)
+                      ? 'bg-gray-100 text-gray-900'
+                      : 'hover:bg-gray-50 text-gray-600'"
                 :aria-current="isActive(link.href) ? 'page' : undefined"
                 @click="closeMobileMenu"
-              >
-                {{ link.label }}
-              </a>
+              >{{ link.label }}</a>
+              <!-- Подразделы каталога -->
+              <ul v-if="link.href === '/catalog'" class="ml-3 mt-0.5 mb-1 space-y-0.5" role="list">
+                <li v-for="item in CATALOG_DROPDOWN" :key="item.href">
+                  <a
+                    :href="item.href"
+                    class="block px-4 py-2 rounded-xl text-sm font-medium transition-colors
+                           hover:bg-gray-50 text-gray-500 hover:text-gray-800"
+                    @click="closeMobileMenu"
+                  >{{ item.label }}</a>
+                </li>
+              </ul>
             </li>
           </ul>
 

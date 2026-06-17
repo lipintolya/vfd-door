@@ -1,5 +1,915 @@
 ---
-import DoorCategoryLanding from '../../components/catalog/DoorCategoryLanding.astro'
-import { skrytyeDveri } from '../../data/door-categories'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import Breadcrumbs from '../../components/ui/Breadcrumbs.astro'
+import CoverSwitcher      from '../../components/catalog/CoverSwitcher.vue'
+import ColorSelector      from '../../components/catalog/ColorSelector.vue'
+import InfoImageViewer    from '../../components/catalog/InfoImageViewer.vue'
+import WorksGallery      from '../../components/catalog/WorksGallery.vue'
+import { INVISIBLE_WORKS } from '../../data/skrytye-dveri-works'
+import {
+  IMAGES,
+  INFO_IMAGES,
+  SECRET_SIZES,
+  SECRET_REVERS_SIZES,
+  DOOR_HEIGHT,
+  POLOTNO_PRICE_SECRET,
+  POLOTNO_PRICE_SECRET_REVERS,
+  TOTAL_SECRET,
+  TOTAL_SECRET_REVERS,
+  CUSTOM_HEIGHT_TIERS,
+  CUSTOM_LEAD_TIME,
+  calcCustomPrice,
+} from '../../data/skrytye-dveri-products'
+
+const PHONE = '+79000297888'
+const TG    = 'https://t.me/vfddoors74'
+
+const fmt = (n: number) => n.toLocaleString('ru-RU') + ' ₽'
+
+const canonicalUrl = Astro.site
+  ? new URL('/catalog/skrytye-dveri', Astro.site).href
+  : undefined
+
+const breadcrumbItems = [
+  { label: 'Главная', href: '/' },
+  { label: 'Каталог', href: '/catalog' },
+  { label: 'Скрытые двери' },
+]
+
+const faq = [
+  { q: 'Чем скрытая дверь отличается от обычной?',
+    a: 'Нет видимых наличников и коробки — алюминиевая рама монтируется заподлицо, полотно располагается вровень со стеной. Петли скрытые. Дверь визуально растворяется в интерьере.' },
+  { q: 'Что входит в комплект?',
+    a: 'Полотно серии «Секрет» или «Секрет Реверс» и комплект скрытого короба: профиль 54×43 мм (2,5 пог. м), запил под ответную планку, ответная планка и две скрытые петли. Ручка, стопор, завёртка WC — опционально.' },
+  { q: 'Можно покрасить в цвет стены?',
+    a: 'Да. Полотно поставляется в грунте — красится или штукатурится после монтажа. Главное: красить только после установки, чтобы зазоры совпали по цвету.' },
+  { q: 'В чём разница «Секрет» и «Секрет Реверс»?',
+    a: '«Секрет» открывается «на себя» (прямой монтаж). «Секрет Реверс» — «от себя», в сторону соседнего помещения. Реверс удобен там, где нежелательно, чтобы полотно занимало пространство в комнате.' },
+  { q: 'Как определить сторонность — левая дверь или правая?',
+    a: 'Встаньте лицом к двери снаружи помещения (со стороны, где открываете). Если петли справа — дверь правая, петли слева — левая. Правило одинаково для «Секрет» и «Секрет Реверс». Замерщик ВФД уточнит сторонность при выезде.' },
+  { q: 'Какой цвет алюминиевой кромки выбрать?',
+    a: 'Три варианта: чёрная (анодированный алюминий) — под тёмную фурнитуру и контрастный интерьер; серебро (натуральный алюминий) — нейтральный, для светлых стен; золото (золотистый анод) — под бронзу, латунь и арт-деко. Цена одинакова для всех трёх.' },
+  { q: 'Какой нужен проём?',
+    a: 'Проём должен быть ровным, откосы — вровень с плоскостью стены. Минимальная толщина стены — 90 мм. Замерщик выезжает бесплатно и даёт конкретные рекомендации.' },
+  { q: 'Есть нестандартные размеры?',
+    a: `Стандарт в наличии: ширины ${SECRET_SIZES.join(', ')} мм, высота 2000 мм. Нестандартные высоты под заказ — от 2050 до 2700 мм, надбавка к цене полотна от +20% до +50%. Срок изготовления: ${CUSTOM_LEAD_TIME}.` },
+  { q: 'Сколько стоит установка?',
+    a: 'Стоимость монтажа рассчитывается отдельно. Мы работаем по Челябинску, даём гарантию на работы. Уточняйте у менеджера при заказе.' },
+]
+
+const structuredData = canonicalUrl ? [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: breadcrumbItems.map((item, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: item.label,
+      ...(item.href ? { item: new URL(item.href, canonicalUrl).href } : {}),
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map(f => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+  ...(INVISIBLE_WORKS.length > 0 ? [{
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Наши работы — монтаж скрытых дверей в Челябинске',
+    itemListElement: INVISIBLE_WORKS.map((w, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'CreativeWork',
+        name: w.title,
+        dateCreated: w.date,
+        image: w.images[0],
+        ...(w.location ? { locationCreated: { '@type': 'Place', name: w.location } } : {}),
+      },
+    })),
+  }] : []),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: 'Скрытые двери — серии «Секрет» и «Секрет Реверс»',
+    description: 'Двери скрытого монтажа: полотно заподлицо со стеной, алюминиевый короб, скрытые петли. Под покраску, штукатурку, обои. Кромка: чёрная, серебро, золото.',
+    brand: { '@type': 'Brand', name: 'ВФД' },
+    image: IMAGES.invisible,
+    offers: {
+      '@type': 'AggregateOffer',
+      priceCurrency: 'RUB',
+      lowPrice: TOTAL_SECRET,
+      highPrice: TOTAL_SECRET_REVERS,
+      availability: 'https://schema.org/InStock',
+      areaServed: { '@type': 'City', name: 'Челябинск' },
+    },
+  },
+] : undefined
 ---
-<DoorCategoryLanding data={skrytyeDveri} />
+
+<BaseLayout
+  title="Скрытые двери в Челябинске — «Секрет» и «Секрет Реверс», цены | ВФД"
+  description={`Скрытые двери в Челябинске: серии «Секрет» (прямой монтаж) и «Секрет Реверс». Полотно вровень со стеной, без наличников, скрытые петли. Кромка: чёрная, серебро, золото. Комплект от ${fmt(TOTAL_SECRET)}. Замер бесплатно, монтаж под ключ.`}
+  ogImage={IMAGES.invisible}
+  preloadImage={IMAGES.covers[0].src}
+  canonical={canonicalUrl}
+  structuredData={structuredData}
+>
+
+  <div class="breadcrumb-bar">
+    <div class="container">
+      <Breadcrumbs items={breadcrumbItems} />
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       HERO
+  ══════════════════════════════════════════════ -->
+  <div class="container sd-hero-wrap">
+    <section class="sd-hero" aria-label="Двери скрытого монтажа">
+      <CoverSwitcher client:load />
+
+      <div class="sd-hero__body">
+        <p class="sd-eyebrow">Скрытый монтаж · Челябинск</p>
+        <h1 class="sd-hero__h1">Двери скрытого<br/>монтажа</h1>
+        <p class="sd-hero__lead">
+          Полотно вровень со стеной. Без наличников,
+          без видимых петель. Алюминиевый короб прячется
+          в проём — снаружи только чистая плоскость.
+        </p>
+        <div class="sd-hero__actions">
+          <a href={TG} target="_blank" rel="noopener" class="btn btn-ghost">Получить расчёт</a>
+          <a href={`tel:${PHONE}`} class="btn btn-ghost">Позвонить</a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       СЕРИИ — 2 ПРОДУКТА
+  ══════════════════════════════════════════════ -->
+  <section class="section">
+    <div class="container">
+      <div class="sd-products">
+
+        <!-- Секрет -->
+        <article class="sd-product">
+          <div class="sd-product__photo">
+            <img
+              src={IMAGES.invisible}
+              alt="Скрытая дверь серии «Секрет» — прямой монтаж"
+              loading="lazy"
+              decoding="async"
+              width="800"
+              height="1000"
+            />
+          </div>
+          <div class="sd-product__info">
+            <span class="sd-product__eyebrow">Серия</span>
+            <h2 class="sd-product__name">«Секрет»</h2>
+            <p class="sd-product__type">Прямой монтаж</p>
+            <p class="sd-product__desc">
+              Классический скрытый монтаж: дверь открывается «на себя».
+              Алюминиевый короб монтируется заподлицо, полотно в грунте —
+              под покраску, штукатурку или оклейку обоями в цвет стен.
+            </p>
+            <div class="sd-product__specs">
+              <div class="sd-spec">
+                <span class="sd-spec__key">Ширины в наличии</span>
+                <span class="sd-spec__val">{SECRET_SIZES.map(w => `${w} мм`).join(' · ')}</span>
+              </div>
+              <div class="sd-spec">
+                <span class="sd-spec__key">Высота стандарт</span>
+                <span class="sd-spec__val">{DOOR_HEIGHT} мм</span>
+              </div>
+              <div class="sd-spec">
+                <span class="sd-spec__key">Направление</span>
+                <span class="sd-spec__val">Левая · Правая</span>
+              </div>
+              <div class="sd-spec">
+                <span class="sd-spec__key">Цвет кромки</span>
+                <span class="sd-spec__val">Чёрная · Серебро · Золото</span>
+              </div>
+            </div>
+            <div class="sd-product__price">
+              <div>
+                <span class="sd-price-label">Полотно</span>
+                <span class="sd-price-val">{fmt(POLOTNO_PRICE_SECRET)}</span>
+              </div>
+              <div>
+                <span class="sd-price-label">Комплект с коробом</span>
+                <span class="sd-price-val sd-price-val--accent">от {fmt(TOTAL_SECRET)}</span>
+              </div>
+            </div>
+            <a href={TG} target="_blank" rel="noopener" class="btn btn-primary sd-product__btn">
+              Рассчитать стоимость
+            </a>
+          </div>
+        </article>
+
+        <!-- Секрет Реверс -->
+        <article class="sd-product sd-product--rev">
+          <div class="sd-product__photo">
+            <img
+              src={IMAGES.invisibleRev}
+              alt="Скрытая дверь серии «Секрет Реверс» — реверсивный монтаж"
+              loading="lazy"
+              decoding="async"
+              width="800"
+              height="1000"
+            />
+          </div>
+          <div class="sd-product__info">
+            <span class="sd-product__eyebrow">Серия</span>
+            <h2 class="sd-product__name">«Секрет Реверс»</h2>
+            <p class="sd-product__type">Реверсивный монтаж</p>
+            <p class="sd-product__desc">
+              Дверь открывается «от себя» — в сторону соседнего помещения.
+              Удобно, когда нежелательно, чтобы полотно занимало пространство
+              в текущей комнате. При заказе указывается сторона петель.
+            </p>
+            <div class="sd-product__specs">
+              <div class="sd-spec">
+                <span class="sd-spec__key">Ширины в наличии</span>
+                <span class="sd-spec__val">{SECRET_REVERS_SIZES.map(w => `${w} мм`).join(' · ')}</span>
+              </div>
+              <div class="sd-spec">
+                <span class="sd-spec__key">Высота стандарт</span>
+                <span class="sd-spec__val">{DOOR_HEIGHT} мм</span>
+              </div>
+              <div class="sd-spec">
+                <span class="sd-spec__key">Направление</span>
+                <span class="sd-spec__val">Левая · Правая</span>
+              </div>
+              <div class="sd-spec">
+                <span class="sd-spec__key">Цвет кромки</span>
+                <span class="sd-spec__val">Чёрная · Серебро · Золото</span>
+              </div>
+            </div>
+            <div class="sd-product__price">
+              <div>
+                <span class="sd-price-label">Полотно</span>
+                <span class="sd-price-val">{fmt(POLOTNO_PRICE_SECRET_REVERS)}</span>
+              </div>
+              <div>
+                <span class="sd-price-label">Комплект с коробом</span>
+                <span class="sd-price-val sd-price-val--accent">от {fmt(TOTAL_SECRET_REVERS)}</span>
+              </div>
+            </div>
+            <a href={TG} target="_blank" rel="noopener" class="btn btn-primary sd-product__btn">
+              Рассчитать стоимость
+            </a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       ТАБЛИЦА ЦЕН И РАЗМЕРОВ
+  ══════════════════════════════════════════════ -->
+  <section class="section" style="padding-top: 0">
+    <div class="container">
+      <h2 class="sd-h2">Цены и размеры</h2>
+
+      <div class="sd-table-wrap">
+        <table class="sd-compare">
+          <thead>
+            <tr>
+              <th scope="col" class="sd-compare__row-head"></th>
+              <th scope="col">«Секрет»</th>
+              <th scope="col">«Секрет Реверс»</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Монтаж</th>
+              <td>Прямой</td>
+              <td>Реверсивный</td>
+            </tr>
+            <tr>
+              <th scope="row">Ширины в наличии</th>
+              <td>{SECRET_SIZES.map(w => `${w}`).join(', ')} мм</td>
+              <td>{SECRET_REVERS_SIZES.map(w => `${w}`).join(', ')} мм</td>
+            </tr>
+            <tr>
+              <th scope="row">Высота (стандарт)</th>
+              <td colspan="2" class="sd-compare__shared">{DOOR_HEIGHT} мм</td>
+            </tr>
+            <tr>
+              <th scope="row">Направление петель</th>
+              <td>Левая / Правая</td>
+              <td>Левая / Правая</td>
+            </tr>
+            <tr>
+              <th scope="row">Цвет кромки</th>
+              <td colspan="2" class="sd-compare__shared">Чёрная / Серебро / Золото</td>
+            </tr>
+            <tr class="sd-compare__price-row">
+              <th scope="row">Полотно</th>
+              <td>{fmt(POLOTNO_PRICE_SECRET)}</td>
+              <td>{fmt(POLOTNO_PRICE_SECRET_REVERS)}</td>
+            </tr>
+            <tr class="sd-compare__price-row sd-compare__kit-row">
+              <th scope="row">Комплект с коробом</th>
+              <td><strong>{fmt(TOTAL_SECRET)}</strong></td>
+              <td><strong>{fmt(TOTAL_SECRET_REVERS)}</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="sd-table-foot">
+        В комплект входит: короб 54×43×2200 мм, ответная планка, 2 скрытые петли.
+        Ручка, стопор и завёртка WC — опционально.
+      </p>
+
+      <!-- Инфо-изображения: комплектация + сторонность -->
+      <InfoImageViewer
+        client:load
+        images={[
+          { src: INFO_IMAGES.kompl, caption: 'Состав комплекта', alt: 'Состав комплекта скрытой двери — профиль, петли, ответная планка' },
+          { src: INFO_IMAGES.lr,    caption: 'Схема сторонности', alt: 'Схема сторонности (левая / правая) открывания скрытой двери' },
+        ]}
+      />
+
+      <!-- Нестандартные высоты -->
+      <div class="sd-custom-section">
+        <h3 class="sd-h3">Нестандартные высоты — под заказ</h3>
+        <p class="sd-p" style="margin-bottom: 1rem">
+          Надбавка применяется к полотну и коробу. Максимальная высота — 2700 мм.
+          Срок изготовления: {CUSTOM_LEAD_TIME}.
+        </p>
+        <div class="sd-table-wrap">
+          <table class="sd-compare">
+            <thead>
+              <tr>
+                <th scope="col">Высота</th>
+                <th scope="col">Надбавка</th>
+                <th scope="col">«Секрет», комплект</th>
+                <th scope="col">«Секрет Реверс», комплект</th>
+              </tr>
+            </thead>
+            <tbody>
+              {CUSTOM_HEIGHT_TIERS.map(tier => (
+                <tr>
+                  <th scope="row">{tier.range} мм</th>
+                  <td class="sd-custom__pct">{tier.pct}</td>
+                  <td>{fmt(calcCustomPrice(TOTAL_SECRET, tier.surcharge))}</td>
+                  <td>{fmt(calcCustomPrice(TOTAL_SECRET_REVERS, tier.surcharge))}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="sd-table-foot" style="margin-top: 0.75rem">
+          Цена включает полотно и короб с той же надбавкой. Ручка, стопор, завёртка WC — по стандартной цене.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       ЦВЕТ КРОМКИ
+  ══════════════════════════════════════════════ -->
+  <section class="section sd-color-section">
+    <div class="container">
+      <div class="sd-color-wrap">
+        <div class="sd-color-text">
+          <h2 class="sd-h2">Цвет кромки</h2>
+          <p class="sd-p">
+            Кромка — алюминиевая полоска по краям проёма шириной 13 мм.
+            Её видно только под углом. Цена одинакова — выбирайте
+            под планируемую отделку стен и фурнитуру.
+          </p>
+          <p class="sd-p">
+            <strong>Чёрная кромка</strong> — анодированный алюминий.
+            Подходит к тёмной фурнитуре и контрастным интерьерам.
+          </p>
+          <p class="sd-p">
+            <strong>Серебро</strong> — натуральный алюминий.
+            Нейтральный вариант для светлых стен и минимализма.
+          </p>
+          <p class="sd-p">
+            <strong>Золото</strong> — анодированный алюминий золотистого оттенка.
+            Подходит к интерьерам с бронзовой или латунной фурнитурой, стилю арт-деко.
+          </p>
+        </div>
+        <div class="sd-color-selector">
+          <ColorSelector client:load />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       О КОНСТРУКЦИИ
+  ══════════════════════════════════════════════ -->
+  <section class="section">
+    <div class="container">
+      <div class="sd-about">
+        <div class="sd-about__text">
+          <h2 class="sd-h2">О конструкции</h2>
+          <p class="sd-p">
+            Скрытые двери — конструкция, в которой алюминиевая коробка
+            монтируется внутрь стены заподлицо с её поверхностью. Полотно
+            навешивается на скрытые петли и устанавливается вровень со стеной.
+            Снаружи — только тонкая кромка профиля.
+          </p>
+          <p class="sd-p">
+            Алюминиевый профиль 54×43 мм — прочный и лёгкий. Выдерживает
+            нагрузку до 70 кг. Минимальная толщина стены — 90 мм.
+            Зазор между полотном и стеной — 1–2 мм.
+          </p>
+          <p class="sd-p">
+            В ВФД скрытые двери поставляются напрямую с фабрики: замер
+            по Челябинску, проект, доставка и монтаж бригадой с гарантией.
+          </p>
+          <div class="sd-about__actions">
+            <a href={TG} target="_blank" rel="noopener" class="btn btn-primary">Написать в Telegram</a>
+            <a href="/contacts" class="btn btn-outline">Контакты</a>
+          </div>
+        </div>
+        <div class="sd-about__photo sd-about__photo--info">
+          <img
+            src={INFO_IMAGES.constr}
+            alt="Конструкция скрытой двери — схема узлов монтажа"
+            loading="lazy"
+            decoding="async"
+            width="1200"
+            height="900"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       НАШИ РАБОТЫ
+  ══════════════════════════════════════════════ -->
+  {INVISIBLE_WORKS.length > 0 && (
+    <section class="section" id="nashi-raboty" aria-labelledby="works-heading">
+      <div class="container">
+        <h2 class="sd-h2" id="works-heading">Наши работы</h2>
+        <p class="sd-p" style="margin-top: -0.75rem; margin-bottom: 1.75rem">
+          Фотографии реальных монтажей скрытых дверей нашей бригадой по Челябинску.
+        </p>
+        <WorksGallery client:load works={INVISIBLE_WORKS} />
+      </div>
+    </section>
+  )}
+
+  <!-- ══════════════════════════════════════════════
+       FAQ
+  ══════════════════════════════════════════════ -->
+  <section class="section">
+    <div class="container">
+      <h2 class="sd-h2">Частые вопросы</h2>
+      <div class="sd-faq">
+        {faq.map(f => (
+          <details class="sd-faq__item">
+            <summary class="sd-faq__q">
+              <span>{f.q}</span>
+              <svg class="sd-faq__chev" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </summary>
+            <p class="sd-faq__a">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       CTA
+  ══════════════════════════════════════════════ -->
+  <section class="section">
+    <div class="container">
+      <div class="sd-cta">
+        <div class="sd-cta__text">
+          <h2 class="sd-cta__h2">Рассчитаем бесплатно</h2>
+          <p class="sd-cta__lead">
+            Замер по Челябинску, точная стоимость, подбор фурнитуры.
+            Двери напрямую с фабрики.
+          </p>
+        </div>
+        <div class="sd-cta__actions">
+          <a href={TG} target="_blank" rel="noopener" class="btn btn-ghost">Написать в Telegram</a>
+          <a href={`tel:${PHONE}`} class="btn btn-ghost">Позвонить</a>
+        </div>
+      </div>
+
+      <nav class="sd-related" aria-label="Смежные разделы">
+        <a href="/catalog">Каталог дверей</a>
+        <a href="/partitions">Перегородки</a>
+        <a href="/contacts">Контакты</a>
+      </nav>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+/* ── Globals ─────────────────────────────────────────────────── */
+.sd-eyebrow {
+  display: block;
+  margin: 0 0 0.875rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+}
+.sd-h2 {
+  margin: 0 0 1.5rem;
+  font-size: clamp(1.625rem, 3vw, 2.125rem);
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+.sd-p {
+  margin: 0 0 1rem;
+  color: #64748b;
+  font-size: clamp(0.9375rem, 1.4vw, 1.0625rem);
+  line-height: 1.75;
+}
+
+/* ── Hero ─────────────────────────────────────────────────────── */
+.sd-hero-wrap { padding-top: clamp(0.75rem, 1.5vw, 1.25rem); padding-bottom: clamp(2.5rem, 4vw, 3.5rem); }
+.sd-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  min-height: clamp(52vh, 72vw, 80vh);
+  display: flex;
+  align-items: flex-end;
+  background: #0f172a;
+}
+.sd-hero__body {
+  position: relative;
+  z-index: 1;
+  padding: clamp(2rem, 5vw, 4rem);
+  color: #fff;
+  max-width: 44rem;
+}
+.sd-hero__h1 {
+  margin: 0 0 1rem;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 900;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  text-shadow: 0 2px 16px rgba(0,0,0,0.35);
+}
+.sd-hero__lead {
+  margin: 0 0 2rem;
+  max-width: 38rem;
+  font-size: clamp(1rem, 1.6vw, 1.125rem);
+  line-height: 1.65;
+  color: rgba(255,255,255,0.88);
+  text-shadow: 0 1px 8px rgba(0,0,0,0.3);
+}
+.sd-hero__actions { display: flex; flex-wrap: wrap; gap: 0.625rem; }
+
+/* ── Products ─────────────────────────────────────────────────── */
+.sd-products { display: flex; flex-direction: column; gap: clamp(1rem, 2.5vw, 1.5rem); }
+.sd-product {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid #e5e7eb;
+  border-radius: 1.25rem;
+  overflow: hidden;
+}
+/* Реверс: фото справа */
+.sd-product--rev { direction: rtl; }
+.sd-product--rev > * { direction: ltr; }
+
+.sd-product__photo {
+  overflow: hidden;
+  background: #f8fafc;
+}
+.sd-product__photo > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  min-height: 28rem;
+  transition: transform 450ms ease;
+}
+.sd-product:hover .sd-product__photo > img { transform: scale(1.03); }
+
+.sd-product__info {
+  padding: clamp(2rem, 4vw, 3.5rem);
+  display: flex;
+  flex-direction: column;
+}
+.sd-product__eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  margin-bottom: 0.375rem;
+}
+.sd-product__name {
+  margin: 0 0 0.25rem;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 900;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+}
+.sd-product__type {
+  margin: 0 0 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.sd-product__desc {
+  margin: 0 0 1.5rem;
+  color: #64748b;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  flex: 1;
+}
+.sd-product__specs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.75rem;
+  padding: 1.25rem;
+  border-radius: 0.75rem;
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+}
+.sd-spec { display: flex; align-items: baseline; gap: 0.625rem; }
+.sd-spec__key {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #94a3b8;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 9rem;
+}
+.sd-spec__val {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #334155;
+}
+.sd-product__price {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.75rem;
+  flex-wrap: wrap;
+}
+.sd-product__price > div { display: flex; flex-direction: column; gap: 0.25rem; }
+.sd-price-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+.sd-price-val {
+  font-size: 1.375rem;
+  font-weight: 900;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+}
+.sd-price-val--accent { color: #0f172a; }
+.sd-product__btn { align-self: flex-start; }
+
+/* ── H3 ───────────────────────────────────────────────────────── */
+.sd-h3 {
+  margin: 0 0 0.75rem;
+  font-size: clamp(1.125rem, 2vw, 1.375rem);
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+
+
+/* ── Custom heights section ───────────────────────────────────── */
+.sd-custom-section {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid #f1f5f9;
+}
+.sd-custom__pct {
+  font-weight: 800 !important;
+  color: #0f172a !important;
+}
+
+/* ── Compare table ────────────────────────────────────────────── */
+.sd-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+}
+.sd-compare {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+  background: #fff;
+}
+.sd-compare thead tr {
+  border-bottom: 2px solid #0f172a;
+}
+.sd-compare thead th {
+  padding: 1rem 1.375rem;
+  text-align: left;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+.sd-compare thead .sd-compare__row-head { color: transparent; }
+.sd-compare tbody th {
+  padding: 0.875rem 1.375rem;
+  text-align: left;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  background: #fafbfc;
+  border-right: 1px solid #f1f5f9;
+  width: 40%;
+}
+.sd-compare tbody td {
+  padding: 0.875rem 1.375rem;
+  color: #334155;
+  font-weight: 600;
+  border-bottom: 1px solid #f8fafc;
+}
+.sd-compare tbody tr:last-child td,
+.sd-compare tbody tr:last-child th { border-bottom: none; }
+.sd-compare__shared { font-style: normal; }
+.sd-compare__price-row th,
+.sd-compare__price-row td { padding-top: 1rem; }
+.sd-compare__price-row th { color: #64748b; }
+.sd-compare__kit-row { border-top: 1px solid #e5e7eb !important; }
+.sd-compare__kit-row th { font-size: 0.9375rem; font-weight: 700; color: #0f172a; text-transform: none; letter-spacing: 0; }
+.sd-compare__kit-row td { font-size: 1.125rem; }
+.sd-compare__kit-row strong { color: #0f172a; font-weight: 900; }
+
+.sd-table-foot {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: #94a3b8;
+  line-height: 1.6;
+}
+
+/* ── Color section ────────────────────────────────────────────── */
+.sd-color-section { border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; }
+.sd-color-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: center;
+}
+.sd-color-selector { display: flex; justify-content: center; }
+
+/* ── About ────────────────────────────────────────────────────── */
+.sd-about {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: center;
+}
+.sd-about__actions { display: flex; flex-wrap: wrap; gap: 0.625rem; margin-top: 1.5rem; }
+.sd-about__photo {
+  border-radius: 1.25rem;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+}
+.sd-about__photo > img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4/5;
+  object-fit: cover;
+}
+.sd-about__photo--info > img {
+  aspect-ratio: auto;
+  max-height: 32rem;
+  object-fit: contain;
+  background: #f8fafc;
+  padding: 1.5rem;
+}
+
+/* ── FAQ ──────────────────────────────────────────────────────── */
+.sd-faq {
+  max-width: 52rem;
+  display: flex;
+  flex-direction: column;
+}
+.sd-faq__item {
+  border-bottom: 1px solid #f1f5f9;
+}
+.sd-faq__item:first-child { border-top: 1px solid #f1f5f9; }
+.sd-faq__q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  padding: 1.125rem 0;
+  cursor: pointer;
+  list-style: none;
+  font-size: clamp(0.9375rem, 1.4vw, 1.0625rem);
+  font-weight: 700;
+  color: #0f172a;
+}
+.sd-faq__q::-webkit-details-marker { display: none; }
+.sd-faq__chev {
+  width: 1.125rem;
+  height: 1.125rem;
+  color: #94a3b8;
+  flex-shrink: 0;
+  transition: transform 220ms ease, color 150ms ease;
+}
+.sd-faq__item[open] .sd-faq__chev { transform: rotate(180deg); color: #0f172a; }
+.sd-faq__a {
+  margin: 0;
+  padding: 0 0 1.125rem;
+  color: #64748b;
+  font-size: 0.9375rem;
+  line-height: 1.75;
+  max-width: 44rem;
+}
+
+/* ── CTA ──────────────────────────────────────────────────────── */
+.sd-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+  padding: clamp(2.5rem, 5vw, 4rem);
+  border-radius: 1.25rem;
+  background: #212124;
+  color: #fff;
+}
+.sd-cta__h2 {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.5rem, 3vw, 2.125rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.sd-cta__lead {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.6;
+}
+.sd-cta__actions { display: flex; gap: 0.625rem; flex-wrap: wrap; flex-shrink: 0; }
+
+/* ── Related ──────────────────────────────────────────────────── */
+.sd-related {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+.sd-related > a {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #64748b;
+  text-decoration: none;
+  padding: 0.4rem 0.875rem;
+  border-radius: 9999px;
+  border: 1px solid #e5e7eb;
+  transition: color 150ms ease, border-color 150ms ease;
+}
+.sd-related > a:hover { color: #0f172a; border-color: #94a3b8; }
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .sd-color-wrap { grid-template-columns: 1fr; }
+  .sd-about       { grid-template-columns: 1fr; }
+  .sd-about__photo { order: -1; }
+}
+@media (max-width: 768px) {
+  .sd-product { grid-template-columns: 1fr; direction: ltr; }
+  .sd-product--rev { direction: ltr; }
+  .sd-product__photo > img { min-height: 18rem; }
+  .sd-cta { flex-direction: column; align-items: flex-start; }
+  .sd-product__price { gap: 1rem; }
+}
+@media (max-width: 520px) {
+  .sd-spec { flex-direction: column; gap: 0.125rem; }
+  .sd-spec__key { min-width: 0; }
+  .sd-compare tbody th { width: auto; min-width: 7rem; }
+}
+</style>
