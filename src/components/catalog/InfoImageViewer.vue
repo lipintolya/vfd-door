@@ -29,59 +29,61 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="iiv">
-    <figure v-for="img in images" :key="img.src" class="iiv-card">
-      <figcaption class="iiv-head">
-        <span class="iiv-caption">{{ img.caption }}</span>
+  <div class="iiv-host">
+    <div class="iiv">
+      <figure v-for="img in images" :key="img.src" class="iiv-card">
+        <figcaption class="iiv-head">
+          <span class="iiv-caption">{{ img.caption }}</span>
+          <button
+            type="button"
+            class="iiv-zoom"
+            :aria-label="`Увеличить: ${img.caption}`"
+            @click="open(img)"
+          >
+            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.75"/>
+              <path d="M13.5 13.5l3 3" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+              <path d="M9 6.5v5M6.5 9h5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+            </svg>
+            Увеличить
+          </button>
+        </figcaption>
+
         <button
           type="button"
-          class="iiv-zoom"
-          :aria-label="`Увеличить: ${img.caption}`"
+          class="iiv-imgbtn"
+          :aria-label="`Открыть изображение: ${img.caption}`"
           @click="open(img)"
         >
-          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.75"/>
-            <path d="M13.5 13.5l3 3" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
-            <path d="M9 6.5v5M6.5 9h5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
-          </svg>
-          Увеличить
+          <img :src="img.src" :alt="img.alt" loading="lazy" decoding="async" />
         </button>
-      </figcaption>
+      </figure>
+    </div>
 
-      <button
-        type="button"
-        class="iiv-imgbtn"
-        :aria-label="`Открыть изображение: ${img.caption}`"
-        @click="open(img)"
-      >
-        <img :src="img.src" :alt="img.alt" loading="lazy" decoding="async" />
-      </button>
-    </figure>
+    <!-- Modal -->
+    <Teleport to="body">
+      <Transition name="iiv-fade">
+        <div
+          v-if="active"
+          class="iiv-overlay"
+          role="dialog"
+          aria-modal="true"
+          :aria-label="active.caption"
+          @click.self="close"
+        >
+          <button class="iiv-close" type="button" aria-label="Закрыть" @click="close">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <figure class="iiv-figure" @click.self="close">
+            <img :src="active.src" :alt="active.alt" class="iiv-modal-img" decoding="async" />
+            <figcaption class="iiv-figcap">{{ active.caption }}</figcaption>
+          </figure>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
-
-  <!-- Modal -->
-  <Teleport to="body">
-    <Transition name="iiv-fade">
-      <div
-        v-if="active"
-        class="iiv-overlay"
-        role="dialog"
-        aria-modal="true"
-        :aria-label="active.caption"
-        @click.self="close"
-      >
-        <button class="iiv-close" type="button" aria-label="Закрыть" @click="close">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-          </svg>
-        </button>
-        <figure class="iiv-figure" @click.self="close">
-          <img :src="active.src" :alt="active.alt" class="iiv-modal-img" decoding="async" />
-          <figcaption class="iiv-figcap">{{ active.caption }}</figcaption>
-        </figure>
-      </div>
-    </Transition>
-  </Teleport>
 </template>
 
 <style scoped>

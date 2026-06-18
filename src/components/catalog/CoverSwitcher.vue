@@ -15,40 +15,42 @@ const activeId = ref<CoverId>('modern')
 </script>
 
 <template>
-  <!-- Background images (all mounted, opacity toggled) -->
-  <div class="csw-bg" aria-hidden="true">
-    <img
-      v-for="cover in COVERS"
-      :key="cover.id"
-      :src="cover.src"
-      :alt="cover.label"
-      class="csw-bg__img"
-      :class="{ 'csw-bg__img--on': cover.id === activeId }"
-      loading="eager"
-      decoding="async"
-      width="1440"
-      height="840"
-    />
-    <div class="csw-bg__grad" />
-  </div>
-
-  <!-- Switcher -->
-  <div class="csw-switcher" role="group" aria-label="Выберите стиль интерьера">
-    <p class="csw-switcher__label">Выбери свой стиль</p>
-    <div class="csw-switcher__row">
-      <button
+  <div class="csw-host">
+    <!-- Background images (all mounted, opacity toggled) -->
+    <div class="csw-bg" aria-hidden="true">
+      <img
         v-for="cover in COVERS"
         :key="cover.id"
-        type="button"
-        class="csw-thumb"
-        :class="{ 'csw-thumb--on': cover.id === activeId }"
-        :aria-pressed="cover.id === activeId"
-        :aria-label="`Стиль: ${cover.label}`"
-        @click="activeId = cover.id"
-      >
-        <img :src="cover.src" alt="" class="csw-thumb__img" decoding="async" />
-        <span class="csw-thumb__name">{{ cover.label }}</span>
-      </button>
+        :src="cover.src"
+        :alt="cover.label"
+        class="csw-bg__img"
+        :class="{ 'csw-bg__img--on': cover.id === activeId }"
+        loading="eager"
+        decoding="async"
+        width="1440"
+        height="840"
+      />
+      <div class="csw-bg__grad" />
+    </div>
+
+    <!-- Switcher -->
+    <div class="csw-switcher" role="group" aria-label="Выберите стиль интерьера">
+      <p class="csw-switcher__label">Выбери свой стиль</p>
+      <div class="csw-switcher__row">
+        <button
+          v-for="cover in COVERS"
+          :key="cover.id"
+          type="button"
+          class="csw-thumb"
+          :class="{ 'csw-thumb--on': cover.id === activeId }"
+          :aria-pressed="cover.id === activeId"
+          :aria-label="`Стиль: ${cover.label}`"
+          @click="activeId = cover.id"
+        >
+          <img :src="cover.src" alt="" class="csw-thumb__img" decoding="async" />
+          <span class="csw-thumb__name">{{ cover.label }}</span>
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -82,9 +84,12 @@ const activeId = ref<CoverId>('modern')
 }
 
 /* ── Switcher ── */
+/* Привязан к верху, а не к низу: текстовый блок hero всегда прижат к низу
+   карточки (align-items: flex-end на .sd-hero), поэтому верх остаётся
+   свободным при любой ширине — переключатель не может налезть на текст. */
 .csw-switcher {
   position: absolute;
-  bottom: clamp(1.25rem, 3vw, 2rem);
+  top: clamp(1.25rem, 3vw, 2rem);
   right: clamp(1.25rem, 3vw, 2rem);
   z-index: 2;
   display: flex;
@@ -152,14 +157,16 @@ const activeId = ref<CoverId>('modern')
 .csw-thumb--on .csw-thumb__name { color: #fff; }
 
 /* ── Responsive ── */
-/* На мобильном — переключатель наверх, чтобы не налезал на CTA-кнопки */
+/* На мобильном переключатель встаёт в обычный поток над заголовком —
+   не абсолютным слоем, поэтому не может налезть на текст ниже, какой бы
+   высоты он ни был (перенос строк, длинные подписи и т.п.). position: relative,
+   а не static — иначе z-index перестаёт действовать и фоновое фото (position:
+   absolute) перекрывает переключатель сверху, как только успевает загрузиться. */
 @media (max-width: 640px) {
-  /* Привязываем и left, и right — ширина свитчера = коробка hero, вылезти не может */
   .csw-switcher {
-    top: 0.75rem;
-    bottom: auto;
-    left: 0.75rem;
-    right: 0.75rem;
+    position: relative;
+    width: 100%;
+    padding: 0.75rem 0.75rem 0;
   }
   .csw-switcher__row { flex-wrap: wrap; justify-content: flex-end; }
 }
