@@ -10,6 +10,8 @@ export interface ColorVariant {
   coatingSlug: string
 }
 
+import { calcKitPrice } from '../../data/accessories'
+
 const props = defineProps<{
   colors:    ColorVariant[]
   modelName: string
@@ -18,6 +20,11 @@ const props = defineProps<{
 const selectedIdx = ref(0)
 
 const selected = computed(() => props.colors[selectedIdx.value] ?? props.colors[0])
+
+const kitTotal = computed(() => {
+  if (!selected.value.price) return null
+  return selected.value.price + calcKitPrice(selected.value.coatingSlug, selected.value.name)
+})
 
 const formatPrice = (price: number | null) =>
   price ? `от ${price.toLocaleString('ru-RU')} ₽` : 'По запросу'
@@ -56,6 +63,9 @@ const normalizeHex = (hex: string) => {
       <span class="color-picker__price">{{ formatPrice(selected.price) }}</span>
       <span class="color-picker__price-note">за полотно</span>
     </div>
+    <p v-if="kitTotal" class="color-picker__kit-price">
+      Комплект под ключ (с коробкой и наличниками): <strong>от {{ kitTotal.toLocaleString('ru-RU') }} ₽</strong>
+    </p>
 
     <!-- Выбранный цвет -->
     <p class="color-picker__color-name">
@@ -101,7 +111,7 @@ const normalizeHex = (hex: string) => {
   border-radius: 1.5rem;
   overflow: hidden;
   background: #f8fafc;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 1 / 1;
   width: 100%;
   display: flex;
   align-items: center;
@@ -111,7 +121,8 @@ const normalizeHex = (hex: string) => {
 .color-picker__photo {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  padding: 1.5rem;
   display: block;
 }
 
@@ -135,6 +146,17 @@ const normalizeHex = (hex: string) => {
 .color-picker__price-note {
   font-size: 0.875rem;
   color: #64748b;
+}
+
+.color-picker__kit-price {
+  font-size: 0.8125rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.color-picker__kit-price strong {
+  color: #334155;
+  font-weight: 700;
 }
 
 .color-picker__color-name {
