@@ -1,12 +1,13 @@
 ---
 import { supabase } from '../../lib/supabase'
+import { buildModelSlugMap } from '../../lib/slugify'
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import Breadcrumbs from '../../components/ui/Breadcrumbs.astro'
 import ProductColorPicker from '../../components/catalog/ProductColorPicker.vue'
 import type { ColorVariant } from '../../components/catalog/ProductColorPicker.vue'
 import { getSeriesSpec } from '../../data/series-descriptions'
-import { accessoriesByCoating, CATEGORY_LABELS } from '../../data/accessories'
-import type { AccessoryCategory } from '../../data/accessories'
+import { accessoriesByCoating, CATEGORY_LABELS, getColorSurchargesForCoating } from '../../data/accessories'
+import type { AccessoryCategory, CoatingSlug } from '../../data/accessories'
 
 export async function getStaticPaths() {
   const { data, error } = await supabase
@@ -33,6 +34,7 @@ export async function getStaticPaths() {
 
   type ModelEntry = {
     model:       { id: string; name: string; hasGlass: boolean }
+    slug:        string
     seriesName:  string
     seriesSlug:  string
     coatingName: string
@@ -60,6 +62,7 @@ export async function getStaticPaths() {
           name:     model.name,
           hasGlass: model.has_glass ?? false,
         },
+        slug:        '',
         seriesName:  series?.name     ?? '',
         seriesSlug:  series?.slug     ?? '',
         coatingName: coating?.name    ?? '',
@@ -87,25 +90,46 @@ export async function getStaticPaths() {
     }
   }
 
-  return [...modelMap.values()].map(entry => ({
-    params: { id: entry.model.id },
-    props:  entry,
-  }))
+  /* ── Читаемые слаги вместо UUID: имя модели + серия, с защитой от коллизий ── */
+  const slugMap = buildModelSlugMap(
+    [...modelMap.values()].map(entry => ({
+      id:         entry.model.id,
+      name:       entry.model.name,
+      seriesSlug: entry.seriesSlug,
+    })),
+  )
+  for (const entry of modelMap.values()) {
+    entry.slug = slugMap.get(entry.model.id)!
+  }
+
+  /* ── Каждая модель доступна по двум путям: новому слагу (канонический)
+     и старому UUID (чтобы не 404'ить уже проиндексированные Яндексом ссылки) ── */
+  const entries = [...modelMap.values()]
+  return [
+    ...entries.map(entry => ({ params: { id: entry.slug },     props: entry })),
+    ...entries.map(entry => ({ params: { id: entry.model.id }, props: entry })),
+  ]
 }
 
-const { model, colors, minPrice, seriesName, seriesSlug, coatingName, coatingSlug } = Astro.props
+const { model, slug, colors, minPrice, seriesName, seriesSlug, coatingName, coatingSlug } = Astro.props
 
 const spec        = getSeriesSpec(seriesSlug, coatingSlug)
-const accessories = accessoriesByCoating[coatingSlug] ?? []
+const accessories = accessoriesByCoating[coatingSlug as CoatingSlug] ?? []
 
-const accessoryGroups: [string, typeof accessories][] = Object.entries(
+const CATEGORY_ORDER: AccessoryCategory[] = ['kit', 'box', 'nalichnik', 'kapitel', 'dobor', 'plinth', 'decorative']
+
+const accessoryGroups: [AccessoryCategory, typeof accessories][] = Object.entries(
   accessories.reduce<Record<string, typeof accessories>>((acc, item) => {
     ;(acc[item.category] ??= []).push(item)
     return acc
   }, {})
 )
+  .sort(([a], [b]) => CATEGORY_ORDER.indexOf(a as AccessoryCategory) - CATEGORY_ORDER.indexOf(b as AccessoryCategory))
+  .map(([category, items]) => [category as AccessoryCategory, items])
 
-const canonicalUrl  = Astro.site ? new URL(`/models/${model.id}`, Astro.site).href : undefined
+const colorSurcharges = getColorSurchargesForCoating(coatingSlug as CoatingSlug, colors.map(c => c.name))
+
+const canonicalUrl  = Astro.site ? new URL(`/models/${slug}`, Astro.site).href : undefined
 const priceStr      = minPrice ? `от ${minPrice.toLocaleString('ru-RU')} ₽` : ''
 const seriesPart    = seriesName ? `серия ${seriesName}` : ''
 const coatingPart   = coatingName
@@ -257,18 +281,30 @@ const structuredData = [breadcrumbSchema, {
         <div class="accessories-header">
           <h2 class="accessories-title">Погонажные изделия</h2>
           <p class="accessories-note">
-            Цены уточняйте у менеджера в салоне или по телефону
+            Цены РРЦ, актуальны на момент публикации — уточняйте у менеджера в салоне
+            {colorSurcharges.length > 0 && (
+              <>. Для цвета {colors[0]?.name ? <strong>{colors[0].name}</strong> : 'этой модели'}{' '}
+                {colorSurcharges.map((s, i) => (
+                  <>{i > 0 ? ', ' : ''}{s.name} +{Math.round(s.pct * 100)}%</>
+                ))}
+              </>
+            )}
           </p>
         </div>
         <div class="accessories-groups">
           {accessoryGroups.map(([category, items]) => (
-            <div class="accessories-group">
+            <div class:list={['accessories-group', category === 'kit' && 'accessories-group--kit']}>
               <p class="accessories-group__label">
-                {CATEGORY_LABELS[category as AccessoryCategory] ?? category}
+                {CATEGORY_LABELS[category] ?? category}
               </p>
               <ul class="accessories-list">
                 {items.map(item => (
-                  <li class="accessories-item">{item.name}</li>
+                  <li class="accessories-item">
+                    <span class="accessories-item__name">{item.name}</span>
+                    <span class="accessories-item__price">
+                      {item.price ? `${item.price.toLocaleString('ru-RU')} ₽ / ${item.unit}` : 'Цена уточняется'}
+                    </span>
+                  </li>
                 ))}
               </ul>
             </div>
@@ -471,6 +507,10 @@ const structuredData = [breadcrumbSchema, {
 }
 
 .accessories-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
   font-size: 0.875rem;
   color: #cbd5e1;
   line-height: 1.45;
@@ -481,5 +521,21 @@ const structuredData = [breadcrumbSchema, {
 .accessories-item:last-child {
   border-bottom: none;
   padding-bottom: 0;
+}
+
+.accessories-item__name {
+  flex: 1;
+}
+
+.accessories-item__price {
+  flex-shrink: 0;
+  font-weight: 700;
+  color: #f1f5f9;
+  white-space: nowrap;
+}
+
+.accessories-group--kit {
+  background: rgba(20, 184, 166, 0.08);
+  border-color: rgba(20, 184, 166, 0.25);
 }
 </style>
