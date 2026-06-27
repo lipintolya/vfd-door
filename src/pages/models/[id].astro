@@ -299,10 +299,10 @@ const structuredData = [breadcrumbSchema, {
         </div>
         <div class="accessories-groups">
           {accessoryGroups.map(([category, items]) => (
-            <div class:list={['accessories-group', category === 'kit' && 'accessories-group--kit']}>
-              <p class="accessories-group__label">
+            <details class:list={['accessories-group', category === 'kit' && 'accessories-group--kit']}>
+              <summary class="accessories-group__label">
                 {CATEGORY_LABELS[category] ?? category}
-              </p>
+              </summary>
               <ul class="accessories-list">
                 {items.map(item => (
                   <li class="accessories-item">
@@ -313,7 +313,7 @@ const structuredData = [breadcrumbSchema, {
                   </li>
                 ))}
               </ul>
-            </div>
+            </details>
           ))}
         </div>
       </div>
@@ -495,32 +495,63 @@ const structuredData = [breadcrumbSchema, {
 }
 
 .accessories-groups {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .accessories-group {
   background: #fff;
   border: 1px solid #e2e8f0;
   border-radius: 1.5rem;
-  padding: 1.25rem 1.5rem;
+  overflow: hidden;
 }
 
 .accessories-group__label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
   font-size: 1.0625rem;
   font-weight: 800;
   color: #0f172a;
-  margin: 0 0 1rem;
+  padding: 1.25rem 1.5rem;
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+}
+
+.accessories-group__label::-webkit-details-marker {
+  display: none;
+}
+
+.accessories-group__label::after {
+  content: '';
+  flex-shrink: 0;
+  width: 0.5625rem;
+  height: 0.5625rem;
+  border-right: 2px solid #94a3b8;
+  border-bottom: 2px solid #94a3b8;
+  transform: rotate(45deg);
+  transition: transform 200ms ease;
+}
+
+.accessories-group[open] > .accessories-group__label::after {
+  transform: rotate(-135deg);
 }
 
 .accessories-list {
   list-style: none;
-  padding: 0;
+  padding: 0 1.5rem 1.25rem;
   margin: 0;
+  border-top: 1px solid #e2e8f0;
   display: flex;
   flex-direction: column;
   gap: 0;
+}
+
+.accessories-list > .accessories-item:first-child {
+  padding-top: 1rem;
 }
 
 .accessories-item {
