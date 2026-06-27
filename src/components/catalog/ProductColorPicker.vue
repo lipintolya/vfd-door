@@ -63,9 +63,10 @@ const normalizeHex = (hex: string) => {
       <span class="color-picker__price">{{ formatPrice(selected.price) }}</span>
       <span class="color-picker__price-note">за полотно</span>
     </div>
-    <p v-if="kitTotal" class="color-picker__kit-price">
-      Комплект под ключ (с коробкой и наличниками): <strong>от {{ kitTotal.toLocaleString('ru-RU') }} ₽</strong>
-    </p>
+    <div v-if="kitTotal" class="color-picker__kit-row">
+      <span class="color-picker__kit-price">от {{ kitTotal.toLocaleString('ru-RU') }} ₽</span>
+      <span class="color-picker__kit-note">комплект под ключ — с коробкой и наличниками</span>
+    </div>
 
     <!-- Выбранный цвет -->
     <p class="color-picker__color-name">
@@ -148,15 +149,22 @@ const normalizeHex = (hex: string) => {
   color: #64748b;
 }
 
-.color-picker__kit-price {
-  font-size: 0.8125rem;
-  color: #64748b;
-  margin: 0;
+.color-picker__kit-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
 }
 
-.color-picker__kit-price strong {
-  color: #334155;
-  font-weight: 700;
+.color-picker__kit-price {
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1;
+}
+
+.color-picker__kit-note {
+  font-size: 0.875rem;
+  color: #64748b;
 }
 
 .color-picker__color-name {
