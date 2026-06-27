@@ -59,6 +59,9 @@ export const BASE_KIT_PRICE: Record<CoatingSlug, number> = {
 }
 export const BASE_KIT_DESCRIPTION = '2,5 коробки, 5 наличников'
 
+// Дата последней проверки/правки цен на этой странице — обновляй вручную при правке прайса
+export const PRICE_LIST_UPDATED = '27.06.2026'
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Надбавка к цене комплекта за цвет (ключ — colors.name из Supabase)
 // ─────────────────────────────────────────────────────────────────────────────
@@ -83,17 +86,6 @@ export function calcKitPrice(coatingSlug: string, colorName: string): number {
   const base = BASE_KIT_PRICE[coatingSlug as CoatingSlug] ?? 0
   const surcharge = COLOR_SURCHARGE[colorName] ?? 0
   return Math.ceil(base * (1 + surcharge))
-}
-
-/** Цвета модели (из её реального набора), у которых есть надбавка — для сноски в таблице цен. */
-export function getColorSurchargesForCoating(
-  coatingSlug: CoatingSlug,
-  colorNames: string[],
-): { name: string; pct: number }[] {
-  return [...new Set(colorNames)]
-    .map(name => ({ name, pct: COLOR_SURCHARGE[name] ?? 0 }))
-    .filter(c => c.pct > 0)
-    .sort((a, b) => a.pct - b.pct)
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
