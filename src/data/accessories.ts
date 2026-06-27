@@ -10,9 +10,9 @@
  *   Если цена ещё не известна — price: null (на странице покажется «Цена уточняется»).
  *
  * Категории:
- *   kit        — Базовый комплект погонажа (2,5 коробки + 5 наличников; используется
+ *   kit        — Базовый комплект погонажа (см. BASE_KIT_DESCRIPTION; используется
  *                для расчёта итоговой цены «под ключ» на странице товара — см. calcKitPrice)
- *   box        — Коробки
+ *   box        — Дверной короб
  *   nalichnik  — Наличники
  *   kapitel    — Капители
  *   dobor      — Доборы
@@ -30,7 +30,7 @@ export type AccessoryCategory = 'kit' | 'box' | 'nalichnik' | 'kapitel' | 'dobor
 
 export const CATEGORY_LABELS: Record<AccessoryCategory, string> = {
   kit:        'Базовый комплект погонажа',
-  box:        'Коробки',
+  box:        'Дверной короб',
   nalichnik:  'Наличники',
   kapitel:    'Капители',
   dobor:      'Доборы',
@@ -48,16 +48,17 @@ export interface Accessory {
 export type CoatingSlug = 'pet' | 'emal' | 'emalex'
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Базовый комплект погонажа (2,5 коробки + 5 наличников) — цена для базового
-// цвета покрытия. Используется и как отдельная позиция в таблице ниже,
-// и в расчёте calcKitPrice().
+// Базовый комплект погонажа — цена для базового цвета покрытия. Используется
+// и как отдельная позиция в таблице ниже, и в расчёте calcKitPrice().
+// BASE_KIT_DESCRIPTION — единственное место с формулировкой состава комплекта,
+// чтобы текст на карточке товара и в таблице цен не расходился.
 // ─────────────────────────────────────────────────────────────────────────────
 export const BASE_KIT_PRICE: Record<CoatingSlug, number> = {
   pet:    5_130,
   emal:   6_080,
   emalex: 4_900,
 }
-export const BASE_KIT_DESCRIPTION = '2,5 коробки, 5 наличников'
+export const BASE_KIT_DESCRIPTION = 'дверной короб 2,5 шт, наличники 5 шт'
 
 // Дата последней проверки/правки цен на этой странице — обновляй вручную при правке прайса
 export const PRICE_LIST_UPDATED = '27.06.2026'
@@ -95,7 +96,7 @@ export const accessoriesByCoating: Record<CoatingSlug, Accessory[]> = {
 
   // ── ПЭТ (Иннова) ─────────────────────────────────────────────────────────
   pet: [
-    { name: 'Комплект погонажа (2,5 коробки, 5 наличников)',     category: 'kit',        unit: 'комплект', price: BASE_KIT_PRICE.pet },
+    { name: `Комплект погонажа (${BASE_KIT_DESCRIPTION})`,       category: 'kit',        unit: 'комплект', price: BASE_KIT_PRICE.pet },
 
     { name: 'Коробка КБТ№43П 80х32х2100',                        category: 'box',        unit: 'шт',       price: 910 },
     { name: 'Коробка КБТ№46П 80х38х2100',                        category: 'box',        unit: 'шт',       price: 1_080 },
@@ -117,7 +118,7 @@ export const accessoriesByCoating: Record<CoatingSlug, Accessory[]> = {
 
   // ── Эмаль ────────────────────────────────────────────────────────────────
   emal: [
-    { name: 'Комплект погонажа (2,5 коробки, 5 наличников)',             category: 'kit',        unit: 'комплект', price: BASE_KIT_PRICE.emal },
+    { name: `Комплект погонажа (${BASE_KIT_DESCRIPTION})`,               category: 'kit',        unit: 'комплект', price: BASE_KIT_PRICE.emal },
 
     { name: 'Коробка КБТ№43П 80х32х2100',                                category: 'box',        unit: 'шт',       price: 1_150 },
     { name: 'Коробка КБТ№43П 80х32х2100 + запил под скрытые петли HH24 Morelli', category: 'box', unit: 'шт',      price: 1_300 },
@@ -148,7 +149,7 @@ export const accessoriesByCoating: Record<CoatingSlug, Accessory[]> = {
 
   // ── Эмалекс ──────────────────────────────────────────────────────────────
   emalex: [
-    { name: 'Комплект погонажа (2,5 коробки, 5 наличников)',             category: 'kit',        unit: 'комплект', price: BASE_KIT_PRICE.emalex },
+    { name: `Комплект погонажа (${BASE_KIT_DESCRIPTION})`,               category: 'kit',        unit: 'комплект', price: BASE_KIT_PRICE.emalex },
 
     { name: 'Коробка КБТ№43П 80х32х2100',                                category: 'box',        unit: 'шт',       price: 880 },
     { name: 'Коробка КБТ№43П 80х32х2100 с запилом под скрытые петли (2 шт, HH24 Morelli)', category: 'box', unit: 'шт', price: 1_030 },

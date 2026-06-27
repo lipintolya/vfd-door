@@ -10,7 +10,7 @@ export interface ColorVariant {
   coatingSlug: string
 }
 
-import { calcKitPrice } from '../../data/accessories'
+import { calcKitPrice, BASE_KIT_DESCRIPTION } from '../../data/accessories'
 
 const props = defineProps<{
   colors:    ColorVariant[]
@@ -65,7 +65,7 @@ const normalizeHex = (hex: string) => {
     </div>
     <div v-if="kitTotal" class="color-picker__kit-row">
       <span class="color-picker__kit-price">от {{ kitTotal.toLocaleString('ru-RU') }} ₽</span>
-      <p class="color-picker__kit-note">комплект под ключ — с коробкой и наличниками</p>
+      <p class="color-picker__kit-note">за комплект — {{ BASE_KIT_DESCRIPTION }}</p>
     </div>
 
     <!-- Выбранный цвет -->
