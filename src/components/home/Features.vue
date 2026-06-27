@@ -5,13 +5,10 @@ import { ref, onMounted, onBeforeUnmount, useTemplateRef } from 'vue'
    Types
    ============================================================ */
 interface Feature {
-  id:        number
-  title:     string
-  text:      string
-  imageUrl:  string
-  stat:      string
-  statLabel: string
-  cta: { label: string; href: string; external?: boolean }
+  id:    number
+  title: string
+  text:  string
+  cta:   { label: string; href: string; external?: boolean }
 }
 
 /* ============================================================
@@ -28,28 +25,19 @@ const FEATURES: Feature[] = [
   {
     id: 1,
     title: 'Официальный дилер ВФД',
-    text: 'Прямые поставки с Владимирской фабрики дверей. Сотни моделей постоянно в наличии на складе в Челябинске — без ожидания и переплат посредникам.',
-    imageUrl: 'https://storage.yandexcloud.net/catalog-vfd/features_block/card-1.webp',
-    stat: '500+',
-    statLabel: 'моделей в наличии',
+    text: 'Прямые поставки с Владимирской фабрики дверей. Более 80 моделей в наличии на складе в Челябинске — без ожидания и переплат посредникам.',
     cta: { label: 'О компании', href: '/about' },
   },
   {
     id: 2,
     title: 'Монтаж под ключ',
-    text: 'Полный цикл без лишних забот: замер, расчёт, доставка и профессиональная установка дверей. Собственные монтажники с опытом более 20 лет.',
-    imageUrl: 'https://storage.yandexcloud.net/catalog-vfd/features_block/card-2.webp',
-    stat: '20+',
-    statLabel: 'лет опыта монтажа',
+    text: 'Полный цикл без лишних забот: замер, расчёт, доставка и профессиональная установка дверей. Более 15 лет опыта — работаем с 2011 года.',
     cta: { label: 'Фотоотчёты с монтажей', href: '/portfolio' },
   },
   {
     id: 3,
     title: 'Крупнейшая выставка',
-    text: 'Самая большая экспозиция дверей ВФД в Челябинске. Более 80 моделей вживую — оцените фактуру, цвет и фурнитуру прежде чем принять решение.',
-    imageUrl: 'https://storage.yandexcloud.net/catalog-vfd/features_block/card-3.webp',
-    stat: '80+',
-    statLabel: 'дверей на экспозиции',
+    text: 'Самая большая экспозиция дверей ВФД в Челябинске. Более 70 дверей на выставке — оцените фактуру, цвет и фурнитуру вживую.',
     cta: { label: 'Как добраться', href: 'https://2gis.ru/chelyabinsk/firm/70000001093506304/tab/photos' },
   },
 ]
@@ -165,62 +153,26 @@ onBeforeUnmount(() => {
           itemscope
           itemtype="https://schema.org/Thing"
         >
-          <!-- Image -->
-          <div class="features-card__media" aria-hidden="true">
-            <img
-              :src="feature.imageUrl"
-              alt=""
-              class="features-card__image"
-              loading="lazy"
-              decoding="async"
-              width="400"
-              height="300"
-            />
-            <div class="features-card__stat">
-              <span class="features-card__stat-num">{{ feature.stat }}</span>
-              <span class="features-card__stat-label">{{ feature.statLabel }}</span>
-            </div>
-          </div>
-
-          <!-- Body -->
-          <div class="features-card__body">
-            <div class="features-card__content">
-              <h3 class="features-card__title" itemprop="name">{{ feature.title }}</h3>
-              <p  class="features-card__text"  itemprop="description">{{ feature.text }}</p>
-            </div>
-
-            <!-- CTA -->
-            <a
-              :href="feature.cta.href"
-              class="features-card__cta"
-              :target="feature.cta.external ? '_blank' : undefined"
-              :rel="feature.cta.external ? 'noopener noreferrer' : undefined"
-              :aria-label="feature.cta.external
-                ? `${feature.cta.label} (открывается в новой вкладке)`
-                : undefined"
-            >
-              {{ feature.cta.label }}
-              <!-- Стрелка — внешняя ссылка получает иконку «открыть» -->
-              <svg
-                v-if="feature.cta.external"
-                class="features-card__cta-icon"
-                viewBox="0 0 16 16"
-                fill="none"
-                aria-hidden="true"
-              >
-                <path d="M6 2H3a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V9M9 2h5m0 0v5m0-5L7 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              <svg
-                v-else
-                class="features-card__cta-icon"
-                viewBox="0 0 16 16"
-                fill="none"
-                aria-hidden="true"
-              >
+          <a
+            :href="feature.cta.href"
+            class="features-card__link"
+            :target="feature.cta.external ? '_blank' : undefined"
+            :rel="feature.cta.external ? 'noopener noreferrer' : undefined"
+            :aria-label="feature.cta.external
+              ? `${feature.title} — ${feature.cta.label} (открывается в новой вкладке)`
+              : `${feature.title} — ${feature.cta.label}`"
+          >
+            <span class="features-card__arrow" aria-hidden="true">
+              <svg viewBox="0 0 16 16" fill="none">
                 <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-            </a>
-          </div>
+            </span>
+
+            <h3 class="features-card__title" itemprop="name">{{ feature.title }}</h3>
+            <p  class="features-card__text"  itemprop="description">{{ feature.text }}</p>
+
+            <span class="features-card__cta">{{ feature.cta.label }}</span>
+          </a>
         </li>
       </ul>
 
@@ -229,15 +181,6 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
-/* ============================================================
-   Section
-   ============================================================ */
-.features-section {
-  background:
-    radial-gradient(ellipse 70% 50% at 50% 0%, color-mix(in srgb, #14b8a6 8%, transparent), transparent),
-    #f8f9fa;
-}
-
 /* ============================================================
    Header
    ============================================================ */
@@ -293,150 +236,95 @@ onBeforeUnmount(() => {
 }
 
 /* ============================================================
-   Card
+   Card — flat tile, no photo: soft tint + arrow circle + link
    ============================================================ */
 .features-card {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
   border-radius: 1.25rem;
-  border: 1px solid #e2e8f0;
-  background: #fff;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
 
   opacity: 0;
   transform: translateY(24px);
   transition:
-    opacity     600ms ease-out var(--delay, 0ms),
-    transform   600ms ease-out var(--delay, 0ms),
-    box-shadow  220ms ease-out,
-    border-color 220ms ease-out;
+    opacity    600ms ease-out var(--delay, 0ms),
+    transform  600ms ease-out var(--delay, 0ms);
 }
 .features-card.is-visible {
   opacity: 1;
   transform: translateY(0);
 }
-.features-card:hover {
-  border-color: color-mix(in srgb, var(--color-accent, #14b8a6) 35%, #e2e8f0);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+
+/* Чередующийся мягкий тинт фона — средняя карточка в фирменном teal */
+.features-card:nth-child(odd) {
+  background: #f8fafc;
+}
+.features-card:nth-child(even) {
+  background: #f0fdfa;
 }
 
-/* ── Media ── */
-.features-card__media {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-  background: linear-gradient(135deg, #f0fdfa, #e6f7f5);
-  flex-shrink: 0;
-}
-.features-card__image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 500ms ease-out;
-}
-.features-card:hover .features-card__image {
-  transform: scale(1.04);
-}
-
-/* Stat badge */
-.features-card__stat {
-  position: absolute;
-  bottom: 0.85rem;
-  right: 0.85rem;
+.features-card__link {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  padding: 0.55rem 0.85rem;
-  border-radius: 0.75rem;
-  background: rgba(15, 23, 42, 0.82);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  color: #fff;
-  line-height: 1.1;
-}
-.features-card__stat-num {
-  font-size: 1.5rem;
-  font-weight: 900;
-  color: #5eead4;
-  letter-spacing: -0.03em;
-}
-.features-card__stat-label {
-  margin-top: 0.1rem;
-  font-size: 0.68rem;
-  font-weight: 600;
-  color: #94a3b8;
-  white-space: nowrap;
-}
-
-/* ── Body ── */
-.features-card__body {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  gap: 1.1rem;
-  padding: clamp(1.1rem, 2vw, 1.4rem);
-}
-.features-card__content {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
   gap: 0.65rem;
+  height: 100%;
+  padding: clamp(1.25rem, 2.5vw, 1.75rem);
+  text-decoration: none;
+  transition: background-color 200ms ease-out;
 }
+.features-card:nth-child(odd) .features-card__link:hover {
+  background: color-mix(in srgb, var(--color-accent, #14b8a6) 6%, #f8fafc);
+}
+.features-card:nth-child(even) .features-card__link:hover {
+  background: color-mix(in srgb, var(--color-accent, #14b8a6) 12%, #f0fdfa);
+}
+.features-card__link:focus-visible {
+  outline: 2px solid var(--color-accent, #14b8a6);
+  outline-offset: -2px;
+}
+
+.features-card__arrow {
+  align-self: flex-end;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #fff;
+  color: #0f172a;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.12);
+  transition: transform 200ms ease-out, background-color 200ms ease-out, color 200ms ease-out;
+}
+.features-card__arrow svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+.features-card__link:hover .features-card__arrow {
+  background: var(--color-accent, #14b8a6);
+  color: #fff;
+  transform: translate(2px, -2px);
+}
+
 .features-card__title {
   margin: 0;
   color: #0f172a;
-  font-size: 1.05rem;
+  font-size: 1.125rem;
   font-weight: 800;
   line-height: 1.25;
 }
 .features-card__text {
   margin: 0;
+  flex: 1;
   color: #475569;
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   line-height: 1.65;
 }
 
-/* ── CTA ── */
 .features-card__cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  align-self: flex-start;        /* не растягивается на всю ширину */
-  padding: 0.55rem 1.1rem;
-  border-radius: 9999px;
-  border: 1.5px solid var(--color-accent, #14b8a6);
-  background: transparent;
-  color: var(--color-accent-hover, #0d9488);
+  margin-top: 0.4rem;
+  color: #0f172a;
   font-size: 0.8125rem;
   font-weight: 700;
-  text-decoration: none;
-  white-space: nowrap;
-  transition:
-    background-color 200ms ease-out,
-    color            200ms ease-out,
-    border-color     200ms ease-out,
-    transform        200ms ease-out;
-}
-.features-card__cta:hover {
-  background: var(--color-accent, #14b8a6);
-  border-color: var(--color-accent, #14b8a6);
-  color: #fff;
-  transform: translateY(-1px);
-}
-.features-card__cta:focus-visible {
-  outline: 2px solid var(--color-accent, #14b8a6);
-  outline-offset: 3px;
-}
-.features-card__cta-icon {
-  width: 0.875rem;
-  height: 0.875rem;
-  flex-shrink: 0;
-  transition: transform 200ms ease-out;
-}
-.features-card__cta:hover .features-card__cta-icon {
-  transform: translateX(2px);
 }
 
 /* ============================================================
@@ -446,16 +334,15 @@ onBeforeUnmount(() => {
   .features-card {
     opacity: 1;
     transform: none;
-    transition: box-shadow 220ms ease-out, border-color 220ms ease-out;
+    transition: none;
   }
   .features-word {
     opacity: 1;
     transform: none;
     transition: none;
   }
-  .features-card__image,
-  .features-card__cta,
-  .features-card__cta-icon {
+  .features-card__link,
+  .features-card__arrow {
     transition: none;
   }
 }
@@ -472,9 +359,6 @@ onBeforeUnmount(() => {
 @media (max-width: 560px) {
   .features-grid {
     grid-template-columns: 1fr;
-  }
-  .features-card__media {
-    aspect-ratio: 3 / 2;
   }
 }
 </style>
