@@ -21,6 +21,9 @@ const WORDS: string[] = [
   'установку дверей «под ключ»',
 ]
 
+// Фото салона/выставки для заголовка блока — вставь URL, когда фото будет готово.
+const HEADER_IMAGE = ''
+
 const FEATURES: Feature[] = [
   {
     id: 1,
@@ -119,22 +122,42 @@ onBeforeUnmount(() => {
 
       <!-- ── Header ── -->
       <header class="features-header">
-        <p class="features-eyebrow" aria-hidden="true">Почему выбирают нас</p>
+        <div class="features-header__text">
+          <p class="features-eyebrow" aria-hidden="true">Почему выбирают нас</p>
 
-        <h2 id="features-heading" class="features-title">
-          Вы нашли
-          <span class="sr-only">официальный салон ВФД</span>
-          <span
-            class="features-word"
-            :class="{ 'is-visible': wordVisible }"
-            aria-hidden="true"
-          >{{ currentWord }}</span>
-        </h2>
+          <h2 id="features-heading" class="features-title">
+            Вы нашли
+            <span class="sr-only">официальный салон ВФД</span>
+            <span
+              class="features-word"
+              :class="{ 'is-visible': wordVisible }"
+              aria-hidden="true"
+            >{{ currentWord }}</span>
+          </h2>
 
-        <p class="features-lead">
-          Официальный салон Владимирской фабрики дверей в Челябинске.
-          Берём на себя всё — от подбора до профессионального монтажа.
-        </p>
+          <p class="features-lead">
+            Официальный салон Владимирской фабрики дверей в Челябинске.
+            Берём на себя всё — от подбора до профессионального монтажа.
+          </p>
+        </div>
+
+        <div class="features-header__photo-wrap" aria-hidden="true">
+          <img
+            v-if="HEADER_IMAGE"
+            :src="HEADER_IMAGE"
+            alt=""
+            class="features-header__photo"
+            loading="lazy"
+            decoding="async"
+          />
+          <div v-else class="features-header__placeholder">
+            <svg fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24" width="40" height="40">
+              <rect x="3" y="5" width="18" height="14" rx="2" />
+              <path d="M3 16l5-5 4 4 3-3 6 6" stroke-linecap="round" stroke-linejoin="round" />
+              <circle cx="8" cy="9" r="1.5" />
+            </svg>
+          </div>
+        </div>
       </header>
 
       <!-- ── Cards ── -->
@@ -185,8 +208,32 @@ onBeforeUnmount(() => {
    Header
    ============================================================ */
 .features-header {
-  max-width: 52rem;
+  display: grid;
+  grid-template-columns: 1fr 22rem;
+  gap: clamp(2rem, 4vw, 3.5rem);
+  align-items: center;
   margin-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+.features-header__text {
+  max-width: 42rem;
+}
+.features-header__photo-wrap {
+  aspect-ratio: 4 / 3;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.features-header__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.features-header__placeholder {
+  color: #d1d5db;
 }
 .features-eyebrow {
   margin: 0 0 0.85rem;
@@ -351,6 +398,12 @@ onBeforeUnmount(() => {
    Responsive
    ============================================================ */
 @media (max-width: 900px) {
+  .features-header {
+    grid-template-columns: 1fr;
+  }
+  .features-header__photo-wrap {
+    aspect-ratio: 16 / 9;
+  }
   .features-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
