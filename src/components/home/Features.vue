@@ -157,18 +157,6 @@ onBeforeUnmount(() => {
           itemscope
           itemtype="https://schema.org/Thing"
         >
-          <div class="features-card__media">
-            <img
-              :src="feature.imageUrl"
-              alt=""
-              class="features-card__image"
-              loading="lazy"
-              decoding="async"
-              width="400"
-              height="300"
-            />
-          </div>
-
           <div class="features-card__body">
             <h3 class="features-card__title" itemprop="name">{{ feature.title }}</h3>
             <p  class="features-card__text"  itemprop="description">{{ feature.text }}</p>
@@ -184,6 +172,18 @@ onBeforeUnmount(() => {
             >
               {{ feature.cta.label }}
             </a>
+          </div>
+
+          <div class="features-card__media">
+            <img
+              :src="feature.imageUrl"
+              alt=""
+              class="features-card__image"
+              loading="lazy"
+              decoding="async"
+              width="400"
+              height="300"
+            />
           </div>
         </li>
       </ul>
@@ -278,7 +278,7 @@ onBeforeUnmount(() => {
 .features-card__media {
   position: relative;
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   border-radius: 1.25rem;
   background: linear-gradient(135deg, #f0fdfa, #e6f7f5);
@@ -300,7 +300,7 @@ onBeforeUnmount(() => {
   flex-direction: column;
   flex: 1;
   gap: 0.65rem;
-  padding: 1.25rem 0.5rem 0.5rem;
+  padding: 0.25rem 0.5rem 1.25rem;
 }
 .features-card__title {
   margin: 0;
