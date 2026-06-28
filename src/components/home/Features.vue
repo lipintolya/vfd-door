@@ -5,10 +5,11 @@ import { ref, onMounted, onBeforeUnmount, useTemplateRef } from 'vue'
    Types
    ============================================================ */
 interface Feature {
-  id:    number
-  title: string
-  text:  string
-  cta:   { label: string; href: string; external?: boolean }
+  id:       number
+  title:    string
+  text:     string
+  imageUrl: string
+  cta:      { label: string; href: string; external?: boolean }
 }
 
 /* ============================================================
@@ -21,26 +22,26 @@ const WORDS: string[] = [
   'установку дверей «под ключ»',
 ]
 
-// Фото салона/выставки для заголовка блока — вставь URL, когда фото будет готово.
-const HEADER_IMAGE = ''
-
 const FEATURES: Feature[] = [
   {
     id: 1,
     title: 'Официальный дилер ВФД',
     text: 'Прямые поставки с Владимирской фабрики дверей. Более 80 моделей в наличии на складе в Челябинске — без ожидания и переплат посредникам.',
+    imageUrl: 'https://storage.yandexcloud.net/catalog-vfd/features_block/card-1.webp',
     cta: { label: 'О компании', href: '/about' },
   },
   {
     id: 2,
     title: 'Монтаж под ключ',
     text: 'Полный цикл без лишних забот: замер, расчёт, доставка и профессиональная установка дверей. Более 15 лет опыта — работаем с 2011 года.',
+    imageUrl: 'https://storage.yandexcloud.net/catalog-vfd/features_block/card-2.webp',
     cta: { label: 'Фотоотчёты с монтажей', href: '/portfolio' },
   },
   {
     id: 3,
     title: 'Крупнейшая выставка',
     text: 'Самая большая экспозиция дверей ВФД в Челябинске. Более 70 дверей на выставке — оцените фактуру, цвет и фурнитуру вживую.',
+    imageUrl: 'https://storage.yandexcloud.net/catalog-vfd/features_block/card-3.webp',
     cta: { label: 'Как добраться', href: 'https://2gis.ru/chelyabinsk/firm/70000001093506304/tab/photos' },
   },
 ]
@@ -122,42 +123,22 @@ onBeforeUnmount(() => {
 
       <!-- ── Header ── -->
       <header class="features-header">
-        <div class="features-header__text">
-          <p class="features-eyebrow" aria-hidden="true">Почему выбирают нас</p>
+        <p class="features-eyebrow" aria-hidden="true">Почему выбирают нас</p>
 
-          <h2 id="features-heading" class="features-title">
-            Вы нашли
-            <span class="sr-only">официальный салон ВФД</span>
-            <span
-              class="features-word"
-              :class="{ 'is-visible': wordVisible }"
-              aria-hidden="true"
-            >{{ currentWord }}</span>
-          </h2>
+        <h2 id="features-heading" class="features-title">
+          Вы нашли
+          <span class="sr-only">официальный салон ВФД</span>
+          <span
+            class="features-word"
+            :class="{ 'is-visible': wordVisible }"
+            aria-hidden="true"
+          >{{ currentWord }}</span>
+        </h2>
 
-          <p class="features-lead">
-            Официальный салон Владимирской фабрики дверей в Челябинске.
-            Берём на себя всё — от подбора до профессионального монтажа.
-          </p>
-        </div>
-
-        <div class="features-header__photo-wrap" aria-hidden="true">
-          <img
-            v-if="HEADER_IMAGE"
-            :src="HEADER_IMAGE"
-            alt=""
-            class="features-header__photo"
-            loading="lazy"
-            decoding="async"
-          />
-          <div v-else class="features-header__placeholder">
-            <svg fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24" width="40" height="40">
-              <rect x="3" y="5" width="18" height="14" rx="2" />
-              <path d="M3 16l5-5 4 4 3-3 6 6" stroke-linecap="round" stroke-linejoin="round" />
-              <circle cx="8" cy="9" r="1.5" />
-            </svg>
-          </div>
-        </div>
+        <p class="features-lead">
+          Официальный салон Владимирской фабрики дверей в Челябинске.
+          Берём на себя всё — от подбора до профессионального монтажа.
+        </p>
       </header>
 
       <!-- ── Cards ── -->
@@ -176,26 +157,34 @@ onBeforeUnmount(() => {
           itemscope
           itemtype="https://schema.org/Thing"
         >
-          <a
-            :href="feature.cta.href"
-            class="features-card__link"
-            :target="feature.cta.external ? '_blank' : undefined"
-            :rel="feature.cta.external ? 'noopener noreferrer' : undefined"
-            :aria-label="feature.cta.external
-              ? `${feature.title} — ${feature.cta.label} (открывается в новой вкладке)`
-              : `${feature.title} — ${feature.cta.label}`"
-          >
-            <span class="features-card__arrow" aria-hidden="true">
-              <svg viewBox="0 0 16 16" fill="none">
-                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
+          <div class="features-card__media">
+            <img
+              :src="feature.imageUrl"
+              alt=""
+              class="features-card__image"
+              loading="lazy"
+              decoding="async"
+              width="400"
+              height="300"
+            />
+          </div>
 
+          <div class="features-card__body">
             <h3 class="features-card__title" itemprop="name">{{ feature.title }}</h3>
             <p  class="features-card__text"  itemprop="description">{{ feature.text }}</p>
 
-            <span class="features-card__cta">{{ feature.cta.label }}</span>
-          </a>
+            <a
+              :href="feature.cta.href"
+              class="features-card__cta"
+              :target="feature.cta.external ? '_blank' : undefined"
+              :rel="feature.cta.external ? 'noopener noreferrer' : undefined"
+              :aria-label="feature.cta.external
+                ? `${feature.cta.label} (открывается в новой вкладке)`
+                : undefined"
+            >
+              {{ feature.cta.label }}
+            </a>
+          </div>
         </li>
       </ul>
 
@@ -208,32 +197,8 @@ onBeforeUnmount(() => {
    Header
    ============================================================ */
 .features-header {
-  display: grid;
-  grid-template-columns: 1fr 22rem;
-  gap: clamp(2rem, 4vw, 3.5rem);
-  align-items: center;
+  max-width: 52rem;
   margin-bottom: clamp(2.5rem, 5vw, 4rem);
-}
-.features-header__text {
-  max-width: 42rem;
-}
-.features-header__photo-wrap {
-  aspect-ratio: 4 / 3;
-  border-radius: 1.5rem;
-  overflow: hidden;
-  background: #f8fafc;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.features-header__photo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.features-header__placeholder {
-  color: #d1d5db;
 }
 .features-eyebrow {
   margin: 0 0 0.85rem;
@@ -283,79 +248,64 @@ onBeforeUnmount(() => {
 }
 
 /* ============================================================
-   Card — flat tile, no photo: soft tint + arrow circle + link
+   Card — photo top, body below (Sofia-reference: framed photo +
+   title + text + pill CTA)
    ============================================================ */
 .features-card {
-  border-radius: 1.25rem;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border-radius: 1.5rem;
+  padding: 0.75rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
 
   opacity: 0;
   transform: translateY(24px);
   transition:
-    opacity    600ms ease-out var(--delay, 0ms),
-    transform  600ms ease-out var(--delay, 0ms);
+    opacity     600ms ease-out var(--delay, 0ms),
+    transform   600ms ease-out var(--delay, 0ms),
+    border-color 220ms ease-out;
 }
 .features-card.is-visible {
   opacity: 1;
   transform: translateY(0);
 }
-
-/* Чередующийся мягкий тинт фона — средняя карточка в фирменном teal */
-.features-card:nth-child(odd) {
-  background: #f8fafc;
-}
-.features-card:nth-child(even) {
-  background: #f0fdfa;
+.features-card:hover {
+  border-color: color-mix(in srgb, var(--color-accent, #14b8a6) 35%, #e2e8f0);
 }
 
-.features-card__link {
+/* ── Media ── */
+.features-card__media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  background: linear-gradient(135deg, #f0fdfa, #e6f7f5);
+  flex-shrink: 0;
+}
+.features-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 500ms ease-out;
+}
+.features-card:hover .features-card__image {
+  transform: scale(1.04);
+}
+
+/* ── Body ── */
+.features-card__body {
   display: flex;
   flex-direction: column;
+  flex: 1;
   gap: 0.65rem;
-  height: 100%;
-  padding: clamp(1.25rem, 2.5vw, 1.75rem);
-  text-decoration: none;
-  transition: background-color 200ms ease-out;
+  padding: 1.25rem 0.5rem 0.5rem;
 }
-.features-card:nth-child(odd) .features-card__link:hover {
-  background: color-mix(in srgb, var(--color-accent, #14b8a6) 6%, #f8fafc);
-}
-.features-card:nth-child(even) .features-card__link:hover {
-  background: color-mix(in srgb, var(--color-accent, #14b8a6) 12%, #f0fdfa);
-}
-.features-card__link:focus-visible {
-  outline: 2px solid var(--color-accent, #14b8a6);
-  outline-offset: -2px;
-}
-
-.features-card__arrow {
-  align-self: flex-end;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  flex-shrink: 0;
-  border-radius: 50%;
-  background: #fff;
-  color: #0f172a;
-  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.12);
-  transition: transform 200ms ease-out, background-color 200ms ease-out, color 200ms ease-out;
-}
-.features-card__arrow svg {
-  width: 0.9rem;
-  height: 0.9rem;
-}
-.features-card__link:hover .features-card__arrow {
-  background: var(--color-accent, #14b8a6);
-  color: #fff;
-  transform: translate(2px, -2px);
-}
-
 .features-card__title {
   margin: 0;
   color: #0f172a;
-  font-size: 1.125rem;
+  font-size: 1.05rem;
   font-weight: 800;
   line-height: 1.25;
 }
@@ -363,15 +313,38 @@ onBeforeUnmount(() => {
   margin: 0;
   flex: 1;
   color: #475569;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   line-height: 1.65;
 }
 
+/* ── CTA — rounded outline pill, like «Смотреть проект» в референсе ── */
 .features-card__cta {
-  margin-top: 0.4rem;
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  margin-top: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: 9999px;
+  border: 1.5px solid #e2e8f0;
+  background: #fff;
   color: #0f172a;
   font-size: 0.8125rem;
   font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color 200ms ease-out,
+    border-color     200ms ease-out,
+    color            200ms ease-out;
+}
+.features-card__cta:hover {
+  background: var(--color-accent, #14b8a6);
+  border-color: var(--color-accent, #14b8a6);
+  color: #fff;
+}
+.features-card__cta:focus-visible {
+  outline: 2px solid var(--color-accent, #14b8a6);
+  outline-offset: 2px;
 }
 
 /* ============================================================
@@ -381,15 +354,15 @@ onBeforeUnmount(() => {
   .features-card {
     opacity: 1;
     transform: none;
-    transition: none;
+    transition: border-color 220ms ease-out;
   }
   .features-word {
     opacity: 1;
     transform: none;
     transition: none;
   }
-  .features-card__link,
-  .features-card__arrow {
+  .features-card__image,
+  .features-card__cta {
     transition: none;
   }
 }
@@ -398,12 +371,6 @@ onBeforeUnmount(() => {
    Responsive
    ============================================================ */
 @media (max-width: 900px) {
-  .features-header {
-    grid-template-columns: 1fr;
-  }
-  .features-header__photo-wrap {
-    aspect-ratio: 16 / 9;
-  }
   .features-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -412,6 +379,9 @@ onBeforeUnmount(() => {
 @media (max-width: 560px) {
   .features-grid {
     grid-template-columns: 1fr;
+  }
+  .features-card__media {
+    aspect-ratio: 3 / 2;
   }
 }
 </style>
