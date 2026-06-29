@@ -144,19 +144,19 @@ watch(
 </script>
 
 <template>
-  <section class="catalog-app" aria-labelledby="catalog-title">
-    <div class="catalog-head">
+  <section class="grid gap-8" aria-labelledby="catalog-title">
+    <div class="flex flex-wrap items-end justify-between gap-4">
       <div>
-        <h1 id="catalog-title">Межкомнатные двери</h1>
-        <p>
-          Найдено: <strong>{{ filteredCards.length }}</strong>
+        <h1 id="catalog-title" class="m-0 mb-1.5 text-[clamp(2rem,4vw,2.25rem)] font-extrabold leading-tight text-ink">Межкомнатные двери</h1>
+        <p class="m-0 text-base text-slate-600">
+          Найдено: <strong class="font-extrabold text-ink">{{ filteredCards.length }}</strong>
           {{ filteredCards.length === 1 ? 'товар' : 'товаров' }}
         </p>
       </div>
 
-      <label class="catalog-sort">
-        <span class="catalog-sort__label">Сортировка:</span>
-        <select v-model="sortBy" class="catalog-sort__select">
+      <label class="flex items-center gap-2.5">
+        <span class="text-[0.9375rem] font-bold text-slate-600">Сортировка:</span>
+        <select v-model="sortBy" class="min-h-11.5 min-w-62 rounded-lg border-2 border-slate-200 bg-white px-4 text-[0.9375rem] font-bold text-ink focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-500/15">
           <option value="price_asc">Цена: по возрастанию</option>
           <option value="price_desc">Цена: по убыванию</option>
           <option value="name">По названию</option>
@@ -164,56 +164,60 @@ watch(
       </label>
     </div>
 
-    <div class="catalog-layout">
+    <div class="grid grid-cols-1 items-start gap-6 lg:grid-cols-[18rem_1fr] lg:gap-9">
 
-      <!-- Mobile filter toggle -->
-      <button
-        type="button"
-        class="catalog-filters-toggle"
-        :class="{ 'is-active': hasActiveFilters }"
-        @click="mobileFiltersOpen = !mobileFiltersOpen"
-      >
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" class="w-4 h-4">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M3 4h18M7 10h10M11 16h2" />
-        </svg>
-        <span>{{ mobileFiltersOpen ? 'Скрыть фильтры' : 'Показать фильтры' }}</span>
-        <span v-if="hasActiveFilters" class="catalog-filters-toggle__badge">
-          {{ [activeSeries, activeCoating, activeColor, glassOnly, searchQuery].filter(Boolean).length }}
-        </span>
-      </button>
+      <div>
+        <!-- Mobile filter toggle -->
+        <button
+          type="button"
+          class="mb-4 flex w-full items-center justify-center gap-2 rounded-lg border-2 border-slate-200 px-4.5 py-2.5 text-sm font-bold text-slate-600 transition lg:hidden"
+          :class="hasActiveFilters ? 'border-teal-300 text-teal-700' : ''"
+          @click="mobileFiltersOpen = !mobileFiltersOpen"
+        >
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 4h18M7 10h10M11 16h2" />
+          </svg>
+          <span>{{ mobileFiltersOpen ? 'Скрыть фильтры' : 'Показать фильтры' }}</span>
+          <span v-if="hasActiveFilters" class="ml-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-teal-600 text-xs font-black text-white">
+            {{ [activeSeries, activeCoating, activeColor, glassOnly, searchQuery].filter(Boolean).length }}
+          </span>
+        </button>
 
-      <CatalogFilters
-        class="catalog-filters-panel"
-        :class="{ 'is-mobile-open': mobileFiltersOpen }"
-        v-model:active-series="activeSeries"
-        v-model:active-coating="activeCoating"
-        v-model:active-color="activeColor"
-        v-model:glass-only="glassOnly"
-        v-model:search-query="searchQuery"
-        :series="allSeries"
-        :coatings="allCoatings"
-        :colors="allColors"
-        :total-count="allCards.length"
-        :filtered-count="filteredCards.length"
-        :has-active-filters="hasActiveFilters"
-        @reset="resetFilters"
-      />
+        <CatalogFilters
+          class="lg:block"
+          :class="mobileFiltersOpen ? 'block' : 'hidden'"
+          v-model:active-series="activeSeries"
+          v-model:active-coating="activeCoating"
+          v-model:active-color="activeColor"
+          v-model:glass-only="glassOnly"
+          v-model:search-query="searchQuery"
+          :series="allSeries"
+          :coatings="allCoatings"
+          :colors="allColors"
+          :total-count="allCards.length"
+          :filtered-count="filteredCards.length"
+          :has-active-filters="hasActiveFilters"
+          @reset="resetFilters"
+        />
+      </div>
 
-      <CatalogEmptyState
-        v-if="filteredCards.length === 0"
-        @reset="resetFilters"
-      />
-      <CatalogGrid
-        v-else
-        :cards="paginatedCards"
-      />
+      <div class="flex flex-col gap-6">
+        <CatalogEmptyState
+          v-if="filteredCards.length === 0"
+          @reset="resetFilters"
+        />
+        <CatalogGrid
+          v-else
+          :cards="paginatedCards"
+        />
 
-      <CatalogPagination
-        :current-page="currentPage"
-        :total-pages="totalPages"
-        :visible-pages="visiblePages"
-        @change="goToPage"
-      />
+        <CatalogPagination
+          :current-page="currentPage"
+          :total-pages="totalPages"
+          :visible-pages="visiblePages"
+          @change="goToPage"
+        />
+      </div>
     </div>
   </section>
 </template>
