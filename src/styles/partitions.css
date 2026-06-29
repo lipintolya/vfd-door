@@ -257,6 +257,36 @@
 }
 
 /* ═══════════════════════════════════════════════════════
+   RENDER BENTO — галерея рендеров (1 крупная + 2 узкие плитки)
+═══════════════════════════════════════════════════════ */
+.pt-render-bento {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.75rem, 1.5vw, 1rem);
+  min-height: 420px;
+}
+.pt-render-bento > :first-child { grid-row: 1 / 3; }
+@media (max-width: 768px) {
+  .pt-render-bento {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    min-height: auto;
+    gap: 0.5rem;
+  }
+  .pt-render-bento > :first-child {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    min-height: clamp(220px, 60vw, 320px);
+  }
+}
+@media (max-width: 560px) {
+  .pt-render-bento { grid-template-columns: 1fr; }
+  .pt-render-bento > :first-child { grid-column: 1; }
+  .pt-render-bento > * { min-height: 220px; }
+}
+
+/* ═══════════════════════════════════════════════════════
    ABOUT
 ═══════════════════════════════════════════════════════ */
 .pt-about__grid {

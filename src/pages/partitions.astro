@@ -20,6 +20,7 @@ import IconExpand from '../components/ui/icons/IconExpand.astro'
 import {
   imgs, heroStats, tracks, mountings, colorSwatches, glassSwatches,
   partitionBenefits, steps, sectionalModels, sectionalDecor, overlayModels, overlayDecor, cases,
+  renderGallery,
 } from '../data/partitions'
 import '../styles/partitions.css'
 
@@ -38,6 +39,7 @@ const structuredData = {
   name:        'Алюминиевые перегородки GRAFIA',
   description,
   url:         canonicalUrl,
+  image:       [imgs.hero, ...renderGallery.map(r => Astro.site ? new URL(r.src, Astro.site).href : r.src)],
   provider: {
     '@type':    'LocalBusiness',
     name:       'Салон дверей ВФД',
@@ -50,6 +52,14 @@ const structuredData = {
     },
   },
 }
+
+/* Превью для бенто-плиток — заранее сгенерированные маленькие копии
+   (public/renders/alum-covers/N-preview.webp), см. README в той же папке. */
+const renderPreviews = renderGallery.slice(0, 3).map(img => ({
+  src: img.src.replace(/\.webp$/, '-preview.webp'),
+  alt: img.alt,
+}))
+const renderLightbox = renderGallery
 ---
 
 <BaseLayout
@@ -218,6 +228,57 @@ const structuredData = {
   <div id="pt-projects">
     {cases.map(c => <ProjectCase data={c} />)}
   </div>
+
+  <!-- ГАЛЕРЕЯ РЕНДЕРОВ: перегородки и алюминиевые двери -->
+  <section class="section pt-tint">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Визуализация"
+        title="Перегородки и двери в интерьере"
+        subtitle={`Дизайн-рендеры алюминиевых перегородок и дверей GRAFIA — ${renderGallery.length} вариантов оформления для разных стилей интерьера`}
+      />
+      <div class="pt-render-bento">
+        {renderGallery.slice(0, 3).map((img, i) => (
+          <button
+            type="button"
+            class="relative overflow-hidden rounded-3xl bg-slate-100 cursor-zoom-in group"
+            data-render-tile
+            data-index={i}
+            aria-label={i === 2 ? `Открыть все ${renderGallery.length} рендеров` : `Открыть рендер крупнее: ${img.alt}`}
+          >
+            <img
+              src={renderPreviews[i].src}
+              alt={img.alt}
+              loading={i === 0 ? 'eager' : 'lazy'}
+              decoding="async"
+              class="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+            />
+            {i === 2 ? (
+              <div class="absolute inset-0 flex flex-col items-center justify-center gap-0.5 bg-slate-900/55 text-white backdrop-blur-xs transition-colors duration-200 group-hover:bg-slate-900/65">
+                <span class="text-2xl font-black tracking-tight">+{renderGallery.length - 3}</span>
+                <span class="text-[0.6875rem] font-semibold uppercase tracking-wider text-slate-200">рендеров</span>
+              </div>
+            ) : (
+              <div class="absolute top-2.5 left-2.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10">
+                <div class="w-8 h-8 rounded-full flex items-center justify-center bg-slate-900/55 backdrop-blur-xs text-white">
+                  <IconExpand size={13} />
+                </div>
+              </div>
+            )}
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <script is:inline define:vars={{ renderGalleryImages: renderLightbox }}>
+    document.querySelectorAll('[data-render-tile]').forEach(function (tile) {
+      tile.addEventListener('click', function () {
+        var index = Number(tile.dataset.index)
+        window.dispatchEvent(new CustomEvent('open-lightbox', { detail: { images: renderGalleryImages, index: index } }))
+      })
+    })
+  </script>
 
   <!-- ТИПЫ НАПРАВЛЯЮЩИХ -->
   <section class="section bg-white">
