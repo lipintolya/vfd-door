@@ -44,6 +44,7 @@ const NAV_LINKS = [
   { href: '/',           label: 'Главная' },
   { href: '/catalog',    label: 'Каталог' },
   { href: '/partitions', label: 'Перегородки' },
+  { href: '/designers',  label: 'Дизайнерам' },
   { href: '/about',      label: 'О нас' },
   { href: '/contacts',   label: 'Контакты' },
 ] as const
@@ -161,7 +162,7 @@ const onResize = () => {
     closeMobileMenu()
     // Закрываем contacts-попап тоже — он hidden на мобильном через CSS,
     // но state может остаться true если resized с открытым мобильным меню
-    closeContacts()
+    closeContacts(false)
   }
 }
 
@@ -180,7 +181,7 @@ const onClickOutside = (e: MouseEvent) => {
     contactsPanelRef.value &&
     !contactsPanelRef.value.contains(t) &&
     !contactsBtnRef.value?.contains(t)
-  ) closeContacts()
+  ) closeContacts(false)
 
   if (
     mobileOpen.value &&
@@ -204,7 +205,13 @@ const openContacts = async () => {
     ?.querySelector<HTMLElement>('a, button, [tabindex]:not([tabindex="-1"])')
     ?.focus()
 }
-const closeContacts  = () => { contactsOpen.value = false; contactsBtnRef.value?.focus() }
+const closeContacts = (returnFocus = true) => {
+  contactsOpen.value = false
+  // Возвращаем фокус на кнопку только при закрытии с клавиатуры (Escape) —
+  // иначе после клика мышью (вне попапа или по ссылке внутри) на кнопке
+  // повисает focus-visible обводка, хотя пользователь работал мышью.
+  if (returnFocus) contactsBtnRef.value?.focus()
+}
 const toggleContacts = () => contactsOpen.value ? closeContacts() : openContacts()
 
 // Используем первый телефон — optional chaining страхует от пустого массива
@@ -471,7 +478,7 @@ onUnmounted(() => {
                     <a
                       href="/contacts"
                       class="btn btn-primary w-full justify-center inline-flex items-center"
-                      @click="closeContacts"
+                      @click="closeContacts(false)"
                     >
                       Перейти к контактам
                     </a>

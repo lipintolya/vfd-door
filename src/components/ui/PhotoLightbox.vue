@@ -11,10 +11,22 @@ interface LightboxImg {
 const images   = ref<LightboxImg[]>([])
 const curIndex = ref<number | null>(null)
 
+/* Предзагрузка соседних кадров — листание в галерее ощущается мгновенным,
+   даже если изображение ещё не открывалось (иначе кажется, что «не листается»). */
+function preloadNeighbors(idx: number) {
+  const len = images.value.length
+  if (len < 2) return
+  for (const n of [(idx + 1) % len, (idx - 1 + len) % len]) {
+    const src = images.value[n]?.src
+    if (src) { const im = new Image(); im.src = src }
+  }
+}
+
 function open(imgs: LightboxImg[], idx: number) {
   images.value   = imgs
   curIndex.value = idx
   document.body.style.overflow = 'hidden'
+  preloadNeighbors(idx)
 }
 
 function close() {
@@ -26,11 +38,13 @@ function close() {
 function prev() {
   if (curIndex.value === null) return
   curIndex.value = (curIndex.value - 1 + images.value.length) % images.value.length
+  preloadNeighbors(curIndex.value)
 }
 
 function next() {
   if (curIndex.value === null) return
   curIndex.value = (curIndex.value + 1) % images.value.length
+  preloadNeighbors(curIndex.value)
 }
 
 function onKey(e: KeyboardEvent) {
