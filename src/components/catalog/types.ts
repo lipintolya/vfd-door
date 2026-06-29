@@ -1,5 +1,6 @@
 export interface CatalogCardItem {
   id: string
+  slug: string
   name: string
   series: string
   seriesSlug: string

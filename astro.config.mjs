@@ -18,7 +18,11 @@ export default defineConfig({
     vue(),
     sitemap({
       filter: (page) =>
-        page !== 'https://vfd74.ru/privacy/' && page !== 'https://vfd74.ru/privacy',
+        page !== 'https://vfd74.ru/privacy/' && page !== 'https://vfd74.ru/privacy' &&
+        // Старые UUID-маршруты моделей остаются доступными (чтобы не 404'ить уже
+        // проиндексированные ссылки), но в сайтмап должен попадать только
+        // канонический слаг-адрес — иначе сайтмап задвоит каждую модель.
+        !/\/models\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/?$/.test(page),
       serialize(item) {
         const u = item.url
         if (u === 'https://vfd74.ru/' || u === 'https://vfd74.ru') {

@@ -8,6 +8,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 import Breadcrumbs from '../components/ui/Breadcrumbs.astro'
 import CatalogClient from '../components/catalog/CatalogClient.vue'
 import { supabase } from '../lib/supabase'
+import { buildModelSlugMap } from '../lib/slugify'
 
 /* ── Все модели с цветами, сериями и покрытиями ── */
 const { data, error } = await supabase
@@ -42,6 +43,7 @@ if (error) console.error('Supabase error:', error.message)
 /* ── Типы ── */
 interface CardItem {
   id:          string
+  slug:        string
   name:        string
   series:      string
   seriesSlug:  string
@@ -81,6 +83,7 @@ for (const row of (data ?? [])) {
 
   cards.push({
     id:          model.id,
+    slug:        '',
     name:        model.name,
     series:      series?.name   ?? '—',
     seriesSlug:  series?.slug   ?? '',
@@ -92,6 +95,13 @@ for (const row of (data ?? [])) {
     price:       row.price_rrp  ?? null,
     hasGlass:    model.has_glass ?? false,
   })
+}
+
+/* ── Читаемые слаги вместо UUID — та же функция, что и в /models/[id].astro,
+   иначе ссылки карточек разойдутся с реально сгенерированными маршрутами ── */
+const slugMap = buildModelSlugMap(cards.map(c => ({ id: c.id, name: c.name, seriesSlug: c.seriesSlug })))
+for (const card of cards) {
+  card.slug = slugMap.get(card.id)!
 }
 
 /* ── Уникальные опции для фильтров ── */
@@ -166,7 +176,7 @@ const structuredData = canonicalUrl ? [
     </div>
   </div>
 
-  <div class="section catalog-page">
+  <div class="section bg-white">
     <div class="container">
       <CatalogClient
         client:load
