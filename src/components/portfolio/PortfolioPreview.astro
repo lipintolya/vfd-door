@@ -1,0 +1,146 @@
+---
+import { PORTFOLIO_WORKS, CATEGORY_LABELS } from '../../data/portfolio-works'
+
+const preview = [...PORTFOLIO_WORKS]
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  .slice(0, 3)
+
+const total = PORTFOLIO_WORKS.length
+const totalWord = total === 1 ? 'фотоотчёт' : total < 5 ? 'фотоотчёта' : 'фотоотчётов'
+---
+
+{preview.length > 0 && (
+  <section class="section" aria-labelledby="portfolio-preview-heading">
+    <div class="container">
+
+      <header class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8 md:mb-10">
+        <div>
+          <p class="mb-2 text-xs font-extrabold uppercase tracking-widest text-teal-600">
+            Наши работы
+          </p>
+          <h2 id="portfolio-preview-heading" class="text-3xl font-extrabold leading-tight tracking-tight text-slate-900 md:text-4xl">
+            Фотоотчёты с объектов
+          </h2>
+          <p class="mt-2 text-base text-slate-600">
+            Реальные проекты монтажа дверей в Челябинске
+          </p>
+        </div>
+        <a
+          href="/portfolio"
+          class="flex-none inline-flex items-center gap-2 rounded-full border-[1.5px] border-slate-200 bg-white px-5 py-2.5 text-sm font-bold text-slate-900 hover:border-teal-500 hover:bg-teal-500 hover:text-white transition-colors duration-200"
+        >
+          Все работы
+          <svg viewBox="0 0 16 16" fill="none" class="w-3.5 h-3.5" aria-hidden="true">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </header>
+
+      <!-- Asymmetric grid: big card left (spans 2 rows) + 2 small cards right -->
+      <div class="portfolio-preview-grid">
+        {preview.map((work, i) => (
+          <a
+            href={`/portfolio/${work.id}`}
+            class:list={['portfolio-preview-card', i === 0 && 'portfolio-preview-card--main', 'group']}
+          >
+            <img
+              src={work.images[0]}
+              alt={work.title}
+              loading={i === 0 ? 'eager' : 'lazy'}
+              decoding="async"
+              class="portfolio-preview-card__img"
+            />
+            <div class="portfolio-preview-card__overlay" />
+            <div class="portfolio-preview-card__meta">
+              <span class="portfolio-preview-card__tag">{CATEGORY_LABELS[work.category]}</span>
+              <p class="portfolio-preview-card__title">{work.title}</p>
+              <p class="portfolio-preview-card__loc">📍 {work.location}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <!-- Count chip -->
+      <div class="mt-5">
+        <span class="inline-flex items-center gap-1.5 text-sm text-slate-500 font-medium">
+          <span class="w-1.5 h-1.5 rounded-full bg-teal-500 inline-block"></span>
+          {total} {totalWord} в портфолио
+        </span>
+      </div>
+
+    </div>
+  </section>
+)}
+
+<style>
+  .portfolio-preview-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  .portfolio-preview-card {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    border-radius: 1.25rem;
+    min-height: 220px;
+    text-decoration: none;
+  }
+  .portfolio-preview-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  .portfolio-preview-card:hover .portfolio-preview-card__img {
+    transform: scale(1.03);
+  }
+  .portfolio-preview-card__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.15) 50%, transparent 100%);
+  }
+  .portfolio-preview-card__meta {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.25rem;
+  }
+  .portfolio-preview-card__tag {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    background: #14b8a6;
+    color: #fff;
+    padding: 0.15em 0.55em;
+    border-radius: 4px;
+    margin-bottom: 0.4rem;
+  }
+  .portfolio-preview-card__title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.35;
+  }
+  .portfolio-preview-card__loc {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.65);
+    margin-top: 0.2rem;
+  }
+
+  @media (min-width: 640px) {
+    .portfolio-preview-grid {
+      grid-template-columns: 1.6fr 1fr;
+      grid-template-rows: 240px 240px;
+    }
+    .portfolio-preview-card--main {
+      grid-row: 1 / 3;
+    }
+    .portfolio-preview-card {
+      min-height: unset;
+    }
+  }
+</style>
