@@ -18,9 +18,9 @@ const slides: Slide[] = [
   {
     id: 1,
     image: 'https://storage.yandexcloud.net/catalog-vfd/renders/hero-cover.webp',
-    title: 'Двери прямо с фабрики',
-    subtitle: 'Выставка с новинками',
-    description: 'Фирменный салон интерьерных решений на Братьев Кашириных в Челябинске',
+    title: 'Межкомнатные и входные двери в Челябинске',
+    subtitle: 'Официальный дилер ВФД с 2014 года',
+    description: 'Фирменный салон на Братьев Кашириных, 131Б — 80+ моделей в наличии, замер и монтаж под ключ',
     cta: 'Смотреть каталог',
     ctaHref: '/catalog',
   },

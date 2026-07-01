@@ -68,6 +68,12 @@ const localBusinessSchema = {
   ],
   foundingDate: '2014',
   priceRange: '₽₽',
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: '4.9',
+    reviewCount: '4',
+    bestRating: '5',
+  },
   sameAs: [
     'https://vk.com/vfddoors74',
     'https://t.me/vfddoors74',
@@ -79,8 +85,8 @@ const localBusinessSchema = {
 ---
 
 <BaseLayout
-  title="Двери ВФД на Кашириных — Салон дверей в Челябинске"
-  description="Фирменный салон дверей и алюминиевых перегородок на Братьев Кашириных 131Б. Работаем с 2014 года."
+  title="Межкомнатные и входные двери в Челябинске — ВФД"
+  description="Официальный салон ВФД в Челябинске — 80+ моделей в наличии, бесплатный замер, монтаж под ключ. Межкомнатные, входные двери и алюминиевые перегородки на Кашириных, 131Б."
   structuredData={[faqSchema, localBusinessSchema]}
   preloadHero={true}
 >

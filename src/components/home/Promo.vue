@@ -33,7 +33,7 @@ const props = withDefaults(defineProps<{
       ctaText: 'Заказать',
       ctaLink: '#',
       discount: '-10%',
-      validUntil: '2026-06-10',
+      validUntil: '2026-09-01',
     },
     {
       id: 2,
@@ -55,7 +55,7 @@ const props = withDefaults(defineProps<{
         'Акция на популярную модель Флэт 2 в эмали! Современный дизайн и высокое качество по специальной цене. Предложение действует до 15 июня 2026 года. Не упустите шанс обновить интерьер с выгодой!',
       image: 'https://storage.yandexcloud.net/catalog-vfd/promo/promo-flat2.webp',
       discount: 'Распродажа',
-      validUntil: '2026-06-15',
+      validUntil: '2026-09-01',
     },
   ]
 })
