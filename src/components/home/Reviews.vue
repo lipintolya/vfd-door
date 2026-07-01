@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, useTemplateRef } from 'vue'
+import { useScrollReveal } from '../../composables/useScrollReveal'
 
 interface Review {
   id: number
@@ -43,27 +43,7 @@ const REVIEWS: Review[] = [
 const formatDate = (dateStr: string): string =>
   new Date(dateStr).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })
 
-const sectionRef = useTemplateRef<HTMLElement>('sectionEl')
-const visible = ref(false)
-let observer: IntersectionObserver | null = null
-
-onMounted(() => {
-  const el = sectionRef.value
-  if (!el) return
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    visible.value = true
-    return
-  }
-  observer = new IntersectionObserver(
-    ([entry]) => {
-      if (entry?.isIntersecting) { visible.value = true; observer?.disconnect() }
-    },
-    { threshold: 0.15 }
-  )
-  observer.observe(el)
-})
-
-onBeforeUnmount(() => observer?.disconnect())
+const { sectionRef, visible } = useScrollReveal(0.15)
 </script>
 
 <template>

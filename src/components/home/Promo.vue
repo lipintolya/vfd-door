@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount, useTemplateRef } from 'vue'
+import { ref, computed } from 'vue'
+import { useScrollReveal } from '../../composables/useScrollReveal'
 
 /* ============================================================
    Types
@@ -108,35 +109,7 @@ const handleCtaClick = (event: Event, link: string): void => {
   if (link === '#') event.preventDefault()
 }
 
-/* ============================================================
-   Entrance animation
-   ============================================================ */
-const sectionRef = useTemplateRef<HTMLElement>('sectionEl')
-const visible = ref(false)
-let observer: IntersectionObserver | null = null
-
-onMounted(() => {
-  const el = sectionRef.value
-  if (!el) return
-
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    visible.value = true
-    return
-  }
-
-  observer = new IntersectionObserver(
-    ([entry]) => {
-      if (entry?.isIntersecting) {
-        visible.value = true
-        observer?.disconnect()
-      }
-    },
-    { threshold: 0.1 }
-  )
-  observer.observe(el)
-})
-
-onBeforeUnmount(() => observer?.disconnect())
+const { sectionRef, visible } = useScrollReveal(0.1)
 </script>
 
 <template>

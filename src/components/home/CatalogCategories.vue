@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, useTemplateRef } from 'vue'
+import { useScrollReveal } from '../../composables/useScrollReveal'
 
 /* ============================================================
    Types
@@ -39,32 +39,7 @@ const CATEGORIES: Category[] = [
   },
 ]
 
-/* ============================================================
-   Entrance animation
-   ============================================================ */
-const sectionRef = useTemplateRef<HTMLElement>('sectionEl')
-const visible    = ref(false)
-let observer: IntersectionObserver | null = null
-
-onMounted(() => {
-  const el = sectionRef.value
-  if (!el) return
-  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  if (prefersReduced) { visible.value = true; return }
-
-  observer = new IntersectionObserver(
-    ([entry]) => {
-      if (entry?.isIntersecting) {
-        visible.value = true
-        observer?.disconnect()
-      }
-    },
-    { threshold: 0.15 }
-  )
-  observer.observe(el)
-})
-
-onBeforeUnmount(() => observer?.disconnect())
+const { sectionRef, visible } = useScrollReveal(0.15)
 </script>
 
 <template>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, useTemplateRef } from 'vue'
+import { ref, watch, onBeforeUnmount } from 'vue'
+import { useScrollReveal } from '../../composables/useScrollReveal'
 
 /* ============================================================
    Types
@@ -26,8 +27,8 @@ const WORDS: string[] = [
 const FEATURES: Feature[] = [
   {
     id: 1,
-    title: 'Официальные двери напрямую с фабрики',
-    text: 'Мы — официальный дилер Владимирской фабрики дверей в Челябинске. Более 80 моделей в наличии на складе, оригинальная продукция и гарантия производителя — без посредников и переплат.',
+    title: 'Двери напрямую с фабрики',
+    text: 'Мы — официальный дилер Владимирской фабрики дверей в Челябинске. Входные и межкомнатные двери в наличии, оригинальная продукция и гарантия производителя — без посредников и переплат.',
     images: ['https://storage.yandexcloud.net/catalog-vfd/features_block/card-1.webp'],
     cta: { label: 'Выбрать двери', href: '/catalog' },
   },
@@ -41,7 +42,7 @@ const FEATURES: Feature[] = [
   {
     id: 3,
     title: 'Большая выставка, где легко выбрать',
-    text: 'Более 70 дверей представлены в салоне на Кашириных, 131Б — самая большая экспозиция ВФД в Челябинске. Сравните покрытия, цвета, фактуры и фурнитуру вживую, прежде чем сделать выбор.',
+    text: 'Модели представлены в салоне на Кашириных, 131Б — самая большая экспозиция ВФД в Челябинске. Сравните покрытия, цвета, фактуры и фурнитуру вживую, прежде чем сделать выбор.',
     images: ['https://storage.yandexcloud.net/catalog-vfd/features_block/card-3.webp'],
     cta: { label: 'Построить маршрут', href: 'https://yandex.ru/maps/-/CPTwZPi-', external: true },
   },
@@ -50,8 +51,7 @@ const FEATURES: Feature[] = [
 /* ============================================================
    State
    ============================================================ */
-const sectionRef  = useTemplateRef<HTMLElement>('sectionEl')
-const visible     = ref(false)
+const { sectionRef, visible } = useScrollReveal(0.2)
 const currentWord = ref(WORDS[0])
 const wordVisible = ref(true)
 const activeImage = ref<number[]>(FEATURES.map(() => 0))
@@ -59,7 +59,6 @@ const activeImage = ref<number[]>(FEATURES.map(() => 0))
 let wordIndex   = 0
 let wordTimer:  ReturnType<typeof setTimeout>  | null = null
 let cycleTimer: ReturnType<typeof setInterval> | null = null
-let observer:   IntersectionObserver | null = null
 
 /* ============================================================
    Card image slider
@@ -99,33 +98,13 @@ const stopCycle = () => {
 }
 
 /* ============================================================
-   Intersection Observer
+   Start word cycle once section enters viewport
    ============================================================ */
-onMounted(() => {
-  const el = sectionRef.value
-  if (!el) return
+watch(visible, (v) => {
+  if (v && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) startCycle()
+}, { once: true })
 
-  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-  observer = new IntersectionObserver(
-    ([entry]) => {
-      if (!entry) return
-      if (entry.isIntersecting) {
-        visible.value = true
-        if (!prefersReduced) startCycle()
-        observer?.unobserve(el)
-      }
-    },
-    { threshold: 0.2 }
-  )
-
-  observer.observe(el)
-})
-
-onBeforeUnmount(() => {
-  stopCycle()
-  observer?.disconnect()
-})
+onBeforeUnmount(stopCycle)
 </script>
 
 <template>
