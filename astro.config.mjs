@@ -40,6 +40,12 @@ export default defineConfig({
         if (/\/articles\/?$/.test(u)) {
           return { ...item, changefreq: 'weekly', priority: 0.7 }
         }
+        if (/\/portfolio\/?$/.test(u)) {
+          return { ...item, changefreq: 'weekly', priority: 0.8 }
+        }
+        if (/\/portfolio\/.+/.test(u)) {
+          return { ...item, changefreq: 'monthly', priority: 0.65 }
+        }
         return { ...item, changefreq: 'monthly', priority: 0.6 }
       },
     }),

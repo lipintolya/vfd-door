@@ -11,6 +11,7 @@ import Promo from '../components/home/Promo.vue'
 import Faq from '../components/home/Faq.vue'
 import Reviews from '../components/home/Reviews.vue'
 import LatestArticles from '../components/home/LatestArticles.astro'
+import PortfolioPreview from '../components/portfolio/PortfolioPreview.astro'
 import { faqs } from '../components/home/faq-data'
 
 const faqSchema = {
@@ -96,6 +97,7 @@ const localBusinessSchema = {
   <Features client:visible />
   <CatalogCategories client:visible />
   <Reviews client:visible />
+  <PortfolioPreview />
   <Promo client:idle />
   <LatestArticles />
   <Faq client:idle />
