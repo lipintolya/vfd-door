@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { useScrollReveal } from '../../composables/useScrollReveal'
 
-/* ============================================================
-   Types
-   ============================================================ */
 interface Category {
   title:    string
   subtitle: string
@@ -12,9 +9,6 @@ interface Category {
   cta:      string
 }
 
-/* ============================================================
-   Data
-   ============================================================ */
 const CATEGORIES: Category[] = [
   {
     title:    'Межкомнатные двери',
@@ -45,7 +39,7 @@ const { sectionRef, visible } = useScrollReveal(0.15)
 <template>
   <section
     ref="sectionEl"
-    class="cat-section section"
+    class="section bg-white"
     aria-labelledby="cat-heading"
   >
     <div class="container">
@@ -68,30 +62,44 @@ const { sectionRef, visible } = useScrollReveal(0.15)
       </header>
 
       <!-- ── Bento grid ── -->
-      <div class="cat-grid" role="list">
+      <div
+        class="grid grid-cols-1 items-stretch gap-4 md:grid-cols-2 lg:grid-cols-[1fr_2fr] lg:gap-5"
+        role="list"
+      >
 
-        <!-- Главная карточка — межкомнатные -->
+        <!-- Hero card — межкомнатные -->
         <article
-          class="cat-card cat-card--hero"
-          :class="visible ? 'is-visible' : ''"
-          style="--delay: 0ms"
+          class="overflow-hidden rounded-3xl transition-[opacity,transform] duration-[600ms] ease-out motion-reduce:transition-none"
+          :class="visible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
+          :style="{ transitionDelay: visible ? '0ms' : '0ms' }"
           role="listitem"
         >
-          <a :href="CATEGORIES[0]!.href" class="cat-card__link group" :aria-label="CATEGORIES[0]!.title">
-            <div class="cat-card__media">
-              <div
-                class="cat-card__bg"
-                :style="{ backgroundImage: `url(${CATEGORIES[0]!.image})` }"
-                aria-hidden="true"
-              />
-              <div class="cat-card__overlay" aria-hidden="true" />
-            </div>
-            <div class="cat-card__body">
-              <div class="cat-card__text">
-                <h3 class="cat-card__title">{{ CATEGORIES[0]!.title }}</h3>
-                <p class="cat-card__subtitle">{{ CATEGORIES[0]!.subtitle }}</p>
+          <a
+            :href="CATEGORIES[0]!.href"
+            class="group relative flex h-full min-h-80 flex-col overflow-hidden rounded-3xl no-underline md:min-h-[420px] lg:min-h-[540px] focus-visible:outline-2 focus-visible:outline-teal-500 focus-visible:outline-offset-3"
+            :aria-label="CATEGORIES[0]!.title"
+          >
+            <!-- Background -->
+            <div
+              class="absolute inset-0 bg-cover bg-center transition-transform duration-[600ms] ease-out group-hover:scale-[1.04] motion-reduce:transition-none"
+              :style="{ backgroundImage: `url(${CATEGORIES[0]!.image})` }"
+              aria-hidden="true"
+            />
+            <!-- Overlay -->
+            <div
+              class="absolute inset-0 bg-gradient-to-t from-black/75 via-slate-900/25 to-transparent"
+              aria-hidden="true"
+            />
+            <!-- Content -->
+            <div class="relative z-10 mt-auto flex flex-col gap-4 p-5 sm:p-8">
+              <div class="flex flex-col gap-2">
+                <h3 class="text-xl font-extrabold leading-snug text-white">{{ CATEGORIES[0]!.title }}</h3>
+                <p class="max-w-md text-sm leading-relaxed text-white/80">{{ CATEGORIES[0]!.subtitle }}</p>
               </div>
-              <span class="inline-flex items-center gap-1.5 self-start rounded-full border border-white/50 px-4 py-2 text-[0.8125rem] font-bold text-white whitespace-nowrap transition-[background-color,border-color,transform] duration-200 ease-out group-hover:bg-white/15 group-hover:border-white group-hover:-translate-y-px" aria-hidden="true">
+              <span
+                class="inline-flex items-center gap-1.5 self-start whitespace-nowrap rounded-full border border-white/50 px-4 py-2 text-[0.8125rem] font-bold text-white transition-[background-color,border-color,transform] duration-200 ease-out group-hover:-translate-y-px group-hover:border-white group-hover:bg-white/15"
+                aria-hidden="true"
+              >
                 {{ CATEGORIES[0]!.cta }}
                 <svg class="h-3.5 w-3.5 shrink-0 transition-transform duration-200 ease-out group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                   <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
@@ -101,31 +109,42 @@ const { sectionRef, visible } = useScrollReveal(0.15)
           </a>
         </article>
 
-        <!-- Правая колонка — 2 карточки -->
-        <div class="cat-col" role="list">
+        <!-- Right column — 2 cards -->
+        <div class="grid gap-4 md:grid-rows-2 lg:gap-5" role="list">
           <article
             v-for="(cat, idx) in CATEGORIES.slice(1)"
             :key="cat.href"
-            class="cat-card"
-            :class="visible ? 'is-visible' : ''"
-            :style="{ '--delay': `${(idx + 1) * 130}ms` }"
+            class="overflow-hidden rounded-3xl transition-[opacity,transform] duration-[600ms] ease-out motion-reduce:transition-none"
+            :class="visible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
+            :style="{ transitionDelay: visible ? `${(idx + 1) * 130}ms` : '0ms' }"
             role="listitem"
           >
-            <a :href="cat.href" class="cat-card__link group" :aria-label="cat.title">
-              <div class="cat-card__media">
-                <div
-                  class="cat-card__bg"
-                  :style="{ backgroundImage: `url(${cat.image})` }"
-                  aria-hidden="true"
-                />
-                <div class="cat-card__overlay" aria-hidden="true" />
-              </div>
-              <div class="cat-card__body">
-                <div class="cat-card__text">
-                  <h3 class="cat-card__title">{{ cat.title }}</h3>
-                  <p class="cat-card__subtitle">{{ cat.subtitle }}</p>
+            <a
+              :href="cat.href"
+              class="group relative flex h-full min-h-56 flex-col overflow-hidden rounded-3xl no-underline md:min-h-[200px] lg:min-h-[255px] focus-visible:outline-2 focus-visible:outline-teal-500 focus-visible:outline-offset-3"
+              :aria-label="cat.title"
+            >
+              <!-- Background -->
+              <div
+                class="absolute inset-0 bg-cover bg-center transition-transform duration-[600ms] ease-out group-hover:scale-[1.04] motion-reduce:transition-none"
+                :style="{ backgroundImage: `url(${cat.image})` }"
+                aria-hidden="true"
+              />
+              <!-- Overlay -->
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-black/75 via-slate-900/25 to-transparent"
+                aria-hidden="true"
+              />
+              <!-- Content -->
+              <div class="relative z-10 mt-auto flex flex-col gap-3 p-5 sm:p-6">
+                <div class="flex flex-col gap-1.5">
+                  <h3 class="text-lg font-extrabold leading-snug text-white">{{ cat.title }}</h3>
+                  <p class="max-w-md text-sm leading-relaxed text-white/80">{{ cat.subtitle }}</p>
                 </div>
-                <span class="inline-flex items-center gap-1.5 self-start rounded-full border border-white/50 px-4 py-2 text-[0.8125rem] font-bold text-white whitespace-nowrap transition-[background-color,border-color,transform] duration-200 ease-out group-hover:bg-white/15 group-hover:border-white group-hover:-translate-y-px" aria-hidden="true">
+                <span
+                  class="inline-flex items-center gap-1.5 self-start whitespace-nowrap rounded-full border border-white/50 px-4 py-2 text-[0.8125rem] font-bold text-white transition-[background-color,border-color,transform] duration-200 ease-out group-hover:-translate-y-px group-hover:border-white group-hover:bg-white/15"
+                  aria-hidden="true"
+                >
                   {{ cat.cta }}
                   <svg class="h-3.5 w-3.5 shrink-0 transition-transform duration-200 ease-out group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                     <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
@@ -140,163 +159,3 @@ const { sectionRef, visible } = useScrollReveal(0.15)
     </div>
   </section>
 </template>
-
-<style scoped>
-/* ============================================================
-   Grid
-   ============================================================ */
-.cat-grid {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: clamp(0.85rem, 1.8vw, 1.25rem);
-  align-items: stretch;
-}
-.cat-col {
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-  gap: clamp(0.85rem, 1.8vw, 1.25rem);
-}
-
-/* ============================================================
-   Card
-   ============================================================ */
-.cat-card {
-  border-radius: 1.5rem;
-  overflow: hidden;
-  opacity: 0;
-  transform: translateY(24px);
-  transition:
-    opacity  600ms ease-out var(--delay, 0ms),
-    transform 600ms ease-out var(--delay, 0ms);
-}
-.cat-card.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Полностью кликабельная карточка через ссылку-блок */
-.cat-card__link {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  text-decoration: none;
-  color: inherit;
-  position: relative;
-  overflow: hidden;
-  border-radius: 1.5rem;
-}
-
-/* Медиа */
-.cat-card__media {
-  position: absolute;
-  inset: 0;
-}
-.cat-card__bg {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  transition: transform 600ms ease-out;
-}
-.cat-card__link:hover .cat-card__bg {
-  transform: scale(1.04);
-}
-.cat-card__overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(4, 6, 11, 0.75) 0%, rgba(15,23,42,.25) 55%, transparent 100%);
-  transition: background 300ms ease-out;
-}
-.cat-card__link:hover .cat-card__overlay {
-  background: linear-gradient(to top, rgba(29, 30, 30, 0.82) 0%, rgba(15,23,42,.3) 55%, transparent 100%);
-}
-
-/* Высоты */
-.cat-card--hero .cat-card__link {
-  min-height: 540px;
-}
-.cat-col .cat-card .cat-card__link {
-  min-height: 255px;
-}
-
-/* Body */
-.cat-card__body {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  flex: 1;
-  padding: clamp(1.25rem, 2.5vw, 2rem);
-  gap: 1.1rem;
-}
-.cat-card__text {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-.cat-card__title {
-  margin: 0;
-  color: #fff;
-  font-size: clamp(1.1rem, 2.2vw, 1.4rem);
-  font-weight: 800;
-  line-height: 1.2;
-}
-.cat-card__subtitle {
-  margin: 0;
-  color: rgba(255,255,255,0.78);
-  font-size: 0.875rem;
-  line-height: 1.6;
-  max-width: 36rem;
-}
-
-.cat-card__link:focus-visible {
-  outline: 2px solid var(--color-accent, #14b8a6);
-  outline-offset: 3px;
-}
-
-/* ============================================================
-   Responsive
-   ============================================================ */
-@media (max-width: 1024px) {
-  .cat-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-  .cat-card--hero .cat-card__link {
-    min-height: 420px;
-  }
-  .cat-col .cat-card .cat-card__link {
-    min-height: 200px;
-  }
-}
-
-@media (max-width: 680px) {
-  .cat-grid {
-    grid-template-columns: 1fr;
-  }
-  .cat-col {
-    grid-template-rows: unset;
-    grid-template-columns: 1fr;
-  }
-  .cat-card--hero .cat-card__link {
-    min-height: 320px;
-  }
-  .cat-col .cat-card .cat-card__link {
-    min-height: 220px;
-  }
-}
-
-/* ============================================================
-   Reduced motion
-   ============================================================ */
-@media (prefers-reduced-motion: reduce) {
-  .cat-card {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-  .cat-card__bg {
-    transition: none;
-  }
-}
-</style>
