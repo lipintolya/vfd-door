@@ -32,3 +32,8 @@ node_modules
 .astro
 dist
 .env
+
+# Claude Code — локальный тулинг (плагины/скиллы ставятся на машину, не код сайта)
+.claude/settings.json
+.claude/skills/
+skills-lock.json
