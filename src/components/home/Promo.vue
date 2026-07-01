@@ -151,14 +151,15 @@ const { sectionRef, visible } = useScrollReveal(0.1)
         <li
           v-for="(promo, index) in activePromos"
           :key="promo.id"
-          :style="{ '--delay': `${index * 100}ms` }"
         >
           <article
-            class="promo-card group bg-white rounded-2xl border border-gray-200 overflow-hidden cursor-pointer flex flex-col h-full transition-all duration-300 hover:border-teal-400 hover:shadow-lg"
+            class="group flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-[opacity,transform,border-color,box-shadow] duration-[600ms] ease-out hover:border-teal-400 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-teal-500 focus-visible:outline-offset-2 motion-reduce:transition-none"
             :class="{
-              'is-visible': visible,
+              'translate-y-0 opacity-100': visible,
+              'translate-y-6 opacity-0': !visible,
               'ring-2 ring-teal-500 border-teal-500': activeIndex === index,
             }"
+            :style="{ transitionDelay: visible ? `${index * 100}ms` : '0ms' }"
             role="button"
             tabindex="0"
             :aria-expanded="activeIndex === index"
@@ -259,35 +260,3 @@ const { sectionRef, visible } = useScrollReveal(0.1)
   </section>
 </template>
 
-<style scoped>
-/* ── Card entrance ── */
-.promo-card {
-  opacity: 0;
-  transform: translateY(24px);
-  transition:
-    opacity 600ms ease-out var(--delay, 0ms),
-    transform 600ms ease-out var(--delay, 0ms);
-}
-.promo-card.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ── Focus ── */
-.promo-card:focus-visible {
-  outline: 2px solid #14b8a6;
-  outline-offset: 2px;
-}
-
-/* ── Reduced motion ── */
-@media (prefers-reduced-motion: reduce) {
-  .promo-card {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
-  }
-  .promo-card img {
-    transition: none !important;
-  }
-}
-</style>
