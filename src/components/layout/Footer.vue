@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, useTemplateRef } from 'vue'
+import { companyLegalInfo } from '../../lib/contacts-data'
 
 /* ============================================================
    Data
@@ -23,13 +24,10 @@ const CATEGORY_LINKS = [
 ] as const
 
 const CONTACTS = {
-  phones: [
-    { raw: '+79000297888', label: '+7 (900) 029-78-88' },
-    { raw: '+79630807888', label: '+7 (963) 080-78-88' },
-  ],
-  email:   'vfddoors74@mail.ru',
-  address: 'г. Челябинск, ул. Братьев Кашириных, 131Б',
-} as const
+  phones:  companyLegalInfo.contacts.phone,
+  email:   companyLegalInfo.contacts.email,
+  address: companyLegalInfo.address.legal,
+}
 
 /* ============================================================
    Legal modal

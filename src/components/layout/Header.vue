@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
+import { companyLegalInfo } from '../../lib/contacts-data'
 
 /* ============================================================
    Constants
@@ -31,14 +32,11 @@ const SOCIAL_NETWORKS = [
 ] as const
 
 const CONTACTS = {
-  phones: [
-    { raw: '+79000297888', label: '+7 (900) 029-78-88' },
-    { raw: '+79630807888', label: '+7 (963) 080-78-88' },
-  ],
-  address: 'Челябинск, ул. Братьев Кашириных, 131Б (вход с ул. Чичерина)',
-  worktime: 'Пн–Пт: 10:00–20:00  ·  Сб: 11:00–16:00  ·  Вс: по предварительной записи',
-  email: 'vfddoors74@mail.ru',
-} as const
+  phones:   companyLegalInfo.contacts.phone,
+  address:  `${companyLegalInfo.address.legal} (${companyLegalInfo.address.entrance})`,
+  worktime: `${companyLegalInfo.workingHours.summer.weekdays.label}  ·  ${companyLegalInfo.workingHours.summer.saturday.label}  ·  Вс: по предварительной записи`,
+  email:    companyLegalInfo.contacts.email,
+}
 
 const NAV_LINKS = [
   { href: '/',           label: 'Главная' },
