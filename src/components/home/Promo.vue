@@ -115,19 +115,23 @@ const { sectionRef, visible } = useScrollReveal(0.1)
 <template>
   <section
     ref="sectionEl"
-    class="promo-section section section--lg bg-white"
+    class="section bg-white"
     aria-labelledby="promo-heading"
   >
     <div class="container">
 
       <!-- ── Header ── -->
       <header
-        class="promo-header"
-        :class="{ 'is-visible': visible }"
+        class="mx-auto mb-10 max-w-3xl text-center transition-[opacity,transform] duration-700 ease-out motion-reduce:transition-none md:mb-16"
+        :class="visible ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'"
       >
-        <p class="promo-eyebrow">Специальные предложения</p>
-        <h2 id="promo-heading" class="promo-title">Акции и скидки</h2>
-        <p class="promo-lead">
+        <p class="mb-3 text-xs font-extrabold uppercase tracking-widest text-teal-600">
+          Специальные предложения
+        </p>
+        <h2 id="promo-heading" class="text-3xl font-extrabold leading-tight tracking-tight text-slate-900 md:text-5xl">
+          Акции и скидки
+        </h2>
+        <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-600 md:text-lg">
           Получите лучшие условия для вашего заказа — следите за нашими акциями
           и не упустите возможность сэкономить
         </p>
@@ -256,50 +260,6 @@ const { sectionRef, visible } = useScrollReveal(0.1)
 </template>
 
 <style scoped>
-/* ── Section ── */
-.promo-section {
-  background: #fff;
-}
-
-/* ── Header entrance ── */
-.promo-header {
-  max-width: 52rem;
-  margin: 0 auto clamp(2.5rem, 5vw, 4rem);
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 600ms ease-out, transform 600ms ease-out;
-  text-align: center;
-}
-.promo-header.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ── Header typography ── */
-.promo-eyebrow {
-  margin: 0 0 0.85rem;
-  color: #0d9488;
-  font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-.promo-title {
-  margin: 0 0 1rem;
-  color: #0f172a;
-  font-size: clamp(2rem, 4.5vw, 3rem);
-  font-weight: 800;
-  line-height: 1.12;
-  letter-spacing: -0.02em;
-}
-.promo-lead {
-  margin: 0 auto;
-  max-width: 42rem;
-  color: #475569;
-  font-size: clamp(1rem, 2vw, 1.125rem);
-  line-height: 1.65;
-}
-
 /* ── Card entrance ── */
 .promo-card {
   opacity: 0;
@@ -319,18 +279,8 @@ const { sectionRef, visible } = useScrollReveal(0.1)
   outline-offset: 2px;
 }
 
-/* ── line-clamp fallback ── */
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
-  .promo-header,
   .promo-card {
     opacity: 1 !important;
     transform: none !important;
@@ -338,16 +288,6 @@ const { sectionRef, visible } = useScrollReveal(0.1)
   }
   .promo-card img {
     transition: none !important;
-  }
-}
-
-/* ── Mobile ── */
-@media (max-width: 640px) {
-  .promo-header {
-    margin-bottom: 2.5rem;
-  }
-  .promo-title {
-    font-size: 2rem;
   }
 }
 </style>

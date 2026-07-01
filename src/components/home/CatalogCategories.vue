@@ -52,12 +52,16 @@ const { sectionRef, visible } = useScrollReveal(0.15)
 
       <!-- ── Header ── -->
       <header
-        class="cat-header"
-        :class="visible ? 'is-visible' : ''"
+        class="mb-10 max-w-3xl transition-[opacity,transform] duration-700 ease-out motion-reduce:transition-none md:mb-16"
+        :class="visible ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'"
       >
-        <p class="cat-eyebrow">Что мы предлагаем</p>
-        <h2 id="cat-heading" class="cat-title">Каталог</h2>
-        <p class="cat-lead">
+        <p class="mb-3 text-xs font-extrabold uppercase tracking-widest text-teal-600">
+          Что мы предлагаем
+        </p>
+        <h2 id="cat-heading" class="text-3xl font-extrabold leading-tight tracking-tight text-slate-900 md:text-5xl">
+          Каталог
+        </h2>
+        <p class="mt-4 text-base leading-relaxed text-slate-600 md:text-lg">
           Межкомнатные и входные двери, алюминиевые перегородки
           от официального дилера Владимирской фабрики дверей
         </p>
@@ -138,51 +142,6 @@ const { sectionRef, visible } = useScrollReveal(0.15)
 </template>
 
 <style scoped>
-/* ============================================================
-   Section
-   ============================================================ */
-.cat-section {
-  background: #fff;
-}
-
-/* ============================================================
-   Header
-   ============================================================ */
-.cat-header {
-  max-width: 52rem;
-  margin-bottom: clamp(2.5rem, 5vw, 4rem);
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 600ms ease-out, transform 600ms ease-out;
-}
-.cat-header.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-.cat-eyebrow {
-  margin: 0 0 0.85rem;
-  color: var(--color-accent-hover, #0d9488);
-  font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-.cat-title {
-  margin: 0 0 1rem;
-  color: #0f172a;
-  font-size: clamp(2rem, 4.5vw, 3rem);
-  font-weight: 800;
-  line-height: 1.12;
-  letter-spacing: -0.02em;
-}
-.cat-lead {
-  margin: 0;
-  max-width: 42rem;
-  color: #475569;
-  font-size: clamp(1rem, 2vw, 1.125rem);
-  line-height: 1.65;
-}
-
 /* ============================================================
    Grid
    ============================================================ */

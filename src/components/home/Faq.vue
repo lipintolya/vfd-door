@@ -12,49 +12,39 @@ const toggleFaq = (id: number) => {
 </script>
 
 <template>
-  <section class="faq-section" aria-labelledby="faq-title">
+  <section class="section bg-white" aria-labelledby="faq-title">
     <div class="container">
 
       <!-- Header -->
-      <header class="faq-header">
-        <h2 id="faq-title" class="faq-title">
+      <header class="mb-10 max-w-3xl">
+        <h2 id="faq-title" class="text-3xl font-extrabold leading-tight tracking-tight text-slate-900 md:text-5xl">
           Ответы на вопросы
         </h2>
-
-        <p class="faq-lead">
+        <p class="mt-4 text-base leading-relaxed text-slate-600 md:text-lg">
           Короткие ответы на частые вопросы о заказе, доставке и монтаже дверей.
         </p>
       </header>
 
-      <!-- FAQ -->
-      <div class="faq-list">
+      <!-- FAQ list -->
+      <div class="flex flex-col gap-3">
         <div
           v-for="item in faqs"
           :key="item.id"
-          class="faq-item"
+          class="overflow-hidden rounded-xl border border-slate-200"
         >
           <button
-            class="faq-button"
+            class="flex w-full cursor-pointer items-center justify-between bg-white p-4 text-left font-semibold text-slate-900 hover:bg-slate-50 sm:p-5"
             :aria-expanded="openFaqIds.includes(item.id)"
             :aria-controls="`faq-${item.id}`"
             @click="toggleFaq(item.id)"
           >
-            <span class="faq-question">
-              {{ item.question }}
-            </span>
-
+            <span class="text-base font-semibold leading-snug">{{ item.question }}</span>
             <span
-              class="faq-icon"
-              :class="{ open: openFaqIds.includes(item.id) }"
+              class="ml-4 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-teal-50 text-teal-600 transition-[background-color,transform] duration-200"
+              :class="openFaqIds.includes(item.id) ? 'rotate-180 bg-teal-100' : ''"
               aria-hidden="true"
             >
-              <svg
-                class="faq-icon-svg"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
               </svg>
             </span>
@@ -63,7 +53,7 @@ const toggleFaq = (id: number) => {
           <div
             :id="`faq-${item.id}`"
             v-show="openFaqIds.includes(item.id)"
-            class="faq-answer"
+            class="px-4 pb-4 text-sm leading-relaxed text-slate-600 sm:px-5"
           >
             <p>{{ item.answer }}</p>
           </div>
@@ -71,16 +61,19 @@ const toggleFaq = (id: number) => {
       </div>
 
       <!-- CTA -->
-      <div class="faq-cta">
-        <h3 class="faq-cta-title">
+      <div class="mt-12 rounded-2xl border border-teal-500 bg-teal-50 p-6 text-center sm:p-8">
+        <h3 class="text-xl font-bold text-slate-900">
           Остались вопросы?
         </h3>
-
-        <p class="faq-cta-text">
+        <p class="mt-2 text-slate-600">
           Свяжитесь с нами — поможем с выбором и проконсультируем.
         </p>
-
-        <a href="https://t.me/vfddoors74" target="_blank" rel="noopener" class="btn btn-primary">
+        <a
+          href="https://t.me/vfddoors74"
+          target="_blank"
+          rel="noopener"
+          class="btn btn-primary mt-5 inline-flex"
+        >
           Написать в Telegram
         </a>
       </div>
@@ -88,134 +81,3 @@ const toggleFaq = (id: number) => {
     </div>
   </section>
 </template>
-
-<style scoped>
-.faq-section {
-  background: #fff;
-  padding-block: 4rem;
-}
-
-.faq-header {
-  margin-bottom: 2.5rem;
-  max-width: 52rem;
-}
-
-.faq-title {
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 800;
-  color: #0f172a;
-}
-
-.faq-lead {
-  margin-top: 0.75rem;
-  color: #64748b;
-  line-height: 1.6;
-}
-
-/* list */
-.faq-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-/* item */
-.faq-item {
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-/* button */
-.faq-button {
-  width: 100%;
-  padding: 1rem 1.25rem;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  background: #fff;
-  border: none;
-  cursor: pointer;
-
-  text-align: left;
-  font-weight: 600;
-  color: #0f172a;
-}
-
-.faq-button:hover {
-  background: #f8fafc;
-}
-
-/* answer */
-.faq-answer {
-  padding: 0 1.25rem 1rem;
-  color: #475569;
-  line-height: 1.6;
-}
-
-/* icon */
-.faq-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 0.5rem;
-  background: #f0fdfa;
-  color: #0d9488;
-  transition: background 200ms ease, transform 300ms ease;
-}
-
-.faq-icon.open {
-  transform: rotate(180deg);
-  background: #ccfbf1;
-  color: #0d9488;
-}
-
-.faq-icon-svg {
-  width: 1.25rem;
-  height: 1.25rem;
-  transition: transform 300ms ease;
-}
-
-/* CTA */
-.faq-cta {
-  margin-top: 3rem;
-  padding: 2rem;
-  border-radius: 16px;
-  background: #f0fdf9;
-  border: 1px solid #14b8a6;
-  text-align: center;
-}
-
-.faq-cta-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-}
-
-.faq-cta-text {
-  margin-top: 0.5rem;
-  color: #475569;
-}
-
-.faq-cta-button {
-  margin-top: 1rem;
-  display: inline-block;
-
-  padding: 0.75rem 1.25rem;
-  border-radius: 10px;
-
-  background: #14b8a6;
-  color: white;
-  text-decoration: none;
-
-  font-weight: 600;
-}
-
-.faq-cta-button:hover {
-  background: #0d9488;
-}
-</style>
