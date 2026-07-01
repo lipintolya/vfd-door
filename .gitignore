@@ -37,3 +37,6 @@ dist
 .claude/settings.json
 .claude/skills/
 skills-lock.json
+
+# Superpowers visual companion — временные mockup-файлы
+.superpowers/
