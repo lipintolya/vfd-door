@@ -77,7 +77,7 @@ const { sectionRef, visible } = useScrollReveal(0.15)
           style="--delay: 0ms"
           role="listitem"
         >
-          <a :href="CATEGORIES[0]!.href" class="cat-card__link" :aria-label="CATEGORIES[0]!.title">
+          <a :href="CATEGORIES[0]!.href" class="cat-card__link group" :aria-label="CATEGORIES[0]!.title">
             <div class="cat-card__media">
               <div
                 class="cat-card__bg"
@@ -91,9 +91,9 @@ const { sectionRef, visible } = useScrollReveal(0.15)
                 <h3 class="cat-card__title">{{ CATEGORIES[0]!.title }}</h3>
                 <p class="cat-card__subtitle">{{ CATEGORIES[0]!.subtitle }}</p>
               </div>
-              <span class="cat-card__cta" aria-hidden="true">
+              <span class="inline-flex items-center gap-1.5 self-start rounded-full border border-white/50 px-4 py-2 text-[0.8125rem] font-bold text-white whitespace-nowrap transition-[background-color,border-color,transform] duration-200 ease-out group-hover:bg-white/15 group-hover:border-white group-hover:-translate-y-px" aria-hidden="true">
                 {{ CATEGORIES[0]!.cta }}
-                <svg class="cat-card__cta-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <svg class="h-3.5 w-3.5 shrink-0 transition-transform duration-200 ease-out group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                   <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </span>
@@ -111,7 +111,7 @@ const { sectionRef, visible } = useScrollReveal(0.15)
             :style="{ '--delay': `${(idx + 1) * 130}ms` }"
             role="listitem"
           >
-            <a :href="cat.href" class="cat-card__link" :aria-label="cat.title">
+            <a :href="cat.href" class="cat-card__link group" :aria-label="cat.title">
               <div class="cat-card__media">
                 <div
                   class="cat-card__bg"
@@ -125,9 +125,9 @@ const { sectionRef, visible } = useScrollReveal(0.15)
                   <h3 class="cat-card__title">{{ cat.title }}</h3>
                   <p class="cat-card__subtitle">{{ cat.subtitle }}</p>
                 </div>
-                <span class="cat-card__cta" aria-hidden="true">
+                <span class="inline-flex items-center gap-1.5 self-start rounded-full border border-white/50 px-4 py-2 text-[0.8125rem] font-bold text-white whitespace-nowrap transition-[background-color,border-color,transform] duration-200 ease-out group-hover:bg-white/15 group-hover:border-white group-hover:-translate-y-px" aria-hidden="true">
                   {{ cat.cta }}
-                  <svg class="cat-card__cta-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <svg class="h-3.5 w-3.5 shrink-0 transition-transform duration-200 ease-out group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                     <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 </span>
@@ -250,42 +250,9 @@ const { sectionRef, visible } = useScrollReveal(0.15)
   max-width: 36rem;
 }
 
-/* CTA — pill, стиль как features/bento */
-.cat-card__cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  align-self: flex-start;
-  padding: 0.55rem 1.1rem;
-  border-radius: 9999px;
-  border: 1.5px solid rgba(255,255,255,0.5);
-  background: transparent;
-  color: #fff;
-  font-size: 0.8125rem;
-  font-weight: 700;
-  white-space: nowrap;
-  transition:
-    background-color 200ms ease-out,
-    border-color     200ms ease-out,
-    transform        200ms ease-out;
-}
-.cat-card__link:hover .cat-card__cta {
-  background: rgba(255,255,255,0.15);
-  border-color: #fff;
-  transform: translateY(-1px);
-}
 .cat-card__link:focus-visible {
   outline: 2px solid var(--color-accent, #14b8a6);
   outline-offset: 3px;
-}
-.cat-card__cta-icon {
-  width: 0.875rem;
-  height: 0.875rem;
-  flex-shrink: 0;
-  transition: transform 200ms ease-out;
-}
-.cat-card__link:hover .cat-card__cta-icon {
-  transform: translateX(2px);
 }
 
 /* ============================================================
@@ -323,15 +290,12 @@ const { sectionRef, visible } = useScrollReveal(0.15)
    Reduced motion
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
-  .cat-header,
   .cat-card {
     opacity: 1;
     transform: none;
     transition: none;
   }
-  .cat-card__bg,
-  .cat-card__cta,
-  .cat-card__cta-icon {
+  .cat-card__bg {
     transition: none;
   }
 }
