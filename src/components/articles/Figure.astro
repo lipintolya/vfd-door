@@ -1,0 +1,38 @@
+---
+interface Props {
+  src: string
+  alt?: string
+  caption?: string
+  wide?: boolean  // выходит за пределы колонки текста на широких экранах
+}
+
+const { src, alt = '', caption, wide = false } = Astro.props
+---
+
+<figure class:list={['article-figure', wide && 'article-figure--wide']}>
+  <img
+    src={src}
+    alt={alt}
+    loading="lazy"
+    decoding="async"
+    class="w-full rounded-xl object-cover"
+  />
+  {caption && (
+    <figcaption class="mt-2 text-center text-sm text-slate-400">
+      {caption}
+    </figcaption>
+  )}
+</figure>
+
+<style>
+.article-figure {
+  margin: 2rem 0;
+}
+/* Широкий вариант — немного выходит за колонку */
+@media (min-width: 768px) {
+  .article-figure--wide {
+    margin-left: -3rem;
+    margin-right: -3rem;
+  }
+}
+</style>
