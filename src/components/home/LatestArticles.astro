@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content'
+import ArticleCard from '../articles/ArticleCard.astro'
 
 const all = await getCollection('articles')
 const articles = all
@@ -13,10 +14,8 @@ const getSlug = (id: string) => id.split('/')[0]!.replace(/\.mdoc$/, '')
   <section class="section bg-slate-50" aria-labelledby="articles-heading">
     <div class="container">
 
-      <header class="max-w-3xl mb-10 md:mb-16">
-        <p class="mb-3 text-xs font-extrabold uppercase tracking-widest text-teal-600">
-          Блог
-        </p>
+      <header class="mb-10 max-w-3xl md:mb-16">
+        <p class="mb-3 text-xs font-extrabold uppercase tracking-widest text-teal-600">Блог</p>
         <h2 id="articles-heading" class="text-3xl font-extrabold leading-tight tracking-tight text-slate-900 md:text-5xl">
           Полезные статьи о дверях
         </h2>
@@ -30,39 +29,14 @@ const getSlug = (id: string) => id.split('/')[0]!.replace(/\.mdoc$/, '')
           const slug = getSlug(article.id)
           return (
             <li>
-              <a
+              <ArticleCard
                 href={`/articles/${slug}`}
-                class="group flex flex-col h-full rounded-2xl border border-slate-200 bg-white overflow-hidden hover:border-teal-400 hover:shadow-md transition-all duration-200"
-              >
-                {article.data.coverImage && (
-                  <div class="aspect-video overflow-hidden bg-slate-100">
-                    <img
-                      src={article.data.coverImage}
-                      alt=""
-                      loading="lazy"
-                      decoding="async"
-                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                )}
-                <div class="flex flex-col flex-1 p-5">
-                  <time
-                    datetime={article.data.publishDate.toISOString()}
-                    class="text-xs text-slate-500 mb-2"
-                  >
-                    {article.data.publishDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}
-                  </time>
-                  <h3 class="text-base font-bold text-slate-900 leading-snug mb-2 group-hover:text-teal-600 transition-colors">
-                    {article.data.title}
-                  </h3>
-                  <p class="text-sm text-slate-600 leading-relaxed line-clamp-2 flex-1">
-                    {article.data.description}
-                  </p>
-                  <span class="mt-4 text-sm font-semibold text-teal-600">
-                    Читать →
-                  </span>
-                </div>
-              </a>
+                title={article.data.title}
+                description={article.data.description}
+                publishDate={article.data.publishDate}
+                coverImage={article.data.coverImage}
+                coverImageAlt={article.data.coverImageAlt}
+              />
             </li>
           )
         })}
@@ -70,10 +44,10 @@ const getSlug = (id: string) => id.split('/')[0]!.replace(/\.mdoc$/, '')
 
       <a
         href="/articles"
-        class="inline-flex items-center gap-2 rounded-full border-[1.5px] border-slate-200 bg-white px-6 py-3 text-sm font-bold text-slate-900 hover:border-teal-500 hover:bg-teal-500 hover:text-white transition-colors duration-200"
+        class="btn btn-teal-fill"
       >
         Все статьи
-        <svg viewBox="0 0 16 16" fill="none" class="w-3.5 h-3.5" aria-hidden="true">
+        <svg viewBox="0 0 16 16" fill="none" class="w-3.5 h-3.5 btn-arrow-icon" aria-hidden="true">
           <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </a>

@@ -8,6 +8,7 @@ const articles = defineCollection({
     description: z.string(),
     publishDate: z.coerce.date(),
     coverImage: z.string().optional(),
+    coverImageAlt: z.string().optional(),
   }),
 })
 
