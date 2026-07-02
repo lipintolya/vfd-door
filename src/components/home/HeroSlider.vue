@@ -155,7 +155,7 @@ onUnmounted(stop)
               <a
                 v-if="currentSlide.cta && currentSlide.ctaHref"
                 :href="currentSlide.ctaHref"
-                class="btn-ghost"
+                class="btn btn-ghost"
               >
                 {{ currentSlide.cta }}
                 <svg class="btn-arrow-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -207,7 +207,7 @@ onUnmounted(stop)
               <p class="text-sm text-white/80 mb-4">
                 Изготовление в течение 45 дней после оформления заказа
               </p>
-              <a href="/partitions" class="btn-ghost">
+              <a href="/partitions" class="btn btn-ghost">
                 Узнать больше
                 <svg class="btn-arrow-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                   <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
@@ -226,7 +226,7 @@ onUnmounted(stop)
                 <h4 class="font-bold text-base mb-2 leading-snug">Полный цикл: от замера до монтажа</h4>
                 <p class="text-sm text-white/75">Работаем в Челябинске с 2014 года</p>
               </div>
-              <a href="/about" class="btn-ghost mt-4">
+              <a href="/about" class="btn btn-ghost mt-4">
                 Подробнее
                 <svg class="btn-arrow-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                   <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
@@ -251,7 +251,7 @@ onUnmounted(stop)
                   <h4 class="font-bold text-base leading-snug mb-1">Фотоотчёты с объектов</h4>
                   <p class="text-sm text-white/75">Живые фото с монтажей — помогут определиться с выбором</p>
                 </div>
-                <a href="/portfolio" class="btn-ghost mt-4">
+                <a href="/portfolio" class="btn btn-ghost mt-4">
                   Смотреть
                   <svg class="btn-arrow-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                     <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
