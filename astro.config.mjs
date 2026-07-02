@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import vue from '@astrojs/vue';
+import react from '@astrojs/react';
 import markdoc from '@astrojs/markdoc';
 import keystatic from '@keystatic/astro';
 
@@ -19,7 +20,7 @@ export default defineConfig({
   integrations: [
     vue(),
     markdoc(),
-    ...(isDev ? [keystatic()] : []),
+    ...(isDev ? [react(), keystatic()] : []),
     sitemap({
       filter: (page) =>
         page !== 'https://vfd74.ru/privacy/' && page !== 'https://vfd74.ru/privacy' &&
