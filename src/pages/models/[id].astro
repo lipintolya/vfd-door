@@ -8,8 +8,6 @@ import type { ColorVariant } from '../../components/catalog/ProductColorPicker.v
 import { getSeriesSpec } from '../../data/series-descriptions'
 import { accessoriesByCoating, CATEGORY_LABELS, PRICE_LIST_UPDATED } from '../../data/accessories'
 import type { AccessoryCategory, CoatingSlug } from '../../data/accessories'
-import { coatingFeatures } from '../../data/coating-features'
-import CoatingFeatures from '../../components/catalog/CoatingFeatures.vue'
 
 export async function getStaticPaths() {
   const { data, error } = await supabase
@@ -130,7 +128,7 @@ const accessoryGroups: [AccessoryCategory, typeof accessories][] = Object.entrie
   .map(([category, items]) => [category as AccessoryCategory, items])
 
 const canonicalUrl  = Astro.site ? new URL(`/models/${slug}`, Astro.site).href : undefined
-const priceStr      = minPrice ? `от ${minPrice.toLocaleString('ru-RU')} ₽` : ''
+const priceStr      = minPrice ? `${minPrice.toLocaleString('ru-RU')} ₽` : ''
 const seriesPart    = seriesName ? `серия ${seriesName}` : ''
 const coatingPart   = coatingName
 
@@ -253,7 +251,7 @@ const structuredData = [breadcrumbSchema, {
           <!-- Быстрый ориентир по цене (статика, всегда виден до гидратации) -->
           {minPrice && (
             <p class="product-price-hint">
-              Цена: <strong>от {minPrice.toLocaleString('ru-RU')} ₽</strong> за полотно
+              Цена: <strong>{minPrice.toLocaleString('ru-RU')} ₽</strong> за полотно
             </p>
           )}
 
@@ -273,18 +271,6 @@ const structuredData = [breadcrumbSchema, {
       </div>
     </div>
   </div>
-
-  <!-- ── Особенности коллекции ── -->
-  {coatingFeatures[coatingSlug as CoatingSlug]?.length > 0 && (
-    <section class="coating-features-section">
-      <div class="container">
-        <h2 class="coating-features-section__title">
-          Особенности коллекции {seriesName || coatingName}
-        </h2>
-        <CoatingFeatures client:visible features={coatingFeatures[coatingSlug as CoatingSlug]} />
-      </div>
-    </section>
-  )}
 
   <!-- ── Погонажные изделия ── -->
   {accessories.length > 0 && (

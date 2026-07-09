@@ -27,7 +27,7 @@ const kitTotal = computed(() => {
 })
 
 const formatPrice = (price: number | null) =>
-  price ? `от ${price.toLocaleString('ru-RU')} ₽` : 'По запросу'
+  price ? `${price.toLocaleString('ru-RU')} ₽` : 'По запросу'
 
 const normalizeHex = (hex: string) => {
   const v = (hex ?? '').trim().replaceAll('С', 'C').replaceAll('с', 'c')
@@ -64,7 +64,7 @@ const normalizeHex = (hex: string) => {
       <span class="color-picker__price-note">за полотно</span>
     </div>
     <div v-if="kitTotal" class="color-picker__kit-row">
-      <span class="color-picker__kit-price">от {{ kitTotal.toLocaleString('ru-RU') }} ₽</span>
+      <span class="color-picker__kit-price">{{ kitTotal.toLocaleString('ru-RU') }} ₽</span>
       <p class="color-picker__kit-note">за комплект — {{ BASE_KIT_DESCRIPTION }}</p>
     </div>
 

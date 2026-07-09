@@ -26,37 +26,15 @@ const props = withDefaults(defineProps<{
   promos: () => [
     {
       id: 1,
-      title: 'Скидка на модель Майами в эмали',
-      subtitle: 'До 10%',
-      description:
-        'Успейте приобрести стильную дверь с трендовой фрезировкой по выгодной цене! Акция действует до 10 июня 2026 года. Майами — это современный дизайн, высокое качество и доступная цена в одном флаконе.',
-      image: 'https://storage.yandexcloud.net/catalog-vfd/promo/promo-miami.webp',
-      ctaText: 'Заказать',
-      ctaLink: '#',
-      discount: '-10%',
-      validUntil: '2026-09-01',
-    },
-    {
-      id: 2,
       title: 'Бесплатный замер',
       subtitle: 'При оформлении заказа',
       description:
         'При заказе межкомнатных дверей в нашем салоне на Братьев Кашириных. Гарантируем точность замеров и расчёт без лишних позиций.',
-      image: 'https://storage.yandexcloud.net/catalog-vfd/covers/roulette.webp',
+      image: 'https://storage.yandexcloud.net/vfd74ru/Main_page/articles/article_1/zamer.webp',
       ctaText: 'Подробнее',
-      ctaLink: '#',
+      ctaLink: '/contacts',
       discount: 'Бесплатно',
       validUntil: '2026-12-31',
-    },
-    {
-      id: 3,
-      title: 'Скидка на модель Флэт 2 в эмали',
-      subtitle: 'Распродажа',
-      description:
-        'Акция на популярную модель Флэт 2 в эмали! Современный дизайн и высокое качество по специальной цене. Предложение действует до 15 июня 2026 года. Не упустите шанс обновить интерьер с выгодой!',
-      image: 'https://storage.yandexcloud.net/catalog-vfd/promo/promo-flat2.webp',
-      discount: 'Распродажа',
-      validUntil: '2026-09-01',
     },
   ]
 })

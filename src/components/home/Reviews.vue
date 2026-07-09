@@ -125,6 +125,30 @@ const { sectionRef, visible } = useScrollReveal(0.15)
         </li>
       </ul>
 
+      <!-- Ссылки на внешние платформы отзывов -->
+      <div
+        class="mt-10 flex flex-wrap items-center gap-3 transition-[opacity,transform] duration-700 ease-out motion-reduce:transition-none md:mt-14"
+        :class="visible ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'"
+      >
+        <span class="text-sm font-medium text-slate-500">Читайте больше отзывов и оставляйте свои:</span>
+        <a
+          href="https://2gis.ru/chelyabinsk/search/ВФД%20Владимирская%20фабрика%20дверей%20Братьев%20Кашириных%20131Б"
+          target="_blank"
+          rel="noopener"
+          class="btn btn-outline"
+        >
+          2ГИС
+        </a>
+        <a
+          href="https://yandex.ru/maps/?text=ВФД%20Владимирская%20фабрика%20дверей%20Челябинск%20Братьев%20Кашириных%20131Б"
+          target="_blank"
+          rel="noopener"
+          class="btn btn-outline"
+        >
+          Яндекс Карты
+        </a>
+      </div>
+
     </div>
   </section>
 </template>

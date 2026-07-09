@@ -6,7 +6,7 @@ defineProps<{
 }>()
 
 const formatPrice = (price: number | null) =>
-  price ? `от ${Number(price).toLocaleString('ru-RU')} ₽` : 'По запросу'
+  price ? `${Number(price).toLocaleString('ru-RU')} ₽` : 'По запросу'
 </script>
 
 <template>

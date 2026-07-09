@@ -3,11 +3,7 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import vue from '@astrojs/vue';
-import react from '@astrojs/react';
 import markdoc from '@astrojs/markdoc';
-import keystatic from '@keystatic/astro';
-
-const isDev = process.env.NODE_ENV !== 'production';
 
 // https://astro.build/config
 export default defineConfig({
@@ -20,12 +16,9 @@ export default defineConfig({
   integrations: [
     vue(),
     markdoc(),
-    ...(isDev ? [react(), keystatic()] : []),
     sitemap({
       filter: (page) =>
         page !== 'https://vfd74.ru/privacy/' && page !== 'https://vfd74.ru/privacy' &&
-        !page.startsWith('https://vfd74.ru/keystatic') &&
-        !page.startsWith('https://vfd74.ru/api/keystatic') &&
         // Старые UUID-маршруты моделей остаются доступными (чтобы не 404'ить уже
         // проиндексированные ссылки), но в сайтмап должен попадать только
         // канонический слаг-адрес — иначе сайтмап задвоит каждую модель.

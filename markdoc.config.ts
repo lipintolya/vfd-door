@@ -25,5 +25,23 @@ export default defineMarkdocConfig({
         title: { type: String },
       },
     },
+
+    // Сетка карточек (покрытия, конструкции и т.п.) во всю ширину
+    // {% cards %}{% card title="Эмаль" image="url" tags="практично, любой цвет" %}текст{% /card %}{% /cards %}
+    cards: {
+      render: component('./src/components/articles/Cards.astro'),
+      attributes: {
+        min: { type: Number },
+      },
+    },
+    card: {
+      render: component('./src/components/articles/Card.astro'),
+      attributes: {
+        title:    { type: String, required: true },
+        image:    { type: String },
+        imageAlt: { type: String },
+        tags:     { type: String },
+      },
+    },
   },
 })

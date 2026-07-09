@@ -85,7 +85,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown))
               </a>
 
               <a
-                href=""
+                href="https://yandex.ru/maps/-/CPTwZPi-"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="hero-btn hero-btn--secondary"
@@ -188,7 +188,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown))
 
         <div class="feature-links">
 
-          <a class="feature-link feature-link--large">
+          <button type="button" class="feature-link feature-link--large" @click="openLightbox(1)">
             <img
               :src="galleryImages[1]?.src"
               :alt="galleryImages[1]?.alt"
@@ -208,9 +208,9 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown))
                 Реальные образцы дверей из наличия и под заказ
               </p>
             </div>
-          </a>
+          </button>
 
-          <a class="feature-link">
+          <button type="button" class="feature-link" @click="openLightbox(2)">
             <img
               :src="galleryImages[2]?.src"
               :alt="galleryImages[2]?.alt"
@@ -226,9 +226,9 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown))
                 Подбор под интерьер
               </h3>
             </div>
-          </a>
+          </button>
 
-          <a class="feature-link">
+          <button type="button" class="feature-link" @click="openLightbox(3)">
             <img
               :src="galleryImages[3]?.src"
               :alt="galleryImages[3]?.alt"
@@ -244,7 +244,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown))
                 Цвета и покрытия
               </h3>
             </div>
-          </a>
+          </button>
 
         </div>
 
@@ -747,6 +747,12 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown))
   border-radius: 28px;
   min-height: 520px;
   background: #0f172a;
+  border: none;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  display: block;
+  width: 100%;
 }
 
 .feature-link img {
