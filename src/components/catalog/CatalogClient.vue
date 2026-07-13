@@ -65,6 +65,8 @@ const filteredCards = computed(() => {
       c.colorNames.some(name => name.toLowerCase().includes(query))
     )
 
+  // Сортировка по цене — всегда по цене за полотно (card.price), не за комплект:
+  // комплект зависит от цвета/покрытия и не задаёт единый порядок по всему каталогу.
   if (sortBy.value === 'price_asc')
     result = [...result].sort((a, b) => (a.price ?? 999999) - (b.price ?? 999999))
   else if (sortBy.value === 'price_desc')

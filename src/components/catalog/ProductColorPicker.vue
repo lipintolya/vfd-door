@@ -11,11 +11,14 @@ export interface ColorVariant {
 }
 
 import { calcKitPrice, BASE_KIT_DESCRIPTION } from '../../data/accessories'
+import { companyLegalInfo } from '../../lib/contacts-data'
 
 const props = defineProps<{
   colors:    ColorVariant[]
   modelName: string
 }>()
+
+const phone = companyLegalInfo.contacts.phone[0]!
 
 const selectedIdx = ref(0)
 
@@ -65,7 +68,7 @@ const normalizeHex = (hex: string) => {
     </div>
     <div v-if="kitTotal" class="color-picker__kit-row">
       <span class="color-picker__kit-price">{{ kitTotal.toLocaleString('ru-RU') }} ₽</span>
-      <p class="color-picker__kit-note">за комплект — {{ BASE_KIT_DESCRIPTION }}</p>
+      <p class="color-picker__kit-note">за комплект — полотно, {{ BASE_KIT_DESCRIPTION }}</p>
     </div>
 
     <!-- Выбранный цвет -->
@@ -97,6 +100,12 @@ const normalizeHex = (hex: string) => {
     <!-- CTA -->
     <div class="color-picker__cta">
       <a href="https://t.me/vfddoors74" target="_blank" rel="noopener" class="btn btn-primary">Написать в Telegram</a>
+      <a :href="`tel:${phone.raw}`" class="btn btn-outline">
+        <svg class="color-picker__phone-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 0 1 2-2h2.28a1 1 0 0 1 .95.68l1.1 3.3a1 1 0 0 1-.44 1.18l-1.7 1a11.05 11.05 0 0 0 5.6 5.6l1-1.7a1 1 0 0 1 1.18-.44l3.3 1.1a1 1 0 0 1 .68.95V19a2 2 0 0 1-2 2h-1C9.72 21 3 14.28 3 6V5Z" />
+        </svg>
+        {{ phone.label }}
+      </a>
     </div>
   </div>
 </template>
@@ -211,5 +220,11 @@ const normalizeHex = (hex: string) => {
   gap: 0.75rem;
   flex-wrap: wrap;
   padding-top: 0.25rem;
+}
+
+.color-picker__phone-icon {
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-right: 0.5rem;
 }
 </style>

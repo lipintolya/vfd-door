@@ -58,7 +58,7 @@ export const BASE_KIT_PRICE: Record<CoatingSlug, number> = {
   emal:   6_080,
   emalex: 4_900,
 }
-export const BASE_KIT_DESCRIPTION = 'дверной короб 2,5 шт, наличники 5 шт'
+export const BASE_KIT_DESCRIPTION = 'дверной короб 2,5 шт, наличники с обеих сторон 5 шт'
 
 // Дата последней проверки/правки цен на этой странице — обновляй вручную при правке прайса
 export const PRICE_LIST_UPDATED = '27.06.2026'

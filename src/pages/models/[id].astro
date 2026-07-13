@@ -18,7 +18,7 @@ export async function getStaticPaths() {
       model_id,
       color_id,
       colors ( id, name, hex_preview, coatings ( id, name, slug ) ),
-      models ( id, name, has_glass, series ( id, name, slug, coatings ( id, name, slug ) ) )
+      models ( id, name, has_glass, trim, series ( id, name, slug, coatings ( id, name, slug ) ) )
     `)
     .order('price_rrp', { ascending: true })
 
@@ -33,7 +33,7 @@ export async function getStaticPaths() {
   }
 
   type ModelEntry = {
-    model:       { id: string; name: string; hasGlass: boolean }
+    model:       { id: string; name: string; hasGlass: boolean; trim: string | null }
     slug:        string
     seriesName:  string
     seriesSlug:  string
@@ -61,6 +61,7 @@ export async function getStaticPaths() {
           id:       model.id,
           name:     model.name,
           hasGlass: model.has_glass ?? false,
+          trim:     model.trim ?? null,
         },
         slug:        '',
         seriesName:  series?.name     ?? '',
@@ -213,8 +214,14 @@ const structuredData = [breadcrumbSchema, {
             <p class="product-description">{spec.description}</p>
           )}
 
-          {(spec.features.length > 0 || spec.coating || spec.material || spec.edge || spec.thickness) && (
+          {(model.trim || spec.features.length > 0 || spec.coating || spec.material || spec.edge || spec.thickness) && (
             <dl class="product-specs">
+              {model.trim && (
+                <div class="product-specs__row">
+                  <dt>Исполнение</dt>
+                  <dd>{model.trim}</dd>
+                </div>
+              )}
               {spec.features.length > 0 && (
                 <div class="product-specs__row">
                   <dt>Особенности</dt>

@@ -266,7 +266,7 @@ const structuredData = canonicalUrl ? [
         </div>
       </div>
 
-      <div class="mt-12 lg:mt-16 flex flex-col sm:flex-row sm:flex-wrap gap-6 sm:gap-x-8 lg:gap-x-12">
+      <div class="mt-12 lg:mt-16 grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-6 lg:gap-x-12">
         {heroStats.map((s, i) => (
           <div class:list={['flex flex-col', i > 0 && 'border-t sm:border-t-0 sm:border-l border-slate-200 pt-6 sm:pt-0 sm:pl-8 lg:pl-12']}>
             <span class="block font-black leading-none text-[clamp(1.75rem,3vw,2.25rem)] text-ink tracking-[-0.02em]">{s.val}</span>
@@ -306,7 +306,7 @@ const structuredData = canonicalUrl ? [
 
       <div class="mt-3.5 lg:mt-5">
         <h3 class="mb-3.5 text-[1.0625rem] font-extrabold text-ink">Формат взаимодействия</h3>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 lg:gap-5">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3.5 lg:gap-5">
           {cooperationFormat.map((step, i) => (
             <article
               class="motion-safe:opacity-0 motion-safe:translate-y-4 transition-all duration-700 ease-out group relative aspect-3/4 overflow-hidden rounded-2xl"
