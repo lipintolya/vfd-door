@@ -8,7 +8,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6" aria-live="polite">
+  <div class="grid grid-cols-2 gap-5 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4" aria-live="polite">
     <CatalogProductCard
       v-for="card in cards"
       :key="card.id"

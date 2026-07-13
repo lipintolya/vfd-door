@@ -24,26 +24,49 @@ const WORDS: string[] = [
   'установку дверей «под ключ»',
 ]
 
-const FEATURES: Feature[] = [
+const CARDS_CDN = 'https://storage.yandexcloud.net/vfd74ru/Main_page/cards/'
+
+const FEATURES: (Feature & { eyebrow: string })[] = [
   {
     id: 1,
+    eyebrow: 'Фабрика',
     title: 'Двери напрямую с фабрики',
-    text: 'Мы — официальный дилер Владимирской фабрики дверей в Челябинске. Входные и межкомнатные двери в наличии, оригинальная продукция и гарантия производителя — без посредников и переплат.',
-    images: ['https://storage.yandexcloud.net/catalog-vfd/features_block/card-1.webp'],
+    text: 'Официальный дилер Владимирской фабрики дверей — без посредников и переплат.',
+    images: [
+      'https://storage.yandexcloud.net/catalog-vfd/features_block/card-1.webp',
+      `${CARDS_CDN}f1.webp`,
+      `${CARDS_CDN}f2.webp`,
+      `${CARDS_CDN}f3.webp`,
+      `${CARDS_CDN}f4.webp`,
+    ],
     cta: { label: 'Выбрать двери', href: '/catalog' },
   },
   {
     id: 2,
-    title: 'Всё в одном месте — от выбора до установки',
-    text: 'Берём на себя весь процесс: бесплатная консультация, точный замер, расчёт стоимости, доставка и профессиональный монтаж под ключ. Работаем больше 15 лет — вам не нужно искать разных специалистов и контролировать каждый этап самостоятельно.',
-    images: ['https://storage.yandexcloud.net/catalog-vfd/features_block/card-2.webp'],
+    eyebrow: 'Сервис',
+    title: 'Всё — от выбора до монтажа',
+    text: 'Консультация, замер, доставка и установка под ключ. Одна команда — 15 лет.',
+    images: [
+      'https://storage.yandexcloud.net/catalog-vfd/features_block/card-2.webp',
+      `${CARDS_CDN}t1.webp`,
+      `${CARDS_CDN}t2.webp`,
+      `${CARDS_CDN}t3.webp`,
+    ],
     cta: { label: 'Посмотреть монтажи', href: '/portfolio' },
   },
   {
     id: 3,
-    title: 'Большая выставка, где легко выбрать',
-    text: 'Модели представлены в салоне на Кашириных, 131Б — самая большая экспозиция ВФД в Челябинске. Сравните покрытия, цвета, фактуры и фурнитуру вживую, прежде чем сделать выбор.',
-    images: ['https://storage.yandexcloud.net/catalog-vfd/features_block/card-3.webp'],
+    eyebrow: 'Шоурум',
+    title: 'Большая выставка ВФД',
+    text: '80+ моделей вживую на Кашириных, 131Б — сравните, не по фото.',
+    images: [
+      'https://storage.yandexcloud.net/catalog-vfd/features_block/card-3.webp',
+      `${CARDS_CDN}foto1.webp`,
+      `${CARDS_CDN}foto2.webp`,
+      `${CARDS_CDN}foto3.webp`,
+      `${CARDS_CDN}foto4.webp`,
+      `${CARDS_CDN}foto6.webp`,
+    ],
     cta: { label: 'Построить маршрут', href: 'https://yandex.ru/maps/-/CPTwZPi-', external: true },
   },
 ]
@@ -61,8 +84,11 @@ let wordTimer:  ReturnType<typeof setTimeout>  | null = null
 let cycleTimer: ReturnType<typeof setInterval> | null = null
 
 /* ============================================================
-   Card image slider
+   Card image slider — статичный, переключение стрелками или точкой
    ============================================================ */
+const setImage = (cardIdx: number, imgIdx: number) => {
+  activeImage.value[cardIdx] = imgIdx
+}
 const prevImage = (cardIdx: number) => {
   const total = FEATURES[cardIdx]!.images.length
   activeImage.value[cardIdx] = (activeImage.value[cardIdx]! - 1 + total) % total
@@ -70,9 +96,6 @@ const prevImage = (cardIdx: number) => {
 const nextImage = (cardIdx: number) => {
   const total = FEATURES[cardIdx]!.images.length
   activeImage.value[cardIdx] = (activeImage.value[cardIdx]! + 1) % total
-}
-const setImage = (cardIdx: number, imgIdx: number) => {
-  activeImage.value[cardIdx] = imgIdx
 }
 
 /* ============================================================
@@ -150,76 +173,95 @@ onBeforeUnmount(stopCycle)
         <li
           v-for="(feature, idx) in FEATURES"
           :key="feature.id"
-          class="group flex flex-col rounded-3xl border border-slate-200 bg-slate-50 p-3 transition-[opacity,transform,border-color] duration-700 ease-out motion-reduce:transition-none"
+          class="group relative flex flex-col overflow-hidden rounded-3xl bg-[#1A191C] p-6 transition-[opacity,transform] duration-700 ease-out motion-reduce:transition-none sm:p-7"
           :class="visible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
           :style="{ transitionDelay: visible ? `${idx * 130}ms` : '0ms' }"
           itemprop="item"
           itemscope
           itemtype="https://schema.org/Thing"
         >
-          <div class="relative aspect-4/3 w-full shrink-0 overflow-hidden rounded-2xl bg-linear-to-br from-teal-50 to-teal-100">
+          <p class="relative mb-3 text-xs font-extrabold uppercase tracking-widest text-teal-400" aria-hidden="true">
+            {{ feature.eyebrow }}
+          </p>
+
+          <h3
+            class="relative mb-4 text-xl font-extrabold leading-[1.15] tracking-tight text-white sm:text-[1.375rem]"
+            itemprop="name"
+          >
+            {{ feature.title }}
+          </h3>
+
+          <!-- Фото: врезано, статично, переключение по клику на точку -->
+          <div class="relative mb-4 aspect-16/15 w-full shrink-0 overflow-hidden rounded-2xl">
             <img
-              :src="feature.images[activeImage[idx]]"
+              v-for="(img, imgIdx) in feature.images"
+              :key="img"
+              :src="img"
               alt=""
-              class="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105 motion-reduce:transition-none"
+              class="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 ease-out motion-reduce:transition-none"
+              :class="{ 'opacity-100': imgIdx === activeImage[idx] }"
               loading="lazy"
               decoding="async"
               width="400"
-              height="300"
+              height="375"
             />
 
             <template v-if="feature.images.length > 1">
               <button
                 type="button"
-                class="absolute left-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 text-slate-700 shadow transition-colors hover:bg-white"
+                class="absolute left-2 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white opacity-0 backdrop-blur-sm transition-opacity duration-200 hover:bg-black/65 group-hover:opacity-100 focus-visible:opacity-100"
                 aria-label="Предыдущее фото"
                 @click.stop="prevImage(idx)"
               >
-                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5">
                   <path d="M12.5 15 7.5 10l5-5" />
                 </svg>
               </button>
               <button
                 type="button"
-                class="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 text-slate-700 shadow transition-colors hover:bg-white"
+                class="absolute right-2 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white opacity-0 backdrop-blur-sm transition-opacity duration-200 hover:bg-black/65 group-hover:opacity-100 focus-visible:opacity-100"
                 aria-label="Следующее фото"
                 @click.stop="nextImage(idx)"
               >
-                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5">
                   <path d="M7.5 5 12.5 10l-5 5" />
                 </svg>
               </button>
 
-              <div class="absolute inset-x-0 bottom-2 flex justify-center gap-1.5">
+              <div class="absolute inset-x-0 bottom-2 flex justify-center gap-1">
                 <button
                   v-for="(img, imgIdx) in feature.images"
                   :key="img"
                   type="button"
-                  class="h-1.5 w-1.5 rounded-full transition-colors"
-                  :class="imgIdx === activeImage[idx] ? 'bg-white' : 'bg-white/50'"
+                  class="flex h-4 w-4 items-center justify-center"
                   :aria-label="`Фото ${imgIdx + 1}`"
                   @click.stop="setImage(idx, imgIdx)"
-                />
+                >
+                  <span
+                    class="h-1.5 w-1.5 rounded-full transition-colors duration-200"
+                    :class="imgIdx === activeImage[idx] ? 'bg-white' : 'bg-white/40'"
+                  />
+                </button>
               </div>
             </template>
           </div>
 
-          <div class="flex flex-1 flex-col gap-2.5 px-2 pb-3 pt-4">
-            <h3 class="text-lg font-extrabold leading-snug text-slate-900" itemprop="name">{{ feature.title }}</h3>
-            <p class="text-sm leading-relaxed text-slate-600" itemprop="description">{{ feature.text }}</p>
+          <p class="relative mb-5 text-sm leading-relaxed text-slate-400" itemprop="description">{{ feature.text }}</p>
 
-            <a
-              :href="feature.cta.href"
-              class="mt-auto inline-flex w-fit items-center self-start whitespace-nowrap rounded-full border-[1.5px] border-slate-200 bg-white px-5 py-2.5 text-[0.8125rem] font-bold text-slate-900 transition-colors duration-200 ease-out hover:border-teal-500 hover:bg-teal-500 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-500"
-              :target="feature.cta.external ? '_blank' : undefined"
-              :rel="feature.cta.external ? 'noopener noreferrer' : undefined"
-              :aria-label="feature.cta.external
-                ? `${feature.cta.label} (открывается в новой вкладке)`
-                : undefined"
-            >
-              {{ feature.cta.label }}
-            </a>
-          </div>
+          <a
+            :href="feature.cta.href"
+            class="btn btn-ghost relative mt-auto w-fit self-start"
+            :target="feature.cta.external ? '_blank' : undefined"
+            :rel="feature.cta.external ? 'noopener noreferrer' : undefined"
+            :aria-label="feature.cta.external
+              ? `${feature.cta.label} (открывается в новой вкладке)`
+              : undefined"
+          >
+            {{ feature.cta.label }}
+            <svg class="btn-arrow-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </a>
         </li>
       </ul>
 

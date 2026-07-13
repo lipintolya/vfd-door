@@ -51,6 +51,8 @@ interface CardItem {
   coatingSlug: string
   colorName:   string
   colorHex:    string
+  /** Все цвета, в которых реально доступна эта модель — для корректной фильтрации по цвету */
+  colorNames:  string[]
   photo:       string
   price:       number | null
   hasGlass:    boolean
@@ -67,7 +69,20 @@ const normalizeHexColor = (value: string | null | undefined) => {
     : '#cccccc'
 }
 
-/* ── Нормализуем: 1 модель = 1 карточка (первый цвет) ── */
+/* ── Полный набор цветов на модель (по всем строкам, не только первой) —
+   нужен для корректной фильтрации: модель может подходить под фильтр
+   «цвет X», даже если её карточка показывает другой цвет как основной. ── */
+const colorsByModel = new Map<string, string[]>()
+for (const row of (data ?? [])) {
+  const model = row.models as any
+  const color = row.colors as any
+  if (!model || !color?.name) continue
+  const list = colorsByModel.get(model.id) ?? []
+  if (!list.includes(color.name)) list.push(color.name)
+  colorsByModel.set(model.id, list)
+}
+
+/* ── Нормализуем: 1 модель = 1 карточка (первый цвет — для витрины) ── */
 const cards: CardItem[] = []
 const seen = new Set<string>()
 
@@ -91,6 +106,7 @@ for (const row of (data ?? [])) {
     coatingSlug: coating?.slug  ?? '',
     colorName:   color.name,
     colorHex:    normalizeHexColor(color.hex_preview),
+    colorNames:  colorsByModel.get(model.id) ?? [color.name],
     photo:       row.photo_url  ?? '',
     price:       row.price_rrp  ?? null,
     hasGlass:    model.has_glass ?? false,
@@ -117,10 +133,13 @@ const allCoatings = [...new Map(
     .map(c => [c.coatingSlug, { label: c.coating, value: c.coatingSlug }])
 ).values()]
 
+/* Из сырых строк, не из карточек — иначе цвета, которые ни у одной модели
+   не оказались «первыми», выпадают из списка фильтра (были видны 12 из 14). */
 const allColors = [...new Map(
-  cards
-    .filter(c => c.colorName)
-    .map(c => [c.colorName, { label: c.colorName, value: c.colorName, color: c.colorHex }])
+  (data ?? [])
+    .map(row => row.colors as any)
+    .filter(color => color?.name)
+    .map(color => [color.name, { label: color.name, value: color.name, color: normalizeHexColor(color.hex_preview) }])
 ).values()]
 
 /* ── Начальные фильтры из URL ── */

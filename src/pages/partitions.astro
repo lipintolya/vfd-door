@@ -154,7 +154,7 @@ const renderLightbox = renderGallery
         <div class="pt-video-wrap rounded-3xl border border-slate-200 bg-slate-900 shadow-sm overflow-hidden min-h-105 p-0 relative">
           <video
             class="pt-autoplay-video absolute inset-0 w-full h-full object-cover object-center"
-            preload="none" muted playsinline
+            preload="metadata" muted playsinline
             aria-label="Анимация открытия алюминиевых перегородок GRAFIA"
           >
             <source data-src="https://storage.yandexcloud.net/catalog-vfd/video/alum_animation.mp4" type="video/mp4" />
@@ -175,7 +175,7 @@ const renderLightbox = renderGallery
           <div class="pt-video-wrap relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-800 aspect-9/16">
             <video
               class="pt-autoplay-video absolute inset-0 w-full h-full object-cover"
-              preload="none" muted playsinline
+              preload="metadata" muted playsinline
               aria-label="Демонстрация работы алюминиевой двери на системе PIVOT"
             >
               <source data-src="https://storage.yandexcloud.net/catalog-vfd/video/pivot_system.mp4" type="video/mp4" />
@@ -501,15 +501,26 @@ const renderLightbox = renderGallery
       })
     })
 
-    var io = new IntersectionObserver(function (entries) {
+    // Ранний префетч: начинаем качать файл задолго до того, как видео
+    // реально попадёт в кадр — на медленном канале успевает добуфериться
+    // к моменту скролла, вместо стопора «чёрный экран, пока грузится».
+    var ioPrefetch = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        var v = entry.target
+        var source = v.querySelector('source[data-src]')
+        if (source && !source.getAttribute('src')) {
+          source.setAttribute('src', source.getAttribute('data-src'))
+          v.load()
+        }
+        ioPrefetch.unobserve(v)
+      })
+    }, { rootMargin: '800px 0px' })
+
+    // Реальная видимость: play/pause, не тратим ресурс на видео за кадром
+    var ioPlay = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         var v = entry.target
         if (entry.isIntersecting) {
-          var source = v.querySelector('source[data-src]')
-          if (source && !source.getAttribute('src')) {
-            source.setAttribute('src', source.getAttribute('data-src'))
-            v.load()
-          }
           if (!v.ended) v.play().catch(function () {})
         } else {
           if (!v.ended) v.pause()
@@ -517,7 +528,7 @@ const renderLightbox = renderGallery
       })
     }, { threshold: 0.4 })
 
-    videos.forEach(function (v) { io.observe(v) })
+    videos.forEach(function (v) { ioPrefetch.observe(v); ioPlay.observe(v) })
   })()
 
   // ── Лайтбокс: открыть через custom event ──

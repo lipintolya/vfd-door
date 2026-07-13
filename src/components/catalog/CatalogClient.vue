@@ -51,7 +51,7 @@ const filteredCards = computed(() => {
     result = result.filter(c => c.coatingSlug === activeCoating.value)
 
   if (activeColor.value)
-    result = result.filter(c => c.colorName === activeColor.value)
+    result = result.filter(c => c.colorNames.includes(activeColor.value))
 
   if (glassOnly.value)
     result = result.filter(c => c.hasGlass)
@@ -62,7 +62,7 @@ const filteredCards = computed(() => {
       c.name.toLowerCase().includes(query) ||
       c.series.toLowerCase().includes(query) ||
       c.coating.toLowerCase().includes(query) ||
-      c.colorName.toLowerCase().includes(query)
+      c.colorNames.some(name => name.toLowerCase().includes(query))
     )
 
   if (sortBy.value === 'price_asc')
@@ -164,7 +164,7 @@ watch(
       </label>
     </div>
 
-    <div class="grid grid-cols-1 items-start gap-6 lg:grid-cols-[18rem_1fr] lg:gap-9">
+    <div class="grid grid-cols-1 items-start gap-6 lg:grid-cols-[15rem_1fr] lg:gap-7">
 
       <div>
         <!-- Mobile filter toggle -->

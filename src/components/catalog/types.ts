@@ -8,6 +8,8 @@ export interface CatalogCardItem {
   coatingSlug: string
   colorName: string
   colorHex: string
+  /** Все цвета, в которых реально доступна эта модель — для корректной фильтрации по цвету */
+  colorNames: string[]
   photo: string
   price: number | null
   hasGlass: boolean

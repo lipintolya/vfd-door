@@ -12,10 +12,10 @@ const formatPrice = (price: number | null) =>
 <template>
   <a
     :href="`/models/${card.slug}`"
-    class="group flex min-h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white no-underline transition hover:border-teal-200 hover:shadow-lg hover:-translate-y-0.5"
+    class="group @container flex min-h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white no-underline transition hover:border-teal-200 hover:shadow-lg hover:-translate-y-0.5"
     :aria-label="`${card.name} — подробнее`"
   >
-    <div class="relative m-5 mb-0 flex aspect-square items-center justify-center overflow-hidden rounded-xl bg-slate-50">
+    <div class="relative m-3.5 mb-0 flex aspect-2/3 items-center justify-center overflow-hidden rounded-xl bg-slate-50 sm:m-5 sm:mb-0">
       <img
         v-if="card.photo"
         :src="card.photo"
@@ -38,7 +38,7 @@ const formatPrice = (price: number | null) =>
       </div>
     </div>
 
-    <div class="flex flex-1 flex-col gap-3 p-5">
+    <div class="flex flex-1 flex-col gap-2.5 p-3.5 sm:gap-3 sm:p-5">
       <div>
         <h2 class="m-0 min-h-12 text-[1.0625rem] font-extrabold leading-snug text-ink line-clamp-2">{{ card.name }}</h2>
         <p class="m-0 mt-1 text-sm font-semibold text-slate-500">{{ card.coating }}</p>
@@ -53,12 +53,12 @@ const formatPrice = (price: number | null) =>
         <span class="truncate text-sm text-slate-500">{{ card.colorName }}</span>
       </div>
 
-      <div class="mt-auto flex items-end justify-between gap-3 pt-1">
+      <div class="mt-auto flex flex-col items-stretch gap-2.5 pt-1 @[17rem]:flex-row @[17rem]:items-end @[17rem]:justify-between @[17rem]:gap-3">
         <p class="m-0 flex flex-col leading-none">
           <span class="whitespace-nowrap text-xl font-black text-ink">{{ formatPrice(card.price) }}</span>
           <span class="mt-1 text-xs font-bold text-slate-500">за полотно</span>
         </p>
-        <span class="btn btn-outline shrink-0 px-4 py-2 text-sm">Подробнее</span>
+        <span class="btn btn-outline shrink-0 justify-center px-4 py-2 text-sm">Подробнее</span>
       </div>
     </div>
   </a>

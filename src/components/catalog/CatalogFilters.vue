@@ -30,7 +30,6 @@ const draftSearchQuery = ref(searchQuery.value)
 const openSections = ref({
   series: true,
   coating: false,
-  material: false,
   color: false,
   tags: true,
 })
@@ -165,41 +164,6 @@ watch(
           @click="draftCoating = draftCoating === item.value ? '' : item.value"
         >
           {{ item.label }}
-        </button>
-      </div>
-    </div>
-
-    <div class="border-b border-slate-200">
-      <button type="button" class="flex w-full items-center justify-between py-3.5 text-[0.9375rem] font-extrabold text-ink" @click="toggleSection('material')">
-        <span>Материал</span>
-        <svg class="h-4 w-4 text-slate-400 transition-transform" :class="{ 'rotate-180': openSections.material }" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 9 6 6 6-6" />
-        </svg>
-      </button>
-      <div v-if="openSections.material" class="mb-3.5 grid gap-1">
-        <button
-          type="button"
-          class="rounded-lg px-2.5 py-2 text-left text-[0.8125rem] text-slate-600 transition hover:bg-slate-100"
-          :class="draftCoating === 'pet' ? 'bg-teal-50 text-teal-700' : ''"
-          @click="draftCoating = draftCoating === 'pet' ? '' : 'pet'"
-        >
-          ПЭТ
-        </button>
-        <button
-          type="button"
-          class="rounded-lg px-2.5 py-2 text-left text-[0.8125rem] text-slate-600 transition hover:bg-slate-100"
-          :class="draftCoating === 'emalex' ? 'bg-teal-50 text-teal-700' : ''"
-          @click="draftCoating = draftCoating === 'emalex' ? '' : 'emalex'"
-        >
-          Полипропилен
-        </button>
-        <button
-          type="button"
-          class="rounded-lg px-2.5 py-2 text-left text-[0.8125rem] text-slate-600 transition hover:bg-slate-100"
-          :class="draftCoating === 'emal' ? 'bg-teal-50 text-teal-700' : ''"
-          @click="draftCoating = draftCoating === 'emal' ? '' : 'emal'"
-        >
-          Эмаль
         </button>
       </div>
     </div>
