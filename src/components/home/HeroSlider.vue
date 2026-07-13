@@ -42,6 +42,15 @@ const slides: Slide[] = [
     cta: 'Смотреть каталог',
     ctaHref: '/catalog',
   },
+  {
+    id: 4,
+    image: 'https://storage.yandexcloud.net/vfd74ru/Main_page/left_bento/render_urban2.webp',
+    title: 'Урбан — городской стиль для вашего интерьера',
+    subtitle: 'Двери от 18 000 ₽ за комплект',
+    description: 'Лаконичные формы, полипропиленовое покрытие Ренолит (Германия) с эффектом эмали',
+    cta: 'Смотреть модель',
+    ctaHref: '/models/urban-2gr-urban-a2d505/',
+  },
 ]
 
 /* ── Slider state ── */
