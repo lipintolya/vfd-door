@@ -71,13 +71,13 @@ const breadcrumbSchema = {
         <!-- Header -->
         <header class="mt-8 mb-6">
           <div class="flex flex-wrap items-center gap-2 mb-3">
-            <span class="inline-block text-xs font-extrabold uppercase tracking-wider bg-teal-500 text-white px-2.5 py-1 rounded">
+            <span class="inline-block text-xs font-medium uppercase tracking-wider bg-teal-500 text-white px-2.5 py-1 rounded">
               {CATEGORY_LABELS[work.category]}
             </span>
             <span class="text-xs text-slate-500">{OBJECT_TYPE_LABELS[work.objectType]}</span>
             <time datetime={work.date} class="text-xs text-slate-500">· {work.label}</time>
           </div>
-          <h1 class="text-2xl font-extrabold leading-tight tracking-tight text-slate-900 md:text-3xl">
+          <h1 class="text-2xl font-medium leading-tight tracking-tight text-slate-900 md:text-3xl">
             {work.title}
           </h1>
           <p class="mt-2 text-sm text-slate-500">

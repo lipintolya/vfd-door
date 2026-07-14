@@ -17,7 +17,7 @@ const toggleFaq = (id: number) => {
 
       <!-- Header -->
       <header class="mb-10 max-w-3xl">
-        <h2 id="faq-title" class="text-3xl font-extrabold leading-tight tracking-tight text-slate-900 md:text-5xl">
+        <h2 id="faq-title" class="text-3xl font-medium leading-tight tracking-tight text-slate-900 md:text-5xl">
           Ответы на вопросы
         </h2>
         <p class="mt-4 text-base leading-relaxed text-slate-600 md:text-lg">

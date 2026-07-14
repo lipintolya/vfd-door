@@ -181,7 +181,7 @@ onUnmounted(() => ctaObserver?.disconnect())
         />
         <div v-else :style="{ viewTransitionName: `door-photo-${model.id}` }" class="absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-2xl bg-slate-50 p-6 text-center">
           <span v-if="selectedSkin" class="text-[1.0625rem] font-medium text-slate-600">{{ selectedSkin.name }}, {{ selectedSkin.color }}</span>
-          <span class="ed-meta">Фото скоро появится — образец можно посмотреть в салоне</span>
+          <span class="t-meta">Фото скоро появится — образец можно посмотреть в салоне</span>
         </div>
 
         <div class="absolute left-3 top-3 inline-flex gap-1 rounded-full bg-white/90 p-1 backdrop-blur-sm" role="tablist" aria-label="Вид двери">
@@ -206,12 +206,12 @@ onUnmounted(() => ctaObserver?.disconnect())
       <div class="flex flex-col gap-5 rounded-2xl border border-slate-200 bg-white p-4.5 sm:p-6">
         <div class="flex flex-col gap-3.5 border-b border-slate-200 pb-4.5 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
           <div>
-            <h3 class="ed-h3 m-0 mb-1.5">{{ model.name }}</h3>
-            <p class="ed-body m-0">{{ model.tagline }}</p>
+            <h3 class="t-h3 m-0 mb-1.5">{{ model.name }}</h3>
+            <p class="t-body m-0">{{ model.tagline }}</p>
           </div>
           <div class="flex flex-col gap-1 sm:items-end sm:text-right" :style="{ viewTransitionName: `door-price-${model.id}` }">
-            <span class="ed-price">{{ formatPrice(currentPrice) }}</span>
-            <span class="ed-meta">{{ selectedSkin?.name }}, {{ selectedSkin?.color }}</span>
+            <span class="t-price">{{ formatPrice(currentPrice) }}</span>
+            <span class="t-meta">{{ selectedSkin?.name }}, {{ selectedSkin?.color }}</span>
           </div>
         </div>
 
@@ -219,7 +219,7 @@ onUnmounted(() => ctaObserver?.disconnect())
              тач-скролл, не wrap): 13 моделей в wrap-сетке — 5-6 строк на узком
              экране, неудобно сканировать. На sm+ — обычный wrap кликом. -->
         <div>
-          <p class="ed-label m-0 mb-2.5">Накладка изнутри — модель</p>
+          <p class="t-label m-0 mb-2.5">Накладка изнутри — модель</p>
           <div class="-mx-4.5 flex snap-x snap-mandatory gap-2 overflow-x-auto px-4.5 pb-1 scrollbar-none sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
             <button
               v-for="group in groupedSkins"
@@ -239,7 +239,7 @@ onUnmounted(() => ctaObserver?.disconnect())
 
         <!-- Шаг 2: цвет внутри модели — тот же приём: свайп на мобиле, wrap на sm+ -->
         <div>
-          <p class="ed-label m-0 mb-2.5">Цвет</p>
+          <p class="t-label m-0 mb-2.5">Цвет</p>
           <div class="-mx-4.5 flex snap-x snap-mandatory gap-2 overflow-x-auto px-4.5 pb-1 scrollbar-none sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
             <button
               v-for="item in activeGroup?.items ?? []"
@@ -381,8 +381,8 @@ onUnmounted(() => ctaObserver?.disconnect())
         class="fixed inset-x-0 bottom-0 z-40 flex items-center justify-between gap-3 border-t border-slate-200 bg-white/95 p-3 shadow-[0_-4px_16px_rgba(0,0,0,0.06)] backdrop-blur-sm sm:hidden"
       >
         <div class="flex min-w-0 flex-col leading-none">
-          <span class="ed-price--sticky">{{ formatPrice(currentPrice) }}</span>
-          <span class="ed-meta truncate">{{ model.name }} · {{ selectedSkin?.color }}</span>
+          <span class="t-price--sm">{{ formatPrice(currentPrice) }}</span>
+          <span class="t-meta truncate">{{ model.name }} · {{ selectedSkin?.color }}</span>
         </div>
         <a :href="telegramHref" target="_blank" rel="noopener" class="btn btn-primary shrink-0 px-4 py-2 text-sm active:scale-95">Написать</a>
       </div>

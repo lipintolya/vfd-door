@@ -59,10 +59,10 @@ const { sectionRef, visible } = useScrollReveal(0.15)
         class="max-w-3xl mb-10 md:mb-16 transition-[opacity,transform] duration-700 ease-out motion-reduce:transition-none"
         :class="visible ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'"
       >
-        <p class="mb-3 text-xs font-extrabold uppercase tracking-widest text-teal-600">
+        <p class="t-eyebrow mb-3">
           Отзывы клиентов
         </p>
-        <h2 id="reviews-heading" class="text-3xl font-extrabold leading-tight tracking-tight text-slate-900 md:text-5xl">
+        <h2 id="reviews-heading" class="text-3xl font-medium leading-tight tracking-tight text-slate-900 md:text-5xl">
           Нам доверяют
         </h2>
         <p class="mt-4 text-base leading-relaxed text-slate-600 md:text-lg">

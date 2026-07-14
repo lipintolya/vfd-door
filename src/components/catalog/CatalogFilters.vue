@@ -99,7 +99,7 @@ watch(
   <aside class="sticky top-[calc(var(--header-height,88px)+1.25rem)] rounded-2xl bg-slate-50 p-5" aria-label="Фильтры каталога">
     <div class="flex items-center justify-between gap-4 border-b border-slate-200 pb-4">
       <div>
-        <h2 class="m-0 text-lg font-extrabold text-ink">Фильтры</h2>
+        <h2 class="m-0 text-lg font-medium text-ink">Фильтры</h2>
         <p v-if="draftFilterCount" class="m-0 mt-1 text-xs font-bold text-slate-500">Выбрано: {{ draftFilterCount }}</p>
       </div>
       <button v-if="hasActiveFilters || draftFilterCount" type="button" class="text-xs font-bold text-teal-600 hover:text-teal-700" @click="resetAll">Сбросить</button>
@@ -119,7 +119,7 @@ watch(
     </label>
 
     <div class="border-b border-slate-200">
-      <button type="button" class="flex w-full items-center justify-between py-3.5 text-[0.9375rem] font-extrabold text-ink" @click="toggleSection('series')">
+      <button type="button" class="flex w-full items-center justify-between py-3.5 text-[0.9375rem] font-medium text-ink" @click="toggleSection('series')">
         <span>Серия</span>
         <svg class="h-4 w-4 text-slate-400 transition-transform" :class="{ 'rotate-180': openSections.series }" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 9 6 6 6-6" />
@@ -148,7 +148,7 @@ watch(
     </div>
 
     <div class="border-b border-slate-200">
-      <button type="button" class="flex w-full items-center justify-between py-3.5 text-[0.9375rem] font-extrabold text-ink" @click="toggleSection('coating')">
+      <button type="button" class="flex w-full items-center justify-between py-3.5 text-[0.9375rem] font-medium text-ink" @click="toggleSection('coating')">
         <span>Покрытие</span>
         <svg class="h-4 w-4 text-slate-400 transition-transform" :class="{ 'rotate-180': openSections.coating }" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 9 6 6 6-6" />
@@ -169,7 +169,7 @@ watch(
     </div>
 
     <div class="border-b border-slate-200">
-      <button type="button" class="flex w-full items-center justify-between py-3.5 text-[0.9375rem] font-extrabold text-ink" @click="toggleSection('color')">
+      <button type="button" class="flex w-full items-center justify-between py-3.5 text-[0.9375rem] font-medium text-ink" @click="toggleSection('color')">
         <span>Цвет</span>
         <svg class="h-4 w-4 text-slate-400 transition-transform" :class="{ 'rotate-180': openSections.color }" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 9 6 6 6-6" />
@@ -191,7 +191,7 @@ watch(
     </div>
 
     <div class="border-b border-slate-200">
-      <button type="button" class="flex w-full items-center justify-between py-3.5 text-[0.9375rem] font-extrabold text-ink" @click="toggleSection('tags')">
+      <button type="button" class="flex w-full items-center justify-between py-3.5 text-[0.9375rem] font-medium text-ink" @click="toggleSection('tags')">
         <span>Теги</span>
         <svg class="h-4 w-4 text-slate-400 transition-transform" :class="{ 'rotate-180': openSections.tags }" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 9 6 6 6-6" />
@@ -207,10 +207,10 @@ watch(
 
     <div class="flex items-center justify-between gap-3 pt-3.5 text-[0.8125rem] text-slate-500">
       <div class="inline-flex items-center gap-1">
-        <strong class="font-extrabold text-ink">{{ filteredCount }}</strong>
+        <strong class="font-medium text-ink">{{ filteredCount }}</strong>
         <span>из {{ totalCount }}</span>
       </div>
-      <span v-if="hasDraftChanges" class="font-extrabold text-teal-600">Есть изменения</span>
+      <span v-if="hasDraftChanges" class="font-medium text-teal-600">Есть изменения</span>
     </div>
 
     <div class="mt-3.5 grid grid-cols-[1fr_auto] gap-2.5 border-t border-slate-200 pt-3.5">

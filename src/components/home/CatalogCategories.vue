@@ -49,10 +49,10 @@ const { sectionRef, visible } = useScrollReveal(0.15)
         class="mb-10 max-w-3xl transition-[opacity,transform] duration-700 ease-out motion-reduce:transition-none md:mb-16"
         :class="visible ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'"
       >
-        <p class="mb-3 text-xs font-extrabold uppercase tracking-widest text-teal-600">
+        <p class="t-eyebrow mb-3">
           Что мы предлагаем
         </p>
-        <h2 id="cat-heading" class="text-3xl font-extrabold leading-tight tracking-tight text-slate-900 md:text-5xl">
+        <h2 id="cat-heading" class="text-3xl font-medium leading-tight tracking-tight text-slate-900 md:text-5xl">
           Каталог
         </h2>
         <p class="mt-4 text-base leading-relaxed text-slate-600 md:text-lg">
@@ -92,7 +92,7 @@ const { sectionRef, visible } = useScrollReveal(0.15)
             <!-- Content -->
             <div class="relative z-10 mt-auto flex flex-col gap-4 p-5 sm:p-8">
               <div class="flex flex-col gap-2">
-                <h3 class="text-xl font-extrabold leading-snug text-white">{{ CATEGORIES[0]!.title }}</h3>
+                <h3 class="text-xl font-medium leading-snug text-white">{{ CATEGORIES[0]!.title }}</h3>
                 <p class="max-w-md text-sm leading-relaxed text-white/80">{{ CATEGORIES[0]!.subtitle }}</p>
               </div>
               <span
@@ -137,7 +137,7 @@ const { sectionRef, visible } = useScrollReveal(0.15)
               <!-- Content -->
               <div class="relative z-10 mt-auto flex flex-col gap-3 p-5 sm:p-6">
                 <div class="flex flex-col gap-1.5">
-                  <h3 class="text-lg font-extrabold leading-snug text-white">{{ cat.title }}</h3>
+                  <h3 class="text-lg font-medium leading-snug text-white">{{ cat.title }}</h3>
                   <p class="max-w-md text-sm leading-relaxed text-white/80">{{ cat.subtitle }}</p>
                 </div>
                 <span

@@ -5,10 +5,6 @@ import ProcessSteps from '../components/partitions/ProcessSteps.astro'
 import EntranceDoorShowcase from '../components/entrance-doors/EntranceDoorShowcase.vue'
 import { ENTRANCE_DOOR_MODELS, ENTRANCE_SKINS, minPriceOf } from '../data/entrance-doors'
 import { companyLegalInfo } from '../lib/contacts-data'
-// Шкала и веса — локальные для страницы. Общий SectionHeading здесь не
-// используется: в нём зашит teal-uppercase-eyebrow и font-extrabold, а
-// править его — задеть /partitions и остальные страницы.
-import '../styles/entrance-doors.css'
 
 const PHONE = companyLegalInfo.contacts.phone[0]!.raw
 const TG    = 'https://t.me/vfddoors74'
@@ -135,8 +131,6 @@ const structuredData = [breadcrumbSchema, faqSchema, ...productSchemas]
   structuredData={structuredData}
 >
 
-  <div class="ed-scope">
-
   <div class="breadcrumb-bar">
     <div class="container">
       <Breadcrumbs items={breadcrumbItems} />
@@ -150,9 +144,9 @@ const structuredData = [breadcrumbSchema, faqSchema, ...productSchemas]
     <div class="container">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
         <div>
-          <p class="ed-eyebrow mb-3">Входные двери · Челябинск и область</p>
-          <h1 class="ed-h1 mb-4">Входные двери для квартиры с монтажом</h1>
-          <p class="ed-lead mb-6 max-w-125">
+          <p class="t-eyebrow mb-3">Входные двери · Челябинск и область</p>
+          <h1 class="t-h1 mb-4">Входные двери для квартиры с монтажом</h1>
+          <p class="t-lead mb-6 max-w-125">
             Стальные двери с закрытым утеплённым коробом и выбором накладки изнутри —
             под интерьер квартиры. Цены указаны сразу, без "от" в никуда.
           </p>
@@ -195,9 +189,9 @@ const structuredData = [breadcrumbSchema, faqSchema, ...productSchemas]
       <div class="mt-12 lg:mt-16 grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-6 lg:gap-x-12">
         {heroStats.map((s, i) => (
           <div class:list={['flex flex-col', i > 0 && 'border-t sm:border-t-0 sm:border-l border-slate-200 pt-6 sm:pt-0 sm:pl-8 lg:pl-12']}>
-            <span class="ed-stat block">{s.val}</span>
+            <span class="t-stat block">{s.val}</span>
             <span class="block text-ink mt-2 text-[0.9375rem] font-medium leading-snug">{s.lbl}</span>
-            <span class="ed-meta block mt-1">{s.desc}</span>
+            <span class="t-meta block mt-1">{s.desc}</span>
           </div>
         ))}
       </div>
@@ -210,9 +204,9 @@ const structuredData = [breadcrumbSchema, faqSchema, ...productSchemas]
   <section class="section bg-white" id="catalog">
     <div class="container">
       <header class="mb-[clamp(2rem,4vw,3rem)]">
-        <p class="ed-eyebrow mb-3">Каталог</p>
-        <h2 class="ed-h2 mb-4">Модели входных дверей</h2>
-        <p class="ed-lead max-w-160">Цена уже включает выбранную накладку изнутри — переключайтесь между вариантами, чтобы увидеть точную стоимость.</p>
+        <p class="t-eyebrow mb-3">Каталог</p>
+        <h2 class="t-h2 mb-4">Модели входных дверей</h2>
+        <p class="t-lead max-w-160">Цена уже включает выбранную накладку изнутри — переключайтесь между вариантами, чтобы увидеть точную стоимость.</p>
       </header>
 
       <div class="flex flex-col gap-16 lg:gap-20">
@@ -234,9 +228,9 @@ const structuredData = [breadcrumbSchema, faqSchema, ...productSchemas]
   <section class="section bg-slate-50">
     <div class="container">
       <header class="mb-[clamp(2rem,4vw,3rem)]">
-        <p class="ed-eyebrow mb-3">Как купить</p>
-        <h2 class="ed-h2 mb-4">От выбора до монтажа</h2>
-        <p class="ed-lead max-w-160">Прозрачный процесс — от заявки до установленной двери.</p>
+        <p class="t-eyebrow mb-3">Как купить</p>
+        <h2 class="t-h2 mb-4">От выбора до монтажа</h2>
+        <p class="t-lead max-w-160">Прозрачный процесс — от заявки до установленной двери.</p>
       </header>
       <ProcessSteps items={steps} />
     </div>
@@ -248,8 +242,8 @@ const structuredData = [breadcrumbSchema, faqSchema, ...productSchemas]
   <section class="section bg-white">
     <div class="container">
       <header class="mb-[clamp(2rem,4vw,3rem)] text-center mx-auto max-w-2xl">
-        <p class="ed-eyebrow mb-3">Вопросы и ответы</p>
-        <h2 class="ed-h2">Частые вопросы</h2>
+        <p class="t-eyebrow mb-3">Вопросы и ответы</p>
+        <h2 class="t-h2">Частые вопросы</h2>
       </header>
       <div class="mx-auto flex max-w-208 flex-col gap-3">
         {faq.map(f => (
@@ -260,14 +254,12 @@ const structuredData = [breadcrumbSchema, faqSchema, ...productSchemas]
                 <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </summary>
-            <p class="ed-body m-0 px-5.5 pb-5">{f.a}</p>
+            <p class="t-body m-0 px-5.5 pb-5">{f.a}</p>
           </details>
         ))}
       </div>
     </div>
   </section>
-
-  </div><!-- /.ed-scope -->
 
 </BaseLayout>
 

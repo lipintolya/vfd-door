@@ -11,7 +11,7 @@ defineEmits<{
         <path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M6 7v13h12V7M9 7V5a3 3 0 0 1 6 0v2" />
       </svg>
     </div>
-    <h2 class="mb-1.5 mt-4 text-[1.35rem] font-extrabold text-ink">Ничего не найдено</h2>
+    <h2 class="mb-1.5 mt-4 text-[1.35rem] font-medium text-ink">Ничего не найдено</h2>
     <p class="mb-5 max-w-100 text-sm leading-relaxed text-slate-500">Попробуйте изменить поисковый запрос или убрать часть фильтров.</p>
     <button type="button" class="btn btn-primary" @click="$emit('reset')">
       Сбросить фильтры

@@ -39,13 +39,13 @@ const kitPrice = computed(() =>
       </div>
 
       <div class="absolute left-0 top-3 flex flex-wrap gap-1">
-        <span class="rounded-r-full bg-teal-600 px-3 py-1 text-xs font-extrabold uppercase tracking-wide text-white">{{ card.series }}</span>
+        <span class="rounded-r-full bg-teal-600 px-3 py-1 text-xs font-medium uppercase tracking-wide text-white">{{ card.series }}</span>
       </div>
     </div>
 
     <div class="flex flex-1 flex-col gap-2.5 p-3.5 sm:gap-3 sm:p-5">
       <div>
-        <h2 class="m-0 min-h-12 text-[1.0625rem] font-extrabold leading-snug text-ink line-clamp-2">{{ card.name }}</h2>
+        <h2 class="m-0 min-h-12 text-[1.0625rem] font-medium leading-snug text-ink line-clamp-2">{{ card.name }}</h2>
         <p class="m-0 mt-1 text-sm font-semibold text-slate-500">{{ card.coating }}</p>
       </div>
 
@@ -61,7 +61,7 @@ const kitPrice = computed(() =>
       <div class="mt-auto flex flex-col gap-2 pt-1">
         <div class="flex flex-col items-stretch gap-2.5 @[17rem]:flex-row @[17rem]:items-end @[17rem]:justify-between @[17rem]:gap-3">
           <p class="m-0 flex flex-col leading-none">
-            <span class="whitespace-nowrap text-xl font-black text-ink">{{ formatPrice(card.price) }}</span>
+            <span class="whitespace-nowrap text-xl font-medium text-ink">{{ formatPrice(card.price) }}</span>
             <span class="mt-1 text-xs font-bold text-slate-500">за полотно</span>
             <span v-if="kitPrice" class="mt-1.5 whitespace-nowrap text-xs font-semibold text-slate-500">
               {{ Number(kitPrice).toLocaleString('ru-RU') }} ₽ за комплект

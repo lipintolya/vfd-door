@@ -149,9 +149,9 @@ watch(
   <section class="grid gap-8" aria-labelledby="catalog-title">
     <div class="flex flex-wrap items-end justify-between gap-4">
       <div>
-        <h1 id="catalog-title" class="m-0 mb-1.5 text-[clamp(2rem,4vw,2.25rem)] font-extrabold leading-tight text-ink">Межкомнатные двери</h1>
+        <h1 id="catalog-title" class="t-h1 text-step-5 m-0 mb-1.5 leading-tight">Межкомнатные двери</h1>
         <p class="m-0 text-base text-slate-600">
-          Найдено: <strong class="font-extrabold text-ink">{{ filteredCards.length }}</strong>
+          Найдено: <strong class="font-medium text-ink">{{ filteredCards.length }}</strong>
           {{ filteredCards.length === 1 ? 'товар' : 'товаров' }}
         </p>
       </div>
@@ -180,7 +180,7 @@ watch(
             <path stroke-linecap="round" stroke-linejoin="round" d="M3 4h18M7 10h10M11 16h2" />
           </svg>
           <span>{{ mobileFiltersOpen ? 'Скрыть фильтры' : 'Показать фильтры' }}</span>
-          <span v-if="hasActiveFilters" class="ml-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-teal-600 text-xs font-black text-white">
+          <span v-if="hasActiveFilters" class="ml-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-teal-600 text-xs font-medium text-white">
             {{ [activeSeries, activeCoating, activeColor, glassOnly, searchQuery].filter(Boolean).length }}
           </span>
         </button>

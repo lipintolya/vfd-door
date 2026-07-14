@@ -65,7 +65,7 @@ const filtered = computed(() =>
         />
         <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
         <div class="absolute bottom-0 left-0 right-0 p-4">
-          <span class="inline-block text-xs font-extrabold uppercase tracking-wider bg-teal-500 text-white px-2 py-0.5 rounded mb-1.5">
+          <span class="inline-block text-xs font-medium uppercase tracking-wider bg-teal-500 text-white px-2 py-0.5 rounded mb-1.5">
             {{ CATEGORY_LABELS[work.category] }}
           </span>
           <h3 class="text-sm font-bold text-white leading-snug">{{ work.title }}</h3>

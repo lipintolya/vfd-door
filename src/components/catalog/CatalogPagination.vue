@@ -14,7 +14,7 @@ defineEmits<{
   <nav v-if="totalPages > 1" class="mt-2 flex flex-wrap items-center justify-center gap-2" aria-label="Навигация по каталогу">
     <button
       type="button"
-      class="min-h-11 rounded-lg border-2 border-slate-200 px-4 text-sm font-extrabold text-slate-600 transition hover:border-slate-300 hover:bg-slate-50 disabled:cursor-default disabled:opacity-45 disabled:hover:border-slate-200 disabled:hover:bg-transparent"
+      class="min-h-11 rounded-lg border-2 border-slate-200 px-4 text-sm font-medium text-slate-600 transition hover:border-slate-300 hover:bg-slate-50 disabled:cursor-default disabled:opacity-45 disabled:hover:border-slate-200 disabled:hover:bg-transparent"
       :disabled="currentPage <= 1"
       @click="$emit('change', currentPage - 1)"
     >
@@ -25,7 +25,7 @@ defineEmits<{
       v-for="page in visiblePages"
       :key="page"
       type="button"
-      class="min-h-11 min-w-11 rounded-lg border-2 text-sm font-extrabold transition disabled:cursor-default"
+      class="min-h-11 min-w-11 rounded-lg border-2 text-sm font-medium transition disabled:cursor-default"
       :class="page === currentPage
         ? 'border-teal-600 bg-teal-600 text-white'
         : page === '...'
@@ -39,7 +39,7 @@ defineEmits<{
 
     <button
       type="button"
-      class="min-h-11 rounded-lg border-2 border-slate-200 px-4 text-sm font-extrabold text-slate-600 transition hover:border-slate-300 hover:bg-slate-50 disabled:cursor-default disabled:opacity-45 disabled:hover:border-slate-200 disabled:hover:bg-transparent"
+      class="min-h-11 rounded-lg border-2 border-slate-200 px-4 text-sm font-medium text-slate-600 transition hover:border-slate-300 hover:bg-slate-50 disabled:cursor-default disabled:opacity-45 disabled:hover:border-slate-200 disabled:hover:bg-transparent"
       :disabled="currentPage >= totalPages"
       @click="$emit('change', currentPage + 1)"
     >

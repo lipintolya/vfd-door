@@ -17,6 +17,23 @@
   --color-fg-subtle:    #9ca3af;  /* = gray-400 — очень приглушённый */
   --color-surface:      #ffffff;  /* белый фон карточек */
   --color-border:       #e5e7eb;  /* = gray-200 — границы */
+
+  /* Типографическая шкала → утилиты text-step-0 … text-step-6.
+     Одна лестница на весь сайт. clamp() живёт здесь, в ступени, а не
+     в разметке: иначе каждый заголовок заводит свою формулу
+     (text-[clamp(2rem,4.5vw,3rem)], text-[clamp(1.375rem,3vw,1.875rem)]…)
+     и системы не остаётся. Веса задаются классами .t-* ниже. */
+  --text-step-0: 0.8125rem;                          /* 13 — подписи, мета */
+  --text-step-1: 0.9375rem;                          /* 15 — вторичный текст */
+  --text-step-2: 1.0625rem;                          /* 17 — основной текст */
+  --text-step-3: 1.25rem;                            /* 20 */
+  --text-step-4: clamp(1.375rem, 2.2vw, 1.625rem);   /* 22 → 26 */
+  --text-step-5: clamp(1.75rem, 3.4vw, 2.25rem);     /* 28 → 36 */
+  --text-step-6: clamp(2.125rem, 4.6vw, 3.25rem);    /* 34 → 52 */
+  --text-step-7: clamp(2.25rem, 5vw, 3.75rem);       /* 36 → 60 — display,
+     флагманские hero (/partitions). Страница намеренно набрана крупнее
+     остального сайта; ступень существует, чтобы это решение жило в шкале,
+     а не рукописным clamp в разметке. */
 }
 
 @font-face {
@@ -95,6 +112,112 @@ html {
 body {
   background-color: var(--color-bg);
   overflow-x: hidden;
+}
+
+/* ============================================================
+   Типографика — семантические роли
+
+   Веса это иерархия: когда жирное всё, не выделено ничто. Поэтому
+   400 — текст, 500 — заголовки, 600 — цифры/цена. Ступени размеров
+   объявлены в @theme выше; здесь к ним привязаны вес, трекинг и
+   интерлиньяж, чтобы роль задавалась одним классом, а не связкой
+   из четырёх утилит на каждом заголовке.
+
+   .t-* — это дефолт по РОЛИ, а не жёсткая привязка к кеглю. Если
+   странице нужен другой размер (флагманский hero крупнее обычного h1) —
+   берите ступень лестницы утилитой (text-step-7) вместе с .t-h1, а НЕ
+   пишите свой clamp в разметке: именно так и заводится зоопарк.
+
+   @layer components — обязателен, не косметика. Классы объявлены ниже
+   @import "tailwindcss", и при равной специфичности побеждал бы .t-h1:
+   `class="t-h1 text-white"` красил бы заголовок в ink вместо белого.
+   В слое components утилиты Tailwind (слой utilities) перебивают роль,
+   поэтому цвет/размер точечно переопределяются как обычно.
+   ============================================================ */
+@layer components {
+.t-h1 {
+  font-size: var(--text-step-6);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: var(--color-ink);
+}
+.t-h2 {
+  font-size: var(--text-step-5);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  color: var(--color-ink);
+}
+.t-h3 {
+  font-size: var(--text-step-4);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+.t-lead {
+  font-size: var(--text-step-2);
+  font-weight: 400;
+  line-height: 1.65;
+  color: #64748b;                                    /* slate-500 */
+}
+.t-body {
+  font-size: var(--text-step-1);
+  font-weight: 400;
+  line-height: 1.6;
+  color: #64748b;
+}
+.t-meta {
+  font-size: var(--text-step-0);
+  font-weight: 400;
+  line-height: 1.45;
+  color: #94a3b8;                                    /* slate-400 */
+}
+
+/* Надзаголовок секции. Был teal + uppercase + tracking-widest — троп
+   лендингов; акцент оставлен за выбранным состоянием и главным CTA. */
+.t-eyebrow {
+  font-size: var(--text-step-0);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: #94a3b8;
+}
+/* Подпись над группой контролов */
+.t-label {
+  font-size: var(--text-step-0);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: #64748b;
+}
+
+/* tabular-nums: цена пересчитывается при выборе опции — без моноширинных
+   цифр блок дёргается по ширине на каждом клике. */
+.t-price {
+  font-size: clamp(1.5rem, 2.6vw, 1.75rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink);
+  white-space: nowrap;
+}
+.t-price--sm {
+  font-size: var(--text-step-2);
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink);
+  white-space: nowrap;
+}
+.t-stat {
+  font-size: var(--text-step-5);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink);
+}
 }
 
 /* ============================================================

@@ -101,7 +101,7 @@ onUnmounted(() => {
             Кромка {{ work.edge.toLowerCase() }}
           </span>
         </div>
-        <h3 class="m-0 text-xl font-extrabold tracking-tight text-slate-900 sm:text-2xl" itemprop="name">
+        <h3 class="m-0 text-xl font-medium tracking-tight text-slate-900 sm:text-2xl" itemprop="name">
           {{ work.title }}
         </h3>
         <p v-if="work.location" class="mt-1.5 flex items-center gap-1.5 text-sm text-slate-500">

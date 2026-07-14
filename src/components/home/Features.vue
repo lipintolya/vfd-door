@@ -165,11 +165,11 @@ onBeforeUnmount(stopCycle)
       <!-- ── Header ── -->
       <div class="mb-10 md:mb-16">
         <header class="max-w-3xl">
-          <p class="mb-3 text-xs font-extrabold uppercase tracking-widest text-teal-600" aria-hidden="true">
+          <p class="t-eyebrow mb-3" aria-hidden="true">
             Почему выбирают нас
           </p>
 
-          <h2 id="features-heading" class="mb-4 text-3xl font-extrabold leading-tight tracking-tight text-slate-900 md:text-5xl">
+          <h2 id="features-heading" class="mb-4 text-3xl font-medium leading-tight tracking-tight text-slate-900 md:text-5xl">
             Вы нашли
             <span class="sr-only">официальный салон ВФД</span>
             <span
@@ -202,12 +202,12 @@ onBeforeUnmount(stopCycle)
           itemscope
           itemtype="https://schema.org/Thing"
         >
-          <p class="relative mb-3 text-xs font-extrabold uppercase tracking-widest text-teal-400" aria-hidden="true">
+          <p class="relative mb-3 text-xs font-medium uppercase tracking-widest text-teal-400" aria-hidden="true">
             {{ feature.eyebrow }}
           </p>
 
           <h3
-            class="relative mb-4 text-xl font-extrabold leading-[1.15] tracking-tight text-white sm:text-[1.375rem]"
+            class="relative mb-4 text-xl font-medium leading-[1.15] tracking-tight text-white sm:text-[1.375rem]"
             itemprop="name"
           >
             {{ feature.title }}

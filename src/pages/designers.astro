@@ -242,9 +242,9 @@ const structuredData = canonicalUrl ? [
     <div class="container">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
         <div>
-          <p class="block mb-3 text-xs font-black tracking-widest uppercase text-teal-700">Партнёрская программа · Челябинск и область</p>
-          <h1 class="mb-4 text-ink font-black leading-[1.05] text-[clamp(2rem,4.5vw,3.25rem)] tracking-[-0.03em]">Сотрудничество с дизайнерами и архитекторами</h1>
-          <p class="mb-6 max-w-125 text-[clamp(0.9375rem,1.5vw,1.0625rem)] leading-relaxed text-slate-600">
+          <p class="t-eyebrow block mb-3">Партнёрская программа · Челябинск и область</p>
+          <h1 class="t-h1 mb-4">Сотрудничество с дизайнерами и архитекторами</h1>
+          <p class="mb-6 max-w-125 t-lead text-slate-600">
             Помогаем реализовывать проекты без проблем с подбором дверей, сроками и монтажом —
             и платим бонус за каждый реализованный проект.
           </p>
@@ -269,7 +269,7 @@ const structuredData = canonicalUrl ? [
       <div class="mt-12 lg:mt-16 grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-6 lg:gap-x-12">
         {heroStats.map((s, i) => (
           <div class:list={['flex flex-col', i > 0 && 'border-t sm:border-t-0 sm:border-l border-slate-200 pt-6 sm:pt-0 sm:pl-8 lg:pl-12']}>
-            <span class="block font-black leading-none text-[clamp(1.75rem,3vw,2.25rem)] text-ink tracking-[-0.02em]">{s.val}</span>
+            <span class="t-stat block">{s.val}</span>
             <span class="block text-sm font-semibold text-ink mt-1.5 leading-snug">{s.lbl}</span>
             <span class="block text-xs text-slate-500 leading-snug mt-1">{s.desc}</span>
           </div>
@@ -291,7 +291,7 @@ const structuredData = canonicalUrl ? [
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-3.5 lg:gap-5">
         {partnerEligibility.map(group => (
           <article class="motion-safe:opacity-0 motion-safe:translate-y-4 transition-all duration-700 ease-out rounded-2xl bg-slate-50 p-[clamp(1.25rem,2.5vw,1.75rem)]" data-reveal>
-            <h3 class="mb-3 text-[1.0625rem] font-extrabold text-ink">{group.title}</h3>
+            <h3 class="mb-3 text-[1.0625rem] font-medium text-ink">{group.title}</h3>
             <ul class="flex flex-col gap-2 list-none p-0 m-0">
               {group.items.map(item => (
                 <li class="flex gap-2.5 text-sm leading-relaxed text-slate-600">
@@ -305,7 +305,7 @@ const structuredData = canonicalUrl ? [
       </div>
 
       <div class="mt-3.5 lg:mt-5">
-        <h3 class="mb-3.5 text-[1.0625rem] font-extrabold text-ink">Формат взаимодействия</h3>
+        <h3 class="mb-3.5 text-[1.0625rem] font-medium text-ink">Формат взаимодействия</h3>
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3.5 lg:gap-5">
           {cooperationFormat.map((step, i) => (
             <article
@@ -324,8 +324,8 @@ const structuredData = canonicalUrl ? [
               )}
               <div class="absolute inset-0 bg-linear-to-t from-slate-900/85 via-slate-900/25 to-transparent" aria-hidden="true"></div>
               <div class="relative z-10 flex h-full flex-col justify-end p-5">
-                <span class="mb-2 block text-xs font-black tabular-nums text-teal-300">{String(i + 1).padStart(2, '0')}</span>
-                <h4 class="mb-1.5 text-base font-extrabold leading-tight text-white">{step.title}</h4>
+                <span class="mb-2 block text-xs font-medium tabular-nums text-teal-300">{String(i + 1).padStart(2, '0')}</span>
+                <h4 class="mb-1.5 text-base font-medium leading-tight text-white">{step.title}</h4>
                 <p class="m-0 text-sm leading-relaxed text-white/80">{step.text}</p>
               </div>
             </article>
@@ -364,10 +364,10 @@ const structuredData = canonicalUrl ? [
           <a href={m.href} target="_blank" rel="noopener" class="group flex items-center gap-4 rounded-2xl bg-slate-50 p-[clamp(1rem,2vw,1.375rem)] no-underline transition hover:bg-teal-50/60 hover:-translate-y-0.5">
             <span class="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-teal-200 bg-teal-50 text-teal-600">
               <svg viewBox="0 0 24 24" fill="none" class="h-6 w-6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <b class="absolute -bottom-1 -right-1 rounded bg-teal-600 px-1 py-0.5 text-[0.5rem] font-extrabold leading-none tracking-wide text-white">{m.badge}</b>
+              <b class="absolute -bottom-1 -right-1 rounded bg-teal-600 px-1 py-0.5 text-[0.5rem] font-medium leading-none tracking-wide text-white">{m.badge}</b>
             </span>
             <span class="flex min-w-0 flex-1 flex-col gap-0.5">
-              <span class="text-[0.9375rem] font-extrabold leading-tight text-ink">{m.title}</span>
+              <span class="text-[0.9375rem] font-medium leading-tight text-ink">{m.title}</span>
               <span class="text-[0.8125rem] leading-snug text-slate-500">{m.desc}</span>
             </span>
             <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-50 text-slate-600 transition-colors group-hover:bg-teal-500 group-hover:text-white">
@@ -392,7 +392,7 @@ const structuredData = canonicalUrl ? [
       <div class="mx-auto flex max-w-208 flex-col gap-3">
         {faq.map(f => (
           <details class="group rounded-2xl border border-slate-200 bg-white overflow-hidden">
-            <summary class="flex list-none cursor-pointer items-center justify-between gap-4 px-5.5 py-4.5 text-[clamp(0.9375rem,1.4vw,1.0625rem)] font-bold text-ink">
+            <summary class="flex list-none cursor-pointer items-center justify-between gap-4 px-5.5 py-4.5 text-step-2 font-medium text-ink">
               <span>{f.q}</span>
               <svg class="h-5 w-5 shrink-0 text-teal-600 transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

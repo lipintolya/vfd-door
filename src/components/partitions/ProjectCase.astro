@@ -33,19 +33,19 @@ const socials = [
       <!-- Текстовая карточка -->
       <div class="pt-case-text rounded-3xl border border-slate-200 bg-white shadow-sm flex flex-col p-[clamp(1.25rem,2.5vw,2rem)]">
         {data.eyebrow.kind === 'plain' ? (
-          <p class="block mb-3 text-xs font-black tracking-widest uppercase text-teal-700">{data.eyebrow.text}</p>
+          <p class="t-eyebrow block mb-3">{data.eyebrow.text}</p>
         ) : (
           <div class="inline-flex items-center gap-1.5 mb-3 self-start">
-            <span class:list={['inline-flex items-center px-2.5 py-1 rounded-lg text-[0.6875rem] font-black tracking-widest uppercase border', badgeTone[data.eyebrow.tone]]}>
+            <span class:list={['inline-flex items-center px-2.5 py-1 rounded-lg text-[0.6875rem] font-medium tracking-widest uppercase border', badgeTone[data.eyebrow.tone]]}>
               {data.eyebrow.text}
             </span>
           </div>
         )}
 
-        <h2 class="mb-3 text-ink font-extrabold leading-tight tracking-tight text-[clamp(1.5rem,2.8vw,2.125rem)]" set:html={data.titleHtml} />
+        <h2 class="t-h2 mb-3" set:html={data.titleHtml} />
 
         {data.paragraphs.map(p => (
-          <p class="mb-5 text-slate-600 text-[clamp(0.9375rem,1.5vw,1.0625rem)] leading-relaxed last:mb-0">{p}</p>
+          <p class="mb-5 t-lead text-slate-600 last:mb-0">{p}</p>
         ))}
 
         {data.features && <FeatureList items={data.features} size={data.featureSize ?? 'sm'} class="mt-1 mb-4" />}
