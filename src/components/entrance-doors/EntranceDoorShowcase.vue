@@ -65,14 +65,21 @@ const toggleTab = (tab: InfoTab) => { infoTab.value = infoTab.value === tab ? nu
          аккордеон характеристик сюда не входит ── -->
     <div class="flex flex-col gap-5 md:grid md:grid-cols-[380px_1fr] md:items-stretch md:gap-8">
 
-      <!-- Фото + переключатель снаружи/изнутри -->
-      <div class="relative flex aspect-4/3 w-full items-center justify-center rounded-2xl bg-slate-50 p-4 md:aspect-auto md:h-full md:p-6">
+      <!-- Фото + переключатель снаружи/изнутри.
+           img — absolute inset, а не h-full/w-full в потоке: с процентной
+           высотой внутри aspect-ratio-бокса без overflow-hidden картинка
+           не резолвит % против ещё "неопределённой" высоты родителя и
+           разрастается по своим натуральным пропорциям, раздувая сам
+           бокс (особенно заметно на мобиле с узкими портретными фото
+           дверей) — abs-позиционирование убирает img из расчёта размера
+           родителя, бокс держит aspect-ratio железно. -->
+      <div class="relative flex aspect-4/3 w-full items-center justify-center overflow-hidden rounded-2xl bg-slate-50 md:aspect-auto md:h-full">
         <img
           v-if="view === 'outside'"
           :key="model.doorImage"
           :src="model.doorImage"
           :alt="`${model.name} — вид снаружи`"
-          class="h-full w-full object-contain"
+          class="absolute inset-4 h-[calc(100%-2rem)] w-[calc(100%-2rem)] object-contain md:inset-6 md:h-[calc(100%-3rem)] md:w-[calc(100%-3rem)]"
           loading="lazy"
           decoding="async"
         />
@@ -81,7 +88,7 @@ const toggleTab = (tab: InfoTab) => { infoTab.value = infoTab.value === tab ? nu
           :key="selectedSkin.photo"
           :src="selectedSkin.photo"
           :alt="`${model.name} — накладка ${selectedSkin.name} ${selectedSkin.color}`"
-          class="h-full w-full object-contain"
+          class="absolute inset-4 h-[calc(100%-2rem)] w-[calc(100%-2rem)] object-contain md:inset-6 md:h-[calc(100%-3rem)] md:w-[calc(100%-3rem)]"
           loading="lazy"
           decoding="async"
         />
