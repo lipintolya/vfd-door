@@ -100,9 +100,9 @@ watch(
     <div class="flex items-center justify-between gap-4 border-b border-slate-200 pb-4">
       <div>
         <h2 class="m-0 text-lg font-medium text-ink">Фильтры</h2>
-        <p v-if="draftFilterCount" class="m-0 mt-1 text-xs font-bold text-slate-500">Выбрано: {{ draftFilterCount }}</p>
+        <p v-if="draftFilterCount" class="m-0 mt-1 text-xs font-semibold text-slate-500">Выбрано: {{ draftFilterCount }}</p>
       </div>
-      <button v-if="hasActiveFilters || draftFilterCount" type="button" class="text-xs font-bold text-teal-600 hover:text-teal-700" @click="resetAll">Сбросить</button>
+      <button v-if="hasActiveFilters || draftFilterCount" type="button" class="text-xs font-semibold text-teal-600 hover:text-teal-700" @click="resetAll">Сбросить</button>
     </div>
 
     <label class="mt-4 mb-2.5 block">

@@ -93,7 +93,7 @@ onUnmounted(() => {
           <!-- Brand -->
           <div>
             <a href="/" class="flex items-center gap-2 mb-4 w-fit" aria-label="ВФД на Кашириных — главная">
-              <span class="text-lg font-bold text-white tracking-wide">VFD</span>
+              <span class="text-lg font-semibold text-white tracking-wide">VFD</span>
               <span class="text-xs text-white/40 uppercase tracking-widest">Кашириных</span>
             </a>
             <p class="text-sm leading-relaxed text-white/60 max-w-xs">
@@ -276,10 +276,10 @@ onUnmounted(() => {
 
           <div class="space-y-6 text-sm">
 
-            <h3 id="legal-title" class="text-base font-bold text-gray-900">Правовая информация</h3>
+            <h3 id="legal-title" class="text-base font-medium text-gray-900">Правовая информация</h3>
 
             <div>
-              <h4 class="text-sm font-bold text-gray-900 mb-2">Авторские права</h4>
+              <h4 class="text-sm font-medium text-gray-900 mb-2">Авторские права</h4>
               <p class="text-gray-600 leading-relaxed">
                 Все изображения, тексты и дизайн сайта являются объектами авторского права VFD Кашириных.
                 Любое использование материалов возможно только с письменного разрешения правообладателя
@@ -289,7 +289,7 @@ onUnmounted(() => {
             </div>
 
             <div class="border-t border-gray-100 pt-5">
-              <h4 class="text-sm font-bold text-gray-900 mb-2">Публичная оферта</h4>
+              <h4 class="text-sm font-medium text-gray-900 mb-2">Публичная оферта</h4>
               <p class="text-gray-600 leading-relaxed">
                 Сайт не является публичной офертой в соответствии со ст. 437 ГК РФ.
                 Цены указаны для ознакомления. Актуальную стоимость уточняйте в салоне
@@ -298,7 +298,7 @@ onUnmounted(() => {
             </div>
 
             <div class="border-t border-gray-100 pt-5">
-              <h4 class="text-sm font-bold text-gray-900 mb-2">Контакты</h4>
+              <h4 class="text-sm font-medium text-gray-900 mb-2">Контакты</h4>
               <p class="text-gray-600 leading-relaxed">
                 г. Челябинск, ул. Братьев Кашириных, 131Б<br />
                 Телефон: <a href="tel:+79000297888" class="text-teal-600 hover:underline">+7 (900) 029-78-88</a><br />

@@ -62,7 +62,7 @@ const kitPrice = computed(() =>
         <div class="flex flex-col items-stretch gap-2.5 @[17rem]:flex-row @[17rem]:items-end @[17rem]:justify-between @[17rem]:gap-3">
           <p class="m-0 flex flex-col leading-none">
             <span class="whitespace-nowrap text-xl font-medium text-ink">{{ formatPrice(card.price) }}</span>
-            <span class="mt-1 text-xs font-bold text-slate-500">за полотно</span>
+            <span class="mt-1 text-xs font-semibold text-slate-500">за полотно</span>
             <span v-if="kitPrice" class="mt-1.5 whitespace-nowrap text-xs font-semibold text-slate-500">
               {{ Number(kitPrice).toLocaleString('ru-RU') }} ₽ за комплект
             </span>

@@ -287,13 +287,13 @@ onUnmounted(() => {
             <div
               v-if="logoError"
               class="w-9 h-9 rounded-lg bg-linear-to-br from-gray-700 to-gray-900
-                     text-white flex items-center justify-center text-xs font-bold"
+                     text-white flex items-center justify-center text-xs font-semibold"
               aria-hidden="true"
             >
               ВФД
             </div>
           </div>
-          <span class="hidden sm:block text-sm font-bold tracking-wide
+          <span class="hidden sm:block text-sm font-semibold tracking-wide
                        group-hover:text-teal-600 transition-colors duration-200">
             ВФД НА КАШИРИНЫХ
           </span>

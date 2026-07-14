@@ -90,13 +90,13 @@ onUnmounted(() => {
         <div class="mb-3 flex flex-wrap items-center gap-2">
           <span
             v-if="work.series"
-            class="inline-flex items-center rounded-full bg-slate-900 px-3 py-1 text-xs font-bold text-white"
+            class="inline-flex items-center rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold text-white"
           >
             Серия «{{ work.series }}»
           </span>
           <span
             v-if="work.edge"
-            class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600"
+            class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600"
           >
             Кромка {{ work.edge.toLowerCase() }}
           </span>
@@ -113,7 +113,7 @@ onUnmounted(() => {
         </p>
       </div>
       <time
-        class="shrink-0 rounded-full bg-slate-100 px-3.5 py-1.5 text-xs font-bold tracking-wide text-slate-600"
+        class="shrink-0 rounded-full bg-slate-100 px-3.5 py-1.5 text-xs font-semibold tracking-wide text-slate-600"
         :datetime="work.date"
         itemprop="dateCreated"
       >
@@ -161,7 +161,7 @@ onUnmounted(() => {
 
           <span
             v-if="work.images.length > 1"
-            class="pointer-events-none absolute left-3 top-3 z-20 rounded-full bg-slate-900/60 px-2.5 py-1 text-xs font-bold text-white backdrop-blur-sm"
+            class="pointer-events-none absolute left-3 top-3 z-20 rounded-full bg-slate-900/60 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur-sm"
             aria-hidden="true"
           >
             {{ activeIndex + 1 }} / {{ work.images.length }}
@@ -190,7 +190,7 @@ onUnmounted(() => {
 
       <!-- Specs column -->
       <div class="flex flex-col">
-        <p class="mb-1 text-xs font-bold uppercase tracking-wider text-slate-400">Спецификация</p>
+        <p class="mb-1 text-xs font-semibold uppercase tracking-wider text-slate-400">Спецификация</p>
         <dl class="m-0 flex flex-col">
           <div
             v-for="spec in specsFor(work)"

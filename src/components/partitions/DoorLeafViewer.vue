@@ -278,7 +278,7 @@ function openDecorLightbox() {
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   font-size: 0.6875rem;
-  font-weight: 800;
+  font-weight: 500;
   letter-spacing: 0.1em;
   color: #e2e8f0;
   pointer-events: none;
@@ -329,7 +329,7 @@ function openDecorLightbox() {
 .dlv__decor-eyebrow {
   margin: 0;
   font-size: 0.6875rem;
-  font-weight: 800;
+  font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #0d9488;
@@ -337,7 +337,7 @@ function openDecorLightbox() {
 .dlv__decor-title {
   margin: 0;
   font-size: clamp(1rem, 1.6vw, 1.1875rem);
-  font-weight: 800;
+  font-weight: 500;
   color: #0f172a;
   line-height: 1.22;
 }
@@ -401,7 +401,7 @@ function openDecorLightbox() {
 
 .dlv__thumb-label {
   font-size: 0.625rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.06em;
   color: #64748b;
   font-variant-numeric: tabular-nums;

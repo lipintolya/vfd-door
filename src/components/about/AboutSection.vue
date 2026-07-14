@@ -502,7 +502,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown))
   margin: 0 0 1rem;
   color: #14b8a6;
   font-size: 0.78rem;
-  font-weight: 800;
+  font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
@@ -511,7 +511,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown))
   margin: 0 0 1rem;
   font-size: clamp(2rem, 5vw, 3.5rem);
   line-height: 1.05;
-  font-weight: 800;
+  font-weight: 500;
   letter-spacing: -0.04em;
   color: #0f172a;
 }
@@ -543,7 +543,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown))
   border: 1px solid #ccfbf1;
   color: #0f766e;
   font-size: 0.82rem;
-  font-weight: 700;
+  font-weight: 600;
   margin-bottom: 1.5rem;
 }
 
@@ -553,7 +553,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown))
   line-height: 0.95;
   letter-spacing: -0.06em;
   color: #0f172a;
-  font-weight: 900;
+  font-weight: 500;
 }
 
 .hero-title span {
@@ -585,7 +585,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown))
 
   border-radius: 16px;
 
-  font-weight: 700;
+  font-weight: 600;
   text-decoration: none;
 
   transition:
@@ -635,7 +635,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown))
   display: block;
   font-size: 1.75rem;
   color: #0f172a;
-  font-weight: 800;
+  font-weight: 500;
 }
 
 .hero-stat-card span {
@@ -688,7 +688,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown))
     );
 
   color: white;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 1rem;
 }
 
@@ -798,7 +798,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown))
   display: inline-block;
   margin-bottom: 0.75rem;
   font-size: 0.75rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   opacity: 0.8;
@@ -847,7 +847,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown))
   margin: 0 0 0.5rem;
   font-size: 2.6rem;
   line-height: 1.05;
-  font-weight: 800;
+  font-weight: 500;
   color: #0f172a;
 }
 

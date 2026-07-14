@@ -100,7 +100,7 @@ const activeId = ref<CoverId>('modern')
 .csw-switcher__label {
   margin: 0;
   font-size: 0.75rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.10em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.75);
@@ -145,7 +145,7 @@ const activeId = ref<CoverId>('modern')
   width: 100%;
   text-align: center;
   font-size: 0.5625rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.7);

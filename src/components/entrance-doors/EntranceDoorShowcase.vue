@@ -305,64 +305,69 @@ onUnmounted(() => ctaObserver?.disconnect())
             <a :href="`tel:${phone.raw}`" class="btn btn-outline active:scale-95">{{ phone.label }}</a>
           </div>
         </div>
-      </div>
 
-    </div>
-
-    <!-- ── Характеристики / комплектация — свёрнуты по умолчанию, вне грида
-         фото+инфо, чтобы раскрытие не тянуло фото-карточку за собой ── -->
-    <div class="flex flex-col rounded-2xl border border-slate-200 bg-white p-4.5 sm:p-6">
-      <div class="border-b border-slate-200">
-        <button
-          type="button"
-          class="flex w-full items-center justify-between gap-3 py-3.5 text-left text-[0.9375rem] font-medium text-ink active:opacity-60"
-          :aria-expanded="infoTab === 'specs'"
-          @click="toggleTab('specs')"
-        >
-          Характеристики
-          <svg
-            class="h-4 w-4 shrink-0 text-slate-400 transition-transform"
-            :class="{ 'rotate-180': infoTab === 'specs' }"
-            viewBox="0 0 16 16" fill="none" aria-hidden="true"
-          >
-            <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-        <dl v-if="infoTab === 'specs'" class="mb-4 overflow-hidden rounded-xl border border-slate-200">
-          <div
-            v-for="s in model.specs"
-            :key="s.label"
-            class="grid grid-cols-1 gap-0.5 px-3.5 py-2.5 odd:bg-slate-50 sm:grid-cols-[190px_1fr] sm:gap-0"
-          >
-            <dt class="text-xs font-medium text-slate-500">{{ s.label }}</dt>
-            <dd class="m-0 text-[0.8125rem] leading-relaxed text-ink">{{ s.value }}</dd>
+        <!-- ── Характеристики / комплектация. Раньше блок жил ВНЕ грида фото+инфо:
+             при items-stretch раскрытие аккордеона растягивало grid-row и тянуло
+             фото-карточку за собой. Теперь колонки выровнены по верху, а высота
+             фото задана его собственной пропорцией — раскрытие соседа на неё не
+             влияет. Поэтому блок вернулся в правую колонку: закрыл пустоту,
+             которая оставалась справа от высокой двери под CTA, и карточка
+             читается одним товаром, а не полосой во всю ширину под ним. ── -->
+        <div class="mt-1 flex flex-col border-t border-slate-200">
+          <div class="border-b border-slate-200">
+            <button
+              type="button"
+              class="flex w-full items-center justify-between gap-3 py-3.5 text-left text-[0.9375rem] font-medium text-ink active:opacity-60"
+              :aria-expanded="infoTab === 'specs'"
+              @click="toggleTab('specs')"
+            >
+              Характеристики
+              <svg
+                class="h-4 w-4 shrink-0 text-slate-400 transition-transform"
+                :class="{ 'rotate-180': infoTab === 'specs' }"
+                viewBox="0 0 16 16" fill="none" aria-hidden="true"
+              >
+                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <dl v-if="infoTab === 'specs'" class="mb-4 overflow-hidden rounded-xl border border-slate-200">
+              <div
+                v-for="s in model.specs"
+                :key="s.label"
+                class="grid grid-cols-1 gap-0.5 px-3.5 py-2.5 odd:bg-slate-50 sm:grid-cols-[190px_1fr] sm:gap-0"
+              >
+                <dt class="text-xs font-medium text-slate-500">{{ s.label }}</dt>
+                <dd class="m-0 text-[0.8125rem] leading-relaxed text-ink">{{ s.value }}</dd>
+              </div>
+            </dl>
           </div>
-        </dl>
+
+          <div>
+            <button
+              type="button"
+              class="flex w-full items-center justify-between gap-3 py-3.5 text-left text-[0.9375rem] font-medium text-ink active:opacity-60"
+              :aria-expanded="infoTab === 'hardware'"
+              @click="toggleTab('hardware')"
+            >
+              Комплектация и фурнитура
+              <svg
+                class="h-4 w-4 shrink-0 text-slate-400 transition-transform"
+                :class="{ 'rotate-180': infoTab === 'hardware' }"
+                viewBox="0 0 16 16" fill="none" aria-hidden="true"
+              >
+                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <ul v-if="infoTab === 'hardware'" class="m-0 mb-4 grid list-none grid-cols-1 gap-2 p-0 sm:grid-cols-2">
+              <li v-for="h in model.hardware" :key="h" class="relative pl-5 text-[0.8125rem] leading-relaxed text-slate-700">
+                <span class="absolute left-0 top-2 h-1.5 w-1.5 rounded-full bg-slate-300" aria-hidden="true" />
+                {{ h }}
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
 
-      <div>
-        <button
-          type="button"
-          class="flex w-full items-center justify-between gap-3 py-3.5 text-left text-[0.9375rem] font-medium text-ink active:opacity-60"
-          :aria-expanded="infoTab === 'hardware'"
-          @click="toggleTab('hardware')"
-        >
-          Комплектация и фурнитура
-          <svg
-            class="h-4 w-4 shrink-0 text-slate-400 transition-transform"
-            :class="{ 'rotate-180': infoTab === 'hardware' }"
-            viewBox="0 0 16 16" fill="none" aria-hidden="true"
-          >
-            <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-        <ul v-if="infoTab === 'hardware'" class="m-0 mb-4 grid list-none grid-cols-1 gap-2 p-0 sm:grid-cols-2">
-          <li v-for="h in model.hardware" :key="h" class="relative pl-5 text-[0.8125rem] leading-relaxed text-slate-700">
-            <span class="absolute left-0 top-2 h-1.5 w-1.5 rounded-full bg-slate-300" aria-hidden="true" />
-            {{ h }}
-          </li>
-        </ul>
-      </div>
     </div>
 
     <!-- ── Sticky CTA на мобиле — виден, только когда основной CTA прокручен

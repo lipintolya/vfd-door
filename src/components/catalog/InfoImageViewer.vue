@@ -116,7 +116,7 @@ onUnmounted(() => {
 }
 .iiv-caption {
   font-size: 0.6875rem;
-  font-weight: 800;
+  font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #334155;
@@ -130,7 +130,7 @@ onUnmounted(() => {
   border-radius: 9999px;
   background: #fff;
   font-size: 0.75rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #475569;
   cursor: pointer;
   white-space: nowrap;
@@ -206,7 +206,7 @@ onUnmounted(() => {
 }
 .iiv-figcap {
   font-size: 0.75rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.72);

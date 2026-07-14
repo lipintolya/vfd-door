@@ -148,7 +148,7 @@ const normalizeHex = (hex: string) => {
 
 .color-picker__price {
   font-size: 1.875rem;
-  font-weight: 800;
+  font-weight: 500;
   color: #0f172a;
   line-height: 1;
 }
@@ -166,7 +166,7 @@ const normalizeHex = (hex: string) => {
 
 .color-picker__kit-price {
   font-size: 1.875rem;
-  font-weight: 800;
+  font-weight: 500;
   color: #0f172a;
   line-height: 1;
   white-space: nowrap;

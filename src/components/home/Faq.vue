@@ -62,7 +62,7 @@ const toggleFaq = (id: number) => {
 
       <!-- CTA -->
       <div class="mt-12 rounded-2xl border border-teal-500 bg-teal-50 p-6 text-center sm:p-8">
-        <h3 class="text-xl font-bold text-slate-900">
+        <h3 class="text-xl font-medium text-slate-900">
           Остались вопросы?
         </h3>
         <p class="mt-2 text-slate-600">

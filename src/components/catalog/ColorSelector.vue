@@ -241,7 +241,7 @@ const current  = computed(() => FRAME_COLORS.find(c => c.id === activeId.value)!
 }
 .cs-swatch__label {
   font-size: 0.875rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #0f172a;
   line-height: 1;
 }

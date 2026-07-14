@@ -5,7 +5,7 @@
         <!-- Левая колонка: Информация -->
         <div>
           <div class="mb-12">
-            <h1 class="text-4xl lg:text-5xl font-bold mb-4 text-gray-900">Контакты</h1>
+            <h1 class="text-4xl lg:text-5xl font-medium mb-4 text-gray-900">Контакты</h1>
             <p class="text-lg text-gray-600">Свяжитесь с нами удобным способом</p>
           </div>
 

@@ -211,7 +211,7 @@
   background: transparent;
   color: #fff;
   font-size: 0.75rem;
-  font-weight: 700;
+  font-weight: 600;
   text-decoration: none;
   white-space: nowrap;
   transition: background 200ms ease-out, border-color 200ms ease-out, transform 200ms ease-out;
@@ -292,7 +292,7 @@
   position: relative;
   line-height: 1.4;
 }
-.pt-track-card__list li::before { content: '—'; position: absolute; left: 0; color: var(--color-accent); font-weight: 700; }
+.pt-track-card__list li::before { content: '—'; position: absolute; left: 0; color: var(--color-accent); font-weight: 600; }
 
 /* ═══════════════════════════════════════════════════════
    STEPS
@@ -323,8 +323,8 @@
   .pt-step { border-right: none; border-bottom: 1px solid #e2e8f0; }
   .pt-step:last-child { border-bottom: none; }
 }
-.pt-step__num   { display: block; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.12em; color: var(--color-accent-hover); margin-bottom: 1rem; }
-.pt-step__title { margin: 0 0 0.5rem; font-size: 1rem; font-weight: 800; color: var(--color-ink); }
+.pt-step__num   { display: block; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.12em; color: var(--color-accent-hover); margin-bottom: 1rem; }
+.pt-step__title { margin: 0 0 0.5rem; font-size: 1rem; font-weight: 500; color: var(--color-ink); }
 .pt-step__text  { margin: 0; font-size: 0.875rem; color: #64748b; line-height: 1.55; }
 
 /* ═══════════════════════════════════════════════════════
@@ -338,7 +338,7 @@
 .pt-dl-head__title {
   margin: 0 0 0.3rem;
   font-size: clamp(1.125rem, 2vw, 1.375rem);
-  font-weight: 800;
+  font-weight: 500;
   color: var(--color-ink);
   letter-spacing: -0.01em;
 }
@@ -561,7 +561,7 @@
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   font-size: 0.6875rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #fff;
   pointer-events: none;
 }

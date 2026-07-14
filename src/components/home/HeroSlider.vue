@@ -155,7 +155,7 @@ onUnmounted(stop)
               <p class="text-xs uppercase tracking-widest text-white/60 mb-2">
                 {{ currentSlide.subtitle }}
               </p>
-              <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 leading-tight">
+              <h1 class="text-2xl sm:text-3xl lg:text-4xl font-medium mb-3 leading-tight">
                 {{ currentSlide.title }}
               </h1>
               <p class="text-sm sm:text-base text-white/85 mb-6 leading-relaxed">
@@ -210,7 +210,7 @@ onUnmounted(stop)
             <div class="absolute inset-0 bg-linear-to-t from-black/70 via-black/35 to-transparent" aria-hidden="true" />
             <div class="relative z-10 h-full p-6 flex flex-col justify-end text-white min-h-56">
               <p class="text-xs uppercase tracking-widest text-white/60 mb-1">Дизайнерские решения</p>
-              <h3 class="text-xl font-bold mb-2 leading-snug">
+              <h3 class="text-xl font-medium mb-2 leading-snug">
                 Алюминиевые перегородки и системы открывания
               </h3>
               <p class="text-sm text-white/80 mb-4">
@@ -232,7 +232,7 @@ onUnmounted(stop)
             <div class="rounded-2xl bg-linear-to-br from-gray-800 to-teal-700 p-6 text-white flex flex-col justify-between min-h-44">
               <div>
                 <p class="text-xs uppercase tracking-widest text-white/50 mb-1">Салон ВФД на Кашириных</p>
-                <h4 class="font-bold text-base mb-2 leading-snug">Полный цикл: от замера до монтажа</h4>
+                <h4 class="font-medium text-base mb-2 leading-snug">Полный цикл: от замера до монтажа</h4>
                 <p class="text-sm text-white/75">Работаем в Челябинске с 2014 года</p>
               </div>
               <a href="/about" class="btn btn-ghost mt-4">
@@ -257,7 +257,7 @@ onUnmounted(stop)
               <div class="relative z-10 h-full p-6 flex flex-col justify-between text-white min-h-44">
                 <div>
                   <p class="text-xs uppercase tracking-widest text-white/60 mb-1">Портфолио</p>
-                  <h4 class="font-bold text-base leading-snug mb-1">Фотоотчёты с объектов</h4>
+                  <h4 class="font-medium text-base leading-snug mb-1">Фотоотчёты с объектов</h4>
                   <p class="text-sm text-white/75">Живые фото с монтажей — помогут определиться с выбором</p>
                 </div>
                 <a href="/portfolio" class="btn btn-ghost mt-4">

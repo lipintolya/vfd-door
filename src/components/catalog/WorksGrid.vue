@@ -47,7 +47,7 @@ onUnmounted(() => {
           />
           <span
             v-if="work.series"
-            class="absolute left-2.5 top-2.5 rounded-full bg-slate-900/85 px-2.5 py-1 text-[11px] font-bold text-white backdrop-blur-sm"
+            class="absolute left-2.5 top-2.5 rounded-full bg-slate-900/85 px-2.5 py-1 text-[11px] font-semibold text-white backdrop-blur-sm"
           >
             «{{ work.series }}»
           </span>
@@ -59,7 +59,7 @@ onUnmounted(() => {
           </span>
         </div>
         <div class="p-3.5">
-          <p class="m-0 line-clamp-2 text-sm font-bold leading-snug text-slate-900">{{ work.title }}</p>
+          <p class="m-0 line-clamp-2 text-sm font-semibold leading-snug text-slate-900">{{ work.title }}</p>
           <p class="mt-1.5 mb-0 text-xs font-semibold text-slate-400">
             {{ work.label }}{{ work.location ? ` · ${work.location}` : '' }}
           </p>

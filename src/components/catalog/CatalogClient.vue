@@ -157,8 +157,8 @@ watch(
       </div>
 
       <label class="flex items-center gap-2.5">
-        <span class="text-[0.9375rem] font-bold text-slate-600">Сортировка:</span>
-        <select v-model="sortBy" class="min-h-11.5 min-w-62 rounded-lg border-2 border-slate-200 bg-white px-4 text-[0.9375rem] font-bold text-ink focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-500/15">
+        <span class="text-[0.9375rem] font-semibold text-slate-600">Сортировка:</span>
+        <select v-model="sortBy" class="min-h-11.5 min-w-62 rounded-lg border-2 border-slate-200 bg-white px-4 text-[0.9375rem] font-semibold text-ink focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-500/15">
           <option value="price_asc">Цена: по возрастанию</option>
           <option value="price_desc">Цена: по убыванию</option>
           <option value="name">По названию</option>
@@ -172,7 +172,7 @@ watch(
         <!-- Mobile filter toggle -->
         <button
           type="button"
-          class="mb-4 flex w-full items-center justify-center gap-2 rounded-lg border-2 border-slate-200 px-4.5 py-2.5 text-sm font-bold text-slate-600 transition lg:hidden"
+          class="mb-4 flex w-full items-center justify-center gap-2 rounded-lg border-2 border-slate-200 px-4.5 py-2.5 text-sm font-semibold text-slate-600 transition lg:hidden"
           :class="hasActiveFilters ? 'border-teal-300 text-teal-700' : ''"
           @click="mobileFiltersOpen = !mobileFiltersOpen"
         >

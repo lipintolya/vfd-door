@@ -33,7 +33,7 @@ const filtered = computed(() =>
         :key="f.key"
         @click="active = f.key"
         :class="[
-          'px-4 py-2 rounded-full text-sm font-bold border-[1.5px] transition-colors duration-150',
+          'px-4 py-2 rounded-full text-sm font-semibold border-[1.5px] transition-colors duration-150',
           active === f.key
             ? 'bg-slate-900 text-white border-slate-900'
             : 'bg-white text-slate-600 border-slate-200 hover:border-slate-400'
@@ -68,7 +68,7 @@ const filtered = computed(() =>
           <span class="inline-block text-xs font-medium uppercase tracking-wider bg-teal-500 text-white px-2 py-0.5 rounded mb-1.5">
             {{ CATEGORY_LABELS[work.category] }}
           </span>
-          <h3 class="text-sm font-bold text-white leading-snug">{{ work.title }}</h3>
+          <h3 class="text-sm font-medium text-white leading-snug">{{ work.title }}</h3>
           <p class="text-xs text-white/65 mt-1">📍 {{ work.location }}</p>
         </div>
       </a>
