@@ -1,0 +1,245 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Breadcrumbs from '../components/ui/Breadcrumbs.astro'
+import SectionHeading from '../components/partitions/SectionHeading.astro'
+import ProcessSteps from '../components/partitions/ProcessSteps.astro'
+import EntranceDoorShowcase from '../components/entrance-doors/EntranceDoorShowcase.vue'
+import { ENTRANCE_DOOR_MODELS, ENTRANCE_SKINS, minPriceOf } from '../data/entrance-doors'
+import { companyLegalInfo } from '../lib/contacts-data'
+
+const PHONE = companyLegalInfo.contacts.phone[0]!.raw
+const TG    = 'https://t.me/vfddoors74'
+
+const heroModel = ENTRANCE_DOOR_MODELS[0]!
+const minPrice  = Math.min(...ENTRANCE_DOOR_MODELS.map(minPriceOf))
+
+const heroStats = [
+  { val: '2014',                       lbl: 'год основания салона',      desc: 'Официальный дилер в Челябинске' },
+  { val: 'Бесплатно',                  lbl: 'замер и консультация',      desc: 'Выезд замерщика перед заказом' },
+  { val: `${ENTRANCE_SKINS.length}+`,  lbl: 'вариантов накладок изнутри', desc: 'Под интерьер и под другие двери в доме' },
+]
+
+interface Step { num: string; title: string; text: string; details: string[] }
+
+const steps: Step[] = [
+  {
+    num: '01',
+    title: 'Выбираете модель и накладку',
+    text: 'Смотрите модели входных дверей и подбираете отделку изнутри — под интерьер или в цвет межкомнатных дверей в квартире.',
+    details: ['Каталог с ценами прямо на сайте', 'Можно посмотреть образцы в салоне'],
+  },
+  {
+    num: '02',
+    title: 'Замер проёма',
+    text: 'Замерщик выезжает на объект, уточняет размер проёма и особенности монтажа.',
+    details: ['Бесплатный выезд по Челябинску', 'Согласование размера короба'],
+  },
+  {
+    num: '03',
+    title: 'Оформление заказа',
+    text: 'Фиксируем модель, накладку, фурнитуру и итоговую стоимость — договор и предоплата.',
+    details: ['Понятная смета без скрытых доплат', 'Срок изготовления уточняется у менеджера'],
+  },
+  {
+    num: '04',
+    title: 'Доставка и монтаж',
+    text: 'Привозим и устанавливаем дверь под ключ — с регулировкой петель и фурнитуры.',
+    details: ['Монтаж собственной бригадой', 'Гарантия на дверь и монтажные работы'],
+  },
+]
+
+const faq = [
+  {
+    q: 'Сколько стоит входная дверь под ключ?',
+    a: `Цена зависит от модели двери и выбранной накладки изнутри — в каталоге на этой странице указана цена за каждый вариант отделки. Минимальная цена сейчас — от ${minPrice.toLocaleString('ru-RU')} ₽. Точную стоимость с учётом монтажа уточнит менеджер.`,
+  },
+  {
+    q: 'Можно ли подобрать накладку под межкомнатные двери в квартире?',
+    a: 'Да — часть накладок повторяют дизайн и цвет наших межкомнатных серий (Niuta, ER1/ER2, Stockholm, Glanta, Dorren и другие), чтобы входная дверь визуально сочеталась с дверьми внутри квартиры.',
+  },
+  {
+    q: 'Какая гарантия на входную дверь?',
+    a: 'Гарантия на дверь — согласно условиям производителя, гарантия на монтажные работы нашей бригады — 12 месяцев.',
+  },
+  {
+    q: 'Есть ли выезд замерщика?',
+    a: 'Да, выезд замерщика и консультация по подбору двери — бесплатно, в пределах Челябинска и области.',
+  },
+  {
+    q: 'Можно ли купить дверь без монтажа?',
+    a: 'Да, возможна поставка без монтажа, но рекомендуем монтаж силами нашей бригады — это условие действующей гарантии на работы.',
+  },
+]
+
+const title       = 'Входные металлические двери в Челябинске — цены, каталог, монтаж | ВФД'
+const description = `Входные двери для квартиры с монтажом в Челябинске. ${ENTRANCE_SKINS.length}+ вариантов накладок изнутри, цены от ${minPrice.toLocaleString('ru-RU')} ₽. Бесплатный замер, гарантия на монтаж.`
+const canonicalUrl = Astro.site ? new URL('/vhodnye-dveri', Astro.site).href : undefined
+const heroOgImage  = Astro.site ? new URL(heroModel.coverImage, Astro.site).href : heroModel.coverImage
+
+const breadcrumbItems = [
+  { label: 'Главная', href: '/' },
+  { label: 'Входные двери' },
+]
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: breadcrumbItems.map((item, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: item.label,
+    ...(item.href ? { item: new URL(item.href, Astro.site!).href } : {}),
+  })),
+}
+
+const productSchemas = ENTRANCE_DOOR_MODELS.map(model => ({
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: `Входная дверь ${model.name}`,
+  description: model.description,
+  image: new URL(model.coverImage, Astro.site ?? 'https://vfd74.ru').href,
+  brand: { '@type': 'Brand', name: 'ВФД' },
+  offers: {
+    '@type': 'AggregateOffer',
+    priceCurrency: 'RUB',
+    lowPrice: minPriceOf(model),
+    highPrice: Math.max(...model.skinOptions.map(o => o.price)),
+    offerCount: model.skinOptions.length,
+    availability: 'https://schema.org/InStoreOnly',
+    seller: { '@type': 'Organization', name: 'Салон дверей ВФД' },
+  },
+}))
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.map(f => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+}
+
+const structuredData = [breadcrumbSchema, faqSchema, ...productSchemas]
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonicalUrl}
+  ogImage={heroOgImage}
+  preloadImage={heroModel.coverImage}
+  structuredData={structuredData}
+>
+
+  <div class="breadcrumb-bar">
+    <div class="container">
+      <Breadcrumbs items={breadcrumbItems} />
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       HERO
+  ══════════════════════════════════════════════ -->
+  <section class="section bg-white">
+    <div class="container">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        <div>
+          <p class="block mb-3 text-xs font-black tracking-widest uppercase text-teal-700">Входные двери · Челябинск и область</p>
+          <h1 class="mb-4 text-ink font-black leading-[1.05] text-[clamp(2rem,4.5vw,3.25rem)] tracking-[-0.03em]">Входные двери для квартиры с монтажом</h1>
+          <p class="mb-6 max-w-125 text-[clamp(0.9375rem,1.5vw,1.0625rem)] leading-relaxed text-slate-600">
+            Стальные двери с закрытым утеплённым коробом и выбором накладки изнутри —
+            под интерьер квартиры. Цены указаны сразу, без "от" в никуда.
+          </p>
+          <div class="flex gap-2.5 flex-wrap">
+            <a href={TG} target="_blank" rel="noopener" class="btn btn-primary">Написать в Telegram</a>
+            <a href={`tel:${PHONE}`} class="btn btn-outline">Позвонить</a>
+          </div>
+        </div>
+
+        <div class="relative overflow-hidden rounded-3xl shadow-lg min-h-80 lg:min-h-110">
+          <img
+            src={heroModel.coverImage}
+            alt={`Входная дверь ${heroModel.name}`}
+            class="absolute inset-0 w-full h-full object-cover object-center"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+        </div>
+      </div>
+
+      <div class="mt-12 lg:mt-16 grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-6 lg:gap-x-12">
+        {heroStats.map((s, i) => (
+          <div class:list={['flex flex-col', i > 0 && 'border-t sm:border-t-0 sm:border-l border-slate-200 pt-6 sm:pt-0 sm:pl-8 lg:pl-12']}>
+            <span class="block font-black leading-none text-[clamp(1.75rem,3vw,2.25rem)] text-ink tracking-[-0.02em]">{s.val}</span>
+            <span class="block text-sm font-semibold text-ink mt-1.5 leading-snug">{s.lbl}</span>
+            <span class="block text-xs text-slate-500 leading-snug mt-1">{s.desc}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       КАТАЛОГ МОДЕЛЕЙ
+  ══════════════════════════════════════════════ -->
+  <section class="section bg-white" id="catalog">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Каталог"
+        title="Модели входных дверей"
+        subtitle="Цена уже включает выбранную накладку изнутри — переключайтесь между вариантами, чтобы увидеть точную стоимость."
+      />
+
+      <div class="flex flex-col gap-16 lg:gap-20">
+        {ENTRANCE_DOOR_MODELS.map(model => (
+          <article id={model.id} class="scroll-mt-24">
+            <EntranceDoorShowcase model={model} client:load />
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       КАК ПРОХОДИТ ПОКУПКА
+  ══════════════════════════════════════════════ -->
+  <section class="section bg-white">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Как купить"
+        title="От выбора до монтажа"
+        subtitle="Прозрачный процесс — от заявки до установленной двери."
+      />
+      <ProcessSteps items={steps} />
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       FAQ
+  ══════════════════════════════════════════════ -->
+  <section class="section bg-white">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Вопросы и ответы"
+        title="Частые вопросы"
+        class="text-center mx-auto max-w-2xl"
+      />
+      <div class="mx-auto flex max-w-208 flex-col gap-3">
+        {faq.map(f => (
+          <details class="group rounded-2xl border border-slate-200 bg-white overflow-hidden">
+            <summary class="flex list-none cursor-pointer items-center justify-between gap-4 px-5.5 py-4.5 text-[clamp(0.9375rem,1.4vw,1.0625rem)] font-bold text-ink">
+              <span>{f.q}</span>
+              <svg class="h-5 w-5 shrink-0 text-teal-600 transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </summary>
+            <p class="m-0 px-5.5 pb-5 text-[0.9375rem] leading-relaxed text-slate-600">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>

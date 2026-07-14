@@ -19,9 +19,9 @@ const CATEGORIES: Category[] = [
   },
   {
     title:    'Входные двери',
-    subtitle: 'Уличные и подъездные модели для частных домов и квартир',
-    image:    'https://storage.yandexcloud.net/catalog-vfd/catalog_preview/catalog-preview2.webp',
-    href:     '/catalog?series=innova',
+    subtitle: 'Стальные двери с накладкой изнутри под интерьер — с монтажом в Челябинске',
+    image:    'https://storage.yandexcloud.net/vfd74ru/metal_doors/Optima/render_optima.webp',
+    href:     '/vhodnye-dveri',
     cta:      'Смотреть входные',
   },
   {

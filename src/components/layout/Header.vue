@@ -50,6 +50,7 @@ const NAV_LINKS = [
 const CATALOG_DROPDOWN = [
   { href: '/catalog',               label: 'Все двери',      desc: 'Межкомнатные' },
   { href: '/catalog/skrytye-dveri', label: 'Скрытые двери', desc: 'Скрытый монтаж' },
+  { href: '/vhodnye-dveri',         label: 'Входные двери', desc: 'С монтажом' },
 ] as const
 
 const WORK_SCHEDULE = {

@@ -105,7 +105,7 @@ onUnmounted(stop)
 <template>
   <section class="section">
     <div class="container">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 lg:min-h-[520px]">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 lg:min-h-130">
 
         <!-- ══ HERO SLIDER ══ -->
         <div

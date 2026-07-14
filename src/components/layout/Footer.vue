@@ -19,7 +19,7 @@ const NAV_LINKS = [
 const CATEGORY_LINKS = [
   { href: '/catalog',                label: 'Межкомнатные' },
   { href: '/catalog/skrytye-dveri',  label: 'Скрытые двери' },
-  { href: '/catalog',                label: 'Входные' },
+  { href: '/vhodnye-dveri',          label: 'Входные' },
   { href: '/partitions',             label: 'Перегородки' },
 ] as const
 
