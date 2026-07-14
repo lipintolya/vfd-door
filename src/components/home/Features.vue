@@ -98,6 +98,28 @@ const nextImage = (cardIdx: number) => {
   activeImage.value[cardIdx] = (activeImage.value[cardIdx]! + 1) % total
 }
 
+/* Свайп по фото на тач-устройствах — стрелки/точки кликом, но на мобиле
+   ожидают жест пальцем (тот же порог, что в HeroSlider.vue) */
+const SWIPE_THRESHOLD = 40
+let touchStartX = 0
+let touchStartY = 0
+let touchCardIdx = -1
+
+const onImageTouchStart = (e: TouchEvent, cardIdx: number) => {
+  if (!e.touches[0]) return
+  touchStartX = e.touches[0].clientX
+  touchStartY = e.touches[0].clientY
+  touchCardIdx = cardIdx
+}
+const onImageTouchEnd = (e: TouchEvent, cardIdx: number) => {
+  if (!e.changedTouches[0] || touchCardIdx !== cardIdx) return
+  const dx = touchStartX - e.changedTouches[0].clientX
+  const dy = touchStartY - e.changedTouches[0].clientY
+  if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > SWIPE_THRESHOLD) {
+    dx > 0 ? nextImage(cardIdx) : prevImage(cardIdx)
+  }
+}
+
 /* ============================================================
    Word animation
    ============================================================ */
@@ -191,8 +213,12 @@ onBeforeUnmount(stopCycle)
             {{ feature.title }}
           </h3>
 
-          <!-- Фото: врезано, статично, переключение по клику на точку -->
-          <div class="relative mb-4 aspect-16/15 w-full shrink-0 overflow-hidden rounded-2xl">
+          <!-- Фото: статично, переключение по клику на точку/стрелку или свайпом на тач -->
+          <div
+            class="relative mb-4 aspect-16/15 w-full shrink-0 overflow-hidden rounded-2xl"
+            @touchstart.passive="onImageTouchStart($event, idx)"
+            @touchend="onImageTouchEnd($event, idx)"
+          >
             <img
               v-for="(img, imgIdx) in feature.images"
               :key="img"
@@ -209,7 +235,7 @@ onBeforeUnmount(stopCycle)
             <template v-if="feature.images.length > 1">
               <button
                 type="button"
-                class="absolute left-2 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white opacity-0 backdrop-blur-sm transition-opacity duration-200 hover:bg-black/65 group-hover:opacity-100 focus-visible:opacity-100"
+                class="absolute left-2 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white opacity-0 backdrop-blur-sm transition-opacity duration-200 hover:bg-black/65 group-hover:opacity-100 focus-visible:opacity-100 active:scale-90"
                 aria-label="Предыдущее фото"
                 @click.stop="prevImage(idx)"
               >
@@ -219,7 +245,7 @@ onBeforeUnmount(stopCycle)
               </button>
               <button
                 type="button"
-                class="absolute right-2 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white opacity-0 backdrop-blur-sm transition-opacity duration-200 hover:bg-black/65 group-hover:opacity-100 focus-visible:opacity-100"
+                class="absolute right-2 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white opacity-0 backdrop-blur-sm transition-opacity duration-200 hover:bg-black/65 group-hover:opacity-100 focus-visible:opacity-100 active:scale-90"
                 aria-label="Следующее фото"
                 @click.stop="nextImage(idx)"
               >

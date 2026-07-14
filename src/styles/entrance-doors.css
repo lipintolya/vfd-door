@@ -1,0 +1,116 @@
+/* ============================================================
+   Страница «Входные двери» — типографическая подсистема.
+
+   Одна лестница размеров на всю страницу. clamp() живёт здесь,
+   в шкале, а не в разметке: иначе каждый заголовок заводит свою
+   формулу (`text-[clamp(2rem,4.5vw,3.25rem)]`, `clamp(1.375rem,3vw,…)`,
+   `clamp(0.9375rem,1.4vw,…)`) и системы не остаётся — остаётся зоопарк.
+
+   Веса — это иерархия. 400 текст, 500 заголовки, 600 цена.
+   Нулевой font-black: когда жирное всё, не выделено ничто.
+
+   Классами пользуется и Vue-остров EntranceDoorShowcase — поэтому
+   не scoped <style> страницы, а отдельный файл (как partitions.css).
+   Переменные висят на .ed-scope, а не на :root, чтобы шкала не
+   протекала на остальной сайт.
+   ============================================================ */
+
+.ed-scope {
+  --ed-step-0: 0.8125rem;                          /* 13 — подписи, мета */
+  --ed-step-1: 0.9375rem;                          /* 15 — вторичный текст */
+  --ed-step-2: 1.0625rem;                          /* 17 — основной текст */
+  --ed-step-3: 1.25rem;                            /* 20 */
+  --ed-step-4: clamp(1.375rem, 2.2vw, 1.625rem);   /* 22 → 26 — имя модели */
+  --ed-step-5: clamp(1.75rem, 3.4vw, 2.25rem);     /* 28 → 36 — заголовок секции */
+  --ed-step-6: clamp(2.125rem, 4.6vw, 3.25rem);    /* 34 → 52 — h1 */
+}
+
+/* ── Заголовки ──────────────────────────────────────────── */
+.ed-h1 {
+  font-size: var(--ed-step-6);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: var(--color-ink);
+}
+.ed-h2 {
+  font-size: var(--ed-step-5);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  color: var(--color-ink);
+}
+.ed-h3 {
+  font-size: var(--ed-step-4);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+
+/* ── Текст ──────────────────────────────────────────────── */
+.ed-lead {
+  font-size: var(--ed-step-2);
+  font-weight: 400;
+  line-height: 1.65;
+  color: #64748b;                                  /* slate-500 */
+}
+.ed-body {
+  font-size: var(--ed-step-1);
+  font-weight: 400;
+  line-height: 1.6;
+  color: #64748b;
+}
+.ed-meta {
+  font-size: var(--ed-step-0);
+  font-weight: 400;
+  line-height: 1.45;
+  color: #94a3b8;                                  /* slate-400 */
+}
+
+/* Надзаголовок секции. Был teal + uppercase + tracking-widest —
+   троп лендингов, и teal здесь не значит ничего: акцент оставлен
+   только за выбранным состоянием и главным CTA. */
+.ed-eyebrow {
+  font-size: var(--ed-step-0);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: #94a3b8;
+}
+
+/* Подпись над группой контролов (модель накладки / цвет) */
+.ed-label {
+  font-size: var(--ed-step-0);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: #64748b;
+}
+
+/* ── Цифры ──────────────────────────────────────────────── */
+/* tabular-nums: цена пересчитывается при выборе накладки — без
+   моноширинных цифр блок дёргается по ширине на каждом клике. */
+.ed-price {
+  font-size: clamp(1.5rem, 2.6vw, 1.75rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink);
+  white-space: nowrap;
+}
+.ed-price--sticky {
+  font-size: var(--ed-step-2);
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink);
+  white-space: nowrap;
+}
+.ed-stat {
+  font-size: var(--ed-step-5);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink);
+}
