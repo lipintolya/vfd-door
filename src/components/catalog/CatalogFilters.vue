@@ -113,13 +113,13 @@ watch(
         inputmode="search"
         autocomplete="off"
         placeholder="Поиск"
-        class="min-h-11 w-full rounded-lg border border-slate-200 bg-white px-3.5 text-[0.8125rem] text-ink placeholder:text-slate-400 focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-500/15"
+        class="min-h-11 w-full rounded-lg border border-slate-200 bg-white px-3.5 text-step-0 text-ink placeholder:text-slate-400 focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-500/15"
         @keydown.enter.prevent="applyFilters"
       />
     </label>
 
     <div class="border-b border-slate-200">
-      <button type="button" class="flex w-full items-center justify-between py-3.5 text-[0.9375rem] font-medium text-ink" @click="toggleSection('series')">
+      <button type="button" class="flex w-full items-center justify-between py-3.5 text-step-1 font-medium text-ink" @click="toggleSection('series')">
         <span>Серия</span>
         <svg class="h-4 w-4 text-slate-400 transition-transform" :class="{ 'rotate-180': openSections.series }" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 9 6 6 6-6" />
@@ -128,7 +128,7 @@ watch(
       <div v-if="openSections.series" class="mb-3.5 grid max-h-56 gap-1 overflow-y-auto">
         <button
           type="button"
-          class="rounded-lg px-2.5 py-3 text-left text-[0.8125rem] text-slate-600 transition hover:bg-slate-100"
+          class="rounded-lg px-2.5 py-3 text-left text-step-0 text-slate-600 transition hover:bg-slate-100"
           :class="draftSeries === '' ? 'bg-teal-50 text-teal-700' : ''"
           @click="draftSeries = ''"
         >
@@ -138,7 +138,7 @@ watch(
           v-for="item in series"
           :key="item.value"
           type="button"
-          class="rounded-lg px-2.5 py-3 text-left text-[0.8125rem] text-slate-600 transition hover:bg-slate-100"
+          class="rounded-lg px-2.5 py-3 text-left text-step-0 text-slate-600 transition hover:bg-slate-100"
           :class="draftSeries === item.value ? 'bg-teal-50 text-teal-700' : ''"
           @click="draftSeries = draftSeries === item.value ? '' : item.value"
         >
@@ -148,7 +148,7 @@ watch(
     </div>
 
     <div class="border-b border-slate-200">
-      <button type="button" class="flex w-full items-center justify-between py-3.5 text-[0.9375rem] font-medium text-ink" @click="toggleSection('coating')">
+      <button type="button" class="flex w-full items-center justify-between py-3.5 text-step-1 font-medium text-ink" @click="toggleSection('coating')">
         <span>Покрытие</span>
         <svg class="h-4 w-4 text-slate-400 transition-transform" :class="{ 'rotate-180': openSections.coating }" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 9 6 6 6-6" />
@@ -159,7 +159,7 @@ watch(
           v-for="item in coatings"
           :key="item.value"
           type="button"
-          class="rounded-lg px-2.5 py-3 text-left text-[0.8125rem] text-slate-600 transition hover:bg-slate-100"
+          class="rounded-lg px-2.5 py-3 text-left text-step-0 text-slate-600 transition hover:bg-slate-100"
           :class="draftCoating === item.value ? 'bg-teal-50 text-teal-700' : ''"
           @click="draftCoating = draftCoating === item.value ? '' : item.value"
         >
@@ -169,7 +169,7 @@ watch(
     </div>
 
     <div class="border-b border-slate-200">
-      <button type="button" class="flex w-full items-center justify-between py-3.5 text-[0.9375rem] font-medium text-ink" @click="toggleSection('color')">
+      <button type="button" class="flex w-full items-center justify-between py-3.5 text-step-1 font-medium text-ink" @click="toggleSection('color')">
         <span>Цвет</span>
         <svg class="h-4 w-4 text-slate-400 transition-transform" :class="{ 'rotate-180': openSections.color }" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 9 6 6 6-6" />
@@ -180,7 +180,7 @@ watch(
           v-for="item in colors"
           :key="item.value"
           type="button"
-          class="flex items-center gap-2 rounded-lg px-2.5 py-3 text-left text-[0.8125rem] text-slate-600 transition hover:bg-slate-100"
+          class="flex items-center gap-2 rounded-lg px-2.5 py-3 text-left text-step-0 text-slate-600 transition hover:bg-slate-100"
           :class="draftColor === item.value ? 'bg-teal-50 text-teal-700' : ''"
           @click="draftColor = draftColor === item.value ? '' : item.value"
         >
@@ -191,7 +191,7 @@ watch(
     </div>
 
     <div class="border-b border-slate-200">
-      <button type="button" class="flex w-full items-center justify-between py-3.5 text-[0.9375rem] font-medium text-ink" @click="toggleSection('tags')">
+      <button type="button" class="flex w-full items-center justify-between py-3.5 text-step-1 font-medium text-ink" @click="toggleSection('tags')">
         <span>Теги</span>
         <svg class="h-4 w-4 text-slate-400 transition-transform" :class="{ 'rotate-180': openSections.tags }" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 9 6 6 6-6" />
@@ -205,7 +205,7 @@ watch(
       </div>
     </div>
 
-    <div class="flex items-center justify-between gap-3 pt-3.5 text-[0.8125rem] text-slate-500">
+    <div class="flex items-center justify-between gap-3 pt-3.5 text-step-0 text-slate-500">
       <div class="inline-flex items-center gap-1">
         <strong class="font-medium text-ink">{{ filteredCount }}</strong>
         <span>из {{ totalCount }}</span>

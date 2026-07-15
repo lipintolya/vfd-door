@@ -96,7 +96,7 @@ const { sectionRef, visible } = useScrollReveal(0.15)
                 <p class="max-w-md text-sm leading-relaxed text-white/80">{{ CATEGORIES[0]!.subtitle }}</p>
               </div>
               <span
-                class="inline-flex items-center gap-1.5 self-start whitespace-nowrap rounded-full border border-white/50 px-4 py-2 text-[0.8125rem] font-semibold text-white transition-[background-color,border-color,transform] duration-200 ease-out group-hover:-translate-y-px group-hover:border-white group-hover:bg-white/15"
+                class="inline-flex items-center gap-1.5 self-start whitespace-nowrap rounded-full border border-white/50 px-4 py-2 text-step-0 font-semibold text-white transition-[background-color,border-color,transform] duration-200 ease-out group-hover:-translate-y-px group-hover:border-white group-hover:bg-white/15"
                 aria-hidden="true"
               >
                 {{ CATEGORIES[0]!.cta }}
@@ -141,7 +141,7 @@ const { sectionRef, visible } = useScrollReveal(0.15)
                   <p class="max-w-md text-sm leading-relaxed text-white/80">{{ cat.subtitle }}</p>
                 </div>
                 <span
-                  class="inline-flex items-center gap-1.5 self-start whitespace-nowrap rounded-full border border-white/50 px-4 py-2 text-[0.8125rem] font-semibold text-white transition-[background-color,border-color,transform] duration-200 ease-out group-hover:-translate-y-px group-hover:border-white group-hover:bg-white/15"
+                  class="inline-flex items-center gap-1.5 self-start whitespace-nowrap rounded-full border border-white/50 px-4 py-2 text-step-0 font-semibold text-white transition-[background-color,border-color,transform] duration-200 ease-out group-hover:-translate-y-px group-hover:border-white group-hover:bg-white/15"
                   aria-hidden="true"
                 >
                   {{ cat.cta }}

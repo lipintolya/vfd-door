@@ -14,7 +14,7 @@ const minPrice  = Math.min(...ENTRANCE_DOOR_MODELS.map(minPriceOf))
 
 const heroStats = [
   { val: '2014',                       lbl: 'год основания салона',      desc: 'Официальный дилер в Челябинске' },
-  { val: 'Бесплатно',                  lbl: 'замер и консультация',      desc: 'Выезд замерщика перед заказом' },
+  { val: '12 месяцев',                 lbl: 'гарантия качества',         desc: 'На монтажные работы нашей бригады' },
   { val: `${ENTRANCE_SKINS.length}+`,  lbl: 'вариантов накладок изнутри', desc: 'Под интерьер и под другие двери в доме' },
 ]
 
@@ -119,7 +119,36 @@ const faqSchema = {
   })),
 }
 
-const structuredData = [breadcrumbSchema, faqSchema, ...productSchemas]
+/* Service + LocalBusiness — геосигнал для локальной выдачи ("входные двери
+   Челябинск"), тот же паттерн, что на /partitions и /contacts. Product-схемы
+   выше уже покрывают цены/варианты по каждой модели — этот блок покрывает
+   "кто и где оказывает услугу". */
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  serviceType: 'Установка входных металлических дверей',
+  name: 'Входные металлические двери с монтажом',
+  description,
+  url: canonicalUrl,
+  areaServed: {
+    '@type': 'City',
+    name: 'Челябинск',
+    containedInPlace: { '@type': 'AdministrativeArea', name: 'Челябинская область' },
+  },
+  provider: {
+    '@type': 'LocalBusiness',
+    name: 'Салон дверей ВФД',
+    telephone: PHONE,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: 'ул. Братьев Кашириных, 131Б',
+      addressLocality: 'Челябинск',
+      addressCountry: 'RU',
+    },
+  },
+}
+
+const structuredData = [breadcrumbSchema, faqSchema, serviceSchema, ...productSchemas]
 ---
 
 <BaseLayout
@@ -145,10 +174,11 @@ const structuredData = [breadcrumbSchema, faqSchema, ...productSchemas]
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
         <div>
           <p class="t-eyebrow mb-3">Входные двери · Челябинск и область</p>
-          <h1 class="t-h1 mb-4">Входные двери для квартиры с монтажом</h1>
+          <h1 class="t-h1 mb-4">Входные двери для квартиры и дома: от бюджетных до уличных с терморазрывом</h1>
           <p class="t-lead mb-6 max-w-125">
-            Стальные двери с закрытым утеплённым коробом и выбором накладки изнутри —
-            под интерьер квартиры. Цены указаны сразу, без "от" в никуда.
+            Надёжные стальные двери с монтажом для квартиры и частного дома. Тёплый короб,
+            дизайн под интерьер и защита от промерзания. Честная фиксированная цена —
+            платите только за то, что выбрали.
           </p>
           <div class="flex gap-2.5 flex-wrap">
             <a href={TG} target="_blank" rel="noopener" class="btn btn-primary">Написать в Telegram</a>
@@ -190,7 +220,7 @@ const structuredData = [breadcrumbSchema, faqSchema, ...productSchemas]
         {heroStats.map((s, i) => (
           <div class:list={['flex flex-col', i > 0 && 'border-t sm:border-t-0 sm:border-l border-slate-200 pt-6 sm:pt-0 sm:pl-8 lg:pl-12']}>
             <span class="t-stat block">{s.val}</span>
-            <span class="block text-ink mt-2 text-[0.9375rem] font-medium leading-snug">{s.lbl}</span>
+            <span class="block text-ink mt-2 text-step-1 font-medium leading-snug">{s.lbl}</span>
             <span class="t-meta block mt-1">{s.desc}</span>
           </div>
         ))}
@@ -248,7 +278,7 @@ const structuredData = [breadcrumbSchema, faqSchema, ...productSchemas]
       <div class="mx-auto flex max-w-208 flex-col gap-3">
         {faq.map(f => (
           <details class="group rounded-2xl border border-slate-200 bg-white overflow-hidden">
-            <summary class="flex list-none cursor-pointer items-center justify-between gap-4 px-5.5 py-4.5 text-[1.0625rem] font-medium text-ink">
+            <summary class="flex list-none cursor-pointer items-center justify-between gap-4 px-5.5 py-4.5 text-step-2 font-medium text-ink">
               <span>{f.q}</span>
               <svg class="h-5 w-5 shrink-0 text-slate-400 transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>

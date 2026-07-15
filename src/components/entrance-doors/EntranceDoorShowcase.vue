@@ -16,7 +16,9 @@ const SOCIAL_NETWORKS = [
   { name: 'MAX',      label: 'Max',        url: 'https://max.ru/id452402308842_biz',      icon: '/svg/b_max_logo.svg' },
 ] as const
 
-const view = ref<'outside' | 'inside'>('outside')
+type View = 'outside' | 'render' | 'inside'
+const VIEW_ORDER: View[] = ['outside', 'render', 'inside']
+const view = ref<View>('outside')
 const selectedIdx = ref(0)
 
 const selectedOption = computed(() => props.model.skinOptions[selectedIdx.value]!)
@@ -25,10 +27,21 @@ const currentPrice   = computed(() => selectedOption.value.price)
 
 const formatPrice = (price: number) => `${price.toLocaleString('ru-RU')} ₽`
 
+/* Есть ли выбор накладки — у некоторых моделей (БалансПрайм) накладка одна
+   фиксированная, шаги "модель"/"цвет" в этом случае скрываются */
+const hasSkinChoice = computed(() => props.model.skinOptions.length > 1)
+
+/* Название накладки для подписи/сообщения — без хвостовой запятой,
+   если у накладки нет отдельного цвета (например, накладка "Сектор") */
+const skinLabel = computed(() => {
+  if (!selectedSkin.value) return ''
+  return selectedSkin.value.color ? `${selectedSkin.value.name}, ${selectedSkin.value.color}` : selectedSkin.value.name
+})
+
 /* Готовое сообщение в Telegram — модель, накладка и цена уже в тексте,
    не нужно печатать это самому при переходе */
 const telegramHref = computed(() => {
-  const skinPart = selectedSkin.value ? `, накладка ${selectedSkin.value.name} ${selectedSkin.value.color}` : ''
+  const skinPart = selectedSkin.value ? `, накладка ${skinLabel.value}` : ''
   const text = `Здравствуйте! Хочу узнать про дверь «${props.model.name}»${skinPart} — ${formatPrice(currentPrice.value)}`
   return `https://t.me/vfddoors74?text=${encodeURIComponent(text)}`
 })
@@ -83,12 +96,12 @@ const selectColor = (idx: number) => {
     view.value = 'inside'
   })
 }
-const selectView = (v: 'outside' | 'inside') => {
+const selectView = (v: View) => {
   withViewTransition(() => { view.value = v })
 }
 
-/* Свайп по фото переключает "Снаружи"/"Изнутри" — на мобиле от фото
-   ожидают жест пальцем, не только тап по табам */
+/* Свайп по фото листает "Снаружи → Визуализация → Изнутри" — на мобиле
+   от фото ожидают жест пальцем, не только тап по табам */
 const SWIPE_THRESHOLD = 40
 let touchStartX = 0
 let touchStartY = 0
@@ -103,7 +116,9 @@ const onPhotoTouchEnd = (e: TouchEvent) => {
   const dx = touchStartX - e.changedTouches[0].clientX
   const dy = touchStartY - e.changedTouches[0].clientY
   if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > SWIPE_THRESHOLD) {
-    selectView(dx > 0 ? 'inside' : 'outside')
+    const curIdx = VIEW_ORDER.indexOf(view.value)
+    const nextIdx = dx > 0 ? Math.min(curIdx + 1, VIEW_ORDER.length - 1) : Math.max(curIdx - 1, 0)
+    selectView(VIEW_ORDER[nextIdx]!)
   }
 }
 
@@ -170,17 +185,27 @@ onUnmounted(() => ctaObserver?.disconnect())
           decoding="async"
         />
         <img
+          v-else-if="view === 'render'"
+          :key="model.coverImage"
+          :src="model.coverImage"
+          :alt="`${model.name} — визуализация в интерьере`"
+          :style="{ viewTransitionName: `door-photo-${model.id}` }"
+          class="absolute inset-0 h-full w-full object-contain"
+          loading="lazy"
+          decoding="async"
+        />
+        <img
           v-else-if="selectedSkin?.photo"
           :key="selectedSkin.photo"
           :src="selectedSkin.photo"
-          :alt="`${model.name} — накладка ${selectedSkin.name} ${selectedSkin.color}`"
+          :alt="`${model.name} — накладка ${skinLabel}`"
           :style="{ viewTransitionName: `door-photo-${model.id}` }"
           class="absolute inset-0 h-full w-full object-contain"
           loading="lazy"
           decoding="async"
         />
         <div v-else :style="{ viewTransitionName: `door-photo-${model.id}` }" class="absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-2xl bg-slate-50 p-6 text-center">
-          <span v-if="selectedSkin" class="text-[1.0625rem] font-medium text-slate-600">{{ selectedSkin.name }}, {{ selectedSkin.color }}</span>
+          <span v-if="selectedSkin" class="text-[1.0625rem] font-medium text-slate-600">{{ skinLabel }}</span>
           <span class="t-meta">Фото скоро появится — образец можно посмотреть в салоне</span>
         </div>
 
@@ -195,6 +220,13 @@ onUnmounted(() => ctaObserver?.disconnect())
           <button
             type="button" role="tab"
             class="rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors active:scale-95"
+            :class="view === 'render' ? 'bg-ink text-white' : 'text-slate-500'"
+            :aria-selected="view === 'render'"
+            @click="selectView('render')"
+          >Визуализация</button>
+          <button
+            type="button" role="tab"
+            class="rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors active:scale-95"
             :class="view === 'inside' ? 'bg-ink text-white' : 'text-slate-500'"
             :aria-selected="view === 'inside'"
             @click="selectView('inside')"
@@ -206,19 +238,25 @@ onUnmounted(() => ctaObserver?.disconnect())
       <div class="flex flex-col gap-5 rounded-2xl border border-slate-200 bg-white p-4.5 sm:p-6">
         <div class="flex flex-col gap-3.5 border-b border-slate-200 pb-4.5 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
           <div>
-            <h3 class="t-h3 m-0 mb-1.5">{{ model.name }}</h3>
+            <h3 class="t-h3 m-0 mb-1.5 flex flex-wrap items-center gap-2">
+              {{ model.name }}
+              <span v-if="model.isHit" class="rounded-full bg-rose-600 px-2.5 py-0.5 text-[0.6875rem] font-semibold uppercase tracking-wide text-white">Хит</span>
+            </h3>
             <p class="t-body m-0">{{ model.tagline }}</p>
           </div>
           <div class="flex flex-col gap-1 sm:items-end sm:text-right" :style="{ viewTransitionName: `door-price-${model.id}` }">
             <span class="t-price">{{ formatPrice(currentPrice) }}</span>
-            <span class="t-meta">{{ selectedSkin?.name }}, {{ selectedSkin?.color }}</span>
+            <span class="t-meta">{{ skinLabel }}</span>
           </div>
         </div>
 
         <!-- Шаг 1: модель накладки. На мобиле — горизонтальный свайп (нативный
              тач-скролл, не wrap): 13 моделей в wrap-сетке — 5-6 строк на узком
-             экране, неудобно сканировать. На sm+ — обычный wrap кликом. -->
-        <div>
+             экране, неудобно сканировать. На sm+ — обычный wrap кликом.
+             Скрыт целиком, если у модели только одна фиксированная накладка
+             (БалансПрайм) — показывать выбор там, где выбирать нечего, только
+             сбивает с толку. -->
+        <div v-if="hasSkinChoice">
           <p class="t-label m-0 mb-2.5">Накладка изнутри — модель</p>
           <div class="-mx-4.5 flex snap-x snap-mandatory gap-2 overflow-x-auto px-4.5 pb-1 scrollbar-none sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
             <button
@@ -237,7 +275,9 @@ onUnmounted(() => ctaObserver?.disconnect())
           </div>
         </div>
 
-        <!-- Шаг 2: цвет внутри модели — тот же приём: свайп на мобиле, wrap на sm+ -->
+        <!-- Шаг 2: цвет внутри модели — тот же приём: свайп на мобиле, wrap на sm+.
+             Показывается всегда, даже при единственной накладке (БалансПрайм) —
+             это не только селектор, но и превью того, что входит в комплект. -->
         <div>
           <p class="t-label m-0 mb-2.5">Цвет</p>
           <div class="-mx-4.5 flex snap-x snap-mandatory gap-2 overflow-x-auto px-4.5 pb-1 scrollbar-none sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
@@ -257,7 +297,7 @@ onUnmounted(() => ctaObserver?.disconnect())
                 <img
                   v-if="item.skin.photo"
                   :src="item.skin.photo"
-                  :alt="item.skin.color"
+                  :alt="item.skin.color || item.skin.name"
                   class="h-full w-full object-cover"
                   loading="lazy"
                   decoding="async"
@@ -268,7 +308,7 @@ onUnmounted(() => ctaObserver?.disconnect())
                 </svg>
               </span>
               <span class="text-center text-[0.6875rem] font-medium leading-tight" :class="item.idx === selectedIdx ? 'text-ink' : 'text-slate-500'">
-                {{ item.skin.color }}
+                {{ item.skin.color || item.skin.name }}
               </span>
             </button>
           </div>

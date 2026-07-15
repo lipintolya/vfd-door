@@ -159,8 +159,8 @@ watch(
       </div>
 
       <label class="flex items-center gap-2.5">
-        <span class="text-[0.9375rem] font-semibold text-slate-600">Сортировка:</span>
-        <select v-model="sortBy" class="min-h-11.5 min-w-62 rounded-lg border-2 border-slate-200 bg-white px-4 text-[0.9375rem] font-semibold text-ink focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-500/15">
+        <span class="text-step-1 font-semibold text-slate-600">Сортировка:</span>
+        <select v-model="sortBy" class="min-h-11.5 min-w-62 rounded-lg border-2 border-slate-200 bg-white px-4 text-step-1 font-semibold text-ink focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-500/15">
           <option value="price_asc">Цена: по возрастанию</option>
           <option value="price_desc">Цена: по убыванию</option>
           <option value="name">По названию</option>

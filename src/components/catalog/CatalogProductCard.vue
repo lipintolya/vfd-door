@@ -67,7 +67,7 @@ const seriesBadgeClass = computed(() => {
 
     <div class="flex flex-1 flex-col gap-2.5 p-3.5 sm:gap-3 sm:p-5">
       <div>
-        <h2 class="m-0 min-h-12 text-[1.0625rem] font-medium leading-snug text-ink line-clamp-2">{{ card.name }}</h2>
+        <h2 class="m-0 min-h-12 text-step-2 font-medium leading-snug text-ink line-clamp-2">{{ card.name }}</h2>
         <p class="m-0 mt-1 text-sm font-semibold text-slate-500">{{ card.coating }}</p>
       </div>
 
