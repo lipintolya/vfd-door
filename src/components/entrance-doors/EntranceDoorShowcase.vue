@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, nextTick, onMounted, onUnmounted, useTemplateRef } from 'vue'
+import { ref, computed, nextTick } from 'vue'
 import { getSkin, type EntranceDoorModel } from '../../data/entrance-doors'
 import { companyLegalInfo } from '../../lib/contacts-data'
 
@@ -128,29 +128,6 @@ const onPhotoTouchEnd = (e: TouchEvent) => {
 type InfoTab = 'specs' | 'hardware'
 const infoTab = ref<InfoTab | null>(null)
 const toggleTab = (tab: InfoTab) => { infoTab.value = infoTab.value === tab ? null : tab }
-
-/* Sticky CTA на мобиле — как только основной блок CTA уходит за пределы
-   экрана (пользователь читает характеристики ниже), внизу появляется
-   компактная панель с ценой и кнопкой, чтобы не скроллить обратно вверх */
-const ctaRef = useTemplateRef<HTMLDivElement>('ctaRef')
-const ctaInView = ref(true)
-let ctaObserver: IntersectionObserver | null = null
-
-onMounted(() => {
-  if (!ctaRef.value || typeof IntersectionObserver === 'undefined') return
-  ctaObserver = new IntersectionObserver(
-    ([entry]) => {
-      if (!entry) return
-      // isIntersecting=false бывает в двух случаях: CTA ещё не долистали
-      // (внизу экрана) или уже проскроллили мимо (выше экрана) — sticky-бар
-      // нужен только во втором случае, иначе он всплывает на входе в карточку.
-      ctaInView.value = entry.isIntersecting || entry.boundingClientRect.top > 0
-    },
-    { threshold: 0 }
-  )
-  ctaObserver.observe(ctaRef.value)
-})
-onUnmounted(() => ctaObserver?.disconnect())
 </script>
 
 <template>
@@ -205,32 +182,57 @@ onUnmounted(() => ctaObserver?.disconnect())
           decoding="async"
         />
         <div v-else :style="{ viewTransitionName: `door-photo-${model.id}` }" class="absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-2xl bg-slate-50 p-6 text-center">
-          <span v-if="selectedSkin" class="text-[1.0625rem] font-medium text-slate-600">{{ skinLabel }}</span>
+          <span v-if="selectedSkin" class="text-step-2-medium text-slate-600">{{ skinLabel }}</span>
           <span class="t-meta">Фото скоро появится — образец можно посмотреть в салоне</span>
         </div>
 
-        <div class="absolute left-3 top-3 inline-flex gap-1 rounded-full bg-white/90 p-1 backdrop-blur-sm" role="tablist" aria-label="Вид двери">
+        <div
+          class="absolute left-2 top-2 flex gap-0.5 rounded-full bg-white/90 p-1 backdrop-blur-sm sm:left-3 sm:top-3 sm:gap-1"
+          role="tablist" aria-label="Вид двери"
+        >
           <button
             type="button" role="tab"
-            class="rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors active:scale-95"
+            class="flex items-center gap-1.5 rounded-full px-2 py-1.5 text-xs font-medium transition-colors active:scale-95 sm:px-3.5"
             :class="view === 'outside' ? 'bg-ink text-white' : 'text-slate-500'"
             :aria-selected="view === 'outside'"
+            aria-label="Снаружи"
             @click="selectView('outside')"
-          >Снаружи</button>
+          >
+            <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="5" y="3" width="14" height="18" rx="1.5" />
+              <path d="M15 12h.01" stroke-linecap="round" />
+            </svg>
+            <span class="hidden sm:inline">Снаружи</span>
+          </button>
           <button
             type="button" role="tab"
-            class="rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors active:scale-95"
+            class="flex items-center gap-1.5 rounded-full px-2 py-1.5 text-xs font-medium transition-colors active:scale-95 sm:px-3.5"
             :class="view === 'render' ? 'bg-ink text-white' : 'text-slate-500'"
             :aria-selected="view === 'render'"
+            aria-label="Визуализация"
             @click="selectView('render')"
-          >Визуализация</button>
+          >
+            <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="16" rx="1.5" />
+              <circle cx="8.5" cy="9.5" r="1.4" />
+              <path d="m4 16 4.5-4.5a1.5 1.5 0 0 1 2.12 0L15 16m2-3 1.5-1.5a1.5 1.5 0 0 1 2.12 0L21 12" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span class="hidden sm:inline">Визуализация</span>
+          </button>
           <button
             type="button" role="tab"
-            class="rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors active:scale-95"
+            class="flex items-center gap-1.5 rounded-full px-2 py-1.5 text-xs font-medium transition-colors active:scale-95 sm:px-3.5"
             :class="view === 'inside' ? 'bg-ink text-white' : 'text-slate-500'"
             :aria-selected="view === 'inside'"
+            aria-label="Изнутри"
             @click="selectView('inside')"
-          >Изнутри</button>
+          >
+            <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 21V6.5L12 3l8 3.5V21" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M9 21v-6h6v6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span class="hidden sm:inline">Изнутри</span>
+          </button>
         </div>
       </div>
 
@@ -263,7 +265,7 @@ onUnmounted(() => ctaObserver?.disconnect())
               v-for="group in groupedSkins"
               :key="group.name"
               type="button"
-              class="shrink-0 snap-start rounded-full border-[1.5px] px-4 py-2 text-[0.8125rem] font-medium transition-colors active:scale-95"
+              class="shrink-0 snap-start rounded-full border-[1.5px] px-4 py-2 text-step-0 font-medium transition-colors active:scale-95"
               :class="group.name === activeGroup?.name
                 ? 'border-teal-600 bg-teal-700 text-white'
                 : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'"
@@ -316,9 +318,8 @@ onUnmounted(() => ctaObserver?.disconnect())
 
         <!-- CTA: на мобиле — компактный ряд иконок (мессенджеры из шапки + телефон
              иконкой), текстовые кнопки там не адаптируются под узкий экран.
-             На sm+ — обычные кнопки с текстом, места достаточно.
-             ctaRef — граница видимости для sticky-панели на мобиле ниже. -->
-        <div ref="ctaRef">
+             На sm+ — обычные кнопки с текстом, места достаточно. -->
+        <div>
           <div class="flex items-center gap-3 sm:hidden">
             <a
               v-for="s in SOCIAL_NETWORKS"
@@ -357,7 +358,7 @@ onUnmounted(() => ctaObserver?.disconnect())
           <div class="border-b border-slate-200">
             <button
               type="button"
-              class="flex w-full items-center justify-between gap-3 py-3.5 text-left text-[0.9375rem] font-medium text-ink active:opacity-60"
+              class="flex w-full items-center justify-between gap-3 py-3.5 text-left text-step-1 font-medium text-ink active:opacity-60"
               :aria-expanded="infoTab === 'specs'"
               @click="toggleTab('specs')"
             >
@@ -377,7 +378,7 @@ onUnmounted(() => ctaObserver?.disconnect())
                 class="grid grid-cols-1 gap-0.5 px-3.5 py-2.5 odd:bg-slate-50 sm:grid-cols-[190px_1fr] sm:gap-0"
               >
                 <dt class="text-xs font-medium text-slate-500">{{ s.label }}</dt>
-                <dd class="m-0 text-[0.8125rem] leading-relaxed text-ink">{{ s.value }}</dd>
+                <dd class="m-0 text-step-0 leading-relaxed text-ink">{{ s.value }}</dd>
               </div>
             </dl>
           </div>
@@ -385,7 +386,7 @@ onUnmounted(() => ctaObserver?.disconnect())
           <div>
             <button
               type="button"
-              class="flex w-full items-center justify-between gap-3 py-3.5 text-left text-[0.9375rem] font-medium text-ink active:opacity-60"
+              class="flex w-full items-center justify-between gap-3 py-3.5 text-left text-step-1 font-medium text-ink active:opacity-60"
               :aria-expanded="infoTab === 'hardware'"
               @click="toggleTab('hardware')"
             >
@@ -399,7 +400,7 @@ onUnmounted(() => ctaObserver?.disconnect())
               </svg>
             </button>
             <ul v-if="infoTab === 'hardware'" class="m-0 mb-4 grid list-none grid-cols-1 gap-2 p-0 sm:grid-cols-2">
-              <li v-for="h in model.hardware" :key="h" class="relative pl-5 text-[0.8125rem] leading-relaxed text-slate-700">
+              <li v-for="h in model.hardware" :key="h" class="relative pl-5 text-step-0 leading-relaxed text-slate-700">
                 <span class="absolute left-0 top-2 h-1.5 w-1.5 rounded-full bg-slate-300" aria-hidden="true" />
                 {{ h }}
               </li>
@@ -409,29 +410,6 @@ onUnmounted(() => ctaObserver?.disconnect())
       </div>
 
     </div>
-
-    <!-- ── Sticky CTA на мобиле — виден, только когда основной CTA прокручен
-         за пределы экрана (характеристики читают долго, кнопка не должна
-         теряться) ── -->
-    <Transition
-      enter-active-class="transition-transform duration-300 ease-out"
-      enter-from-class="translate-y-full"
-      enter-to-class="translate-y-0"
-      leave-active-class="transition-transform duration-200 ease-in"
-      leave-from-class="translate-y-0"
-      leave-to-class="translate-y-full"
-    >
-      <div
-        v-if="!ctaInView"
-        class="fixed inset-x-0 bottom-0 z-40 flex items-center justify-between gap-3 border-t border-slate-200 bg-white/95 p-3 shadow-[0_-4px_16px_rgba(0,0,0,0.06)] backdrop-blur-sm sm:hidden"
-      >
-        <div class="flex min-w-0 flex-col leading-none">
-          <span class="t-price--sm">{{ formatPrice(currentPrice) }}</span>
-          <span class="t-meta truncate">{{ model.name }} · {{ selectedSkin?.color }}</span>
-        </div>
-        <a :href="telegramHref" target="_blank" rel="noopener" class="btn btn-primary shrink-0 px-4 py-2 text-sm active:scale-95">Написать</a>
-      </div>
-    </Transition>
 
   </div>
 </template>
