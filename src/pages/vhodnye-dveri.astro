@@ -186,7 +186,7 @@ const structuredData = [breadcrumbSchema, faqSchema, serviceSchema, ...productSc
           </div>
         </div>
 
-        <div class="relative aspect-4/5 w-full overflow-hidden rounded-3xl shadow-lg bg-slate-100">
+        <div id="hero-swipe" class="relative aspect-4/5 w-full overflow-hidden rounded-3xl shadow-lg bg-slate-100">
           {ENTRANCE_DOOR_MODELS.map((model, i) => (
             <img
               src={model.coverImage}
@@ -294,22 +294,51 @@ const structuredData = [breadcrumbSchema, faqSchema, serviceSchema, ...productSc
 </BaseLayout>
 
 <script>
-  // Ручное переключение рендеров моделей в hero — без автоплея (как договорились
-  // на Features.vue: авто-листание визуально "нагружено", клик по точке — ок).
-  const heroDots = document.querySelectorAll<HTMLButtonElement>('.hero-dot')
-  const heroImgs = document.querySelectorAll<HTMLImageElement>('.hero-render')
+  // Переключение рендеров моделей в hero — клик по точке и свайп по фото на
+  // мобиле (без автоплея, как договорились на Features.vue: авто-листание
+  // визуально "нагружено", жест/клик — ок).
+  const heroDots  = document.querySelectorAll<HTMLButtonElement>('.hero-dot')
+  const heroImgs  = document.querySelectorAll<HTMLImageElement>('.hero-render')
+  const heroSwipe = document.getElementById('hero-swipe')
+
+  const setActiveHero = (idx: number) => {
+    const idxStr = String(idx)
+    heroImgs.forEach(img => {
+      img.classList.toggle('opacity-100', img.dataset.idx === idxStr)
+      img.classList.toggle('opacity-0', img.dataset.idx !== idxStr)
+    })
+    heroDots.forEach(d => {
+      d.classList.toggle('bg-white', d.dataset.idx === idxStr)
+      d.classList.toggle('bg-white/30', d.dataset.idx !== idxStr)
+    })
+  }
 
   heroDots.forEach(dot => {
-    dot.addEventListener('click', () => {
-      const idx = dot.dataset.idx
-      heroImgs.forEach(img => {
-        img.classList.toggle('opacity-100', img.dataset.idx === idx)
-        img.classList.toggle('opacity-0', img.dataset.idx !== idx)
-      })
-      heroDots.forEach(d => {
-        d.classList.toggle('bg-white', d === dot)
-        d.classList.toggle('bg-white/30', d !== dot)
-      })
-    })
+    dot.addEventListener('click', () => setActiveHero(Number(dot.dataset.idx)))
   })
+
+  if (heroSwipe && heroImgs.length > 1) {
+    const SWIPE_THRESHOLD = 40
+    let touchStartX = 0
+    let touchStartY = 0
+
+    heroSwipe.addEventListener('touchstart', (e: TouchEvent) => {
+      if (!e.touches[0]) return
+      touchStartX = e.touches[0].clientX
+      touchStartY = e.touches[0].clientY
+    }, { passive: true })
+
+    heroSwipe.addEventListener('touchend', (e: TouchEvent) => {
+      if (!e.changedTouches[0]) return
+      const dx = touchStartX - e.changedTouches[0].clientX
+      const dy = touchStartY - e.changedTouches[0].clientY
+      if (Math.abs(dx) <= Math.abs(dy) || Math.abs(dx) <= SWIPE_THRESHOLD) return
+
+      const activeDot = document.querySelector<HTMLButtonElement>('.hero-dot.bg-white')
+      const curIdx = Number(activeDot?.dataset.idx ?? 0)
+      const total = heroImgs.length
+      const nextIdx = dx > 0 ? (curIdx + 1) % total : (curIdx - 1 + total) % total
+      setActiveHero(nextIdx)
+    })
+  }
 </script>
