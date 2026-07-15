@@ -96,7 +96,7 @@ watch(
 </script>
 
 <template>
-  <aside class="sticky top-[calc(var(--header-height,88px)+1.25rem)] rounded-2xl bg-slate-50 p-5" aria-label="Фильтры каталога">
+  <aside class="@container sticky top-[calc(var(--header-height,88px)+1.25rem)] rounded-2xl bg-slate-50 p-5" aria-label="Фильтры каталога">
     <div class="flex items-center justify-between gap-4 border-b border-slate-200 pb-4">
       <div>
         <h2 class="m-0 text-lg font-medium text-ink">Фильтры</h2>
@@ -128,7 +128,7 @@ watch(
       <div v-if="openSections.series" class="mb-3.5 grid max-h-56 gap-1 overflow-y-auto">
         <button
           type="button"
-          class="rounded-lg px-2.5 py-2 text-left text-[0.8125rem] text-slate-600 transition hover:bg-slate-100"
+          class="rounded-lg px-2.5 py-3 text-left text-[0.8125rem] text-slate-600 transition hover:bg-slate-100"
           :class="draftSeries === '' ? 'bg-teal-50 text-teal-700' : ''"
           @click="draftSeries = ''"
         >
@@ -138,7 +138,7 @@ watch(
           v-for="item in series"
           :key="item.value"
           type="button"
-          class="rounded-lg px-2.5 py-2 text-left text-[0.8125rem] text-slate-600 transition hover:bg-slate-100"
+          class="rounded-lg px-2.5 py-3 text-left text-[0.8125rem] text-slate-600 transition hover:bg-slate-100"
           :class="draftSeries === item.value ? 'bg-teal-50 text-teal-700' : ''"
           @click="draftSeries = draftSeries === item.value ? '' : item.value"
         >
@@ -159,7 +159,7 @@ watch(
           v-for="item in coatings"
           :key="item.value"
           type="button"
-          class="rounded-lg px-2.5 py-2 text-left text-[0.8125rem] text-slate-600 transition hover:bg-slate-100"
+          class="rounded-lg px-2.5 py-3 text-left text-[0.8125rem] text-slate-600 transition hover:bg-slate-100"
           :class="draftCoating === item.value ? 'bg-teal-50 text-teal-700' : ''"
           @click="draftCoating = draftCoating === item.value ? '' : item.value"
         >
@@ -180,7 +180,7 @@ watch(
           v-for="item in colors"
           :key="item.value"
           type="button"
-          class="flex items-center gap-2 rounded-lg px-2.5 py-2 text-left text-[0.8125rem] text-slate-600 transition hover:bg-slate-100"
+          class="flex items-center gap-2 rounded-lg px-2.5 py-3 text-left text-[0.8125rem] text-slate-600 transition hover:bg-slate-100"
           :class="draftColor === item.value ? 'bg-teal-50 text-teal-700' : ''"
           @click="draftColor = draftColor === item.value ? '' : item.value"
         >
@@ -213,10 +213,10 @@ watch(
       <span v-if="hasDraftChanges" class="font-medium text-teal-600">Есть изменения</span>
     </div>
 
-    <div class="mt-3.5 grid grid-cols-[1fr_auto] gap-2.5 border-t border-slate-200 pt-3.5">
+    <div class="mt-3.5 grid grid-cols-1 gap-2.5 border-t border-slate-200 pt-3.5 @[16rem]:grid-cols-[1fr_auto]">
       <button
         type="button"
-        class="btn btn-primary justify-center disabled:cursor-default disabled:opacity-45"
+        class="btn btn-primary min-w-0 justify-center disabled:cursor-default disabled:opacity-45"
         :disabled="!hasDraftChanges"
         @click="applyFilters"
       >
@@ -224,7 +224,7 @@ watch(
       </button>
       <button
         type="button"
-        class="btn btn-outline px-3.5 disabled:cursor-default disabled:opacity-45"
+        class="btn btn-outline min-w-0 justify-center px-3.5 disabled:cursor-default disabled:opacity-45"
         :disabled="!hasActiveFilters && !draftFilterCount"
         @click="resetAll"
       >

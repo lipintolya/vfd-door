@@ -5,6 +5,12 @@ import type { CatalogCardItem } from './types'
 
 const props = defineProps<{
   card: CatalogCardItem
+  isKitOpen: boolean
+  isDimmed: boolean
+}>()
+
+const emit = defineEmits<{
+  'kit-toggle': []
 }>()
 
 const formatPrice = (price: number | null) =>
@@ -14,11 +20,27 @@ const formatPrice = (price: number | null) =>
 const kitPrice = computed(() =>
   props.card.price ? props.card.price + calcKitPrice(props.card.coatingSlug, props.card.colorName) : null
 )
+
+/* Бейдж серии — цвет группы вместо одного teal на всё:
+   ПЭТ (Иннова, Урбан ПЭТ) — мягкий красный
+   Эмалекс/Эмалекс Модерн + Урбан/Элегант/Бэйзик (эмаль) — мягкий синий
+   остальные эмалевые коллекции — графит */
+const RED_SERIES  = new Set(['innova', 'urban-pet'])
+const BLUE_SERIES = new Set(['emalex', 'emalex-modern', 'urban', 'elegant', 'basic'])
+
+const seriesBadgeClass = computed(() => {
+  const slug = props.card.seriesSlug
+  if (RED_SERIES.has(slug))  return 'bg-rose-500 text-white'
+  if (BLUE_SERIES.has(slug)) return 'bg-blue-500 text-white'
+  return 'bg-slate-700 text-white'
+})
 </script>
 
 <template>
   <article
     class="group @container relative flex min-h-full flex-col rounded-2xl border border-slate-200 bg-white transition hover:border-teal-200 hover:shadow-lg hover:-translate-y-0.5"
+    :class="isKitOpen ? 'z-30' : isDimmed ? 'pointer-events-none opacity-40 blur-[1px]' : ''"
+    :data-kit-card="card.id"
   >
     <div class="relative m-3.5 mb-0 flex aspect-2/3 items-center justify-center overflow-hidden rounded-xl bg-slate-50 sm:m-5 sm:mb-0">
       <img
@@ -39,7 +61,7 @@ const kitPrice = computed(() =>
       </div>
 
       <div class="absolute left-0 top-3 flex flex-wrap gap-1">
-        <span class="rounded-r-full bg-teal-600 px-3 py-1 text-xs font-medium uppercase tracking-wide text-white">{{ card.series }}</span>
+        <span class="rounded-r-full px-3 py-1 text-xs font-medium uppercase tracking-wide" :class="seriesBadgeClass">{{ card.series }}</span>
       </div>
     </div>
 
@@ -76,30 +98,28 @@ const kitPrice = computed(() =>
           </a>
         </div>
 
-        <details v-if="kitPrice" class="kit-info relative z-10">
-          <summary class="flex w-fit cursor-pointer list-none items-center gap-1 text-[0.6875rem] font-semibold text-teal-700 transition hover:text-teal-800">
+        <div v-if="kitPrice" class="relative z-10">
+          <button
+            type="button"
+            class="flex w-fit cursor-pointer items-center gap-1 text-[0.6875rem] font-semibold text-teal-700 transition hover:text-teal-800"
+            :aria-expanded="isKitOpen"
+            @click="emit('kit-toggle')"
+          >
             <svg class="h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 20 20" aria-hidden="true">
               <circle cx="10" cy="10" r="8" />
               <path d="M10 9.25v4.25" stroke-linecap="round" />
               <circle cx="10" cy="6.75" r="0.9" fill="currentColor" stroke="none" />
             </svg>
-            Что входит в комплект
-          </summary>
-          <p class="m-0 mt-1.5 rounded-lg bg-slate-50 px-2.5 py-2 text-[0.6875rem] leading-snug text-slate-600">
+            Что входит в комплект?
+          </button>
+          <p
+            v-if="isKitOpen"
+            class="absolute inset-x-0 top-full z-20 m-0 mt-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-2 text-[0.6875rem] leading-snug text-slate-600 shadow-xl"
+          >
             Полотно, {{ BASE_KIT_DESCRIPTION }}
           </p>
-        </details>
+        </div>
       </div>
     </div>
   </article>
 </template>
-
-<style scoped>
-/* Скрываем нативный маркер-треугольник <details> — иконка-инфо в summary уже даёт понятный триггер */
-.kit-info > summary {
-  list-style: none;
-}
-.kit-info > summary::-webkit-details-marker {
-  display: none;
-}
-</style>

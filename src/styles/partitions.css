@@ -424,8 +424,8 @@
   .pt-pivot-grid .pt-video-wrap { aspect-ratio: 4 / 5; }   /* 9:16 → 4:5 */
 }
 
-.pt-video-wrap { opacity: 0; transition: opacity 600ms ease; }
-.pt-video-wrap.pt-video-ready { opacity: 1; }
+.pt-autoplay-video { opacity: 0; transition: opacity 500ms ease; }
+.pt-video-wrap.pt-video-ready .pt-autoplay-video { opacity: 1; }
 
 .pt-pivot-replay {
   position: absolute;

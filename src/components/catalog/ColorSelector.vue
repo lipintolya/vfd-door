@@ -209,31 +209,36 @@ const current  = computed(() => FRAME_COLORS.find(c => c.id === activeId.value)!
   gap: 1.5rem;
 }
 
-/* ── Swatches ── */
+/* ── Swatches ──
+   Грид, а не flex-wrap: flex-wrap пакует карточки «журнальной вёрсткой»
+   (2 в строке + 1 отдельно), из-за чего flex-grow распределял лишнее
+   место неравномерно и карточки получались разной ширины. */
 .cs-swatches {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.75rem;
-  flex-wrap: wrap;
-  justify-content: center;
+  max-width: 34rem;
+  margin-inline: auto;
+}
+@media (max-width: 30rem) {
+  .cs-swatches { grid-template-columns: 1fr; }
 }
 .cs-swatch {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   padding: 0.875rem 1.375rem;
   border: 2px solid #e2e8f0;
   border-radius: 1.25rem;
   background: #fff;
   cursor: pointer;
-  min-width: 8.5rem;
+  min-height: 7.75rem;
   transition: border-color 200ms ease, box-shadow 200ms ease, transform 150ms ease;
 }
 .cs-swatch:hover { border-color: #99f6e4; transform: translateY(-2px); }
-.cs-swatch--active {
-  border-color: #14b8a6;
-  box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.18);
-}
+.cs-swatch--active { border-color: #14b8a6; }
 .cs-swatch__dot {
   width: 2.25rem;
   height: 2.25rem;

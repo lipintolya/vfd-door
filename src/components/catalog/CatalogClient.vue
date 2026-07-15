@@ -36,7 +36,9 @@ const glassOnly     = ref(false)
 const searchQuery   = ref('')
 const sortBy        = ref<CatalogSort>('price_asc')
 const currentPage   = ref(1)
-const itemsPerPage  = 21
+// 24 = кратно и 2, и 3, и 4 колонкам грида (sm/lg/xl) — последняя строка
+// страницы всегда заполнена целиком, без одинокой карточки в углу
+const itemsPerPage  = 24
 
 /* ============================================================
    Filtered & sorted cards

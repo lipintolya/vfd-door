@@ -84,12 +84,24 @@ const renderLightbox = renderGallery
       <div class="pt-hero-bento">
 
         <div class="col-start-1 row-span-full relative rounded-3xl overflow-hidden min-h-110 flex flex-col justify-end bg-ink">
+          <!-- Картинка — мгновенный LCP-фон, никогда не убирается из DOM (fallback
+               без JS / при prefers-reduced-motion). Видео поверх неё — необязательное
+               улучшение, догружается только после window.load, чтобы не спорить
+               с критичными ресурсами страницы за полосу. -->
           <img
             class="absolute inset-0 w-full h-full object-cover object-center"
             src={imgs.hero}
             alt="Алюминиевые раздвижные перегородки GRAFIA в современном интерьере"
             width="1920" height="1080" loading="eager" decoding="async" fetchpriority="high"
           />
+          <video
+            id="pt-hero-video"
+            class="absolute inset-0 w-full h-full object-cover object-center opacity-0 transition-opacity duration-700"
+            muted loop playsinline preload="none"
+            aria-hidden="true"
+          >
+            <source data-src="https://storage.yandexcloud.net/vfd74ru/alum_cover/alum_cover.mp4" type="video/mp4" />
+          </video>
           <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/35 to-black/[.08]" aria-hidden="true"></div>
           <div class="relative z-10 p-[clamp(1.5rem,3vw,2.5rem)]">
             <p class="block mb-3 text-xs font-medium tracking-widest uppercase text-white/55">Официальный партнёр VFD</p>
@@ -477,7 +489,33 @@ const renderLightbox = renderGallery
   </section>
 
 <script is:inline>
+  // ── Hero-видео: грузим только после полной загрузки страницы (не спорит
+  // за полосу с критичными ресурсами) и только если пользователь не просил
+  // сократить анимации — тогда просто остаётся статичная картинка. ──
   (function () {
+    var heroVideo = document.getElementById('pt-hero-video')
+    if (!heroVideo) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    function startHeroVideo() {
+      var source = heroVideo.querySelector('source[data-src]')
+      if (!source) return
+      source.setAttribute('src', source.getAttribute('data-src'))
+      heroVideo.addEventListener('loadeddata', function () {
+        heroVideo.classList.remove('opacity-0')
+      }, { once: true })
+      heroVideo.load()
+      heroVideo.play().catch(function () {})
+    }
+
+    if (document.readyState === 'complete') {
+      startHeroVideo()
+    } else {
+      window.addEventListener('load', startHeroVideo)
+    }
+  })()
+
+  ;(function () {
     var videos = document.querySelectorAll('.pt-autoplay-video')
     if (!videos.length || !('IntersectionObserver' in window)) return
 
