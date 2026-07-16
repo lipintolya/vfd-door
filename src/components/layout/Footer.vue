@@ -83,7 +83,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <footer class="bg-gray-950 text-white/80" aria-label="Подвал сайта">
+  <footer class="bg-fg text-white/80" aria-label="Подвал сайта">
     <div class="container">
       <div class="pt-16 pb-10">
 

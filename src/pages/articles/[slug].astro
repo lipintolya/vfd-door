@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content'
 import BaseLayout from '../../layouts/BaseLayout.astro'
+import FaqAccordion from '../../components/ui/FaqAccordion.astro'
 
 export async function getStaticPaths() {
   const articles = await getCollection('articles')
@@ -129,20 +130,7 @@ const structuredData = [blogPostingSchema, breadcrumbSchema, ...(faqSchema ? [fa
           <!-- FAQ (SEO — FAQPage schema + аккордеон) -->
           {faq.length > 0 && (
             <section class="article-faq" aria-label="Частые вопросы">
-              <h2 class="article-faq__h2">Частые вопросы</h2>
-              <div class="article-faq__list">
-                {faq.map((f) => (
-                  <details class="article-faq__item">
-                    <summary class="article-faq__q">
-                      <span>{f.q}</span>
-                      <svg class="article-faq__chev" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                      </svg>
-                    </summary>
-                    <p class="article-faq__a">{f.a}</p>
-                  </details>
-                ))}
-              </div>
+              <FaqAccordion items={faq} />
             </section>
           )}
 
@@ -273,42 +261,4 @@ const structuredData = [blogPostingSchema, breadcrumbSchema, ...(faqSchema ? [fa
 
   /* ── FAQ ── */
   .article-faq { margin-top: 3rem; }
-  .article-faq__h2 {
-    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
-    font-weight: 500;
-    color: var(--color-ink);
-    letter-spacing: -0.02em;
-    margin: 0 0 1.25rem;
-  }
-  .article-faq__list { display: flex; flex-direction: column; }
-  .article-faq__item { border-bottom: 1px solid #e5e7eb; }
-  .article-faq__item:first-child { border-top: 1px solid #e5e7eb; }
-  .article-faq__q {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 1.15rem 0;
-    cursor: pointer;
-    list-style: none;
-    font-size: clamp(1rem, 0.95rem + 0.3vw, 1.1875rem);
-    font-weight: 600;
-    color: var(--color-ink);
-  }
-  .article-faq__q::-webkit-details-marker { display: none; }
-  .article-faq__chev {
-    width: 1.25rem;
-    height: 1.25rem;
-    color: #94a3b8;
-    flex-shrink: 0;
-    transition: transform 220ms ease;
-  }
-  .article-faq__item[open] .article-faq__chev { transform: rotate(180deg); color: var(--color-ink); }
-  .article-faq__a {
-    margin: 0;
-    padding: 0 0 1.15rem;
-    color: var(--color-body);
-    line-height: 1.75;
-    font-size: 1.0625rem;
-  }
 </style>

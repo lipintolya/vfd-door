@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
 import Breadcrumbs from '../components/ui/Breadcrumbs.astro'
+import FaqAccordion from '../components/ui/FaqAccordion.astro'
 import ProcessSteps from '../components/partitions/ProcessSteps.astro'
 import EntranceDoorShowcase from '../components/entrance-doors/EntranceDoorShowcase.vue'
 import { ENTRANCE_DOOR_MODELS, ENTRANCE_SKINS, minPriceOf } from '../data/entrance-doors'
@@ -34,7 +35,7 @@ const steps: Step[] = [
     num: '02',
     title: 'Замер проёма',
     text: 'Замерщик выезжает на объект, уточняет размер проёма и особенности монтажа.',
-    details: ['Бесплатный выезд по Челябинску', 'Согласование размера короба'],
+    details: ['Выезд по Челябинску — от 300 ₽', 'Согласование размера короба'],
   },
   {
     num: '03',
@@ -65,7 +66,7 @@ const faq = [
   },
   {
     q: 'Есть ли выезд замерщика?',
-    a: 'Да, выезд замерщика и консультация по подбору двери — бесплатно, в пределах Челябинска и области.',
+    a: 'Да, выезд замерщика по Челябинску — от 300 ₽. Точную стоимость выезда за пределы города уточнит менеджер.',
   },
   {
     q: 'Можно ли купить дверь без монтажа?',
@@ -74,7 +75,7 @@ const faq = [
 ]
 
 const title       = 'Входные металлические двери в Челябинске — цены, каталог, монтаж | ВФД'
-const description = `Входные двери для квартиры с монтажом в Челябинске. ${ENTRANCE_SKINS.length}+ вариантов накладок изнутри, цены от ${minPrice.toLocaleString('ru-RU')} ₽. Бесплатный замер, гарантия на монтаж.`
+const description = `Входные двери для квартиры с монтажом в Челябинске. ${ENTRANCE_SKINS.length}+ вариантов накладок изнутри, цены от ${minPrice.toLocaleString('ru-RU')} ₽. Замер от 300 ₽, гарантия на монтаж.`
 const canonicalUrl = Astro.site ? new URL('/vhodnye-dveri', Astro.site).href : undefined
 const heroOgImage  = Astro.site ? new URL(heroModel.coverImage, Astro.site).href : heroModel.coverImage
 
@@ -319,23 +320,7 @@ const structuredData = [breadcrumbSchema, faqSchema, serviceSchema, ...productSc
   ══════════════════════════════════════════════ -->
   <section class="section bg-white">
     <div class="container">
-      <header class="mb-[clamp(2rem,4vw,3rem)] text-center mx-auto max-w-2xl">
-        <p class="t-eyebrow mb-3">Вопросы и ответы</p>
-        <h2 class="t-h2">Частые вопросы</h2>
-      </header>
-      <div class="mx-auto flex max-w-208 flex-col gap-3">
-        {faq.map(f => (
-          <details class="group rounded-2xl border border-slate-200 bg-white overflow-hidden">
-            <summary class="flex list-none cursor-pointer items-center justify-between gap-4 px-5.5 py-4.5 text-step-2 font-medium text-ink">
-              <span>{f.q}</span>
-              <svg class="h-5 w-5 shrink-0 text-slate-400 transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </summary>
-            <p class="t-body m-0 px-5.5 pb-5">{f.a}</p>
-          </details>
-        ))}
-      </div>
+      <FaqAccordion items={faq} />
     </div>
   </section>
 

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
 import Breadcrumbs from '../components/ui/Breadcrumbs.astro'
+import FaqAccordion from '../components/ui/FaqAccordion.astro'
 import SectionHeading from '../components/partitions/SectionHeading.astro'
 import ProcessSteps from '../components/partitions/ProcessSteps.astro'
 
@@ -309,24 +310,25 @@ const structuredData = canonicalUrl ? [
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3.5 lg:gap-5">
           {cooperationFormat.map((step, i) => (
             <article
-              class="motion-safe:opacity-0 motion-safe:translate-y-4 transition-all duration-700 ease-out group relative aspect-3/4 overflow-hidden rounded-2xl"
+              class="motion-safe:opacity-0 motion-safe:translate-y-4 transition-all duration-700 ease-out group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white"
               style={`transition-delay:${i * 90}ms`}
               data-reveal
             >
               {step.image && (
-                <img
-                  src={step.image}
-                  alt=""
-                  class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
-                  decoding="async"
-                />
+                <div class="relative aspect-4/3 overflow-hidden">
+                  <img
+                    src={step.image}
+                    alt=""
+                    class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
               )}
-              <div class="absolute inset-0 bg-linear-to-t from-slate-900/85 via-slate-900/25 to-transparent" aria-hidden="true"></div>
-              <div class="relative z-10 flex h-full flex-col justify-end p-5">
-                <span class="mb-2 block text-xs font-medium tabular-nums text-teal-300">{String(i + 1).padStart(2, '0')}</span>
-                <h4 class="mb-1.5 text-base font-medium leading-tight text-white">{step.title}</h4>
-                <p class="m-0 text-sm leading-relaxed text-white/80">{step.text}</p>
+              <div class="flex flex-1 flex-col p-4">
+                <span class="mb-2 block text-xs font-medium tabular-nums text-teal-600">{String(i + 1).padStart(2, '0')}</span>
+                <h4 class="mb-1.5 text-base font-medium leading-tight text-ink">{step.title}</h4>
+                <p class="m-0 text-sm leading-relaxed text-slate-600">{step.text}</p>
               </div>
             </article>
           ))}
@@ -384,24 +386,7 @@ const structuredData = canonicalUrl ? [
   ══════════════════════════════════════════════ -->
   <section class="section bg-white">
     <div class="container">
-      <SectionHeading
-        eyebrow="Вопросы и ответы"
-        title="Частые вопросы"
-        class="text-center mx-auto max-w-2xl"
-      />
-      <div class="mx-auto flex max-w-208 flex-col gap-3">
-        {faq.map(f => (
-          <details class="group rounded-2xl border border-slate-200 bg-white overflow-hidden">
-            <summary class="flex list-none cursor-pointer items-center justify-between gap-4 px-5.5 py-4.5 text-step-2 font-medium text-ink">
-              <span>{f.q}</span>
-              <svg class="h-5 w-5 shrink-0 text-teal-600 transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </summary>
-            <p class="m-0 px-5.5 pb-5 text-[0.9375rem] leading-relaxed text-slate-600">{f.a}</p>
-          </details>
-        ))}
-      </div>
+      <FaqAccordion items={faq} />
     </div>
   </section>
 

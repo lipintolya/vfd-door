@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import Breadcrumbs from '../../components/ui/Breadcrumbs.astro'
+import FaqAccordion from '../../components/ui/FaqAccordion.astro'
 import CoverSwitcher      from '../../components/catalog/CoverSwitcher.vue'
 import ColorSelector      from '../../components/catalog/ColorSelector.vue'
 import InfoImageViewer    from '../../components/catalog/InfoImageViewer.vue'
@@ -478,20 +479,7 @@ const structuredData = canonicalUrl ? [
   ══════════════════════════════════════════════ -->
   <section class="section">
     <div class="container">
-      <h2 class="sd-h2">Частые вопросы</h2>
-      <div class="sd-faq">
-        {faq.map(f => (
-          <details class="sd-faq__item">
-            <summary class="sd-faq__q">
-              <span>{f.q}</span>
-              <svg class="sd-faq__chev" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-            </summary>
-            <p class="sd-faq__a">{f.a}</p>
-          </details>
-        ))}
-      </div>
+      <FaqAccordion items={faq} />
     </div>
   </section>
 
@@ -816,46 +804,6 @@ const structuredData = canonicalUrl ? [
   padding: 1.5rem;
 }
 
-/* ── FAQ ──────────────────────────────────────────────────────── */
-.sd-faq {
-  max-width: 52rem;
-  display: flex;
-  flex-direction: column;
-}
-.sd-faq__item {
-  border-bottom: 1px solid #f1f5f9;
-}
-.sd-faq__item:first-child { border-top: 1px solid #f1f5f9; }
-.sd-faq__q {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.25rem;
-  padding: 1.125rem 0;
-  cursor: pointer;
-  list-style: none;
-  font-size: clamp(0.9375rem, 1.4vw, 1.0625rem);
-  font-weight: 600;
-  color: #0f172a;
-}
-.sd-faq__q::-webkit-details-marker { display: none; }
-.sd-faq__chev {
-  width: 1.125rem;
-  height: 1.125rem;
-  color: #94a3b8;
-  flex-shrink: 0;
-  transition: transform 220ms ease, color 150ms ease;
-}
-.sd-faq__item[open] .sd-faq__chev { transform: rotate(180deg); color: #0f172a; }
-.sd-faq__a {
-  margin: 0;
-  padding: 0 0 1.125rem;
-  color: #64748b;
-  font-size: 0.9375rem;
-  line-height: 1.75;
-  max-width: 44rem;
-}
-
 /* ── CTA ──────────────────────────────────────────────────────── */
 .sd-cta {
   display: flex;
@@ -914,7 +862,7 @@ const structuredData = canonicalUrl ? [
   .sd-product--rev { direction: ltr; }
   .sd-product__photo > img { min-height: 16rem; }
   .sd-product__info { padding: 1.75rem 1.5rem; }
-  .sd-cta { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+  .sd-cta { flex-direction: column; align-items: flex-start; gap: 1.5rem; padding: 1.75rem 1.5rem; }
   .sd-product__price { gap: 1.25rem; }
 }
 @media (max-width: 640px) {
