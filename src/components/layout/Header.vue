@@ -425,9 +425,7 @@ onUnmounted(() => {
                         class="flex items-center gap-2.5 font-semibold text-gray-800 hover:text-teal-600
                                transition-colors duration-200 py-0.5"
                       >
-                        <div class="w-7 h-7 rounded-full bg-teal-500 flex items-center justify-center shrink-0">
-                          <img src="/svg/w_phone.svg" alt="" class="w-3.5 h-3.5" />
-                        </div>
+                        <img src="https://storage.yandexcloud.net/vfd74ru/svg/phone_call.svg" alt="" class="w-6 h-6 shrink-0" />
                         {{ p.label }}
                       </a>
                     </div>

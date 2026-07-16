@@ -11,9 +11,9 @@ const phone = companyLegalInfo.contacts.phone[0]!
 
 /* Мессенджеры — те же иконки/ссылки, что в шапке сайта (Header.vue SOCIAL_NETWORKS) */
 const SOCIAL_NETWORKS = [
-  { name: 'VK',       label: 'ВКонтакте', url: 'https://vk.com/vfddoors74',              icon: '/svg/b_vk_logo.svg' },
-  { name: 'Telegram', label: 'Telegram',   url: 'https://t.me/vfddoors74',                icon: '/svg/b_tg_logo.svg' },
-  { name: 'MAX',      label: 'Max',        url: 'https://max.ru/id452402308842_biz',      icon: '/svg/b_max_logo.svg' },
+  { name: 'VK',       label: 'ВК',       url: 'https://vk.com/vfddoors74',              icon: '/svg/b_vk_logo.svg' },
+  { name: 'Telegram', label: 'Телеграм', url: 'https://t.me/vfddoors74',                icon: '/svg/b_tg_logo.svg' },
+  { name: 'MAX',      label: 'Макс',     url: 'https://max.ru/id452402308842_biz',      icon: '/svg/b_max_logo.svg' },
 ] as const
 
 type View = 'outside' | 'render' | 'inside'
@@ -135,7 +135,7 @@ const toggleTab = (tab: InfoTab) => { infoTab.value = infoTab.value === tab ? nu
 
     <!-- ── Фото+инфо. Колонки выравниваются по верху: высоту фото задаёт
          его собственная пропорция, а не длина текста в соседней колонке. ── -->
-    <div class="flex flex-col gap-5 md:grid md:grid-cols-[340px_1fr] md:items-start md:gap-10">
+    <div class="flex flex-col gap-5 md:grid md:grid-cols-[21.25rem_1fr] md:items-start md:gap-10">
 
       <!-- Фото. Бокс держит пропорцию накладок (699×1500 = 7:15) — их 37 из 39,
            они заполняют его пиксель в пиксель. Два фото самих дверей чуть шире
@@ -151,87 +151,73 @@ const toggleTab = (tab: InfoTab) => { infoTab.value = infoTab.value === tab ? nu
         @touchstart.passive="onPhotoTouchStart"
         @touchend="onPhotoTouchEnd"
       >
-        <img
-          v-if="view === 'outside'"
-          :key="model.doorImage"
-          :src="model.doorImage"
-          :alt="`${model.name} — вид снаружи`"
-          :style="{ viewTransitionName: `door-photo-${model.id}` }"
-          class="absolute inset-0 h-full w-full object-contain"
-          loading="lazy"
-          decoding="async"
-        />
-        <img
-          v-else-if="view === 'render'"
-          :key="model.coverImage"
-          :src="model.coverImage"
-          :alt="`${model.name} — визуализация в интерьере`"
-          :style="{ viewTransitionName: `door-photo-${model.id}` }"
-          class="absolute inset-0 h-full w-full object-contain"
-          loading="lazy"
-          decoding="async"
-        />
-        <img
-          v-else-if="selectedSkin?.photo"
-          :key="selectedSkin.photo"
-          :src="selectedSkin.photo"
-          :alt="`${model.name} — накладка ${skinLabel}`"
-          :style="{ viewTransitionName: `door-photo-${model.id}` }"
-          class="absolute inset-0 h-full w-full object-contain"
-          loading="lazy"
-          decoding="async"
-        />
-        <div v-else :style="{ viewTransitionName: `door-photo-${model.id}` }" class="absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-2xl bg-slate-50 p-6 text-center">
-          <span v-if="selectedSkin" class="text-step-2-medium text-slate-600">{{ skinLabel }}</span>
-          <span class="t-meta">Фото скоро появится — образец можно посмотреть в салоне</span>
-        </div>
+        <!-- Плавный кроссфейд смены фото — Vue Transition, а не View Transitions API:
+             последний не поддержан во всех браузерах (даёт резкий скачок без
+             fallback-анимации), а этот работает одинаково everywhere. -->
+        <Transition name="photo-fade">
+          <img
+            v-if="view === 'outside'"
+            key="outside"
+            :src="model.doorImage"
+            :alt="`${model.name} — вид снаружи`"
+            class="absolute inset-0 h-full w-full object-contain"
+            loading="lazy"
+            decoding="async"
+          />
+          <img
+            v-else-if="view === 'render'"
+            key="render"
+            :src="model.coverImage"
+            :alt="`${model.name} — визуализация в интерьере`"
+            class="absolute inset-0 h-full w-full object-contain"
+            loading="lazy"
+            decoding="async"
+          />
+          <img
+            v-else-if="selectedSkin?.photo"
+            :key="selectedSkin.photo"
+            :src="selectedSkin.photo"
+            :alt="`${model.name} — накладка ${skinLabel}`"
+            class="absolute inset-0 h-full w-full object-contain"
+            loading="lazy"
+            decoding="async"
+          />
+          <div v-else key="placeholder" class="absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-2xl bg-slate-50 p-6 text-center">
+            <span v-if="selectedSkin" class="text-step-2-medium text-slate-600">{{ skinLabel }}</span>
+            <span class="t-meta">Фото скоро появится — образец можно посмотреть в салоне</span>
+          </div>
+        </Transition>
 
         <div
-          class="absolute left-2 top-2 flex gap-0.5 rounded-full bg-white/90 p-1 backdrop-blur-sm sm:left-3 sm:top-3 sm:gap-1"
+          class="absolute inset-x-2 top-2 flex gap-0.5 rounded-full bg-white/90 p-1 backdrop-blur-sm sm:inset-x-3 sm:top-3 sm:w-fit sm:gap-1"
           role="tablist" aria-label="Вид двери"
         >
           <button
             type="button" role="tab"
-            class="flex items-center gap-1.5 rounded-full px-2 py-1.5 text-xs font-medium transition-colors active:scale-95 sm:px-3.5"
+            class="flex-1 rounded-full px-2 py-1.5 text-center text-[0.6875rem] font-medium transition-colors active:scale-95 sm:flex-none sm:px-3.5 sm:text-xs"
             :class="view === 'outside' ? 'bg-ink text-white' : 'text-slate-500'"
             :aria-selected="view === 'outside'"
-            aria-label="Снаружи"
             @click="selectView('outside')"
           >
-            <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" aria-hidden="true">
-              <rect x="5" y="3" width="14" height="18" rx="1.5" />
-              <path d="M15 12h.01" stroke-linecap="round" />
-            </svg>
-            <span class="hidden sm:inline">Снаружи</span>
+            Снаружи
           </button>
           <button
             type="button" role="tab"
-            class="flex items-center gap-1.5 rounded-full px-2 py-1.5 text-xs font-medium transition-colors active:scale-95 sm:px-3.5"
+            class="flex-1 rounded-full px-2 py-1.5 text-center text-[0.6875rem] font-medium transition-colors active:scale-95 sm:flex-none sm:px-3.5 sm:text-xs"
             :class="view === 'render' ? 'bg-ink text-white' : 'text-slate-500'"
             :aria-selected="view === 'render'"
-            aria-label="Визуализация"
             @click="selectView('render')"
           >
-            <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" aria-hidden="true">
-              <rect x="3" y="4" width="18" height="16" rx="1.5" />
-              <circle cx="8.5" cy="9.5" r="1.4" />
-              <path d="m4 16 4.5-4.5a1.5 1.5 0 0 1 2.12 0L15 16m2-3 1.5-1.5a1.5 1.5 0 0 1 2.12 0L21 12" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            <span class="hidden sm:inline">Визуализация</span>
+            Рендер
           </button>
           <button
             type="button" role="tab"
-            class="flex items-center gap-1.5 rounded-full px-2 py-1.5 text-xs font-medium transition-colors active:scale-95 sm:px-3.5"
+            class="flex-1 rounded-full px-2 py-1.5 text-center text-[0.6875rem] font-medium transition-colors active:scale-95 sm:flex-none sm:px-3.5 sm:text-xs"
             :class="view === 'inside' ? 'bg-ink text-white' : 'text-slate-500'"
             :aria-selected="view === 'inside'"
-            aria-label="Изнутри"
             @click="selectView('inside')"
           >
-            <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M4 21V6.5L12 3l8 3.5V21" stroke-linecap="round" stroke-linejoin="round" />
-              <path d="M9 21v-6h6v6" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            <span class="hidden sm:inline">Изнутри</span>
+            Изнутри
           </button>
         </div>
       </div>
@@ -260,7 +246,7 @@ const toggleTab = (tab: InfoTab) => { infoTab.value = infoTab.value === tab ? nu
              сбивает с толку. -->
         <div v-if="hasSkinChoice">
           <p class="t-label m-0 mb-2.5">Накладка изнутри — модель</p>
-          <div class="-mx-4.5 flex snap-x snap-mandatory gap-2 overflow-x-auto px-4.5 pb-1 scrollbar-none sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
+          <div class="flex snap-x snap-mandatory gap-2 overflow-x-auto pb-1 scrollbar-none sm:flex-wrap sm:overflow-visible sm:pb-0">
             <button
               v-for="group in groupedSkins"
               :key="group.name"
@@ -282,7 +268,7 @@ const toggleTab = (tab: InfoTab) => { infoTab.value = infoTab.value === tab ? nu
              это не только селектор, но и превью того, что входит в комплект. -->
         <div>
           <p class="t-label m-0 mb-2.5">Цвет</p>
-          <div class="-mx-4.5 flex snap-x snap-mandatory gap-2 overflow-x-auto px-4.5 pb-1 scrollbar-none sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
+          <div class="flex snap-x snap-mandatory gap-2 overflow-x-auto pb-1 scrollbar-none sm:flex-wrap sm:overflow-visible sm:pb-0">
             <button
               v-for="item in activeGroup?.items ?? []"
               :key="item.idx"
@@ -320,25 +306,26 @@ const toggleTab = (tab: InfoTab) => { infoTab.value = infoTab.value === tab ? nu
              иконкой), текстовые кнопки там не адаптируются под узкий экран.
              На sm+ — обычные кнопки с текстом, места достаточно. -->
         <div>
-          <div class="flex items-center gap-3 sm:hidden">
+          <p class="t-label m-0 mb-2.5 sm:hidden">Узнать больше</p>
+          <div class="flex justify-start gap-6 sm:hidden">
             <a
               v-for="s in SOCIAL_NETWORKS"
               :key="s.name"
               :href="s.url"
               target="_blank"
               rel="noopener noreferrer"
-              :aria-label="`${s.label} (открывается в новой вкладке)`"
-              class="shrink-0 active:scale-90"
+              class="flex flex-col items-center gap-1 active:scale-90"
             >
               <img :src="s.icon" :alt="s.label" class="h-10 w-10" width="40" height="40" />
+              <span class="text-[0.6875rem] font-medium text-slate-500">{{ s.label }}</span>
             </a>
             <a
               :href="`tel:${phone.raw}`"
-              :aria-label="`Позвонить: ${phone.label}`"
               :title="phone.label"
-              class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-teal-500 active:scale-90"
+              class="flex flex-col items-center gap-1 active:scale-90"
             >
-              <img src="/svg/w_phone.svg" alt="" class="h-4 w-4" />
+              <img src="https://storage.yandexcloud.net/vfd74ru/svg/phone_call.svg" alt="" class="h-10 w-10" width="40" height="40" />
+              <span class="text-[0.6875rem] font-medium text-slate-500">Звонок</span>
             </a>
           </div>
           <div class="hidden flex-wrap gap-2.5 sm:flex">
@@ -375,7 +362,7 @@ const toggleTab = (tab: InfoTab) => { infoTab.value = infoTab.value === tab ? nu
               <div
                 v-for="s in model.specs"
                 :key="s.label"
-                class="grid grid-cols-1 gap-0.5 px-3.5 py-2.5 odd:bg-slate-50 sm:grid-cols-[190px_1fr] sm:gap-0"
+                class="grid grid-cols-1 gap-0.5 px-3.5 py-2.5 odd:bg-slate-50 sm:grid-cols-[11.875rem_1fr] sm:gap-0"
               >
                 <dt class="text-xs font-medium text-slate-500">{{ s.label }}</dt>
                 <dd class="m-0 text-step-0 leading-relaxed text-ink">{{ s.value }}</dd>
@@ -413,3 +400,14 @@ const toggleTab = (tab: InfoTab) => { infoTab.value = infoTab.value === tab ? nu
 
   </div>
 </template>
+
+<style scoped>
+.photo-fade-enter-active,
+.photo-fade-leave-active { transition: opacity 200ms ease; }
+.photo-fade-enter-from,
+.photo-fade-leave-to { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .photo-fade-enter-active,
+  .photo-fade-leave-active { transition: none; }
+}
+</style>

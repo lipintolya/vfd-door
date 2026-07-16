@@ -17,9 +17,7 @@
                 href="tel:+79000297888"
                 class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors group"
               >
-                <div class="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0 group-hover:bg-teal-600 transition-colors">
-                  <img src="/svg/w_phone.svg" alt="" class="w-5 h-5" />
-                </div>
+                <img src="https://storage.yandexcloud.net/vfd74ru/svg/phone_call.svg" alt="" class="w-9 h-9 shrink-0" />
                 <div>
                   <p class="font-semibold text-gray-900 group-hover:text-teal-600 transition-colors">+7 (900) 029-78-88</p>
                   <p class="text-sm text-gray-500">Основной номер</p>
@@ -29,9 +27,7 @@
                 href="tel:+79630807888"
                 class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors group"
               >
-                <div class="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0 group-hover:bg-teal-600 transition-colors">
-                  <img src="/svg/w_phone.svg" alt="" class="w-5 h-5" />
-                </div>
+                <img src="https://storage.yandexcloud.net/vfd74ru/svg/phone_call.svg" alt="" class="w-9 h-9 shrink-0" />
                 <div>
                   <p class="font-semibold text-gray-900 group-hover:text-teal-600 transition-colors">+7 (963) 080-78-88</p>
                   <p class="text-sm text-gray-500">Дополнительный номер</p>
@@ -47,9 +43,7 @@
               href="mailto:vfddoors74@mail.ru"
               class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors group"
             >
-              <div class="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center shrink-0 group-hover:bg-teal-600 transition-colors">
-                <img src="/svg/w_mail_logo.svg" alt="" class="w-5 h-5" />
-              </div>
+              <img src="https://storage.yandexcloud.net/vfd74ru/svg/email_cover.svg" alt="" class="w-9 h-9 shrink-0" />
               <div>
                 <p class="font-semibold text-gray-900 group-hover:text-teal-600 transition-colors">vfddoors74@mail.ru</p>
               </div>
