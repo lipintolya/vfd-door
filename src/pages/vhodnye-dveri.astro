@@ -12,6 +12,9 @@ const TG    = 'https://t.me/vfddoors74'
 const heroModel = ENTRANCE_DOOR_MODELS[0]!
 const minPrice  = Math.min(...ENTRANCE_DOOR_MODELS.map(minPriceOf))
 
+const apartmentModels = ENTRANCE_DOOR_MODELS.filter(m => m.purpose === 'apartment')
+const houseModels     = ENTRANCE_DOOR_MODELS.filter(m => m.purpose === 'house')
+
 const heroStats = [
   { val: '2014',                       lbl: 'год основания салона',      desc: 'Официальный дилер в Челябинске' },
   { val: '12 месяцев',                 lbl: 'гарантия качества',         desc: 'На монтажные работы нашей бригады' },
@@ -239,9 +242,54 @@ const structuredData = [breadcrumbSchema, faqSchema, serviceSchema, ...productSc
         <p class="t-lead max-w-160">Цена уже включает выбранную накладку изнутри — переключайтесь между вариантами, чтобы увидеть точную стоимость.</p>
       </header>
 
-      <div class="flex flex-col gap-16 lg:gap-20">
+      <!-- Для квартиры (подъездная дверь) vs для дома (уличная, с терморазрывом) —
+           две обложки-категории с ценой "от" по минимуму внутри группы, клик
+           скроллит к первой модели этой группы в списке ниже. -->
+      <div class="mb-12 grid grid-cols-2 gap-4 lg:mb-16 lg:gap-6">
+        {[
+          { label: 'Для квартиры', hint: 'подъездные', models: apartmentModels, cover: 'https://storage.yandexcloud.net/vfd74ru/metal_doors/covers/render_hall.webp' },
+          { label: 'Для дома',     hint: 'уличные, с терморазрывом', models: houseModels, cover: 'https://storage.yandexcloud.net/vfd74ru/metal_doors/covers/homecover_render.webp' },
+        ].map(group => group.models.length > 0 && (
+          <a
+            href={`#${group.models[0]!.id}`}
+            class="group relative flex aspect-16/10 flex-col justify-end overflow-hidden rounded-2xl bg-slate-100 no-underline focus-visible:outline-2 focus-visible:outline-teal-500 focus-visible:outline-offset-2"
+            aria-label={`${group.label} — от ${Math.min(...group.models.map(minPriceOf)).toLocaleString('ru-RU')} ₽`}
+          >
+            <img
+              src={group.cover}
+              alt=""
+              aria-hidden="true"
+              class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute inset-0 bg-linear-to-t from-black/80 via-black/15 to-transparent" aria-hidden="true" />
+            <div class="relative z-10 p-4 sm:p-6">
+              <h3 class="text-lg font-medium leading-snug text-white sm:text-2xl">{group.label}</h3>
+              <p class="mt-1 text-xs text-white/70 sm:text-sm">{group.hint}</p>
+              <p class="mt-2 text-sm font-semibold text-white sm:text-base">от {Math.min(...group.models.map(minPriceOf)).toLocaleString('ru-RU')} ₽</p>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <!-- Фильтр по назначению — те же детальные карточки ниже, без отдельной
+           параллельной галереи, просто скрывает лишние.
+           Сортировку по цене убрали: у каждой двери 37 вариантов накладки
+           с разной ценой, карточка по умолчанию показывает цену Niuta (флагманская
+           накладка-дефолт), а не минимум — сортировка "по возрастанию" по факту
+           шла по минимуму среди всех накладок, и видимые цифры на карточках
+           не совпадали с порядком. Показывать вместо Niuta самую дешёвую
+           накладку ради сортировки — то же самое, только с другой стороны. -->
+      <div id="purpose-filter" class="mb-8 flex flex-wrap gap-2" role="tablist" aria-label="Тип двери">
+        <button type="button" class="purpose-filter-btn rounded-full border-[1.5px] px-4 py-2 text-sm font-medium transition-colors" data-purpose="all">Все двери</button>
+        <button type="button" class="purpose-filter-btn rounded-full border-[1.5px] px-4 py-2 text-sm font-medium transition-colors" data-purpose="apartment">Для квартиры</button>
+        <button type="button" class="purpose-filter-btn rounded-full border-[1.5px] px-4 py-2 text-sm font-medium transition-colors" data-purpose="house">Для дома</button>
+      </div>
+
+      <div id="catalog-list" class="flex flex-col gap-16 lg:gap-20">
         {ENTRANCE_DOOR_MODELS.map(model => (
-          <article id={model.id} class="scroll-mt-24">
+          <article id={model.id} class="scroll-mt-24" data-purpose={model.purpose}>
             <EntranceDoorShowcase model={model} client:load />
           </article>
         ))}
@@ -292,6 +340,35 @@ const structuredData = [breadcrumbSchema, faqSchema, serviceSchema, ...productSc
   </section>
 
 </BaseLayout>
+
+<script>
+  // Фильтр "Все / Для квартиры / Для дома" — показывает/скрывает готовые
+  // article-блоки каталога по data-purpose.
+  const purposeButtons  = document.querySelectorAll<HTMLButtonElement>('.purpose-filter-btn')
+  const purposeArticles = document.querySelectorAll<HTMLElement>('#catalog-list > [data-purpose]')
+
+  const setPurposeFilter = (purpose: string) => {
+    purposeButtons.forEach(btn => {
+      const active = btn.dataset.purpose === purpose
+      btn.setAttribute('aria-selected', String(active))
+      btn.classList.toggle('border-ink', active)
+      btn.classList.toggle('bg-ink', active)
+      btn.classList.toggle('text-white', active)
+      btn.classList.toggle('border-slate-200', !active)
+      btn.classList.toggle('bg-white', !active)
+      btn.classList.toggle('text-slate-600', !active)
+    })
+    purposeArticles.forEach(article => {
+      article.classList.toggle('hidden', purpose !== 'all' && article.dataset.purpose !== purpose)
+    })
+  }
+
+  purposeButtons.forEach(btn => {
+    btn.addEventListener('click', () => setPurposeFilter(btn.dataset.purpose!))
+  })
+
+  setPurposeFilter('all')
+</script>
 
 <script>
   // Переключение рендеров моделей в hero — клик по точке и свайп по фото на
