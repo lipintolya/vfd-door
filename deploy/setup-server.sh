@@ -44,6 +44,13 @@ EOF
 fi
 
 if [ ! -f "/etc/nginx/sites-available/$DOMAIN" ]; then
+  # ВАЖНО: certbot --nginx перезапишет этот файл при выпуске SSL-сертификата
+  # и обычно объединяет www.$DOMAIN в тот же server_name без редиректа —
+  # после certbot вручную добавь отдельный server{} с редиректом
+  # www.$DOMAIN -> $DOMAIN (301), иначе оба домена будут отдавать один и тот
+  # же контент как независимые сайты (дубли для поисковиков). Также проверь,
+  # что try_files остаётся "=404" (не "/index.html" — SPA-фоллбек ломает
+  # реальные коды 404 для несуществующих страниц).
   cat > "/etc/nginx/sites-available/$DOMAIN" <<NGINX
 server {
     listen 80;

@@ -8,11 +8,13 @@ import HeroSlider from '../components/home/HeroSlider.vue'
 import Features from '../components/home/Features.vue'
 import CatalogCategories from '../components/home/CatalogCategories.vue'
 import Promo from '../components/home/Promo.vue'
-import Faq from '../components/home/Faq.vue'
 import Reviews from '../components/home/Reviews.vue'
 import LatestArticles from '../components/home/LatestArticles.astro'
 import PortfolioPreview from '../components/portfolio/PortfolioPreview.astro'
+import FaqAccordion from '../components/ui/FaqAccordion.astro'
 import { faqs } from '../components/home/faq-data'
+
+const faqItems = faqs.map(f => ({ q: f.question, a: f.answer }))
 
 const faqSchema = {
   '@context': 'https://schema.org',
@@ -100,5 +102,21 @@ const localBusinessSchema = {
   <PortfolioPreview />
   <Promo client:idle />
   <LatestArticles />
-  <Faq client:idle />
+
+  <section class="section bg-white">
+    <div class="container">
+      <FaqAccordion items={faqItems} />
+
+      <div class="mt-12 flex flex-col items-start gap-6 rounded-2xl bg-fg p-[clamp(2.5rem,5vw,4rem)] text-white sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h3 class="m-0 mb-2 text-2xl font-medium tracking-tight">Остались вопросы?</h3>
+          <p class="m-0 text-[0.9375rem] text-white/60">Свяжитесь с нами — поможем с выбором и проконсультируем.</p>
+        </div>
+        <div class="flex shrink-0 flex-wrap gap-2.5">
+          <a href="https://t.me/vfddoors74" target="_blank" rel="noopener" class="btn btn-ghost">Написать в Telegram</a>
+          <a href="tel:+79000297888" class="btn btn-ghost">Позвонить</a>
+        </div>
+      </div>
+    </div>
+  </section>
 </BaseLayout>
