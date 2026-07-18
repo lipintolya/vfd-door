@@ -115,12 +115,6 @@ const structuredData = canonicalUrl ? [
     </section>
   </div>
 
-  <div class="container">
-    <p class="dc-disclaimer">
-      Цены носят ознакомительный характер. Точный расчёт под ваш проект — у менеджера салона.
-    </p>
-  </div>
-
   <!-- ══════════════════════════════════════════════
        ФАЛЬШФРАМУГА
   ══════════════════════════════════════════════ -->
@@ -168,16 +162,16 @@ const structuredData = canonicalUrl ? [
             {FRAMUGA_ROWS.map((row: PriceRow, i: number) => (
               <tr class:list={{ 'dc-table__kit-row': i === FRAMUGA_ROWS.length - 1 }}>
                 <th scope="row">{row.name}{row.size && <span class="dc-row-size">{row.size}</span>}</th>
-                <td class="dc-table__unit">{row.unit}</td>
+                <td class="dc-table__unit" data-label="Ед.">{row.unit}</td>
                 {FRAMUGA_MATERIALS.map((m: Material) => (
-                  <td>{row.prices[m] != null ? fmt(row.prices[m]!) : '—'}</td>
+                  <td data-label={MATERIAL_LABELS[m]}>{row.prices[m] != null ? fmt(row.prices[m]!) : '—'}</td>
                 ))}
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <p class="dc-table-foot">Цены указаны за единицу/комплект, РРЦ. Итоговая стоимость под ваш проём — у менеджера.</p>
+      <p class="dc-table-foot">Цены за единицу/комплект, РРЦ. * Цены ознакомительные — точный расчёт под ваш проём у менеджера салона.</p>
     </div>
   </section>
 
@@ -227,16 +221,16 @@ const structuredData = canonicalUrl ? [
             {PLINTUS_ROWS.map((row: PriceRow) => (
               <tr>
                 <th scope="row">{row.name}{row.size && <span class="dc-row-size">{row.size}</span>}</th>
-                <td class="dc-table__unit">{row.unit}</td>
+                <td class="dc-table__unit" data-label="Ед.">{row.unit}</td>
                 {PLINTUS_MATERIALS.map((m: Material) => (
-                  <td>{row.prices[m] != null ? fmt(row.prices[m]!) : '—'}</td>
+                  <td data-label={MATERIAL_LABELS[m]}>{row.prices[m] != null ? fmt(row.prices[m]!) : '—'}</td>
                 ))}
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <p class="dc-table-foot">Длина плинтуса — 2140 мм. Клипсы для монтажа — единая цена для всех покрытий.</p>
+      <p class="dc-table-foot">Длина плинтуса — 2140 мм. Клипсы для монтажа — единая цена для всех покрытий. * Цены ознакомительные — точный расчёт у менеджера салона.</p>
     </div>
   </section>
 
@@ -287,16 +281,16 @@ const structuredData = canonicalUrl ? [
             {REYKI_ROWS.map((row: PriceRow) => (
               <tr>
                 <th scope="row">{row.name}{row.size && <span class="dc-row-size">{row.size}</span>}</th>
-                <td class="dc-table__unit">{row.unit}</td>
+                <td class="dc-table__unit" data-label="Ед.">{row.unit}</td>
                 {REYKI_MATERIALS.map((m: Material) => (
-                  <td>{row.prices[m] != null ? fmt(row.prices[m]!) : '—'}</td>
+                  <td data-label={MATERIAL_LABELS[m]}>{row.prices[m] != null ? fmt(row.prices[m]!) : '—'}</td>
                 ))}
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <p class="dc-table-foot">Длина рейки — 2750 мм, комплект — по 4 шт каждого типа. Количество на проект — по расчёту менеджера.</p>
+      <p class="dc-table-foot">Длина рейки — 2750 мм, комплект — по 4 шт каждого типа. * Цены ознакомительные — точный расчёт у менеджера салона.</p>
     </div>
   </section>
 
@@ -368,20 +362,8 @@ const structuredData = canonicalUrl ? [
   color: #64748b;
   font-size: clamp(0.9375rem, 1.4vw, 1.0625rem);
   line-height: 1.75;
-  max-width: 48rem;
 }
 .dc-p strong { color: #334155; font-weight: 600; }
-
-.dc-disclaimer {
-  margin: 0 0 clamp(2rem, 4vw, 2.75rem);
-  padding: 0.875rem 1.125rem;
-  border-radius: 0.75rem;
-  background: #f8fafc;
-  border: 1px solid #f1f5f9;
-  color: #64748b;
-  font-size: 0.8125rem;
-  line-height: 1.6;
-}
 
 /* ── Section text + photo slot (пусто, пока не добавлены фото) ──── */
 .dc-section { display: flex; flex-direction: column; margin-bottom: 0; }
@@ -570,11 +552,56 @@ const structuredData = canonicalUrl ? [
   .dc-cta { flex-direction: column; align-items: flex-start; gap: 1.5rem; padding: 1.75rem 1.5rem; }
 }
 @media (max-width: 560px) {
-  .dc-table { font-size: 0.8125rem; }
-  .dc-table thead th { padding: 0.7rem 0.875rem; font-size: 0.875rem; }
-  .dc-table tbody th,
-  .dc-table tbody td { padding: 0.7rem 0.875rem; }
-  .dc-table__kit-row td { font-size: 0.9375rem; }
   .dc-hero { padding: 1.75rem 1.5rem; }
+}
+
+/* ── Таблица → карточки на мобиле: колонки материалов в строку
+   не помещаются даже с укороченными подписями (до 3 материалов +
+   ед. изм. + название), поэтому вместо горизонтального скролла
+   таблица превращается в список карточек (по одной на строку),
+   а значения покрытий идут парами «подпись: цена». ──────────── */
+@media (max-width: 640px) {
+  .dc-table-wrap { overflow-x: visible; border: none; border-radius: 0; margin-top: 1.25rem; }
+  .dc-table, .dc-table thead, .dc-table tbody, .dc-table tr, .dc-table th, .dc-table td {
+    display: block;
+    width: 100%;
+  }
+  .dc-table thead { display: none; }
+  .dc-table tbody tr {
+    padding: 1rem 1.125rem;
+    margin-bottom: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.875rem;
+    background: #fff;
+  }
+  .dc-table tbody tr:last-child { margin-bottom: 0; }
+  .dc-table tbody th {
+    padding: 0 0 0.625rem;
+    background: transparent;
+    border-right: none;
+    border-bottom: 1px solid #f1f5f9;
+    margin-bottom: 0.5rem;
+    max-width: none;
+  }
+  .dc-table tbody td {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.375rem 0;
+    border-bottom: none;
+    white-space: normal;
+  }
+  .dc-table tbody td::before {
+    content: attr(data-label);
+    color: #94a3b8;
+    font-weight: 500;
+    font-size: 0.8125rem;
+    flex-shrink: 0;
+  }
+  .dc-table__unit { color: #94a3b8 !important; }
+  .dc-table__kit-row { border-top: none; }
+  .dc-table__kit-row th { font-size: 1rem; }
+  .dc-table__kit-row td { font-size: 1rem; }
 }
 </style>
