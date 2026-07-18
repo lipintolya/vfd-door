@@ -245,18 +245,28 @@ onUnmounted(() => {
 
 <template>
   <header
-    class="fixed inset-x-0 z-50"
+    class="fixed inset-x-0 top-0 z-50"
     :style="{
-      top: 'calc(env(safe-area-inset-top, 0px) + 1rem)',
       paddingLeft:  'env(safe-area-inset-left)',
       paddingRight: 'env(safe-area-inset-right)',
     }"
   >
-    <div class="container">
+    <!-- Непрозрачная подложка от самого верха экрана до низа пилюли — без неё
+         контент страницы, доскроленный ровно до этой высоты (например, кнопка
+         "Что входит в комплект?" на карточке каталога), просвечивал в зазоре
+         над пилюлей: сама пилюля начиналась не с top:0, а с отступом 1rem,
+         и выше неё ничего не рисовалось. -->
+    <div
+      class="absolute inset-x-0 top-0 bg-white"
+      :style="{ height: `calc(env(safe-area-inset-top, 0px) + 1rem + ${HEADER_HEIGHT}px)` }"
+      aria-hidden="true"
+    />
+
+    <div class="container" :style="{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 1rem)' }">
 
       <!-- ── Pill bar ── -->
       <div
-        class="flex items-center justify-between rounded-full border px-5 py-3 transition-all duration-300"
+        class="relative flex items-center justify-between rounded-full border px-5 py-3 transition-all duration-300"
         :class="scrolled
           ? 'bg-white/95 backdrop-blur-md border-gray-200 shadow-[0_4px_20px_rgba(0,0,0,0.10)]'
           : 'bg-white/88 backdrop-blur-sm border-gray-200'"
