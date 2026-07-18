@@ -45,7 +45,7 @@ export interface Accessory {
   price:    number | null
 }
 
-export type CoatingSlug = 'pet' | 'emal' | 'emalex'
+export type CoatingSlug = 'pet' | 'emal' | 'emalex' | 'protach'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Базовый комплект погонажа — цена для базового цвета покрытия. Используется
@@ -54,9 +54,10 @@ export type CoatingSlug = 'pet' | 'emal' | 'emalex'
 // чтобы текст на карточке товара и в таблице цен не расходился.
 // ─────────────────────────────────────────────────────────────────────────────
 export const BASE_KIT_PRICE: Record<CoatingSlug, number> = {
-  pet:    5_130,
-  emal:   6_080,
-  emalex: 4_900,
+  pet:     5_130,
+  emal:    6_080,
+  emalex:  4_900,
+  protach: 3_650,
 }
 export const BASE_KIT_DESCRIPTION = 'дверной короб 2,5 шт, наличники с обеих сторон 5 шт'
 
@@ -175,5 +176,12 @@ export const accessoriesByCoating: Record<CoatingSlug, Accessory[]> = {
 
     { name: 'Плинтус 70х16х2140',                                        category: 'plinth',     unit: 'шт',       price: 810 },
     { name: 'Клипсы для плинтуса',                                       category: 'plinth',     unit: 'шт',       price: 50 },
+  ],
+
+  // ── Протач (Смарт) ──────────────────────────────────────────────────────
+  // Итемизированный погонаж (коробка/наличники поштучно) пока не внесён —
+  // добавь строки по тому же образцу, когда будут цены на конкретные профили.
+  protach: [
+    { name: `Комплект погонажа (${BASE_KIT_DESCRIPTION})`,               category: 'kit',        unit: 'комплект', price: BASE_KIT_PRICE.protach },
   ],
 }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { calcKitPrice, BASE_KIT_DESCRIPTION } from '../../data/accessories'
 import type { CatalogCardItem } from './types'
 
@@ -16,9 +16,67 @@ const emit = defineEmits<{
 const formatPrice = (price: number | null) =>
   price ? `${Number(price).toLocaleString('ru-RU')} ₽` : 'По запросу'
 
-/* Цена за комплект (полотно + короб + наличники) — тот же расчёт, что и на странице модели */
+/* Свотчи доступных цветов на карточке — кликабельные: переключают обложку,
+   цену и подпись цвета прямо в каталоге (раньше был виден только один цвет,
+   и понять цену в другом варианте можно было только зайдя в товар).
+   Показываем до 5 кружков + "+N", остальное — в самом товаре. */
+const MAX_VISIBLE_SWATCHES = 5
+const visibleSwatches = computed(() => props.card.colorSwatches.slice(0, MAX_VISIBLE_SWATCHES))
+const extraSwatchCount = computed(() => Math.max(0, props.card.colorSwatches.length - MAX_VISIBLE_SWATCHES))
+
+const activeSwatchIdx = ref(0)
+const activeSwatch = computed(() => props.card.colorSwatches[activeSwatchIdx.value] ?? props.card.colorSwatches[0])
+const activePhoto = computed(() => activeSwatch.value?.photo || props.card.photo)
+const activePrice = computed(() => activeSwatch.value?.price ?? props.card.price)
+const activeColorName = computed(() => activeSwatch.value?.name ?? props.card.colorName)
+const activeColorHex = computed(() => activeSwatch.value?.hex ?? props.card.colorHex)
+
+const selectSwatch = (idx: number) => { activeSwatchIdx.value = idx }
+
+/* Свайп по фото листает цвета — тот же паттерн, что в HeroSlider/EntranceDoorShowcase.
+   Порог 40px: реальный свайп (>40px) браузер сам не превращает в click по
+   растянутой ссылке карточки (стандартная эвристика тач-жестов), поэтому
+   тап по фото по-прежнему открывает товар, а свайп — просто меняет цвет.
+
+   Слушатели висят на <article>, а не на самом блоке с фото: у карточки
+   растянутая ссылка "Подробнее" (::after inset-0 от края до края article),
+   она перекрывает фото по paint-order, так что touch-события физически
+   долетают до article/<a>, а не до div с картинкой — проверяем координаты
+   старта вручную через photoBoxRef, чтобы свайп ловился только над фото. */
+const SWIPE_THRESHOLD = 40
+const photoBoxRef = ref<HTMLElement | null>(null)
+let touchStartX = 0
+let touchStartY = 0
+let touchActive = false
+
+const onPhotoTouchStart = (e: TouchEvent) => {
+  const touch = e.touches[0]
+  const box = photoBoxRef.value
+  touchActive = false
+  if (!touch || !box) return
+  const rect = box.getBoundingClientRect()
+  if (touch.clientX < rect.left || touch.clientX > rect.right || touch.clientY < rect.top || touch.clientY > rect.bottom) return
+  touchStartX = touch.clientX
+  touchStartY = touch.clientY
+  touchActive = true
+}
+const onPhotoTouchEnd = (e: TouchEvent) => {
+  if (!touchActive || !e.changedTouches[0] || props.card.colorSwatches.length < 2) return
+  touchActive = false
+  const dx = touchStartX - e.changedTouches[0].clientX
+  const dy = touchStartY - e.changedTouches[0].clientY
+  if (Math.abs(dx) <= Math.abs(dy) || Math.abs(dx) <= SWIPE_THRESHOLD) return
+  const total = props.card.colorSwatches.length
+  const nextIdx = dx > 0
+    ? (activeSwatchIdx.value + 1) % total
+    : (activeSwatchIdx.value - 1 + total) % total
+  selectSwatch(nextIdx)
+}
+
+/* Цена за комплект (полотно + короб + наличники) — тот же расчёт, что и на странице
+   товара, но от АКТИВНОГО (выбранного свотчем) цвета и его цены за полотно */
 const kitPrice = computed(() =>
-  props.card.price ? props.card.price + calcKitPrice(props.card.coatingSlug, props.card.colorName) : null
+  activePrice.value ? activePrice.value + calcKitPrice(props.card.coatingSlug, activeColorName.value) : null
 )
 
 /* Бейдж серии — цвет группы вместо одного teal на всё:
@@ -30,6 +88,7 @@ const BLUE_SERIES = new Set(['emalex', 'emalex-modern', 'urban', 'elegant', 'bas
 
 const seriesBadgeClass = computed(() => {
   const slug = props.card.seriesSlug
+  if (slug === 'smart')      return 'bg-violet-500 text-white'
   if (RED_SERIES.has(slug))  return 'bg-rose-500 text-white'
   if (BLUE_SERIES.has(slug)) return 'bg-blue-500 text-white'
   return 'bg-slate-700 text-white'
@@ -41,12 +100,18 @@ const seriesBadgeClass = computed(() => {
     class="group @container relative flex min-h-full flex-col rounded-2xl border border-slate-200 bg-white transition hover:border-teal-200 hover:shadow-lg hover:-translate-y-0.5"
     :class="isKitOpen ? 'z-30' : isDimmed ? 'pointer-events-none opacity-40 blur-[1px]' : ''"
     :data-kit-card="card.id"
+    @touchstart.passive="onPhotoTouchStart"
+    @touchend="onPhotoTouchEnd"
   >
-    <div class="relative m-3.5 mb-0 flex aspect-2/3 items-center justify-center overflow-hidden rounded-xl bg-slate-50 sm:m-5 sm:mb-0">
+    <div
+      ref="photoBoxRef"
+      class="relative m-3.5 mb-0 flex aspect-2/3 items-center justify-center overflow-hidden rounded-xl bg-slate-50 sm:m-5 sm:mb-0"
+    >
       <img
-        v-if="card.photo"
-        :src="card.photo"
-        :alt="card.name"
+        v-if="activePhoto"
+        :key="activePhoto"
+        :src="activePhoto"
+        :alt="`${card.name} — ${activeColorName}`"
         class="h-full w-full object-contain p-4 transition-transform duration-300 group-hover:scale-105"
         loading="lazy"
         decoding="async"
@@ -71,19 +136,35 @@ const seriesBadgeClass = computed(() => {
         <p class="m-0 mt-1 text-sm font-semibold text-slate-500">{{ card.coating }}</p>
       </div>
 
-      <div class="flex min-w-0 items-center gap-2">
+      <div v-if="card.colorSwatches.length > 1" class="relative z-10 flex min-w-0 flex-wrap items-center gap-1.5">
+        <button
+          v-for="(swatch, idx) in visibleSwatches"
+          :key="swatch.name"
+          type="button"
+          class="h-4.5 w-4.5 shrink-0 rounded-full border border-black/10 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.55)] transition-transform active:scale-90"
+          :class="idx === activeSwatchIdx ? 'ring-2 ring-offset-1 ring-teal-600' : ''"
+          :style="{ backgroundColor: swatch.hex }"
+          :title="swatch.name"
+          :aria-label="`Цвет: ${swatch.name}`"
+          :aria-pressed="idx === activeSwatchIdx"
+          @click="selectSwatch(idx)"
+        />
+        <span v-if="extraSwatchCount > 0" class="shrink-0 text-xs font-semibold text-slate-400">+{{ extraSwatchCount }}</span>
+        <span class="ml-0.5 w-full truncate text-sm text-slate-500 @[13rem]:w-auto">{{ activeColorName }}</span>
+      </div>
+      <div v-else class="flex min-w-0 items-center gap-2">
         <span
           class="h-4 w-4 shrink-0 rounded-full border border-black/10 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.55)]"
-          :style="{ backgroundColor: card.colorHex }"
-          :title="`Цвет: ${card.colorName}`"
+          :style="{ backgroundColor: activeColorHex }"
+          :title="`Цвет: ${activeColorName}`"
         />
-        <span class="truncate text-sm text-slate-500">{{ card.colorName }}</span>
+        <span class="truncate text-sm text-slate-500">{{ activeColorName }}</span>
       </div>
 
       <div class="mt-auto flex flex-col gap-2 pt-1">
         <div class="flex flex-col items-stretch gap-2.5 @[17rem]:flex-row @[17rem]:items-end @[17rem]:justify-between @[17rem]:gap-3">
           <p class="m-0 flex flex-col leading-none">
-            <span class="whitespace-nowrap text-xl font-medium text-ink">{{ formatPrice(card.price) }}</span>
+            <span class="whitespace-nowrap text-xl font-medium text-ink">{{ formatPrice(activePrice) }}</span>
             <span class="mt-1 text-xs font-semibold text-slate-500">за полотно</span>
             <span v-if="kitPrice" class="mt-1.5 whitespace-nowrap text-xs font-semibold text-slate-500">
               {{ Number(kitPrice).toLocaleString('ru-RU') }} ₽ за комплект

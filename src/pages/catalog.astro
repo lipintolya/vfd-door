@@ -53,6 +53,9 @@ interface CardItem {
   colorHex:    string
   /** Все цвета, в которых реально доступна эта модель — для корректной фильтрации по цвету */
   colorNames:  string[]
+  /** Те же цвета с hex/ценой/фото — рядок свотчей на карточке переключает
+      обложку и цену прямо в каталоге, без захода в товар */
+  colorSwatches: { name: string; hex: string; price: number | null; photo: string }[]
   photo:       string
   price:       number | null
   hasGlass:    boolean
@@ -71,8 +74,11 @@ const normalizeHexColor = (value: string | null | undefined) => {
 
 /* ── Полный набор цветов на модель (по всем строкам, не только первой) —
    нужен для корректной фильтрации: модель может подходить под фильтр
-   «цвет X», даже если её карточка показывает другой цвет как основной. ── */
+   «цвет X», даже если её карточка показывает другой цвет как основной.
+   Свотчи (name+hex) — та же карта, чтобы на карточке в каталоге сразу было
+   видно все доступные цвета, а не только тот, что выбран для обложки. ── */
 const colorsByModel = new Map<string, string[]>()
+const colorSwatchesByModel = new Map<string, { name: string; hex: string; price: number | null; photo: string }[]>()
 for (const row of (data ?? [])) {
   const model = row.models as any
   const color = row.colors as any
@@ -80,6 +86,17 @@ for (const row of (data ?? [])) {
   const list = colorsByModel.get(model.id) ?? []
   if (!list.includes(color.name)) list.push(color.name)
   colorsByModel.set(model.id, list)
+
+  const swatches = colorSwatchesByModel.get(model.id) ?? []
+  if (!swatches.some(s => s.name === color.name)) {
+    swatches.push({
+      name:  color.name,
+      hex:   normalizeHexColor(color.hex_preview),
+      price: row.price_rrp ?? null,
+      photo: row.photo_url ?? '',
+    })
+  }
+  colorSwatchesByModel.set(model.id, swatches)
 }
 
 /* ── Нормализуем: 1 модель = 1 карточка (первый цвет — для витрины) ── */
@@ -107,6 +124,7 @@ for (const row of (data ?? [])) {
     colorName:   color.name,
     colorHex:    normalizeHexColor(color.hex_preview),
     colorNames:  colorsByModel.get(model.id) ?? [color.name],
+    colorSwatches: colorSwatchesByModel.get(model.id) ?? [{ name: color.name, hex: normalizeHexColor(color.hex_preview), price: row.price_rrp ?? null, photo: row.photo_url ?? '' }],
     photo:       row.photo_url  ?? '',
     price:       row.price_rrp  ?? null,
     hasGlass:    model.has_glass ?? false,
