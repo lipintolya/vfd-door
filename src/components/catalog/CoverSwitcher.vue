@@ -171,10 +171,21 @@ const activeId = ref<CoverId>('modern')
   .csw-switcher__row { flex-wrap: wrap; justify-content: flex-end; }
 }
 @media (max-width: 520px) {
-  .csw-thumb { width: 3.5rem; }
+  .csw-thumb { width: 4.25rem; }
   .csw-thumb__img { height: 2.25rem; }
   .csw-switcher__label { font-size: 0.625rem; letter-spacing: 0.06em; }
-  .csw-thumb__name { font-size: 0.5rem; padding: 0.2rem 0.25rem 0.24rem; }
+  .csw-thumb__name {
+    font-size: 0.5rem;
+    padding: 0.2rem 0.25rem 0.24rem;
+    /* «Современный» — одно длинное слово без пробелов, обычный перенос
+       по словам его не разбивает (негде), поэтому вместо многоточия
+       («СОВРЕМ...») переносим по буквам на 2 строки. */
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    overflow-wrap: anywhere;
+    line-height: 1.2;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
