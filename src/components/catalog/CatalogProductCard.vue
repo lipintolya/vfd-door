@@ -182,11 +182,11 @@ const seriesBadgeClass = computed(() => {
         <div v-if="kitPrice" class="relative z-10">
           <button
             type="button"
-            class="flex w-fit cursor-pointer items-center gap-1 text-[0.6875rem] font-semibold text-teal-700 transition hover:text-teal-800"
+            class="flex w-fit cursor-pointer items-start gap-1 text-left text-[0.6875rem] font-semibold text-teal-700 transition hover:text-teal-800"
             :aria-expanded="isKitOpen"
             @click="emit('kit-toggle')"
           >
-            <svg class="h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 20 20" aria-hidden="true">
+            <svg class="mt-0.5 h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 20 20" aria-hidden="true">
               <circle cx="10" cy="10" r="8" />
               <path d="M10 9.25v4.25" stroke-linecap="round" />
               <circle cx="10" cy="6.75" r="0.9" fill="currentColor" stroke="none" />
