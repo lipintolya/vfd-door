@@ -158,7 +158,7 @@ const setHeaderVar = () =>
 const onScroll = () => { scrolled.value = window.scrollY > 20 }
 
 const onResize = () => {
-  if (window.innerWidth >= 768) {
+  if (window.innerWidth >= 1280) {
     closeMobileMenu()
     // Закрываем contacts-попап тоже — он hidden на мобильном через CSS,
     // но state может остаться true если resized с открытым мобильным меню
@@ -301,7 +301,7 @@ onUnmounted(() => {
         </a>
 
         <!-- Desktop nav -->
-        <nav class="hidden md:flex gap-7 text-sm" aria-label="Основная навигация">
+        <nav class="hidden xl:flex gap-7 text-sm" aria-label="Основная навигация">
           <template v-for="link in NAV_LINKS" :key="link.href">
 
             <!-- Обычная ссылка -->
@@ -376,7 +376,7 @@ onUnmounted(() => {
         <div class="flex items-center gap-3">
 
           <!-- Desktop actions -->
-          <div class="hidden lg:flex items-center gap-3">
+          <div class="hidden xl:flex items-center gap-3">
             <a
               v-for="s in SOCIAL_NETWORKS"
               :key="s.name"
@@ -488,7 +488,7 @@ onUnmounted(() => {
           </div>
 
           <!-- Mobile: socials + burger -->
-          <div class="md:hidden flex items-center gap-2.5 ml-auto">
+          <div class="xl:hidden flex items-center gap-2.5 ml-auto">
             <a
               v-for="s in SOCIAL_NETWORKS"
               :key="s.name"
@@ -534,7 +534,7 @@ onUnmounted(() => {
         role="dialog"
         aria-label="Мобильное меню"
         aria-modal="true"
-        class="md:hidden fixed left-0 right-0 z-40 mx-4 rounded-2xl
+        class="xl:hidden fixed left-0 right-0 z-40 mx-4 rounded-2xl
                bg-white border border-gray-100 p-4"
         :style="{
           top: `calc(1rem + env(safe-area-inset-top, 0px) + ${HEADER_HEIGHT}px + 0.75rem)`
