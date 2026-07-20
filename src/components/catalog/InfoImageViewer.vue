@@ -94,6 +94,8 @@ onUnmounted(() => {
   gap: 1rem;
   margin: 1.5rem 0;
 }
+/* Один элемент — карточка на всю ширину, а не половина с пустым местом рядом */
+.iiv:has(.iiv-card:only-child) { grid-template-columns: 1fr; }
 
 .iiv-card {
   margin: 0;

@@ -7,10 +7,11 @@
 // framuga/plintus/reyki — обложки для соответствующих секций, вставить
 // сюда, когда будут готовы (пусто = секция рендерится без фото).
 export const IMAGES = {
-  hero:    'https://storage.yandexcloud.net/vfd74ru/decor/render_framuga.webp',
-  framuga: '',
-  plintus: '',
-  reyki:   '',
+  hero:        'https://storage.yandexcloud.net/vfd74ru/decor/render_framuga.webp',
+  framuga:     'https://storage.yandexcloud.net/vfd74ru/decor/framuga_r.webp',
+  framugaInfo: 'https://storage.yandexcloud.net/vfd74ru/decor/framuga_info.webp',
+  plintus:     '',
+  reyki:       '',
 } as const
 
 export type Material = 'emalex' | 'ekoshpon' | 'emal'

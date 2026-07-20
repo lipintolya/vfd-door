@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import Breadcrumbs from '../../components/ui/Breadcrumbs.astro'
 import FaqAccordion from '../../components/ui/FaqAccordion.astro'
+import InfoImageViewer from '../../components/catalog/InfoImageViewer.vue'
 import {
   IMAGES,
   MATERIAL_LABELS,
@@ -172,6 +173,17 @@ const structuredData = canonicalUrl ? [
         </table>
       </div>
       <p class="dc-table-foot">Цены за единицу/комплект, РРЦ. * Цены ознакомительные — точный расчёт под ваш проём у менеджера салона.</p>
+
+      {IMAGES.framugaInfo && (
+        <InfoImageViewer
+          client:load
+          images={[{
+            src: IMAGES.framugaInfo,
+            caption: 'Комплектация и характеристики',
+            alt: 'Схема комплектации фальшфрамуги и компланарного короба',
+          }]}
+        />
+      )}
     </div>
   </section>
 
