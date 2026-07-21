@@ -121,7 +121,7 @@ const structuredData = canonicalUrl ? [
   ══════════════════════════════════════════════ -->
   <section class="section" style="padding-bottom: 0">
     <div class="container">
-      <div class:list={['dc-section', IMAGES.framuga && 'dc-section--photo']}>
+      <div class="dc-section">
         <div class="dc-section__text">
           <h2 class="dc-h2">Фальшфрамуга и компланарный короб</h2>
           <p class="dc-p">
@@ -136,18 +136,6 @@ const structuredData = canonicalUrl ? [
             сохранив ровную плоскость без наличников внахлёст.
           </p>
         </div>
-        {IMAGES.framuga && (
-          <div class="dc-section__photo">
-            <img
-              src={IMAGES.framuga}
-              alt="Фальшфрамуга и компланарный короб — ВФД"
-              loading="lazy"
-              decoding="async"
-              width="800"
-              height="600"
-            />
-          </div>
-        )}
       </div>
 
       <div class="dc-table-wrap">
@@ -174,14 +162,21 @@ const structuredData = canonicalUrl ? [
       </div>
       <p class="dc-table-foot">Цены за единицу/комплект, РРЦ. * Цены ознакомительные — точный расчёт под ваш проём у менеджера салона.</p>
 
-      {IMAGES.framugaInfo && (
+      {(IMAGES.framuga || IMAGES.framugaInfo) && (
         <InfoImageViewer
           client:load
-          images={[{
-            src: IMAGES.framugaInfo,
-            caption: 'Комплектация и характеристики',
-            alt: 'Схема комплектации фальшфрамуги и компланарного короба',
-          }]}
+          images={[
+            ...(IMAGES.framuga ? [{
+              src: IMAGES.framuga,
+              caption: 'Фальшфрамуга и компланарный короб',
+              alt: 'Фальшфрамуга и компланарный короб — ВФД',
+            }] : []),
+            ...(IMAGES.framugaInfo ? [{
+              src: IMAGES.framugaInfo,
+              caption: 'Комплектация и характеристики',
+              alt: 'Схема комплектации фальшфрамуги и компланарного короба',
+            }] : []),
+          ]}
         />
       )}
     </div>
