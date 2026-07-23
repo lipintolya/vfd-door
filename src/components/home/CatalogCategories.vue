@@ -109,7 +109,7 @@ const { sectionRef, visible } = useScrollReveal(0.15)
         </article>
 
         <!-- Right column — 2 cards -->
-        <div class="grid gap-4 md:grid-rows-2 lg:gap-5" role="list">
+        <div class="grid grid-rows-2 gap-4 lg:gap-5" role="list">
           <article
             v-for="(cat, idx) in CATEGORIES.slice(1)"
             :key="cat.href"
