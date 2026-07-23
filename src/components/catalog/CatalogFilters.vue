@@ -126,24 +126,20 @@ watch(
         </svg>
       </button>
       <div v-if="openSections.series" class="mb-3.5 grid max-h-56 gap-1 overflow-y-auto">
-        <button
-          type="button"
+        <a
+          href="/catalog/series"
           class="rounded-lg px-2.5 py-3 text-left text-step-0 text-slate-600 transition hover:bg-slate-100"
-          :class="draftSeries === '' ? 'bg-teal-50 text-teal-700' : ''"
-          @click="draftSeries = ''"
         >
-          Все серии
-        </button>
-        <button
+          Все серии →
+        </a>
+        <a
           v-for="item in series"
           :key="item.value"
-          type="button"
+          :href="`/catalog/series/${item.value}`"
           class="rounded-lg px-2.5 py-3 text-left text-step-0 text-slate-600 transition hover:bg-slate-100"
-          :class="draftSeries === item.value ? 'bg-teal-50 text-teal-700' : ''"
-          @click="draftSeries = draftSeries === item.value ? '' : item.value"
         >
           {{ item.label }}
-        </button>
+        </a>
       </div>
     </div>
 
