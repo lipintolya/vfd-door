@@ -26,7 +26,7 @@ const CATEGORIES: Category[] = [
   },
   {
     title:    'Алюминиевые перегородки',
-    subtitle: 'Стеклянные перегородки с алюминиевым профилем для квартир, домов, офисов — под ключ в течение 45 дней. Нестандартные решения по вашим чертежам и эскизам',
+    subtitle: 'Стеклянные перегородки с алюминиевым профилем — под ключ за 45 дней',
     image:    'https://storage.yandexcloud.net/catalog-vfd/catalog_preview/catalog-preview3.webp',
     href:     '/partitions',
     cta:      'Смотреть перегородки',
