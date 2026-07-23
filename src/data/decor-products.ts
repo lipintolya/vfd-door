@@ -48,9 +48,9 @@ export const FRAMUGA_ROWS: PriceRow[] = [
 // ── Плинтус ──
 export const PLINTUS_MATERIALS: Material[] = ['emalex', 'ekoshpon', 'emal']
 export const PLINTUS_ROWS: PriceRow[] = [
-  { name: 'Плинтус', size: '70×16×2140',  unit: 'шт', prices: { emalex: 780,  ekoshpon: 705, emal: 1_035 } },
-  { name: 'Плинтус', size: '100×16×2140', unit: 'шт', prices: { emalex: 1_020, ekoshpon: 900, emal: 1_370 } },
-  { name: 'Клипса',                       unit: 'шт', prices: { emalex: 75,   ekoshpon: 75,  emal: 75 } },
+  { name: 'Плинтус', size: '70×16×2140',  unit: 'шт', prices: { emalex: 810,  ekoshpon: 705, emal: 950 } },
+  { name: 'Плинтус', size: '100×16×2140', unit: 'шт', prices: { emalex: 1_260, ekoshpon: 900, emal: 1_370 } },
+  { name: 'Клипса',                       unit: 'шт', prices: { emalex: 50,   ekoshpon: 50,  emal: 50 } },
 ]
 
 // ── Декоративные рейки (реечные панели, минимальный комплект — 4 шт) ──
