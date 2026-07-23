@@ -1,142 +1,15 @@
 ---
 /**
  * src/pages/catalog.astro
- * Данные грузятся на сервере — полный JOIN через Supabase.
+ * Данные грузятся на сервере — полный JOIN через Supabase (src/lib/catalog-data.ts).
  * Фильтрация — клиентская (Vue island), без перезагрузки страницы.
  */
 import BaseLayout from '../layouts/BaseLayout.astro'
 import Breadcrumbs from '../components/ui/Breadcrumbs.astro'
 import CatalogClient from '../components/catalog/CatalogClient.vue'
-import { supabase } from '../lib/supabase'
-import { buildModelSlugMap } from '../lib/slugify'
+import { getCatalogCards } from '../lib/catalog-data'
 
-/* ── Все модели с цветами, сериями и покрытиями ── */
-const { data, error } = await supabase
-  .from('model_colors')
-  .select(`
-    price_rrp,
-    photo_url,
-    colors (
-      id,
-      name,
-      hex_preview,
-      coating_id,
-      coatings ( id, name, slug )
-    ),
-    models (
-      id,
-      name,
-      has_glass,
-      series (
-        id,
-        name,
-        slug,
-        coating_id,
-        coatings ( id, name, slug )
-      )
-    )
-  `)
-  .order('price_rrp', { ascending: true })
-
-if (error) console.error('Supabase error:', error.message)
-
-/* ── Типы ── */
-interface CardItem {
-  id:          string
-  slug:        string
-  name:        string
-  series:      string
-  seriesSlug:  string
-  coating:     string
-  coatingSlug: string
-  colorName:   string
-  colorHex:    string
-  /** Все цвета, в которых реально доступна эта модель — для корректной фильтрации по цвету */
-  colorNames:  string[]
-  /** Те же цвета с hex/ценой/фото — рядок свотчей на карточке переключает
-      обложку и цену прямо в каталоге, без захода в товар */
-  colorSwatches: { name: string; hex: string; price: number | null; photo: string }[]
-  photo:       string
-  price:       number | null
-  hasGlass:    boolean
-}
-
-const normalizeHexColor = (value: string | null | undefined) => {
-  const normalized = (value ?? '')
-    .trim()
-    .replaceAll('С', 'C')
-    .replaceAll('с', 'c')
-
-  return /^#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/.test(normalized)
-    ? normalized
-    : '#cccccc'
-}
-
-/* ── Полный набор цветов на модель (по всем строкам, не только первой) —
-   нужен для корректной фильтрации: модель может подходить под фильтр
-   «цвет X», даже если её карточка показывает другой цвет как основной.
-   Свотчи (name+hex) — та же карта, чтобы на карточке в каталоге сразу было
-   видно все доступные цвета, а не только тот, что выбран для обложки. ── */
-const colorsByModel = new Map<string, string[]>()
-const colorSwatchesByModel = new Map<string, { name: string; hex: string; price: number | null; photo: string }[]>()
-for (const row of (data ?? [])) {
-  const model = row.models as any
-  const color = row.colors as any
-  if (!model || !color?.name) continue
-  const list = colorsByModel.get(model.id) ?? []
-  if (!list.includes(color.name)) list.push(color.name)
-  colorsByModel.set(model.id, list)
-
-  const swatches = colorSwatchesByModel.get(model.id) ?? []
-  if (!swatches.some(s => s.name === color.name)) {
-    swatches.push({
-      name:  color.name,
-      hex:   normalizeHexColor(color.hex_preview),
-      price: row.price_rrp ?? null,
-      photo: row.photo_url ?? '',
-    })
-  }
-  colorSwatchesByModel.set(model.id, swatches)
-}
-
-/* ── Нормализуем: 1 модель = 1 карточка (первый цвет — для витрины) ── */
-const cards: CardItem[] = []
-const seen = new Set<string>()
-
-for (const row of (data ?? [])) {
-  const model   = row.models as any
-  const color   = row.colors as any
-  if (!model || !color) continue
-  if (seen.has(model.id)) continue
-  seen.add(model.id)
-
-  const series  = model?.series  as any
-  const coating = series?.coatings ?? color?.coatings as any
-
-  cards.push({
-    id:          model.id,
-    slug:        '',
-    name:        model.name,
-    series:      series?.name   ?? '—',
-    seriesSlug:  series?.slug   ?? '',
-    coating:     coating?.name  ?? '—',
-    coatingSlug: coating?.slug  ?? '',
-    colorName:   color.name,
-    colorHex:    normalizeHexColor(color.hex_preview),
-    colorNames:  colorsByModel.get(model.id) ?? [color.name],
-    colorSwatches: colorSwatchesByModel.get(model.id) ?? [{ name: color.name, hex: normalizeHexColor(color.hex_preview), price: row.price_rrp ?? null, photo: row.photo_url ?? '' }],
-    photo:       row.photo_url  ?? '',
-    price:       row.price_rrp  ?? null,
-    hasGlass:    model.has_glass ?? false,
-  })
-}
-
-/* ── Читаемые слаги вместо UUID — та же функция, что и в /models/[id].astro,
-   иначе ссылки карточек разойдутся с реально сгенерированными маршрутами ── */
-const slugMap = buildModelSlugMap(cards.map(c => ({ id: c.id, name: c.name, seriesSlug: c.seriesSlug })))
-for (const card of cards) {
-  card.slug = slugMap.get(card.id)!
-}
+const { cards, error } = await getCatalogCards()
 
 /* ── Уникальные опции для фильтров ── */
 const allSeries = [...new Map(
@@ -151,13 +24,12 @@ const allCoatings = [...new Map(
     .map(c => [c.coatingSlug, { label: c.coating, value: c.coatingSlug }])
 ).values()]
 
-/* Из сырых строк, не из карточек — иначе цвета, которые ни у одной модели
-   не оказались «первыми», выпадают из списка фильтра (были видны 12 из 14). */
+/* Из colorSwatches (полный набор цветов на модель, не только первого) —
+   свотчи уже содержат все цвета каждой модели, так что колонка не теряет
+   цвета, которые ни у одной модели не оказались «первыми». */
 const allColors = [...new Map(
-  (data ?? [])
-    .map(row => row.colors as any)
-    .filter(color => color?.name)
-    .map(color => [color.name, { label: color.name, value: color.name, color: normalizeHexColor(color.hex_preview) }])
+  cards
+    .flatMap(c => c.colorSwatches.map(s => [s.name, { label: s.name, value: s.name, color: s.hex }] as const))
 ).values()]
 
 /* ── Начальные фильтры из URL ── */
@@ -202,7 +74,7 @@ const structuredData = canonicalUrl ? [
   {error && (
     <div class="container pt-8">
       <div class="rounded-2xl bg-red-50 border border-red-100 px-5 py-4 text-red-700 text-sm">
-        Ошибка загрузки каталога: {error.message}
+        Ошибка загрузки каталога: {error}
       </div>
     </div>
   )}
