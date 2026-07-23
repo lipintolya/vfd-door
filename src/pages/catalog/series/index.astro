@@ -1,0 +1,129 @@
+---
+/**
+ * src/pages/catalog/series/index.astro
+ * Хаб — сетка карточек всех серий. Добавление новой серии в Supabase
+ * автоматически добавляет карточку сюда, без правки этого файла.
+ */
+import BaseLayout from '../../../layouts/BaseLayout.astro'
+import Breadcrumbs from '../../../components/ui/Breadcrumbs.astro'
+import { getCatalogCards, getSeriesList, getSeriesCards } from '../../../lib/catalog-data'
+import { getSeriesSpec } from '../../../data/series-descriptions'
+
+const { cards } = await getCatalogCards()
+const seriesList = getSeriesList(cards)
+
+const seriesCardsData = seriesList.map(series => {
+  const spec = getSeriesSpec(series.slug, series.coatingSlug)
+  const seriesCards = getSeriesCards(cards, series.slug)
+  return {
+    ...series,
+    tagline: spec.tagline,
+    cover:   spec.heroImage || seriesCards[0]?.photo || '',
+  }
+})
+
+const fmt = (n: number) => n.toLocaleString('ru-RU') + ' ₽'
+
+const canonicalUrl = Astro.site ? new URL('/catalog/series', Astro.site).href : undefined
+
+const breadcrumbItems = [
+  { label: 'Главная', href: '/' },
+  { label: 'Каталог', href: '/catalog' },
+  { label: 'Серии' },
+]
+
+const structuredData = canonicalUrl ? [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: breadcrumbItems.map((item, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: item.label,
+      ...(item.href ? { item: new URL(item.href, canonicalUrl).href } : {}),
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Серии дверей ВФД',
+    description: 'Все серии межкомнатных дверей ВФД — покрытия, характеристики, цены.',
+    url: canonicalUrl,
+    numberOfItems: seriesCardsData.length,
+  },
+] : undefined
+---
+
+<BaseLayout
+  title="Серии дверей — каталог коллекций | ВФД Челябинск"
+  description="Все серии межкомнатных дверей ВФД: Иннова, Линия, Стокгольм и другие. Покрытия, характеристики, цены. Салон в Челябинске."
+  canonical={canonicalUrl}
+  structuredData={structuredData}
+>
+
+  <div class="breadcrumb-bar">
+    <div class="container">
+      <Breadcrumbs items={breadcrumbItems} />
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <header class="mb-10 max-w-3xl md:mb-16">
+        <p class="t-eyebrow mb-3">Каталог</p>
+        <h1 class="m-0 mb-4 text-3xl font-medium leading-tight tracking-tight text-slate-900 md:text-5xl">Серии дверей</h1>
+        <p class="m-0 text-base leading-relaxed text-slate-600 md:text-lg">
+          {seriesCardsData.length} {seriesCardsData.length === 1 ? 'серия' : 'серий'} — выберите коллекцию, чтобы увидеть все модели, покрытия и цены.
+        </p>
+      </header>
+
+      <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {seriesCardsData.map(series => (
+          <a href={`/catalog/series/${series.slug}`} class="sh-card">
+            <div class="sh-card__img-wrap">
+              {series.cover && (
+                <img
+                  src={series.cover}
+                  alt={`Серия ${series.name} — ВФД`}
+                  class="sh-card__img"
+                  loading="lazy"
+                  decoding="async"
+                  width="600"
+                  height="450"
+                />
+              )}
+            </div>
+            <div class="sh-card__body">
+              <h2 class="sh-card__name">{series.name}</h2>
+              {series.tagline && <p class="sh-card__tagline">{series.tagline}</p>}
+              <p class="sh-card__meta">
+                {series.modelCount} {series.modelCount === 1 ? 'модель' : 'моделей'}
+                {series.minPrice && <span> · от {fmt(series.minPrice)}</span>}
+              </p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+.sh-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e5e7eb;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  text-decoration: none;
+  transition: border-color 150ms ease, transform 150ms ease;
+}
+.sh-card:hover { border-color: #94a3b8; transform: translateY(-2px); }
+.sh-card__img-wrap { aspect-ratio: 4/3; background: #f1f5f9; overflow: hidden; }
+.sh-card__img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.sh-card__body { padding: 1.25rem 1.375rem 1.5rem; }
+.sh-card__name { margin: 0 0 0.375rem; font-size: 1.25rem; font-weight: 500; color: #0f172a; letter-spacing: -0.01em; }
+.sh-card__tagline { margin: 0 0 0.625rem; font-size: 0.875rem; color: #64748b; line-height: 1.5; }
+.sh-card__meta { margin: 0; font-size: 0.8125rem; font-weight: 600; color: #94a3b8; }
+</style>

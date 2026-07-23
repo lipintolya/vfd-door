@@ -31,6 +31,9 @@ export default defineConfig({
         if (/\/(catalog|about|contacts|partitions|vhodnye-dveri)\/?$/.test(u)) {
           return { ...item, changefreq: 'weekly', priority: 0.8 }
         }
+        if (/\/catalog\/series(\/.+)?\/?$/.test(u)) {
+          return { ...item, changefreq: 'weekly', priority: 0.8 }
+        }
         if (/\/articles\/?$/.test(u)) {
           return { ...item, changefreq: 'weekly', priority: 0.7 }
         }
