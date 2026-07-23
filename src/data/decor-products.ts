@@ -40,8 +40,8 @@ export interface PriceRow {
 export const FRAMUGA_MATERIALS: Material[] = ['emalex', 'ekoshpon']
 export const FRAMUGA_ROWS: PriceRow[] = [
   { name: 'Фальшфрамуга',            size: '930×930×10',                      unit: 'шт',    prices: { emalex: 2_744, ekoshpon: 2_534 } },
-  { name: 'Коробка компланарная',    size: '75×38×2100 (2,5 шт)',             unit: 'компл', prices: { emalex: 2_590, ekoshpon: 2_422 } },
-  { name: 'Наличник компланарный',   size: '90×10×3000 (2 шт)',               unit: 'компл', prices: { emalex: 1_736, ekoshpon: 1_366 } },
+  { name: 'Коробка компланарная',    size: '75×38×2400 (2,5 шт)',             unit: 'компл', prices: { emalex: 2_590, ekoshpon: 2_422 } },
+  { name: 'Наличник компланарный',   size: '90×10×2800 (2 шт)',               unit: 'компл', prices: { emalex: 1_736, ekoshpon: 1_366 } },
   { name: 'Комплект',                size: 'фальшфрамуга, 2,5 коробки, 2 наличника', unit: 'компл', prices: { emalex: 7_070, ekoshpon: 6_322 } },
 ]
 
