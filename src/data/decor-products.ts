@@ -4,15 +4,22 @@
    ============================================================ */
 
 // ── Фото ──
-// framuga/plintus/reyki — обложки для соответствующих секций, вставить
-// сюда, когда будут готовы (пусто = секция рендерится без фото).
+// Постеры 1920×1080 под таблицей каждой секции (компонент InfoImageViewer,
+// variant="photo" — без леттербоксинга, aspect-ratio 16:9).
 export const IMAGES = {
-  hero:        'https://storage.yandexcloud.net/vfd74ru/decor/render_framuga.webp',
-  framuga:     'https://storage.yandexcloud.net/vfd74ru/decor/framuga_r.webp',
-  framugaInfo: 'https://storage.yandexcloud.net/vfd74ru/decor/framuga_info.webp',
-  plintus:     '',
-  reyki:       '',
+  hero:    'https://storage.yandexcloud.net/vfd74ru/decor/render_framuga.webp',
+  framuga: 'https://storage.yandexcloud.net/vfd74ru/decor/framuga_type.webp',
+  plintus: 'https://storage.yandexcloud.net/vfd74ru/decor/plintus/plintus_type.webp',
 } as const
+
+// Декоративные рейки — 4 фото, по порядку соответствуют строкам REYKI_ROWS
+// (портретные, ~3:4 — не 16:9, как постеры выше).
+export const REYKI_IMAGES: string[] = [
+  'https://storage.yandexcloud.net/vfd74ru/decor/reika/reyki_1.webp',
+  'https://storage.yandexcloud.net/vfd74ru/decor/reika/reyki_2.webp',
+  'https://storage.yandexcloud.net/vfd74ru/decor/reika/reyki_3.webp',
+  'https://storage.yandexcloud.net/vfd74ru/decor/reika/reyki_4.webp',
+]
 
 export type Material = 'emalex' | 'ekoshpon' | 'emal'
 

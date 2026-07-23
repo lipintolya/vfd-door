@@ -7,7 +7,16 @@ interface InfoImage {
   alt: string
 }
 
-defineProps<{ images: InfoImage[] }>()
+const props = withDefaults(defineProps<{
+  images: InfoImage[]
+  /** diagram (по умолчанию) — серый канвас под схемы произвольного формата;
+      photo — постеры/фото, без канваса, кадрируются по aspectRatio */
+  variant?: 'diagram' | 'photo'
+  aspectRatio?: string
+}>(), {
+  variant: 'diagram',
+  aspectRatio: '16 / 9',
+})
 
 const active = ref<InfoImage | null>(null)
 
@@ -30,7 +39,11 @@ onUnmounted(() => {
 
 <template>
   <div class="iiv-host">
-    <div class="iiv">
+    <div
+      class="iiv"
+      :class="{ 'iiv--photo': variant === 'photo' }"
+      :style="variant === 'photo' ? { '--iiv-ar': aspectRatio } : {}"
+    >
       <figure v-for="img in images" :key="img.src" class="iiv-card">
         <figcaption class="iiv-head">
           <span class="iiv-caption">{{ img.caption }}</span>
@@ -160,6 +173,19 @@ onUnmounted(() => {
   transition: transform 300ms ease;
 }
 .iiv-imgbtn:hover img { transform: scale(1.015); }
+
+/* ── Photo variant — постеры/фото без канваса, кадрируются под фикс.
+   пропорцию (--iiv-ar), а не вписываются в фикс. высоту с летербоксингом ── */
+.iiv--photo .iiv-imgbtn {
+  padding: 0;
+  background: transparent;
+}
+.iiv--photo .iiv-imgbtn img {
+  height: auto;
+  max-height: none;
+  aspect-ratio: var(--iiv-ar, 16 / 9);
+  object-fit: cover;
+}
 
 /* ── Overlay ── */
 .iiv-overlay {

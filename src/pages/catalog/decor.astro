@@ -5,6 +5,7 @@ import FaqAccordion from '../../components/ui/FaqAccordion.astro'
 import InfoImageViewer from '../../components/catalog/InfoImageViewer.vue'
 import {
   IMAGES,
+  REYKI_IMAGES,
   MATERIAL_LABELS,
   FRAMUGA_MATERIALS, FRAMUGA_ROWS,
   PLINTUS_MATERIALS, PLINTUS_ROWS,
@@ -162,21 +163,15 @@ const structuredData = canonicalUrl ? [
       </div>
       <p class="dc-table-foot">Цены за единицу/комплект, РРЦ. * Цены ознакомительные — точный расчёт под ваш проём у менеджера салона.</p>
 
-      {(IMAGES.framuga || IMAGES.framugaInfo) && (
+      {IMAGES.framuga && (
         <InfoImageViewer
           client:load
-          images={[
-            ...(IMAGES.framuga ? [{
-              src: IMAGES.framuga,
-              caption: 'Фальшфрамуга и компланарный короб',
-              alt: 'Фальшфрамуга и компланарный короб — ВФД',
-            }] : []),
-            ...(IMAGES.framugaInfo ? [{
-              src: IMAGES.framugaInfo,
-              caption: 'Комплектация и характеристики',
-              alt: 'Схема комплектации фальшфрамуги и компланарного короба',
-            }] : []),
-          ]}
+          variant="photo"
+          images={[{
+            src: IMAGES.framuga,
+            caption: 'Фальшфрамуга и компланарный короб',
+            alt: 'Фальшфрамуга и компланарный короб в интерьере — ВФД',
+          }]}
         />
       )}
     </div>
@@ -187,7 +182,7 @@ const structuredData = canonicalUrl ? [
   ══════════════════════════════════════════════ -->
   <section class="section" style="padding-bottom: 0">
     <div class="container">
-      <div class:list={['dc-section', IMAGES.plintus && 'dc-section--photo']}>
+      <div class="dc-section">
         <div class="dc-section__text">
           <h2 class="dc-h2">Плинтус</h2>
           <p class="dc-p">
@@ -201,18 +196,6 @@ const structuredData = canonicalUrl ? [
             и просторных комнат.
           </p>
         </div>
-        {IMAGES.plintus && (
-          <div class="dc-section__photo">
-            <img
-              src={IMAGES.plintus}
-              alt="Плинтус в цвет дверного полотна — ВФД"
-              loading="lazy"
-              decoding="async"
-              width="800"
-              height="600"
-            />
-          </div>
-        )}
       </div>
 
       <div class="dc-table-wrap">
@@ -238,6 +221,18 @@ const structuredData = canonicalUrl ? [
         </table>
       </div>
       <p class="dc-table-foot">Длина плинтуса — 2140 мм. Клипсы для монтажа — единая цена для всех покрытий. * Цены ознакомительные — точный расчёт у менеджера салона.</p>
+
+      {IMAGES.plintus && (
+        <InfoImageViewer
+          client:load
+          variant="photo"
+          images={[{
+            src: IMAGES.plintus,
+            caption: 'Плинтус в интерьере',
+            alt: 'Плинтус в цвет дверного полотна — ВФД',
+          }]}
+        />
+      )}
     </div>
   </section>
 
@@ -246,7 +241,7 @@ const structuredData = canonicalUrl ? [
   ══════════════════════════════════════════════ -->
   <section class="section">
     <div class="container">
-      <div class:list={['dc-section', IMAGES.reyki && 'dc-section--photo']}>
+      <div class="dc-section">
         <div class="dc-section__text">
           <h2 class="dc-h2">Декоративные рейки</h2>
           <p class="dc-p">
@@ -260,18 +255,6 @@ const structuredData = canonicalUrl ? [
             в цвет дверей и мебели для единого стиля интерьера.
           </p>
         </div>
-        {IMAGES.reyki && (
-          <div class="dc-section__photo">
-            <img
-              src={IMAGES.reyki}
-              alt="Декоративные рейки для отделки стен — ВФД"
-              loading="lazy"
-              decoding="async"
-              width="800"
-              height="600"
-            />
-          </div>
-        )}
       </div>
 
       <h3 class="dc-h3">Минимальный комплект</h3>
@@ -298,6 +281,19 @@ const structuredData = canonicalUrl ? [
         </table>
       </div>
       <p class="dc-table-foot">Длина рейки — 2750 мм, комплект — по 4 шт каждого типа. * Цены ознакомительные — точный расчёт у менеджера салона.</p>
+
+      {REYKI_IMAGES.length > 0 && (
+        <InfoImageViewer
+          client:load
+          variant="photo"
+          aspectRatio="3 / 4"
+          images={REYKI_IMAGES.map((src, i) => ({
+            src,
+            caption: REYKI_ROWS[i]?.name ?? `Рейка, фото ${i + 1}`,
+            alt: `${REYKI_ROWS[i]?.name ?? 'Декоративная рейка'} — ВФД`,
+          }))}
+        />
+      )}
     </div>
   </section>
 
@@ -372,25 +368,7 @@ const structuredData = canonicalUrl ? [
 }
 .dc-p strong { color: #334155; font-weight: 600; }
 
-/* ── Section text + photo slot (пусто, пока не добавлены фото) ──── */
 .dc-section { display: flex; flex-direction: column; margin-bottom: 0; }
-.dc-section--photo {
-  display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: clamp(2rem, 5vw, 3.5rem);
-  align-items: start;
-}
-.dc-section__photo {
-  border-radius: 1.25rem;
-  overflow: hidden;
-  border: 1px solid #e5e7eb;
-}
-.dc-section__photo > img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 4/3;
-  object-fit: cover;
-}
 
 /* ── Hero ─────────────────────────────────────────────────────── */
 .dc-hero-wrap { padding-top: clamp(0.75rem, 1.5vw, 1.25rem); padding-bottom: clamp(2.5rem, 4vw, 3.5rem); }
@@ -551,10 +529,6 @@ const structuredData = canonicalUrl ? [
 .dc-related > a:hover { color: #0f172a; border-color: #94a3b8; }
 
 /* ── Responsive ───────────────────────────────────────────────── */
-@media (max-width: 900px) {
-  .dc-section--photo { grid-template-columns: 1fr; }
-  .dc-section__photo { order: -1; }
-}
 @media (max-width: 768px) {
   .dc-cta { flex-direction: column; align-items: flex-start; gap: 1.5rem; padding: 1.75rem 1.5rem; }
 }
