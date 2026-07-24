@@ -6,21 +6,32 @@
  */
 import BaseLayout from '../../../layouts/BaseLayout.astro'
 import Breadcrumbs from '../../../components/ui/Breadcrumbs.astro'
-import { getCatalogCards, getSeriesList, getSeriesCards } from '../../../lib/catalog-data'
-import { getSeriesSpec } from '../../../data/series-descriptions'
+import { getCatalogCards, getSeriesCardsData } from '../../../lib/catalog-data'
 
 const { cards } = await getCatalogCards()
-const seriesList = getSeriesList(cards)
+const seriesCardsData = getSeriesCardsData(cards)
 
-const seriesCardsData = seriesList.map(series => {
-  const spec = getSeriesSpec(series.slug, series.coatingSlug)
-  const seriesCards = getSeriesCards(cards, series.slug)
-  return {
-    ...series,
-    tagline: spec.tagline,
-    cover:   spec.heroImage || seriesCards[0]?.photo || '',
-  }
-})
+/* ── Группировка по покрытию — так же, как в фильтре каталога:
+   Эмалекс / Эмаль / Протач / ПЭТ. Порядок фиксирован для известных
+   покрытий, всё остальное (новое покрытие в будущем) — следом по
+   алфавиту, чтобы группа не потерялась молча. ── */
+const COATING_ORDER = ['emalex', 'emal', 'protach', 'pet']
+
+const coatingGroups = [...new Map(
+  seriesCardsData.map(s => [s.coatingSlug, { slug: s.coatingSlug, name: s.coatingName }])
+).values()]
+  .sort((a, b) => {
+    const ai = COATING_ORDER.indexOf(a.slug)
+    const bi = COATING_ORDER.indexOf(b.slug)
+    if (ai === -1 && bi === -1) return a.name.localeCompare(b.name, 'ru')
+    if (ai === -1) return 1
+    if (bi === -1) return -1
+    return ai - bi
+  })
+  .map(coating => ({
+    ...coating,
+    series: seriesCardsData.filter(s => s.coatingSlug === coating.slug),
+  }))
 
 const fmt = (n: number) => n.toLocaleString('ru-RU') + ' ₽'
 
@@ -77,39 +88,60 @@ const structuredData = canonicalUrl ? [
         </p>
       </header>
 
-      <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {seriesCardsData.map(series => (
-          <a href={`/catalog/series/${series.slug}`} class="sh-card">
-            <div class="sh-card__img-wrap">
-              {series.cover && (
-                <img
-                  src={series.cover}
-                  alt={`Серия ${series.name} — ВФД`}
-                  class="sh-card__img"
-                  loading="lazy"
-                  decoding="async"
-                  width="600"
-                  height="450"
-                />
-              )}
-            </div>
-            <div class="sh-card__body">
-              <h2 class="sh-card__name">{series.name}</h2>
-              {series.tagline && <p class="sh-card__tagline">{series.tagline}</p>}
-              <p class="sh-card__meta">
-                {series.modelCount} {series.modelCount === 1 ? 'модель' : 'моделей'}
-                {series.minPrice && <span> · от {fmt(series.minPrice)}</span>}
-              </p>
-            </div>
-          </a>
-        ))}
-      </div>
+      {coatingGroups.map(group => (
+        <div class="sh-group">
+          <div class="sh-group__head">
+            <h2 class="sh-group__title">{group.name}</h2>
+            <span class="sh-group__count">{group.series.length} {group.series.length === 1 ? 'серия' : 'серий'}</span>
+          </div>
+          <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {group.series.map(series => (
+              <a href={`/catalog/series/${series.slug}`} class="sh-card">
+                <div class="sh-card__img-wrap">
+                  {series.cover && (
+                    <img
+                      src={series.cover}
+                      alt={`Серия ${series.name} — ВФД`}
+                      class="sh-card__img"
+                      loading="lazy"
+                      decoding="async"
+                      width="600"
+                      height="450"
+                    />
+                  )}
+                </div>
+                <div class="sh-card__body">
+                  <h3 class="sh-card__name">{series.name}</h3>
+                  {series.tagline && <p class="sh-card__tagline">{series.tagline}</p>}
+                  <p class="sh-card__meta">
+                    {series.modelCount} {series.modelCount === 1 ? 'модель' : 'моделей'}
+                    {series.minPrice && <span> · от {fmt(series.minPrice)}</span>}
+                  </p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   </section>
 
 </BaseLayout>
 
 <style>
+.sh-group { margin-bottom: clamp(2.5rem, 5vw, 3.5rem); }
+.sh-group:last-child { margin-bottom: 0; }
+.sh-group__head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.875rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+.sh-group__title { margin: 0; font-size: 1.375rem; font-weight: 500; color: #0f172a; letter-spacing: -0.01em; }
+.sh-group__count { font-size: 0.8125rem; font-weight: 600; color: #94a3b8; }
+
 .sh-card {
   display: flex;
   flex-direction: column;

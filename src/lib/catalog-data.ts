@@ -6,6 +6,7 @@
  */
 import { supabase } from './supabase'
 import { buildModelSlugMap } from './slugify'
+import { getSeriesSpec } from '../data/series-descriptions'
 import type { CatalogCardItem } from '../components/catalog/types'
 
 const normalizeHexColor = (value: string | null | undefined) => {
@@ -125,6 +126,7 @@ export interface SeriesListItem {
   slug:        string
   name:        string
   coatingSlug: string
+  coatingName: string
   modelCount:  number
   minPrice:    number | null
 }
@@ -147,6 +149,7 @@ export function getSeriesList(cards: CatalogCardItem[]): SeriesListItem[] {
       slug:        card.seriesSlug,
       name:        card.series,
       coatingSlug: card.coatingSlug,
+      coatingName: card.coating,
       modelCount:  1,
       minPrice:    card.price,
     })
@@ -160,4 +163,24 @@ export function getSeriesCards(cards: CatalogCardItem[], seriesSlug: string): Ca
   return cards
     .filter(c => c.seriesSlug === seriesSlug)
     .sort((a, b) => (a.price ?? Infinity) - (b.price ?? Infinity))
+}
+
+export interface SeriesCardData extends SeriesListItem {
+  tagline: string
+  /** Обложка — heroImage из SeriesSpec, либо фото первой (по цене) модели серии. */
+  cover: string
+}
+
+/** Данные для карточки серии (хаб /catalog/series, полоса серий на /catalog) —
+    та же форма в обоих местах, чтобы не расходились при правках. */
+export function getSeriesCardsData(cards: CatalogCardItem[]): SeriesCardData[] {
+  return getSeriesList(cards).map(series => {
+    const spec = getSeriesSpec(series.slug, series.coatingSlug)
+    const seriesCards = getSeriesCards(cards, series.slug)
+    return {
+      ...series,
+      tagline: spec.tagline,
+      cover:   spec.heroImage || seriesCards[0]?.photo || '',
+    }
+  })
 }
