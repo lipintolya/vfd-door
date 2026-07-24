@@ -265,7 +265,10 @@ const structuredData = canonicalUrl ? [
   position: relative;
   overflow: hidden;
   margin-top: calc(-1 * var(--header-height, 88px));
-  min-height: calc(clamp(24rem, 46vw, 34rem) + var(--header-height, 88px));
+  /* min() против vh — без потолка по высоте вьюпорта clamp(...,46vw,...)
+     на широких мониторах разбухал, а короткого текста (крошки+заголовок)
+     не хватало его заполнить — зияющая пустота между ними. */
+  min-height: calc(min(clamp(22rem, 42vw, 30rem), 60vh) + var(--header-height, 88px));
   background: #0f172a;
   display: flex;
   flex-direction: column;
