@@ -269,7 +269,6 @@ const structuredData = canonicalUrl ? [
   background: #0f172a;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
 }
 .sr-hero__img {
   position: absolute;
@@ -284,9 +283,16 @@ const structuredData = canonicalUrl ? [
   inset: 0;
   background: linear-gradient(to top, rgba(15,23,42,0.92), rgba(15,23,42,0.5) 55%, rgba(15,23,42,0.15));
 }
+/* flex-столбец на всю высоту hero: крошки естественно у верха (сразу под
+   хедером), заголовок прижат к низу через margin-top:auto на __body —
+   раньше весь блок был один flex-end child, и «зазор от хедера» на деле
+   определялся разницей высоты hero и высоты контента, а не паддингом. */
 .sr-hero__content {
   position: relative;
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   padding-top: calc(var(--header-height, 88px) + clamp(2.5rem, 4vw, 3.5rem));
   padding-bottom: clamp(2.5rem, 6vw, 4.5rem);
 }
@@ -296,7 +302,7 @@ const structuredData = canonicalUrl ? [
 .sr-hero__crumbs :global(.breadcrumbs__current) { color: #fff; }
 .sr-hero__crumbs :global(.breadcrumbs__link:hover) { color: #fff; background: rgba(255,255,255,0.14); }
 .sr-hero__crumbs :global(.breadcrumbs__icon) { color: rgba(255,255,255,0.35); }
-.sr-hero__body { max-width: 44rem; color: #fff; }
+.sr-hero__body { margin-top: auto; max-width: 44rem; color: #fff; }
 .sr-hero__h1 {
   margin: 0 0 0.75rem;
   font-size: clamp(2.25rem, 5vw, 3.5rem);
