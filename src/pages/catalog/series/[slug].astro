@@ -97,14 +97,10 @@ const structuredData = canonicalUrl ? [
   structuredData={structuredData}
 >
 
-  <div class="breadcrumb-bar">
-    <div class="container">
-      <Breadcrumbs items={breadcrumbItems} />
-    </div>
-  </div>
-
   <!-- ══════════════════════════════════════════════
        HERO + ЯКОРНАЯ НАВИГАЦИЯ
+       Обложка заходит под фикс. хедер (margin-top отрицательный на
+       высоту хедера), крошки — поверх фото, как в референсе volhovec.
   ══════════════════════════════════════════════ -->
   <section class="sr-hero" aria-label={`Серия ${series.name}`}>
     {heroImage && (
@@ -120,13 +116,18 @@ const structuredData = canonicalUrl ? [
       />
     )}
     <div class="sr-hero__overlay" aria-hidden="true"></div>
-    <div class="sr-hero__body">
-      <p class="sr-eyebrow">Серия дверей</p>
-      <h1 class="sr-hero__h1">{series.name}</h1>
-      {spec.tagline && <p class="sr-hero__tagline">{spec.tagline}</p>}
-      <div class="sr-hero__actions">
-        <a href={TG} target="_blank" rel="noopener" class="btn btn-ghost">Получить расчёт</a>
-        <a href={`tel:${PHONE}`} class="btn btn-ghost">Позвонить</a>
+    <div class="container sr-hero__content">
+      <div class="sr-hero__crumbs">
+        <Breadcrumbs items={breadcrumbItems} />
+      </div>
+      <div class="sr-hero__body">
+        <p class="sr-eyebrow">Серия дверей</p>
+        <h1 class="sr-hero__h1">{series.name}</h1>
+        {spec.tagline && <p class="sr-hero__tagline">{spec.tagline}</p>}
+        <div class="sr-hero__actions">
+          <a href={TG} target="_blank" rel="noopener" class="btn btn-ghost">Получить расчёт</a>
+          <a href={`tel:${PHONE}`} class="btn btn-ghost">Позвонить</a>
+        </div>
       </div>
     </div>
   </section>
@@ -257,14 +258,18 @@ const structuredData = canonicalUrl ? [
 .sr-p--tight { margin-bottom: 1.5rem; }
 
 /* ── Hero ─────────────────────────────────────────────────────── */
+/* Заезжает под фикс. хедер (тот всегда position:fixed + полупрозрачный
+   фон) — отрицательный margin-top на высоту хедера, а контент внутри
+   получает такой же паддинг сверху, чтобы не оказаться под хедером. */
 .sr-hero {
   position: relative;
   overflow: hidden;
-  min-height: clamp(24rem, 46vw, 34rem);
-  padding: clamp(2.5rem, 6vw, 4.5rem) 0;
+  margin-top: calc(-1 * var(--header-height, 88px));
+  min-height: calc(clamp(24rem, 46vw, 34rem) + var(--header-height, 88px));
   background: #0f172a;
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 .sr-hero__img {
   position: absolute;
@@ -279,15 +284,19 @@ const structuredData = canonicalUrl ? [
   inset: 0;
   background: linear-gradient(to top, rgba(15,23,42,0.92), rgba(15,23,42,0.5) 55%, rgba(15,23,42,0.15));
 }
-.sr-hero__body {
+.sr-hero__content {
   position: relative;
   z-index: 1;
-  max-width: 44rem;
-  margin: 0 auto;
-  width: 100%;
-  padding: 0 var(--container-padding, 1.25rem);
-  color: #fff;
+  padding-top: calc(var(--header-height, 88px) + clamp(2.5rem, 4vw, 3.5rem));
+  padding-bottom: clamp(2.5rem, 6vw, 4.5rem);
 }
+.sr-hero__crumbs :global(.breadcrumbs) { margin-bottom: 1.5rem; }
+.sr-hero__crumbs :global(.breadcrumbs__link),
+.sr-hero__crumbs :global(.breadcrumbs__current) { color: rgba(255,255,255,0.75); }
+.sr-hero__crumbs :global(.breadcrumbs__current) { color: #fff; }
+.sr-hero__crumbs :global(.breadcrumbs__link:hover) { color: #fff; background: rgba(255,255,255,0.14); }
+.sr-hero__crumbs :global(.breadcrumbs__icon) { color: rgba(255,255,255,0.35); }
+.sr-hero__body { max-width: 44rem; color: #fff; }
 .sr-hero__h1 {
   margin: 0 0 0.75rem;
   font-size: clamp(2.25rem, 5vw, 3.5rem);
