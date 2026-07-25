@@ -117,23 +117,23 @@ const structuredData = canonicalUrl ? [
               <h2 class="m-0 text-lg font-medium text-ink">{group.name}</h2>
               <span class="text-xs font-semibold text-slate-400">{group.series.length} {group.series.length === 1 ? 'серия' : 'серий'}</span>
             </div>
-            <div class="-mx-1 flex snap-x snap-mandatory gap-3 overflow-x-auto px-1 pb-2">
+            <div class="-mx-1 flex snap-x snap-mandatory gap-4 overflow-x-auto px-1 pb-3">
               {group.series.map(s => (
-                <a href={`/catalog/series/${s.slug}`} class="group flex w-28 shrink-0 snap-start flex-col gap-2 sm:w-32">
-                  <div class="aspect-4/3 overflow-hidden rounded-xl border border-slate-200 bg-slate-100">
+                <a href={`/catalog/series/${s.slug}`} class="group flex w-40 shrink-0 snap-start flex-col gap-3 sm:w-52">
+                  <div class="aspect-3/4 overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
                     {s.cover && (
                       <img
                         src={s.cover}
                         alt={`Серия ${s.name} — ВФД`}
                         loading="lazy"
                         decoding="async"
-                        width="200"
-                        height="150"
+                        width="300"
+                        height="400"
                         class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                       />
                     )}
                   </div>
-                  <span class="truncate text-center text-xs font-semibold text-slate-700">{s.name}</span>
+                  <span class="text-center text-sm font-semibold text-slate-800">{s.name}</span>
                 </a>
               ))}
             </div>
