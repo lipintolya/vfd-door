@@ -87,6 +87,7 @@ export const seriesDescriptions: Record<string, SeriesSpec> = {
     material:    'Тамбурат с особым, малым размером сот. В основе прочная плита ХДФ и инженерный массив',
     edge:        'Эко-материал в цвет полотна',
     thickness:   '37',
+    heroImage:   'https://storage.yandexcloud.net/vfd74ru/cover_first_section/elegant.webp',
   },
 
   'antique-luxe': {
@@ -109,6 +110,7 @@ export const seriesDescriptions: Record<string, SeriesSpec> = {
     material:    'Тамбурат с особым, малым размером сот. В основе прочная плита ХДФ и инженерный массив',
     edge:        'Эко-материал в цвет полотна',
     thickness:   '37',
+    heroImage:   'https://storage.yandexcloud.net/vfd74ru/cover_first_section/basic.webp',
   },
 
   'classic-luxe': {
@@ -149,6 +151,7 @@ export const seriesDescriptions: Record<string, SeriesSpec> = {
     material:    'Тамбурат с особым, малым размером сот. В основе прочная плита ХДФ и инженерный массив',
     edge:        'Эко-материал в цвет полотна',
     thickness:   '37',
+    heroImage:   'https://storage.yandexcloud.net/vfd74ru/cover_first_section/urban.webp',
   },
 
   sektor: {
@@ -171,6 +174,7 @@ export const seriesDescriptions: Record<string, SeriesSpec> = {
     material:    'Тамбурат с особым, малым размером сот. В основе прочная плита ХДФ и инженерный массив',
     edge:        'Эко-материал в цвет полотна',
     thickness:   '37',
+    heroImage:   'https://storage.yandexcloud.net/vfd74ru/cover_first_section/emalex.webp',
   },
 
   'emalex-modern': {
@@ -181,6 +185,7 @@ export const seriesDescriptions: Record<string, SeriesSpec> = {
     material:    'Тамбурат с особым, малым размером сот. В основе прочная плита ХДФ и инженерный массив',
     edge:        'Эко-материал в цвет полотна',
     thickness:   '37',
+    heroImage:   'https://storage.yandexcloud.net/vfd74ru/cover_first_section/emalex_modern.webp',
   },
 
   // ── ПЭТ ──────────────────────────────────────────────────────────────────
