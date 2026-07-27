@@ -36,10 +36,10 @@ const fmt = (n: number) => n.toLocaleString('ru-RU') + ' ₽'
     />
   )}
   <div class="absolute inset-0 bg-linear-to-t from-black/80 via-black/5 to-transparent" aria-hidden="true"></div>
-  <div class="relative z-10 flex flex-col gap-1 p-4 sm:p-5">
-    <span class="text-base font-medium text-white sm:text-lg">{s.name}</span>
-    {s.tagline && <span class="line-clamp-2 text-xs leading-snug text-white/75">{s.tagline}</span>}
-    <span class="mt-1 text-base font-bold text-white sm:text-lg">
+  <div class="relative z-10 flex flex-col gap-1.5 p-4 sm:p-6">
+    <span class="text-xl font-semibold text-white sm:text-2xl">{s.name}</span>
+    {s.tagline && <span class="line-clamp-2 text-sm leading-snug text-white/80 sm:text-base">{s.tagline}</span>}
+    <span class="mt-1 text-lg font-bold text-white sm:text-xl">
       {s.minPrice ? `от ${fmt(s.minPrice)}` : `${s.modelCount} ${s.modelCount === 1 ? 'модель' : 'моделей'}`}
     </span>
   </div>
