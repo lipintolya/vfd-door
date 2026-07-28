@@ -5,6 +5,7 @@
  */
 import BaseLayout from '../layouts/BaseLayout.astro'
 import HeroSlider from '../components/home/HeroSlider.vue'
+import PriceIncreaseNotice from '../components/home/PriceIncreaseNotice.astro'
 import Features from '../components/home/Features.vue'
 import CatalogCategories from '../components/home/CatalogCategories.vue'
 import Promo from '../components/home/Promo.vue'
@@ -96,6 +97,7 @@ const localBusinessSchema = {
   preloadHero={true}
 >
   <HeroSlider client:load />
+  <PriceIncreaseNotice />
   <Features client:visible />
   <CatalogCategories client:visible />
   <Reviews client:visible />
