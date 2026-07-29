@@ -55,6 +55,7 @@ export const seriesDescriptions: Record<string, SeriesSpec> = {
     material:    'Тамбурат с особым, малым размером сот. В основе прочная плита ХДФ и инженерный массив',
     edge:        'Эко-материал в цвет полотна',
     thickness:   '37',
+    heroImage:   'https://storage.yandexcloud.net/vfd74ru/cover_first_section/emal/stockholm.webp',
   },
 
   skinel: {
@@ -65,6 +66,7 @@ export const seriesDescriptions: Record<string, SeriesSpec> = {
     material:    'Тамбурат с особым, малым размером сот. В основе прочная плита ХДФ и инженерный массив',
     edge:        'Эко-материал в цвет полотна',
     thickness:   '37',
+    heroImage:   'https://storage.yandexcloud.net/vfd74ru/cover_first_section/emal/skinel.webp',
   },
 
   winter: {
@@ -75,6 +77,7 @@ export const seriesDescriptions: Record<string, SeriesSpec> = {
     material:    'Тамбурат с особым, малым размером сот. В основе прочная плита ХДФ и инженерный массив',
     edge:        'Эко-материал в цвет полотна',
     thickness:   '37',
+    heroImage:   'https://storage.yandexcloud.net/vfd74ru/cover_first_section/emal/winter.webp',
   },
 
   elegant: {
@@ -98,6 +101,7 @@ export const seriesDescriptions: Record<string, SeriesSpec> = {
     material:    'Тамбурат с особым, малым размером сот. В основе прочная плита ХДФ и инженерный массив',
     edge:        'Эко-материал в цвет полотна',
     thickness:   '37',
+    heroImage:   'https://storage.yandexcloud.net/vfd74ru/cover_first_section/emal/antique_luxe.webp',
   },
 
   basic: {
@@ -131,6 +135,7 @@ export const seriesDescriptions: Record<string, SeriesSpec> = {
     material:    'Тамбурат с особым, малым размером сот. В основе прочная плита ХДФ и инженерный массив',
     edge:        'Эко-материал в цвет полотна',
     thickness:   '37',
+    heroImage:   'https://storage.yandexcloud.net/vfd74ru/cover_first_section/emal/linea.webp',
   },
 
   premium: {
@@ -141,6 +146,7 @@ export const seriesDescriptions: Record<string, SeriesSpec> = {
     material:    'Тамбурат с особым, малым размером сот. В основе прочная плита ХДФ и инженерный массив',
     edge:        'Эко-материал в цвет полотна',
     thickness:   '37',
+    heroImage:   'https://storage.yandexcloud.net/vfd74ru/cover_first_section/emal/premium.webp',
   },
 
   urban: {
@@ -162,6 +168,7 @@ export const seriesDescriptions: Record<string, SeriesSpec> = {
     material:    'Тамбурат с особым, малым размером сот. В основе прочная плита ХДФ и инженерный массив',
     edge:        'Эко-материал в цвет полотна',
     thickness:   '37',
+    heroImage:   'https://storage.yandexcloud.net/vfd74ru/cover_first_section/emal/sector.webp',
   },
 
   // ── ЭМАЛЕКС ──────────────────────────────────────────────────────────────
@@ -198,6 +205,7 @@ export const seriesDescriptions: Record<string, SeriesSpec> = {
     material:    'Тамбурат с особым, малым размером сот. В основе прочная плита ХДФ и инженерный массив',
     edge:        'ПВХ-кромка в цвет полотна',
     thickness:   '36',
+    heroImage:   'https://storage.yandexcloud.net/vfd74ru/cover_first_section/pet/innova.webp',
   },
 
   'urban-pet': {
@@ -208,6 +216,20 @@ export const seriesDescriptions: Record<string, SeriesSpec> = {
     material:    'Тамбурат с особым, малым размером сот. В основе прочная плита ХДФ и инженерный массив',
     edge:        'ПВХ-кромка в цвет полотна',
     thickness:   '36',
+    heroImage:   'https://storage.yandexcloud.net/vfd74ru/cover_first_section/pet/urban_pet.webp',
+  },
+
+  // ── ПРОТАЧ ───────────────────────────────────────────────────────────────
+
+  smart: {
+    tagline:     '',
+    description: '',
+    features:    [],
+    coating:     '',
+    material:    '',
+    edge:        '',
+    thickness:   '37',
+    heroImage:   'https://storage.yandexcloud.net/vfd74ru/cover_first_section/protouch/smart.webp',
   },
 }
 
