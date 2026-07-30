@@ -7,6 +7,7 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro'
 import Breadcrumbs from '../../../components/ui/Breadcrumbs.astro'
 import CatalogGrid from '../../../components/catalog/CatalogGrid.vue'
+import InfoImageViewer from '../../../components/catalog/InfoImageViewer.vue'
 import { getCatalogCards, getSeriesList, getSeriesCards } from '../../../lib/catalog-data'
 import { getSeriesSpec } from '../../../data/series-descriptions'
 import type { CatalogCardItem } from '../../../components/catalog/types'
@@ -150,6 +151,16 @@ const structuredData = canonicalUrl ? [
       <div class="container">
         <h2 class="sr-h2">О коллекции</h2>
         <p class="sr-p">{spec.description}</p>
+        {spec.infoImage && (
+          <InfoImageViewer
+            client:load
+            images={[{
+              src: spec.infoImage,
+              caption: `Презентация серии ${series.name}`,
+              alt: `Презентация серии ${series.name} — ВФД`,
+            }]}
+          />
+        )}
       </div>
     </section>
   )}

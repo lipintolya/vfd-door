@@ -38,6 +38,10 @@ export interface SeriesSpec {
   /** Обложка hero страницы серии. Пусто → на странице серии используется
       фото первой (по цене) модели серии как фолбэк. */
   heroImage?:  string
+  /** Инфографика/презентация серии — картинка с текстом внутри (не фото),
+      показывается под описанием в «О коллекции». object-fit:contain
+      (см. InfoImageViewer default variant) — обрезать нельзя, там текст. */
+  infoImage?:  string
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -113,6 +117,7 @@ export const seriesDescriptions: Record<string, SeriesSpec> = {
     edge:        'Защитная кромка в цвет полотна, обеспечивающая герметичность и защиту торцов от влаги и сколов',
     thickness:   '38',
     heroImage:   'https://storage.yandexcloud.net/vfd74ru/cover_first_section/basic.webp',
+    infoImage:   'https://storage.yandexcloud.net/vfd74ru/info/basic/prezentaciya_basic_emalex.webp',
   },
 
   'classic-luxe': {
