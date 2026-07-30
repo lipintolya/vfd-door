@@ -9,9 +9,12 @@ interface InfoImage {
 
 const props = withDefaults(defineProps<{
   images: InfoImage[]
-  /** diagram (по умолчанию) — серый канвас под схемы произвольного формата;
-      photo — постеры/фото, без канваса, кадрируются по aspectRatio */
-  variant?: 'diagram' | 'photo'
+  /** diagram (по умолчанию) — небольшой канвас с потолком высоты, под мелкие
+      схемы; photo — постеры/фото на всю карточку, кадрируются (object-fit:
+      cover) по aspectRatio — для реальных фото, где кроп не страшен; wide —
+      во всю ширину контейнера БЕЗ кропа (object-fit:contain) по aspectRatio
+      — для инфографики/презентаций с текстом внутри, где обрезать нельзя. */
+  variant?: 'diagram' | 'photo' | 'wide'
   aspectRatio?: string
 }>(), {
   variant: 'diagram',
@@ -41,8 +44,8 @@ onUnmounted(() => {
   <div class="iiv-host">
     <div
       class="iiv"
-      :class="{ 'iiv--photo': variant === 'photo' }"
-      :style="variant === 'photo' ? { '--iiv-ar': aspectRatio } : {}"
+      :class="{ 'iiv--photo': variant === 'photo', 'iiv--wide': variant === 'wide' }"
+      :style="variant !== 'diagram' ? { '--iiv-ar': aspectRatio } : {}"
     >
       <figure v-for="img in images" :key="img.src" class="iiv-card">
         <figcaption class="iiv-head">
@@ -185,6 +188,21 @@ onUnmounted(() => {
   max-height: none;
   aspect-ratio: var(--iiv-ar, 16 / 9);
   object-fit: cover;
+}
+
+/* ── Wide variant — инфографика/презентация на всю ширину карточки, без
+   кропа (там текст, обрезать нельзя, в отличие от photo-варианта). Лёгкий
+   канвас — на случай если пропорция aspectRatio не идеально совпадёт с
+   реальной, летербоксинг не будет выглядеть как баг. ── */
+.iiv--wide .iiv-imgbtn {
+  padding: 0;
+  background: #f8fafc;
+}
+.iiv--wide .iiv-imgbtn img {
+  height: auto;
+  max-height: none;
+  aspect-ratio: var(--iiv-ar, 16 / 9);
+  object-fit: contain;
 }
 
 /* ── Overlay ── */
