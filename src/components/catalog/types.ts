@@ -11,8 +11,14 @@ export interface CatalogCardItem {
   /** Все цвета, в которых реально доступна эта модель — для корректной фильтрации по цвету */
   colorNames: string[]
   /** Те же цвета с hex/ценой/фото — рядок свотчей на карточке переключает
-      обложку и цену прямо в каталоге, без захода в товар */
-  colorSwatches: { name: string; hex: string; price: number | null; photo: string }[]
+      обложку и цену прямо в каталоге, без захода в товар. available:false —
+      цвет заведён у покрытия серии, но фото под эту конкретную модель фабрика
+      ещё не прислала: свотч всё равно показываем (кликабельный, с hex), но
+      без цены/фото — иначе выглядит так, будто модель в этом цвете не
+      существует, хотя на деле просто нет фото. Такие цвета НЕ участвуют в
+      фильтре каталога (см. colorNames/allColors) — иначе фильтр по ним давал
+      бы пустую выдачу. */
+  colorSwatches: { name: string; hex: string; price: number | null; photo: string; available: boolean }[]
   photo: string
   price: number | null
   hasGlass: boolean

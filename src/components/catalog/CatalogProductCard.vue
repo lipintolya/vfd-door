@@ -26,10 +26,15 @@ const extraSwatchCount = computed(() => Math.max(0, props.card.colorSwatches.len
 
 const activeSwatchIdx = ref(0)
 const activeSwatch = computed(() => props.card.colorSwatches[activeSwatchIdx.value] ?? props.card.colorSwatches[0])
+/* Фото не переключаем на пустое — у цвета без фото под эту модель остаётся
+   текущее/дефолтное фото, а не пустой плейсхолдер (цвет выглядел бы "сломанным"). */
 const activePhoto = computed(() => activeSwatch.value?.photo || props.card.photo)
-const activePrice = computed(() => activeSwatch.value?.price ?? props.card.price)
+/* Цену не наследуем от базовой при отсутствии фото — цена под конкретный
+   цвет не подтверждена, честнее показать «По запросу», чем чужую цифру. */
+const activePrice = computed(() => activeSwatch.value?.available === false ? null : (activeSwatch.value?.price ?? props.card.price))
 const activeColorName = computed(() => activeSwatch.value?.name ?? props.card.colorName)
 const activeColorHex = computed(() => activeSwatch.value?.hex ?? props.card.colorHex)
+const activeSwatchUnavailable = computed(() => activeSwatch.value?.available === false)
 
 const selectSwatch = (idx: number) => { activeSwatchIdx.value = idx }
 
@@ -141,16 +146,23 @@ const seriesBadgeClass = computed(() => {
           v-for="(swatch, idx) in visibleSwatches"
           :key="swatch.name"
           type="button"
-          class="h-4.5 w-4.5 shrink-0 rounded-full border border-black/10 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.55)] transition-transform active:scale-90"
-          :class="idx === activeSwatchIdx ? 'ring-2 ring-offset-1 ring-teal-600' : ''"
+          class="h-4.5 w-4.5 shrink-0 rounded-full transition-transform active:scale-90"
+          :class="[
+            idx === activeSwatchIdx ? 'ring-2 ring-offset-1 ring-teal-600' : '',
+            swatch.available === false
+              ? 'border-2 border-dashed border-black/30'
+              : 'border border-black/10 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.55)]',
+          ]"
           :style="{ backgroundColor: swatch.hex }"
-          :title="swatch.name"
-          :aria-label="`Цвет: ${swatch.name}`"
+          :title="swatch.available === false ? `${swatch.name} — фото уточняется` : swatch.name"
+          :aria-label="`Цвет: ${swatch.name}${swatch.available === false ? ', фото уточняется' : ''}`"
           :aria-pressed="idx === activeSwatchIdx"
           @click="selectSwatch(idx)"
         />
         <span v-if="extraSwatchCount > 0" class="shrink-0 text-xs font-semibold text-slate-400">+{{ extraSwatchCount }}</span>
-        <span class="ml-0.5 w-full truncate text-sm text-slate-500 @[13rem]:w-auto">{{ activeColorName }}</span>
+        <span class="ml-0.5 w-full truncate text-sm text-slate-500 @[13rem]:w-auto">
+          {{ activeColorName }}<span v-if="activeSwatchUnavailable" class="text-slate-400"> · фото уточняется</span>
+        </span>
       </div>
       <div v-else class="flex min-w-0 items-center gap-2">
         <span

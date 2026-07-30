@@ -8,6 +8,11 @@ export interface ColorVariant {
   photo:       string
   price:       number | null
   coatingSlug: string
+  /** false — цвет заведён у покрытия серии, но фото под эту модель фабрика
+      ещё не прислала. Свотч всё равно показываем (см. .astro, который его
+      добавляет), просто без фото/цены — иначе выглядит так, будто модель
+      в этом цвете не выпускается вовсе. */
+  available?:  boolean
 }
 
 import { calcKitPrice, BASE_KIT_DESCRIPTION } from '../../data/accessories'
@@ -24,8 +29,14 @@ const selectedIdx = ref(0)
 
 const selected = computed(() => props.colors[selectedIdx.value] ?? props.colors[0])
 
+/* Фото не пропадает при выборе цвета без снимка — остаётся фото первого
+   сфотканного цвета вместо пустого плейсхолдера. */
+const displayPhoto = computed(() =>
+  selected.value.photo || props.colors.find(c => c.photo)?.photo || ''
+)
+
 const kitTotal = computed(() => {
-  if (!selected.value.price) return null
+  if (selected.value.available === false || !selected.value.price) return null
   return selected.value.price + calcKitPrice(selected.value.coatingSlug, selected.value.name)
 })
 
@@ -43,9 +54,9 @@ const normalizeHex = (hex: string) => {
     <!-- Фото -->
     <div class="color-picker__photo-wrap">
       <img
-        v-if="selected.photo"
-        :key="selected.id"
-        :src="selected.photo"
+        v-if="displayPhoto"
+        :key="displayPhoto"
+        :src="displayPhoto"
         :alt="`${modelName} — ${selected.name}`"
         class="color-picker__photo"
         width="600"
@@ -63,7 +74,7 @@ const normalizeHex = (hex: string) => {
 
     <!-- Цена -->
     <div class="color-picker__price-row">
-      <span class="color-picker__price">{{ formatPrice(selected.price) }}</span>
+      <span class="color-picker__price">{{ selected.available === false ? 'По запросу' : formatPrice(selected.price) }}</span>
       <span class="color-picker__price-note">за полотно</span>
     </div>
     <div v-if="kitTotal" class="color-picker__kit-row">
@@ -74,6 +85,7 @@ const normalizeHex = (hex: string) => {
     <!-- Выбранный цвет -->
     <p class="color-picker__color-name">
       Цвет:&nbsp;<strong>{{ selected.name }}</strong>
+      <span v-if="selected.available === false" class="color-picker__color-note"> — фото уточняется</span>
     </p>
 
     <!-- Свотчи -->
@@ -88,10 +100,10 @@ const normalizeHex = (hex: string) => {
         :key="color.id"
         type="button"
         class="color-picker__swatch"
-        :class="{ 'is-active': i === selectedIdx }"
+        :class="{ 'is-active': i === selectedIdx, 'is-unavailable': color.available === false }"
         :style="{ backgroundColor: normalizeHex(color.hex) }"
-        :title="color.name"
-        :aria-label="color.name"
+        :title="color.available === false ? `${color.name} — фото уточняется` : color.name"
+        :aria-label="color.available === false ? `${color.name}, фото уточняется` : color.name"
         :aria-pressed="String(i === selectedIdx)"
         @click="selectedIdx = i"
       />
@@ -183,6 +195,10 @@ const normalizeHex = (hex: string) => {
   color: #475569;
   margin: 0;
 }
+.color-picker__color-note {
+  color: #94a3b8;
+  font-weight: 400;
+}
 
 .color-picker__swatches {
   display: flex;
@@ -208,6 +224,9 @@ const normalizeHex = (hex: string) => {
 
 .color-picker__swatch.is-active {
   box-shadow: 0 0 0 2px #fff, 0 0 0 4px #14b8a6;
+}
+.color-picker__swatch.is-unavailable {
+  border: 2px dashed rgba(0, 0, 0, 0.32);
 }
 
 .color-picker__swatch:focus-visible {

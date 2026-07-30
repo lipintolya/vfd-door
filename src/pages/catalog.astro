@@ -64,10 +64,12 @@ const allCoatings = [...new Map(
 
 /* Из colorSwatches (полный набор цветов на модель, не только первого) —
    свотчи уже содержат все цвета каждой модели, так что колонка не теряет
-   цвета, которые ни у одной модели не оказались «первыми». */
+   цвета, которые ни у одной модели не оказались «первыми». available:false
+   (цвет покрытия без фото под конкретную модель) сюда не попадает —
+   фильтр по нему дал бы пустую выдачу. */
 const allColors = [...new Map(
   cards
-    .flatMap(c => c.colorSwatches.map(s => [s.name, { label: s.name, value: s.name, color: s.hex }] as const))
+    .flatMap(c => c.colorSwatches.filter(s => s.available).map(s => [s.name, { label: s.name, value: s.name, color: s.hex }] as const))
 ).values()]
 
 /* ── Начальные фильтры из URL ── */
