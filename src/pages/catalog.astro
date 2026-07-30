@@ -9,7 +9,7 @@ import Breadcrumbs from '../components/ui/Breadcrumbs.astro'
 import CatalogClient from '../components/catalog/CatalogClient.vue'
 import SeriesCard from '../components/catalog/SeriesCard.astro'
 import { getCatalogCards, getSeriesCardsData } from '../lib/catalog-data'
-import { getSeriesSpec, coatingGroupDescriptions } from '../data/series-descriptions'
+import { getSeriesSpec, coatingGroupCopy } from '../data/series-descriptions'
 
 const { cards, error } = await getCatalogCards()
 const seriesCardsData = getSeriesCardsData(cards)
@@ -33,15 +33,18 @@ const seriesCoatingGroups = [...new Map(
   })
   .map(coating => {
     const series = seriesCardsData.filter(s => s.coatingSlug === coating.slug)
-    /* Описание покрытия одинаковое для всех серий внутри группы (coating/
+    /* Копирайтинг покрытия одинаковый для всех серий внутри группы (coating/
        material в SeriesSpec завязаны на coatingSlug, не на серию) — берём
-       у первой серии группы, не плодим повторный запрос/текст. */
+       у первой серии группы, не плодим повторный запрос/текст. Если для
+       покрытия ещё нет полного текста (tagline/benefits/closing) — падаем
+       на короткое derived-описание (coating+material), без остальных полей. */
     const spec = getSeriesSpec(series[0]!.slug, coating.slug)
-    const description = coatingGroupDescriptions[coating.slug]
+    const copy = coatingGroupCopy[coating.slug]
+    const description = copy?.description
       ?? [spec.coating, spec.material].filter(Boolean).join(' ')
     const prices = series.map(s => s.minPrice).filter((p): p is number => p != null)
     const minPrice = prices.length ? Math.min(...prices) : null
-    return { ...coating, series, description, minPrice }
+    return { ...coating, series, description, tagline: copy?.tagline ?? '', benefits: copy?.benefits ?? [], closing: copy?.closing ?? '', minPrice }
   })
 
 const fmt = (n: number) => n.toLocaleString('ru-RU') + ' ₽'
@@ -134,6 +137,9 @@ const structuredData = canonicalUrl ? [
                 <div>
                   <p class="m-0 mb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">Покрытие</p>
                   <h2 class="m-0 mb-3 text-2xl font-medium text-ink sm:text-3xl">{group.name}</h2>
+                  {group.tagline && (
+                    <p class="m-0 mb-2 text-sm font-semibold text-ink">{group.tagline}</p>
+                  )}
                   {group.description && (
                     <p class="m-0 text-sm leading-relaxed text-slate-600">{group.description}</p>
                   )}
@@ -147,6 +153,20 @@ const structuredData = canonicalUrl ? [
               </div>
               {group.series.map(s => <SeriesCard series={s} />)}
             </div>
+
+            {group.benefits.length > 0 && (
+              <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5">
+                {group.benefits.map(b => (
+                  <div class="rounded-xl border border-slate-200 p-5">
+                    <p class="m-0 mb-1.5 text-sm font-semibold text-ink">{b.title}</p>
+                    <p class="m-0 text-sm leading-relaxed text-slate-600">{b.text}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+            {group.closing && (
+              <p class="m-0 mt-5 text-sm font-medium leading-relaxed text-slate-700">{group.closing}</p>
+            )}
           </div>
         ))}
       </div>
