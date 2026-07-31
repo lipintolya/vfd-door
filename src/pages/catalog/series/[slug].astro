@@ -155,7 +155,7 @@ const structuredData = canonicalUrl ? [
           <InfoImageViewer
             client:load
             variant="wide"
-            aspectRatio="3508 / 2003"
+            aspectRatio={spec.infoImageAspect || '16 / 9'}
             images={[{
               src: spec.infoImage,
               caption: `Презентация серии ${series.name}`,
