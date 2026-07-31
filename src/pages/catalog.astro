@@ -20,6 +20,18 @@ const seriesCardsData = getSeriesCardsData(cards)
    группа (напр. будущее покрытие) не потерялась молча. ── */
 const COATING_ORDER = ['emalex', 'emal', 'protach', 'pet']
 
+/* Мягкий цветовой акцент группы по покрытию — та же логика, что и бейджи
+   цвета серии на карточках товара (CatalogProductCard.vue): каждое
+   покрытие получает свой оттенок, чтобы группы отличались с первого
+   взгляда, а не только текстом заголовка. */
+const COATING_ACCENT: Record<string, { panel: string; label: string; dot: string }> = {
+  emalex:  { panel: 'border-blue-200 bg-blue-50/50',     label: 'text-blue-600',    dot: 'bg-blue-500' },
+  pet:     { panel: 'border-rose-200 bg-rose-50/50',     label: 'text-rose-600',    dot: 'bg-rose-500' },
+  protach: { panel: 'border-emerald-200 bg-emerald-50/50', label: 'text-emerald-600', dot: 'bg-emerald-500' },
+  emal:    { panel: 'border-slate-300 bg-slate-100/60',  label: 'text-slate-600',   dot: 'bg-slate-500' },
+}
+const DEFAULT_ACCENT = { panel: 'border-slate-200 bg-slate-50/60', label: 'text-slate-400', dot: 'bg-slate-400' }
+
 const seriesCoatingGroups = [...new Map(
   seriesCardsData.map(s => [s.coatingSlug, { slug: s.coatingSlug, name: s.coatingName }])
 ).values()]
@@ -128,12 +140,16 @@ const structuredData = canonicalUrl ? [
   {seriesCoatingGroups.length > 0 && (
     <div id="series" class="section bg-white" style="padding-bottom: 0; scroll-margin-top: 5.5rem">
       <div class="container">
-        {seriesCoatingGroups.map(group => (
+        {seriesCoatingGroups.map(group => {
+          const accent = COATING_ACCENT[group.slug] ?? DEFAULT_ACCENT
+          return (
           /* Вся группа (карточки + преимущества + вывод) — в едином панельном
              контейнере с рамкой/фоном: без него нижний ряд карточек серий
              визуально сливался со след. группой, а блок преимуществ читался
-             как отдельная, не связанная с группой секция. */
-          <div class="mb-10 rounded-3xl border border-slate-200 bg-slate-50/60 p-4 sm:p-6 last:mb-0">
+             как отдельная, не связанная с группой секция. Цвет панели —
+             мягкий акцент по покрытию (та же палитра, что у бейджей серии
+             на карточках товара), чтобы группы отличались с первого взгляда. */
+          <div class={`mb-10 rounded-3xl border ${accent.panel} p-4 sm:p-6 last:mb-0`}>
             {/* Единая wrap-сетка, одинаковая колонность для всех групп — карточки
                одного размера везде. Первая ячейка — инфо-карточка покрытия
                (название/описание/цена от/CTA), дальше карточки серий — по
@@ -141,7 +157,10 @@ const structuredData = canonicalUrl ? [
             <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5">
               <div class="col-span-2 flex h-full flex-col justify-between gap-6 rounded-2xl border border-slate-200 bg-white p-5 sm:col-span-1 sm:p-7">
                 <div>
-                  <p class="m-0 mb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">Покрытие</p>
+                  <p class={`m-0 mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide ${accent.label}`}>
+                    <span class={`h-1.5 w-1.5 rounded-full ${accent.dot}`} aria-hidden="true"></span>
+                    Покрытие
+                  </p>
                   <h2 class="m-0 mb-3 text-2xl font-medium text-ink sm:text-3xl">{group.name}</h2>
                   {group.tagline && (
                     <p class="m-0 mb-2 text-sm font-semibold text-ink">{group.tagline}</p>
@@ -161,8 +180,8 @@ const structuredData = canonicalUrl ? [
             </div>
 
             {group.benefits.length > 0 && (
-              <div class="mt-6 border-t border-slate-200 pt-6">
-                <p class="m-0 mb-4 text-xs font-semibold uppercase tracking-wide text-slate-400">Почему выбирают {group.name}</p>
+              <div class={`mt-6 border-t pt-6 ${accent.panel.split(' ')[0]}`}>
+                <p class={`m-0 mb-4 text-xs font-semibold uppercase tracking-wide ${accent.label}`}>Почему выбирают {group.name}</p>
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5">
                   {group.benefits.map(b => (
                     <div class="rounded-xl border border-slate-200 bg-white p-5">
@@ -177,7 +196,8 @@ const structuredData = canonicalUrl ? [
               <p class="m-0 mt-5 text-sm font-medium leading-relaxed text-slate-700">{group.closing}</p>
             )}
           </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   )}
