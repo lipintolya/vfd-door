@@ -158,8 +158,8 @@ const structuredData = canonicalUrl ? [
             aspectRatio={spec.infoImageAspect || '16 / 9'}
             images={[{
               src: spec.infoImage,
-              caption: `Презентация серии ${series.name}`,
-              alt: `Презентация серии ${series.name} — ВФД`,
+              caption: spec.infoImageCaption || `Презентация серии ${series.name}`,
+              alt: spec.infoImageCaption || `Презентация серии ${series.name} — ВФД`,
             }]}
           />
         )}
