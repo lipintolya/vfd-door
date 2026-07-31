@@ -24,13 +24,13 @@ const COATING_ORDER = ['emalex', 'emal', 'protach', 'pet']
    цвета серии на карточках товара (CatalogProductCard.vue): каждое
    покрытие получает свой оттенок, чтобы группы отличались с первого
    взгляда, а не только текстом заголовка. */
-const COATING_ACCENT: Record<string, { panel: string; label: string; dot: string }> = {
-  emalex:  { panel: 'border-blue-200 bg-blue-50/50',     label: 'text-blue-600',    dot: 'bg-blue-500' },
-  pet:     { panel: 'border-rose-200 bg-rose-50/50',     label: 'text-rose-600',    dot: 'bg-rose-500' },
-  protach: { panel: 'border-emerald-200 bg-emerald-50/50', label: 'text-emerald-600', dot: 'bg-emerald-500' },
-  emal:    { panel: 'border-slate-300 bg-slate-100/60',  label: 'text-slate-600',   dot: 'bg-slate-500' },
+const COATING_ACCENT: Record<string, { panel: string; card: string; label: string; dot: string; price: string; btn: string }> = {
+  emalex:  { panel: 'border-blue-200 bg-blue-50/50',       card: 'border-blue-200 bg-blue-100/70',       label: 'text-blue-700',    dot: 'bg-blue-500',    price: 'text-blue-900/70',    btn: 'border-blue-300 hover:bg-blue-100' },
+  pet:     { panel: 'border-rose-200 bg-rose-50/50',       card: 'border-rose-200 bg-rose-100/70',       label: 'text-rose-700',    dot: 'bg-rose-500',    price: 'text-rose-900/70',    btn: 'border-rose-300 hover:bg-rose-100' },
+  protach: { panel: 'border-emerald-200 bg-emerald-50/50', card: 'border-emerald-200 bg-emerald-100/70', label: 'text-emerald-700', dot: 'bg-emerald-500', price: 'text-emerald-900/70', btn: 'border-emerald-300 hover:bg-emerald-100' },
+  emal:    { panel: 'border-slate-300 bg-slate-100/60',    card: 'border-slate-300 bg-slate-200/60',     label: 'text-slate-700',   dot: 'bg-slate-500',   price: 'text-slate-700',      btn: 'border-slate-400 hover:bg-slate-200' },
 }
-const DEFAULT_ACCENT = { panel: 'border-slate-200 bg-slate-50/60', label: 'text-slate-400', dot: 'bg-slate-400' }
+const DEFAULT_ACCENT = { panel: 'border-slate-200 bg-slate-50/60', card: 'border-slate-200 bg-white', label: 'text-slate-400', dot: 'bg-slate-400', price: 'text-slate-500', btn: 'border-slate-200 hover:bg-slate-50' }
 
 const seriesCoatingGroups = [...new Map(
   seriesCardsData.map(s => [s.coatingSlug, { slug: s.coatingSlug, name: s.coatingName }])
@@ -155,7 +155,7 @@ const structuredData = canonicalUrl ? [
                (название/описание/цена от/CTA), дальше карточки серий — по
                референсу (коллекция слева, товары справа в одной ленте). */}
             <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5">
-              <div class={`col-span-2 flex h-full flex-col justify-between gap-6 rounded-2xl border bg-white p-5 sm:col-span-1 sm:p-7 ${accent.panel.split(' ')[0]}`}>
+              <div class={`col-span-2 flex h-full flex-col justify-between gap-6 rounded-2xl border p-5 sm:col-span-1 sm:p-7 ${accent.card}`}>
                 <div>
                   <p class={`m-0 mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide ${accent.label}`}>
                     <span class={`h-1.5 w-1.5 rounded-full ${accent.dot}`} aria-hidden="true"></span>
@@ -166,14 +166,14 @@ const structuredData = canonicalUrl ? [
                     <p class="m-0 mb-2 text-sm font-semibold text-ink">{group.tagline}</p>
                   )}
                   {group.description && (
-                    <p class="m-0 text-sm leading-relaxed text-slate-600">{group.description}</p>
+                    <p class="m-0 text-sm leading-relaxed text-slate-700">{group.description}</p>
                   )}
                 </div>
                 <div class="flex flex-col gap-3">
-                  <p class="m-0 text-lg text-slate-500 sm:text-xl">
+                  <p class={`m-0 text-lg font-medium sm:text-xl ${accent.price}`}>
                     {group.minPrice ? `от ${fmt(group.minPrice)}` : `${group.series.length} ${group.series.length === 1 ? 'серия' : 'серий'}`}
                   </p>
-                  <a href={`/catalog?coating=${group.slug}#catalog-title`} class="btn btn-outline w-fit">Смотреть модели</a>
+                  <a href={`/catalog?coating=${group.slug}#catalog-title`} class={`btn btn-outline w-fit bg-white ${accent.btn}`}>Смотреть модели</a>
                 </div>
               </div>
               {group.series.map(s => <SeriesCard series={s} />)}
