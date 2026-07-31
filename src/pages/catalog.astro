@@ -155,7 +155,7 @@ const structuredData = canonicalUrl ? [
                (название/описание/цена от/CTA), дальше карточки серий — по
                референсу (коллекция слева, товары справа в одной ленте). */}
             <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5">
-              <div class="col-span-2 flex h-full flex-col justify-between gap-6 rounded-2xl border border-slate-200 bg-white p-5 sm:col-span-1 sm:p-7">
+              <div class={`col-span-2 flex h-full flex-col justify-between gap-6 rounded-2xl border bg-white p-5 sm:col-span-1 sm:p-7 ${accent.panel.split(' ')[0]}`}>
                 <div>
                   <p class={`m-0 mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide ${accent.label}`}>
                     <span class={`h-1.5 w-1.5 rounded-full ${accent.dot}`} aria-hidden="true"></span>
