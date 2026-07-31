@@ -5,7 +5,6 @@
  */
 import BaseLayout from '../layouts/BaseLayout.astro'
 import HeroSlider from '../components/home/HeroSlider.vue'
-import PriceIncreaseNotice from '../components/home/PriceIncreaseNotice.astro'
 import Features from '../components/home/Features.vue'
 import CatalogCategories from '../components/home/CatalogCategories.vue'
 import Promo from '../components/home/Promo.vue'
@@ -97,7 +96,6 @@ const localBusinessSchema = {
   preloadHero={true}
 >
   <HeroSlider client:load />
-  <PriceIncreaseNotice />
   <Features client:visible />
   <CatalogCategories client:visible />
   <Reviews client:visible />
@@ -112,7 +110,7 @@ const localBusinessSchema = {
       <div class="mt-12 flex flex-col items-start gap-6 rounded-2xl bg-fg p-[clamp(2.5rem,5vw,4rem)] text-white sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h3 class="m-0 mb-2 text-2xl font-medium tracking-tight">Остались вопросы?</h3>
-          <p class="m-0 text-[0.9375rem] text-white/60">Свяжитесь с нами — поможем с выбором и проконсультируем.</p>
+          <p class="m-0 text-step-1 text-white/60">Свяжитесь с нами — поможем с выбором и проконсультируем.</p>
         </div>
         <div class="flex shrink-0 flex-wrap gap-2.5">
           <a href="https://t.me/vfddoors74" target="_blank" rel="noopener" class="btn btn-ghost">Написать в Telegram</a>
