@@ -533,6 +533,11 @@ onUnmounted(() => {
          (10000) сравнивался бы только относительно других детей header —
          cookie-баннер (z-index:9999) висит в root, вне header, и перекрывал
          бы панель, будь она вложена. -->
+    <!-- translateZ(0) на панели ниже: iOS Safari у fixed-элемента с safe-area
+         паддингом не всегда успевает промоутнуть его в свой GPU-слой к
+         первому кадру opacity-перехода — зона чёлки на миг остаётся
+         непрокрашенной и "дорисовывается" следующим кадром. Форсируем
+         слой заранее. -->
     <Teleport to="body">
     <Transition name="menu-fade">
       <div
@@ -547,6 +552,9 @@ onUnmounted(() => {
           paddingTop:    'env(safe-area-inset-top, 0px)',
           paddingLeft:   'env(safe-area-inset-left)',
           paddingRight:  'env(safe-area-inset-right)',
+          transform: 'translateZ(0)',
+          WebkitTransform: 'translateZ(0)',
+          WebkitBackfaceVisibility: 'hidden',
         }"
       >
         <!-- Верхняя строка: город + адрес + закрыть -->
