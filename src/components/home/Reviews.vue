@@ -3,9 +3,9 @@ import { computed, reactive, ref, onMounted, onUnmounted } from 'vue'
 import { useScrollReveal } from '../../composables/useScrollReveal'
 import { reviews, type ReviewPlatform, type Review } from '../../data/reviews'
 
-const PLATFORM_META: Record<ReviewPlatform, { label: string; badge: string }> = {
-  yandex: { label: 'Яндекс Карты', badge: 'bg-red-50 text-red-600' },
-  '2gis':  { label: '2ГИС',        badge: 'bg-emerald-50 text-emerald-600' },
+const PLATFORM_META: Record<ReviewPlatform, { label: string; logo: string }> = {
+  yandex: { label: 'Яндекс Карты', logo: 'https://storage.yandexcloud.net/vfd74ru/info/reviews/yandex_logo.webp' },
+  '2gis':  { label: '2ГИС',        logo: 'https://storage.yandexcloud.net/vfd74ru/info/reviews/2gis_logo.webp' },
 }
 
 const formatDate = (dateStr?: string): string =>
@@ -111,10 +111,10 @@ onUnmounted(() => {
             Отзывы клиентов
           </p>
           <h2 id="reviews-heading" class="text-3xl font-medium leading-tight tracking-tight text-slate-900 md:text-5xl">
-            Нам доверяют
+            Репутация, подтверждённая фактами
           </h2>
           <p class="mt-4 text-base leading-relaxed text-slate-600 md:text-lg">
-            Отзывы клиентов с Яндекс Карт и 2ГИС — с фотографиями и датами публикации
+            Публикуем только верифицированные отзывы с Яндекс Карт и 2ГИС. Сохраняем оригинальные фотографии работ и даты публикаций для полной прозрачности.
           </p>
         </div>
 
@@ -163,10 +163,18 @@ onUnmounted(() => {
         >
           <!-- Платформа + дата -->
           <div class="flex items-center justify-between gap-2">
-            <span
-              class="rounded-full px-2.5 py-1 text-xs font-semibold"
-              :class="PLATFORM_META[review.platform].badge"
-            >{{ PLATFORM_META[review.platform].label }}</span>
+            <span class="flex items-center gap-1.5">
+              <img
+                :src="PLATFORM_META[review.platform].logo"
+                :alt="PLATFORM_META[review.platform].label"
+                class="h-5 w-5 shrink-0 rounded-md"
+                width="20"
+                height="20"
+                loading="lazy"
+                decoding="async"
+              />
+              <span class="text-xs font-semibold text-slate-600">{{ PLATFORM_META[review.platform].label }}</span>
+            </span>
             <time
               v-if="review.date"
               :datetime="review.date"
