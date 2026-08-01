@@ -420,6 +420,16 @@ body {
   transform: translateY(-8px);
 }
 
+/* ── Полноэкранное мобильное меню ── */
+.menu-fade-enter-active,
+.menu-fade-leave-active {
+  transition: opacity .22s ease;
+}
+.menu-fade-enter-from,
+.menu-fade-leave-to {
+  opacity: 0;
+}
+
 /* ── Thin scrollbar ── */
 ::-webkit-scrollbar        { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track  { background: transparent; }

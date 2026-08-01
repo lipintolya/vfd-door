@@ -526,8 +526,15 @@ onUnmounted(() => {
 
     </div><!-- /container -->
 
-    <!-- ── Mobile menu ── -->
-    <Transition name="fade-slide">
+    <!-- ── Mobile menu — полноэкранная тёмная панель (не плавающая карточка):
+         своя шапка (метка города + закрыть), звонок и соцсети сверху,
+         прокручиваемая навигация в середине, номер телефона закреплён внизу.
+         Teleport на body: внутри <header z-50> собственный z-index панели
+         (10000) сравнивался бы только относительно других детей header —
+         cookie-баннер (z-index:9999) висит в root, вне header, и перекрывал
+         бы панель, будь она вложена. -->
+    <Teleport to="body">
+    <Transition name="menu-fade">
       <div
         v-if="mobileOpen"
         id="mobile-menu"
@@ -535,33 +542,82 @@ onUnmounted(() => {
         role="dialog"
         aria-label="Мобильное меню"
         aria-modal="true"
-        class="xl:hidden fixed left-0 right-0 z-40 mx-4 rounded-2xl
-               bg-white border border-gray-100 p-4"
+        class="xl:hidden fixed inset-0 z-10000 flex flex-col bg-[oklch(21%_0.006_285.885)]"
         :style="{
-          top: `calc(1rem + env(safe-area-inset-top, 0px) + ${HEADER_HEIGHT}px + 0.75rem)`
+          paddingTop:    'env(safe-area-inset-top, 0px)',
+          paddingLeft:   'env(safe-area-inset-left)',
+          paddingRight:  'env(safe-area-inset-right)',
         }"
       >
-        <nav aria-label="Мобильная навигация">
-          <ul class="flex flex-col gap-1" role="list">
-            <li v-for="link in NAV_LINKS" :key="link.href">
+        <!-- Верхняя строка: город + адрес + закрыть -->
+        <div class="flex items-start justify-between px-5 pt-4 pb-6 shrink-0">
+          <span class="flex flex-col gap-0.5">
+            <span class="flex items-center gap-1.5 text-sm font-medium text-white/70">
+              <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21Z"/>
+                <circle cx="12" cy="9.5" r="2.25" stroke-linecap="round"/>
+              </svg>
+              Челябинск
+            </span>
+            <span class="pl-5.5 text-xs text-white/40">ул. Братьев Кашириных, 131Б</span>
+          </span>
+          <button
+            type="button"
+            class="w-9 h-9 shrink-0 flex items-center justify-center rounded-full text-white/70 hover:bg-white/10 hover:text-white transition-colors"
+            aria-label="Закрыть меню"
+            @click="closeMobileMenu"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Звонок + соцсети -->
+        <div class="flex items-center gap-2.5 px-5 pb-4 shrink-0">
+          <a
+            :href="`tel:${CONTACTS.phones[0]?.raw}`"
+            class="flex-1 flex items-center justify-center gap-2 rounded-full bg-white text-ink font-semibold text-sm py-3 transition-opacity active:opacity-80"
+            @click="closeMobileMenu"
+          >
+            <img src="https://storage.yandexcloud.net/vfd74ru/svg/phone_call.svg" alt="" class="w-5 h-5" width="20" height="20" />
+            Позвонить
+          </a>
+          <a
+            v-for="s in SOCIAL_NETWORKS"
+            :key="s.name"
+            :href="s.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            :aria-label="`${s.label} (открывается в новой вкладке)`"
+            class="w-11 h-11 shrink-0 flex items-center justify-center rounded-full bg-white transition-opacity active:opacity-80"
+          >
+            <img :src="s.icon" :alt="s.label" class="w-5 h-5" width="20" height="20" />
+          </a>
+        </div>
+
+        <!-- Навигация — прокручиваемая середина -->
+        <nav class="flex-1 overflow-y-auto px-5" aria-label="Мобильная навигация">
+          <ul class="border-t border-white/10" role="list">
+            <li v-for="link in NAV_LINKS" :key="link.href" class="border-b border-white/10">
               <a
                 :href="link.href"
-                class="block px-4 py-3 rounded-xl transition-colors text-base font-medium"
-                :class="currentPath.startsWith(link.href) && link.href !== '/'
-                    ? 'bg-gray-100 text-gray-900'
-                    : isActive(link.href)
-                      ? 'bg-gray-100 text-gray-900'
-                      : 'hover:bg-gray-50 text-gray-600'"
+                class="flex items-center justify-between py-4 text-base font-semibold transition-colors"
+                :class="isActive(link.href) ? 'text-white' : 'text-white/85 hover:text-white'"
                 :aria-current="isActive(link.href) ? 'page' : undefined"
                 @click="closeMobileMenu"
-              >{{ link.label }}</a>
+              >
+                {{ link.label }}
+                <svg class="w-4 h-4 shrink-0 text-white/30" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 6l6 6-6 6"/>
+                </svg>
+              </a>
               <!-- Подразделы каталога -->
-              <ul v-if="link.href === '/catalog'" class="ml-3 mt-0.5 mb-1 space-y-0.5" role="list">
+              <ul v-if="link.href === '/catalog'" class="mb-3 -mt-1 space-y-0.5" role="list">
                 <li v-for="item in CATALOG_DROPDOWN" :key="item.href">
                   <a
                     :href="item.href"
-                    class="block px-4 py-2 rounded-xl text-sm font-medium transition-colors
-                           hover:bg-gray-50 text-gray-500 hover:text-gray-800"
+                    class="block rounded-xl px-3 py-2 text-sm font-medium text-white/55 transition-colors hover:bg-white/5 hover:text-white/90"
                     @click="closeMobileMenu"
                   >{{ item.label }}</a>
                 </li>
@@ -571,41 +627,45 @@ onUnmounted(() => {
 
           <!-- Open/closed badge mobile -->
           <div
-            class="mt-2 rounded-xl px-4 py-3 text-sm font-medium"
-            :class="isOpen ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'"
+            class="mt-4 mb-5 rounded-xl px-4 py-3 text-sm font-medium"
+            :class="isOpen ? 'bg-green-500/15 text-green-400' : 'bg-red-500/15 text-red-400'"
             aria-live="polite"
             aria-atomic="true"
           >
             <div class="flex items-center gap-2">
               <span
                 class="w-2 h-2 rounded-full shrink-0"
-                :class="isOpen ? 'bg-green-500 animate-pulse' : 'bg-red-500'"
+                :class="isOpen ? 'bg-green-400 animate-pulse' : 'bg-red-400'"
                 aria-hidden="true"
               />
               <span class="flex-1">
                 {{ isOpen ? 'Салон открыт' : closedMessage }}
               </span>
-              <span v-if="isOpen && timeUntilCloseText" class="text-xs text-gray-400 shrink-0">
+              <span v-if="isOpen && timeUntilCloseText" class="text-xs text-white/40 shrink-0">
                 ({{ timeUntilCloseText }})
               </span>
             </div>
           </div>
-
-          <!-- Phone buttons -->
-          <div class="pt-3 mt-1 border-t border-gray-100 flex flex-col gap-2">
-            <a
-              v-for="p in CONTACTS.phones"
-              :key="p.raw"
-              :href="`tel:${p.raw}`"
-              class="btn btn-primary text-center justify-center"
-              @click="closeMobileMenu"
-            >
-              {{ p.label }}
-            </a>
-          </div>
         </nav>
+
+        <!-- Телефоны — закреплены внизу -->
+        <div
+          class="shrink-0 border-t border-white/10 bg-[oklch(21%_0.006_285.885)] px-5 pt-4 flex flex-col items-center gap-1"
+          :style="{ paddingBottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))' }"
+        >
+          <a
+            v-for="p in CONTACTS.phones"
+            :key="p.raw"
+            :href="`tel:${p.raw}`"
+            class="text-center text-lg font-bold text-white transition-opacity active:opacity-80"
+            @click="closeMobileMenu"
+          >
+            {{ p.label }}
+          </a>
+        </div>
       </div>
     </Transition>
+    </Teleport>
 
   </header>
 </template>
