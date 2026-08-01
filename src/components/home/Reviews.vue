@@ -1,49 +1,31 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useScrollReveal } from '../../composables/useScrollReveal'
+import { reviews, type ReviewPlatform } from '../../data/reviews'
 
-interface Review {
-  id: number
-  name: string
-  date: string
-  text: string
-  rating: number
+const PLATFORM_META: Record<ReviewPlatform, { label: string; badge: string }> = {
+  yandex: { label: 'Яндекс Карты', badge: 'bg-red-50 text-red-600' },
+  '2gis':  { label: '2ГИС',        badge: 'bg-emerald-50 text-emerald-600' },
 }
 
-const REVIEWS: Review[] = [
-  {
-    id: 1,
-    name: 'Ирина К.',
-    date: '2025-11-15',
-    text: 'Купили двери Иннова, очень довольны качеством. Замерщик приехал быстро, монтаж сделали аккуратно. Рекомендую!',
-    rating: 5,
-  },
-  {
-    id: 2,
-    name: 'Алексей П.',
-    date: '2025-10-08',
-    text: 'Большой выбор, есть что посмотреть вживую. Помогли подобрать под интерьер. Поставили 3 двери — всё отлично.',
-    rating: 5,
-  },
-  {
-    id: 3,
-    name: 'Наталья С.',
-    date: '2026-02-20',
-    text: 'Заказывали алюминиевые перегородки для квартиры. Сделали за 40 дней как и обещали. Качество отличное.',
-    rating: 5,
-  },
-  {
-    id: 4,
-    name: 'Дмитрий В.',
-    date: '2026-04-12',
-    text: 'Работаем с ВФД по проектам уже 2 года. Надёжные партнёры, всегда держат слово.',
-    rating: 5,
-  },
-]
+const formatDate = (dateStr?: string): string =>
+  dateStr
+    ? new Date(dateStr).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })
+    : ''
 
-const formatDate = (dateStr: string): string =>
-  new Date(dateStr).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })
+const { sectionRef, visible } = useScrollReveal(0.1)
 
-const { sectionRef, visible } = useScrollReveal(0.15)
+/* Горизонтальная карусель-«стена отзывов»: карточек много (15+) и их число
+   будет расти — вертикальная сетка на все отзывы сделала бы блок на главной
+   огромным. Скролл нативный (свайп/трекпад), стрелки — для мыши/доступности. */
+const trackRef = ref<HTMLElement | null>(null)
+const scrollByCards = (dir: 1 | -1) => {
+  const el = trackRef.value
+  if (!el) return
+  const card = el.querySelector<HTMLElement>('[data-review-card]')
+  const step = (card?.offsetWidth ?? 320) + 16
+  el.scrollBy({ left: dir * step, behavior: 'smooth' })
+}
 </script>
 
 <template>
@@ -56,41 +38,84 @@ const { sectionRef, visible } = useScrollReveal(0.15)
 
       <!-- Header -->
       <header
-        class="max-w-3xl mb-10 md:mb-16 transition-[opacity,transform] duration-700 ease-out motion-reduce:transition-none"
+        class="mb-10 flex flex-wrap items-end justify-between gap-6 transition-[opacity,transform] duration-700 ease-out motion-reduce:transition-none md:mb-12"
         :class="visible ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'"
       >
-        <p class="t-eyebrow mb-3">
-          Отзывы клиентов
-        </p>
-        <h2 id="reviews-heading" class="text-3xl font-medium leading-tight tracking-tight text-slate-900 md:text-5xl">
-          Нам доверяют
-        </h2>
-        <p class="mt-4 text-base leading-relaxed text-slate-600 md:text-lg">
-          Более 5 000 довольных клиентов в Челябинске за 10 лет работы
-        </p>
+        <div class="max-w-2xl">
+          <p class="t-eyebrow mb-3">
+            Отзывы клиентов
+          </p>
+          <h2 id="reviews-heading" class="text-3xl font-medium leading-tight tracking-tight text-slate-900 md:text-5xl">
+            Нам доверяют
+          </h2>
+          <p class="mt-4 text-base leading-relaxed text-slate-600 md:text-lg">
+            Реальные отзывы с Яндекс Карт и 2ГИС — без купюр, с фото от клиентов
+          </p>
+        </div>
+
+        <!-- Стрелки карусели — скрыты на мобильном, там свайп -->
+        <div class="hidden shrink-0 items-center gap-2 sm:flex">
+          <button
+            type="button"
+            class="flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition-colors hover:border-slate-300 hover:text-ink"
+            aria-label="Предыдущие отзывы"
+            @click="scrollByCards(-1)"
+          >
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6 6 6"/>
+            </svg>
+          </button>
+          <button
+            type="button"
+            class="flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition-colors hover:border-slate-300 hover:text-ink"
+            aria-label="Следующие отзывы"
+            @click="scrollByCards(1)"
+          >
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 6l6 6-6 6"/>
+            </svg>
+          </button>
+        </div>
       </header>
 
-      <!-- Grid -->
+      <!-- Carousel -->
       <ul
-        class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6"
+        ref="trackRef"
+        class="scrollbar-none [&::-webkit-scrollbar]:hidden flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth pb-3 transition-[opacity,transform] duration-700 ease-out motion-reduce:transition-none md:gap-5"
+        :class="visible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
         role="list"
         itemscope
         itemtype="https://schema.org/ItemList"
       >
         <li
-          v-for="(review, idx) in REVIEWS"
+          v-for="review in reviews"
           :key="review.id"
-          class="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-6 transition-[opacity,transform] duration-700 ease-out motion-reduce:transition-none"
-          :class="visible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
-          :style="{ transitionDelay: visible ? `${idx * 100}ms` : '0ms' }"
+          data-review-card
+          class="flex w-70 shrink-0 snap-start flex-col gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:w-80"
           itemprop="itemListElement"
           itemscope
           itemtype="https://schema.org/Review"
         >
+          <!-- Платформа + дата -->
+          <div class="flex items-center justify-between gap-2">
+            <span
+              class="rounded-full px-2.5 py-1 text-xs font-semibold"
+              :class="PLATFORM_META[review.platform].badge"
+            >{{ PLATFORM_META[review.platform].label }}</span>
+            <time
+              v-if="review.date"
+              :datetime="review.date"
+              class="shrink-0 text-xs text-slate-400"
+              itemprop="datePublished"
+            >{{ formatDate(review.date) }}</time>
+          </div>
+
           <!-- Stars -->
-          <div class="flex gap-0.5" :aria-label="`Оценка: ${review.rating} из 5`">
+          <div class="flex gap-0.5" aria-label="Оценка: 5 из 5" itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating">
+            <meta itemprop="ratingValue" content="5" />
+            <meta itemprop="bestRating" content="5" />
             <svg
-              v-for="i in review.rating"
+              v-for="i in 5"
               :key="i"
               class="h-4 w-4 fill-amber-400"
               viewBox="0 0 20 20"
@@ -100,34 +125,50 @@ const { sectionRef, visible } = useScrollReveal(0.15)
             </svg>
           </div>
 
+          <!-- Author -->
+          <span
+            class="text-sm font-semibold text-slate-900"
+            itemprop="author"
+            itemscope
+            itemtype="https://schema.org/Person"
+          >
+            <span itemprop="name">{{ review.name }}</span>
+          </span>
+
           <!-- Text -->
           <p
-            class="flex-1 text-sm leading-relaxed text-slate-700"
+            class="line-clamp-6 flex-1 text-sm leading-relaxed text-slate-700"
             itemprop="reviewBody"
           >{{ review.text }}</p>
 
-          <!-- Author + date -->
-          <div class="flex items-center justify-between border-t border-slate-200 pt-4">
-            <span
-              class="text-sm font-semibold text-slate-900"
-              itemprop="author"
-              itemscope
-              itemtype="https://schema.org/Person"
+          <!-- Фото от клиента — единый кроп независимо от исходных пропорций -->
+          <div
+            v-if="review.photos?.length"
+            class="grid gap-1.5"
+            :style="{ gridTemplateColumns: `repeat(${Math.min(review.photos.length, 3)}, minmax(0, 1fr))` }"
+          >
+            <div
+              v-for="photo in review.photos"
+              :key="photo"
+              class="aspect-square overflow-hidden rounded-lg bg-slate-200"
             >
-              <span itemprop="name">{{ review.name }}</span>
-            </span>
-            <time
-              :datetime="review.date"
-              class="text-xs text-slate-500"
-              itemprop="datePublished"
-            >{{ formatDate(review.date) }}</time>
+              <img
+                :src="photo"
+                :alt="`Фото от клиента ${review.name} — отзыв о ВФД`"
+                loading="lazy"
+                decoding="async"
+                width="200"
+                height="200"
+                class="h-full w-full object-cover"
+              />
+            </div>
           </div>
         </li>
       </ul>
 
       <!-- Ссылки на внешние платформы отзывов -->
       <div
-        class="mt-10 flex flex-wrap items-center gap-3 transition-[opacity,transform] duration-700 ease-out motion-reduce:transition-none md:mt-14"
+        class="mt-8 flex flex-wrap items-center gap-3 transition-[opacity,transform] duration-700 ease-out motion-reduce:transition-none md:mt-10"
         :class="visible ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'"
       >
         <span class="text-sm font-medium text-slate-500">Читайте больше отзывов и оставляйте свои:</span>
