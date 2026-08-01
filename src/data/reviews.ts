@@ -44,6 +44,7 @@ export const reviews: Review[] = [
     id:       'yandex-diana',
     name:     'Диана',
     platform: 'yandex',
+    date:     '2025-08-08',
     text:     'Выбор дверей большой. Как входных дверей, так и фурнитуры. Актуальные расцветки и модели с алюминиевыми кромками, приятные цены.',
     photos:   [`${PHOTO_BASE}/rev_1.webp`],
   },

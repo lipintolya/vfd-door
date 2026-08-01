@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, reactive, ref, onMounted, onUnmounted } from 'vue'
 import { useScrollReveal } from '../../composables/useScrollReveal'
-import { reviews, type ReviewPlatform } from '../../data/reviews'
+import { reviews, type ReviewPlatform, type Review } from '../../data/reviews'
 
 const PLATFORM_META: Record<ReviewPlatform, { label: string; badge: string }> = {
   yandex: { label: 'Яндекс Карты', badge: 'bg-red-50 text-red-600' },
@@ -12,6 +12,12 @@ const formatDate = (dateStr?: string): string =>
   dateStr
     ? new Date(dateStr).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })
     : ''
+
+/* Свежие отзывы — первыми. Отзывы без даты (если появятся) уходят в конец,
+   а не в начало/вперемешку. */
+const sortedReviews = computed(() =>
+  [...reviews].sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''))
+)
 
 const { sectionRef, visible } = useScrollReveal(0.1)
 
@@ -26,6 +32,65 @@ const scrollByCards = (dir: 1 | -1) => {
   const step = (card?.offsetWidth ?? 320) + 16
   el.scrollBy({ left: dir * step, behavior: 'smooth' })
 }
+
+/* ── Фото у отзыва: на карточке показываем ОДНО фото за раз (единый размер,
+   не мозаика из фото разных пропорций) — если их несколько, свайпом внутри
+   превью переключаем между ними, точки снизу показывают, что фото ещё есть.
+   Клик — открывает то же самое фото в полноэкранном лайтбоксе. ── */
+const activePhotoIdx = reactive<Record<string, number>>({})
+const getActiveIdx = (id: string) => activePhotoIdx[id] ?? 0
+
+const SWIPE_THRESHOLD = 40
+const touchStartX = new Map<string, number>()
+const onPhotoTouchStart = (id: string, e: TouchEvent) => {
+  touchStartX.set(id, e.touches[0]?.clientX ?? 0)
+}
+const onPhotoTouchEnd = (review: Review, e: TouchEvent) => {
+  const total = review.photos?.length ?? 0
+  const startX = touchStartX.get(review.id)
+  if (total < 2 || startX == null || !e.changedTouches[0]) return
+  const dx = startX - e.changedTouches[0].clientX
+  if (Math.abs(dx) <= SWIPE_THRESHOLD) return
+  const cur = getActiveIdx(review.id)
+  activePhotoIdx[review.id] = dx > 0 ? (cur + 1) % total : (cur - 1 + total) % total
+}
+
+/* ── Лайтбокс ── */
+const lightbox = ref<{ photos: string[]; name: string; index: number } | null>(null)
+
+const openLightbox = (review: Review) => {
+  if (!review.photos?.length) return
+  lightbox.value = { photos: review.photos, name: review.name, index: getActiveIdx(review.id) }
+  document.body.style.overflow = 'hidden'
+}
+const closeLightbox = () => {
+  lightbox.value = null
+  document.body.style.overflow = ''
+}
+const lightboxStep = (dir: 1 | -1) => {
+  if (!lightbox.value) return
+  const total = lightbox.value.photos.length
+  lightbox.value.index = (lightbox.value.index + dir + total) % total
+}
+let lightboxTouchStartX = 0
+const onLightboxTouchStart = (e: TouchEvent) => { lightboxTouchStartX = e.touches[0]?.clientX ?? 0 }
+const onLightboxTouchEnd = (e: TouchEvent) => {
+  if (!lightbox.value || lightbox.value.photos.length < 2 || !e.changedTouches[0]) return
+  const dx = lightboxTouchStartX - e.changedTouches[0].clientX
+  if (Math.abs(dx) <= SWIPE_THRESHOLD) return
+  lightboxStep(dx > 0 ? 1 : -1)
+}
+const onKeydown = (e: KeyboardEvent) => {
+  if (!lightbox.value) return
+  if (e.key === 'Escape')     closeLightbox()
+  if (e.key === 'ArrowRight') lightboxStep(1)
+  if (e.key === 'ArrowLeft')  lightboxStep(-1)
+}
+onMounted(() => window.addEventListener('keydown', onKeydown))
+onUnmounted(() => {
+  window.removeEventListener('keydown', onKeydown)
+  document.body.style.overflow = ''
+})
 </script>
 
 <template>
@@ -49,7 +114,7 @@ const scrollByCards = (dir: 1 | -1) => {
             Нам доверяют
           </h2>
           <p class="mt-4 text-base leading-relaxed text-slate-600 md:text-lg">
-            Реальные отзывы с Яндекс Карт и 2ГИС — без купюр, с фото от клиентов
+            Отзывы клиентов с Яндекс Карт и 2ГИС — с фотографиями и датами публикации
           </p>
         </div>
 
@@ -88,7 +153,7 @@ const scrollByCards = (dir: 1 | -1) => {
         itemtype="https://schema.org/ItemList"
       >
         <li
-          v-for="review in reviews"
+          v-for="review in sortedReviews"
           :key="review.id"
           data-review-card
           class="flex w-70 shrink-0 snap-start flex-col gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:w-80"
@@ -141,25 +206,40 @@ const scrollByCards = (dir: 1 | -1) => {
             itemprop="reviewBody"
           >{{ review.text }}</p>
 
-          <!-- Фото от клиента — единый кроп независимо от исходных пропорций -->
+          <!-- Фото от клиента — одно превью за раз (единый размер), свайп между
+               фото, если их несколько; клик — открыть в лайтбоксе -->
           <div
             v-if="review.photos?.length"
-            class="grid gap-1.5"
-            :style="{ gridTemplateColumns: `repeat(${Math.min(review.photos.length, 3)}, minmax(0, 1fr))` }"
+            class="relative aspect-square touch-pan-y overflow-hidden rounded-lg bg-slate-200"
+            @touchstart.passive="onPhotoTouchStart(review.id, $event)"
+            @touchend="onPhotoTouchEnd(review, $event)"
           >
-            <div
-              v-for="photo in review.photos"
-              :key="photo"
-              class="aspect-square overflow-hidden rounded-lg bg-slate-200"
+            <button
+              type="button"
+              class="block h-full w-full cursor-zoom-in"
+              :aria-label="`Открыть фото от клиента ${review.name} на весь экран`"
+              @click="openLightbox(review)"
             >
               <img
-                :src="photo"
+                :src="review.photos[getActiveIdx(review.id)]"
                 :alt="`Фото от клиента ${review.name} — отзыв о ВФД`"
                 loading="lazy"
                 decoding="async"
-                width="200"
-                height="200"
+                width="320"
+                height="320"
                 class="h-full w-full object-cover"
+              />
+            </button>
+            <div
+              v-if="review.photos.length > 1"
+              class="pointer-events-none absolute inset-x-0 bottom-2 flex justify-center gap-1"
+              aria-hidden="true"
+            >
+              <span
+                v-for="(photo, i) in review.photos"
+                :key="photo"
+                class="h-1.5 w-1.5 rounded-full transition-colors"
+                :class="i === getActiveIdx(review.id) ? 'bg-white' : 'bg-white/50'"
               />
             </div>
           </div>
@@ -191,5 +271,66 @@ const scrollByCards = (dir: 1 | -1) => {
       </div>
 
     </div>
+
+    <!-- Лайтбокс — полноэкранный просмотр фото от клиента -->
+    <Teleport to="body">
+      <Transition name="menu-fade">
+        <div
+          v-if="lightbox"
+          class="fixed inset-0 z-10000 flex items-center justify-center bg-black/90 p-4 sm:p-8"
+          role="dialog"
+          aria-modal="true"
+          :aria-label="`Фото от клиента ${lightbox.name}`"
+          @click.self="closeLightbox"
+          @touchstart.passive="onLightboxTouchStart"
+          @touchend="onLightboxTouchEnd"
+        >
+          <button
+            type="button"
+            class="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
+            aria-label="Закрыть"
+            @click="closeLightbox"
+          >
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+
+          <button
+            v-if="lightbox.photos.length > 1"
+            type="button"
+            class="absolute left-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 sm:left-4"
+            aria-label="Предыдущее фото"
+            @click="lightboxStep(-1)"
+          >
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6 6 6"/>
+            </svg>
+          </button>
+          <button
+            v-if="lightbox.photos.length > 1"
+            type="button"
+            class="absolute right-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 sm:right-4"
+            aria-label="Следующее фото"
+            @click="lightboxStep(1)"
+          >
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 6l6 6-6 6"/>
+            </svg>
+          </button>
+
+          <figure class="m-0 flex max-w-full flex-col items-center gap-3">
+            <img
+              :src="lightbox.photos[lightbox.index]"
+              :alt="`Фото от клиента ${lightbox.name} — отзыв о ВФД`"
+              class="max-h-[80vh] max-w-[92vw] rounded-lg object-contain shadow-2xl sm:max-w-[85vw]"
+            />
+            <figcaption v-if="lightbox.photos.length > 1" class="text-sm font-medium text-white/70">
+              {{ lightbox.index + 1 }} / {{ lightbox.photos.length }}
+            </figcaption>
+          </figure>
+        </div>
+      </Transition>
+    </Teleport>
   </section>
 </template>
