@@ -533,11 +533,15 @@ onUnmounted(() => {
          (10000) сравнивался бы только относительно других детей header —
          cookie-баннер (z-index:9999) висит в root, вне header, и перекрывал
          бы панель, будь она вложена. -->
-    <!-- translateZ(0) на панели ниже: iOS Safari у fixed-элемента с safe-area
-         паддингом не всегда успевает промоутнуть его в свой GPU-слой к
-         первому кадру opacity-перехода — зона чёлки на миг остаётся
-         непрокрашенной и "дорисовывается" следующим кадром. Форсируем
-         слой заранее. -->
+    <!-- top:-100px + компенсирующий paddingTop ниже: iOS Safari закрашивает
+         зону safe-area (чёлку) отдельным композитинг-проходом, привязанным
+         к границе вьюпорта — если фон fixed-элемента начинается ровно на
+         top:0, при появлении элемента эта полоса на кадр-два остаётся
+         непрокрашенной (виден фон страницы под меню). translateZ(0)/GPU-слой
+         это не чинит — проблема не в промоутинге слоя, а в самой границе.
+         Уводим фон на 100px выше вьюпорта (граница исчезает, чёлка — уже
+         середина закрашенной области, а не край) и добавляем те же 100px
+         к paddingTop, чтобы контент визуально остался на прежнем месте. -->
     <Teleport to="body">
     <Transition name="menu-fade">
       <div
@@ -549,12 +553,10 @@ onUnmounted(() => {
         aria-modal="true"
         class="xl:hidden fixed inset-0 z-10000 flex flex-col bg-[oklch(21%_0.006_285.885)]"
         :style="{
-          paddingTop:    'env(safe-area-inset-top, 0px)',
+          top:           '-100px',
+          paddingTop:    'calc(env(safe-area-inset-top, 0px) + 100px)',
           paddingLeft:   'env(safe-area-inset-left)',
           paddingRight:  'env(safe-area-inset-right)',
-          transform: 'translateZ(0)',
-          WebkitTransform: 'translateZ(0)',
-          WebkitBackfaceVisibility: 'hidden',
         }"
       >
         <!-- Верхняя строка: город + адрес + закрыть -->
