@@ -195,19 +195,19 @@ onBeforeUnmount(stopCycle)
         <li
           v-for="(feature, idx) in FEATURES"
           :key="feature.id"
-          class="group relative flex flex-col rounded-2xl border border-slate-200 bg-white p-6 transition-[opacity,transform,border-color,box-shadow] duration-700 ease-out hover:border-slate-300 hover:shadow-lg hover:shadow-slate-200/60 motion-reduce:transition-none sm:p-7"
+          class="group relative flex flex-col overflow-hidden rounded-3xl bg-[#1A191C] p-6 transition-[opacity,transform] duration-700 ease-out motion-reduce:transition-none sm:p-7"
           :class="visible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
           :style="{ transitionDelay: visible ? `${idx * 130}ms` : '0ms' }"
           itemprop="item"
           itemscope
           itemtype="https://schema.org/Thing"
         >
-          <span class="relative mb-3 w-fit rounded-full bg-teal-50 px-2.5 py-1 text-xs font-semibold text-teal-700" aria-hidden="true">
+          <p class="relative mb-3 text-xs font-medium uppercase tracking-widest text-teal-400" aria-hidden="true">
             {{ feature.eyebrow }}
-          </span>
+          </p>
 
           <h3
-            class="relative mb-4 text-xl font-medium leading-[1.15] tracking-tight text-ink sm:text-[1.375rem]"
+            class="relative mb-4 text-xl font-medium leading-[1.15] tracking-tight text-white sm:text-[1.375rem]"
             itemprop="name"
           >
             {{ feature.title }}
@@ -272,11 +272,11 @@ onBeforeUnmount(stopCycle)
             </template>
           </div>
 
-          <p class="relative mb-5 text-sm leading-relaxed text-slate-600" itemprop="description">{{ feature.text }}</p>
+          <p class="relative mb-5 text-sm leading-relaxed text-slate-400" itemprop="description">{{ feature.text }}</p>
 
           <a
             :href="feature.cta.href"
-            class="btn btn-outline relative mt-auto w-fit self-start"
+            class="btn btn-ghost relative mt-auto w-fit self-start"
             :target="feature.cta.external ? '_blank' : undefined"
             :rel="feature.cta.external ? 'noopener noreferrer' : undefined"
             :aria-label="feature.cta.external
