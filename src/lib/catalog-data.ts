@@ -7,6 +7,7 @@
 import { supabase } from './supabase'
 import { buildModelSlugMap } from './slugify'
 import { getSeriesSpec } from '../data/series-descriptions'
+import { adjustPrice } from './price-adjustments'
 import type { CatalogCardItem } from '../components/catalog/types'
 
 const normalizeHexColor = (value: string | null | undefined) => {
@@ -64,6 +65,7 @@ export async function getCatalogCards(): Promise<{
     const model = row.models as any
     const color = row.colors as any
     if (!model || !color?.name) continue
+    const seriesSlug = model?.series?.slug ?? ''
     const list = colorsByModel.get(model.id) ?? []
     if (!list.includes(color.name)) list.push(color.name)
     colorsByModel.set(model.id, list)
@@ -73,7 +75,7 @@ export async function getCatalogCards(): Promise<{
       swatches.push({
         name:      color.name,
         hex:       normalizeHexColor(color.hex_preview),
-        price:     row.price_rrp ?? null,
+        price:     adjustPrice(seriesSlug, row.price_rrp ?? null),
         photo:     row.photo_url ?? '',
         available: true,
       })
@@ -114,21 +116,22 @@ export async function getCatalogCards(): Promise<{
 
     const series  = model?.series  as any
     const coating = series?.coatings ?? color?.coatings as any
+    const seriesSlug = series?.slug ?? ''
 
     cards.push({
       id:          model.id,
       slug:        '',
       name:        model.name,
       series:      series?.name   ?? '—',
-      seriesSlug:  series?.slug   ?? '',
+      seriesSlug,
       coating:     coating?.name  ?? '—',
       coatingSlug: coating?.slug  ?? '',
       colorName:   color.name,
       colorHex:    normalizeHexColor(color.hex_preview),
       colorNames:  colorsByModel.get(model.id) ?? [color.name],
-      colorSwatches: colorSwatchesByModel.get(model.id) ?? [{ name: color.name, hex: normalizeHexColor(color.hex_preview), price: row.price_rrp ?? null, photo: row.photo_url ?? '', available: true }],
+      colorSwatches: colorSwatchesByModel.get(model.id) ?? [{ name: color.name, hex: normalizeHexColor(color.hex_preview), price: adjustPrice(seriesSlug, row.price_rrp ?? null), photo: row.photo_url ?? '', available: true }],
       photo:       row.photo_url  ?? '',
-      price:       row.price_rrp  ?? null,
+      price:       adjustPrice(seriesSlug, row.price_rrp ?? null),
       hasGlass:    model.has_glass ?? false,
     })
   }

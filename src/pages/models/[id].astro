@@ -6,6 +6,7 @@ import Breadcrumbs from '../../components/ui/Breadcrumbs.astro'
 import ProductColorPicker from '../../components/catalog/ProductColorPicker.vue'
 import type { ColorVariant } from '../../components/catalog/ProductColorPicker.vue'
 import { getSeriesSpec } from '../../data/series-descriptions'
+import { adjustPrice } from '../../lib/price-adjustments'
 import { accessoriesByCoating, CATEGORY_LABELS, PRICE_LIST_UPDATED } from '../../data/accessories'
 import type { AccessoryCategory, CoatingSlug } from '../../data/accessories'
 
@@ -75,19 +76,21 @@ export async function getStaticPaths() {
 
     const entry = modelMap.get(model.id)!
 
+    const adjustedPrice = adjustPrice(series?.slug ?? '', row.price_rrp ?? null)
+
     if (!entry.colors.some(c => c.id === color.id)) {
       entry.colors.push({
         id:          color.id,
         name:        color.name,
         hex:         normalizeHex(color.hex_preview),
         photo:       row.photo_url  ?? '',
-        price:       row.price_rrp  ?? null,
+        price:       adjustedPrice,
         coatingSlug: coating?.slug  ?? '',
       })
     }
 
-    if (row.price_rrp && (!entry.minPrice || row.price_rrp < entry.minPrice)) {
-      entry.minPrice = row.price_rrp
+    if (adjustedPrice && (!entry.minPrice || adjustedPrice < entry.minPrice)) {
+      entry.minPrice = adjustedPrice
     }
   }
 

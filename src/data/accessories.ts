@@ -54,15 +54,15 @@ export type CoatingSlug = 'pet' | 'emal' | 'emalex' | 'protach'
 // чтобы текст на карточке товара и в таблице цен не расходился.
 // ─────────────────────────────────────────────────────────────────────────────
 export const BASE_KIT_PRICE: Record<CoatingSlug, number> = {
-  pet:     5_130,
-  emal:    6_080,
-  emalex:  4_900,
-  protach: 3_650,
+  pet:     5_387,
+  emal:    6_384,
+  emalex:  5_145,
+  protach: 3_833,
 }
 export const BASE_KIT_DESCRIPTION = 'дверной короб 2,5 шт, наличники с обеих сторон 5 шт'
 
 // Дата последней проверки/правки цен на этой странице — обновляй вручную при правке прайса
-export const PRICE_LIST_UPDATED = '27.06.2026'
+export const PRICE_LIST_UPDATED = '03.08.2026'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Надбавка к цене комплекта за цвет (ключ — colors.name из Supabase)
@@ -99,20 +99,20 @@ export const accessoriesByCoating: Record<CoatingSlug, Accessory[]> = {
   pet: [
     { name: `Комплект погонажа (${BASE_KIT_DESCRIPTION})`,       category: 'kit',        unit: 'комплект', price: BASE_KIT_PRICE.pet },
 
-    { name: 'Коробка КБТ№43П 80х32х2100',                        category: 'box',        unit: 'шт',       price: 910 },
-    { name: 'Коробка КБТ№46П 80х38х2100',                        category: 'box',        unit: 'шт',       price: 1_080 },
-    { name: 'К-т коробки КБКМ№43П 80х32х2100 компланар',         category: 'box',        unit: 'комплект', price: 2_270 },
+    { name: 'Коробка КБТ№43П 80х32х2100',                        category: 'box',        unit: 'шт',       price: 956 },
+    { name: 'Коробка КБТ№46П 80х38х2100',                        category: 'box',        unit: 'шт',       price: 1_134 },
+    { name: 'К-т коробки КБКМ№43П 80х32х2100 компланар',         category: 'box',        unit: 'комплект', price: 2_384 },
 
-    { name: 'Наличник НТ№22 70х8х2140',                          category: 'nalichnik',  unit: 'шт',       price: 570 },
-    { name: 'Наличник НТ№35 85х16х2140 «Каскад»',                category: 'nalichnik',  unit: 'шт',       price: 790 },
-    { name: 'Наличник НТ№36 80х22х2140 «Нео1»',                  category: 'nalichnik',  unit: 'шт',       price: 910 },
-    { name: 'Наличник НТ№37 80х22х2140 «Нео2»',                  category: 'nalichnik',  unit: 'шт',       price: 910 },
-    { name: 'К-т наличника КН№01 90х10х2140 компланарный',       category: 'nalichnik',  unit: 'комплект', price: 1_660 },
+    { name: 'Наличник НТ№22 70х8х2140',                          category: 'nalichnik',  unit: 'шт',       price: 599 },
+    { name: 'Наличник НТ№35 85х16х2140 «Каскад»',                category: 'nalichnik',  unit: 'шт',       price: 830 },
+    { name: 'Наличник НТ№36 80х22х2140 «Нео1»',                  category: 'nalichnik',  unit: 'шт',       price: 956 },
+    { name: 'Наличник НТ№37 80х22х2140 «Нео2»',                  category: 'nalichnik',  unit: 'шт',       price: 956 },
+    { name: 'К-т наличника КН№01 90х10х2140 компланарный',       category: 'nalichnik',  unit: 'комплект', price: 1_743 },
 
-    { name: 'Добор ДПТ№2 100х10х2070',                           category: 'dobor',      unit: 'шт',       price: 710 },
-    { name: 'Добор ДПТ№2 150х10х2070',                           category: 'dobor',      unit: 'шт',       price: 940 },
-    { name: 'Добор ДПТ№2 200х10х2070',                           category: 'dobor',      unit: 'шт',       price: 1_120 },
-    { name: 'Соединитель для доборов 35х4х2100',                 category: 'dobor',      unit: 'шт',       price: 50 },
+    { name: 'Добор ДПТ№2 100х10х2070',                           category: 'dobor',      unit: 'шт',       price: 746 },
+    { name: 'Добор ДПТ№2 150х10х2070',                           category: 'dobor',      unit: 'шт',       price: 987 },
+    { name: 'Добор ДПТ№2 200х10х2070',                           category: 'dobor',      unit: 'шт',       price: 1_176 },
+    { name: 'Соединитель для доборов 35х4х2100',                 category: 'dobor',      unit: 'шт',       price: 53 },
 
     { name: 'Притворная планка 30х10х2100',                      category: 'decorative', unit: 'шт',       price: null },
   ],
@@ -121,61 +121,61 @@ export const accessoriesByCoating: Record<CoatingSlug, Accessory[]> = {
   emal: [
     { name: `Комплект погонажа (${BASE_KIT_DESCRIPTION})`,               category: 'kit',        unit: 'комплект', price: BASE_KIT_PRICE.emal },
 
-    { name: 'Коробка КБТ№43П 80х32х2100',                                category: 'box',        unit: 'шт',       price: 1_150 },
-    { name: 'Коробка КБТ№43П 80х32х2100 + запил под скрытые петли HH24 Morelli', category: 'box', unit: 'шт',      price: 1_300 },
-    { name: 'Комплект коробки КБТ№46П 80×38×2100 (с запилом под скрытые петли HH24 Morelli, 2,5 шт)', category: 'box', unit: 'комплект', price: 3_025 },
-    { name: 'Комплект коробки КБКМ№02/39 75×38×2100 компланарный (2,5 шт)', category: 'box',      unit: 'комплект', price: 3_450 },
+    { name: 'Коробка КБТ№43П 80х32х2100',                                category: 'box',        unit: 'шт',       price: 1_208 },
+    { name: 'Коробка КБТ№43П 80х32х2100 + запил под скрытые петли HH24 Morelli', category: 'box', unit: 'шт',      price: 1_365 },
+    { name: 'Комплект коробки КБТ№46П 80×38×2100 (с запилом под скрытые петли HH24 Morelli, 2,5 шт)', category: 'box', unit: 'комплект', price: 3_176 },
+    { name: 'Комплект коробки КБКМ№02/39 75×38×2100 компланарный (2,5 шт)', category: 'box',      unit: 'комплект', price: 3_623 },
 
-    { name: 'Наличник НТ№22 70х8х2140',                                  category: 'nalichnik',  unit: 'шт',       price: 640 },
-    { name: 'Наличник НТ№25 100х8х2200',                                 category: 'nalichnik',  unit: 'шт',       price: 890 },
-    { name: 'Наличник НТ№13 80х8х2140, 3 ручья',                        category: 'nalichnik',  unit: 'шт',       price: 930 },
-    { name: 'Наличник НТ№34 80х12х2140 «Антик»',                        category: 'nalichnik',  unit: 'шт',       price: 890 },
-    { name: 'Наличник НТ№35 85х16х2140 «Каскад»',                       category: 'nalichnik',  unit: 'шт',       price: 890 },
-    { name: 'Наличник НТ№36 80х22х2140 «Нео 1»',                        category: 'nalichnik',  unit: 'шт',       price: 1_030 },
-    { name: 'Наличник НТ№37 80х22х2140 «Нео 2»',                        category: 'nalichnik',  unit: 'шт',       price: 1_030 },
-    { name: 'Комплект наличника КН№01 90×10×2140 компланарный (5 шт)',  category: 'nalichnik',  unit: 'комплект', price: 3_750 },
+    { name: 'Наличник НТ№22 70х8х2140',                                  category: 'nalichnik',  unit: 'шт',       price: 672 },
+    { name: 'Наличник НТ№25 100х8х2200',                                 category: 'nalichnik',  unit: 'шт',       price: 935 },
+    { name: 'Наличник НТ№13 80х8х2140, 3 ручья',                        category: 'nalichnik',  unit: 'шт',       price: 977 },
+    { name: 'Наличник НТ№34 80х12х2140 «Антик»',                        category: 'nalichnik',  unit: 'шт',       price: 935 },
+    { name: 'Наличник НТ№35 85х16х2140 «Каскад»',                       category: 'nalichnik',  unit: 'шт',       price: 935 },
+    { name: 'Наличник НТ№36 80х22х2140 «Нео 1»',                        category: 'nalichnik',  unit: 'шт',       price: 1_082 },
+    { name: 'Наличник НТ№37 80х22х2140 «Нео 2»',                        category: 'nalichnik',  unit: 'шт',       price: 1_082 },
+    { name: 'Комплект наличника КН№01 90×10×2140 компланарный (5 шт)',  category: 'nalichnik',  unit: 'комплект', price: 3_938 },
 
-    { name: 'Добор ДПТ100№2 100х10х2070',                                category: 'dobor',      unit: 'шт',       price: 1_030 },
-    { name: 'Добор ДПТ150№2 150х10х2070',                                category: 'dobor',      unit: 'шт',       price: 1_290 },
-    { name: 'Добор ДПТ200№2 200х10х2070',                                category: 'dobor',      unit: 'шт',       price: 1_540 },
-    { name: 'Соединитель для доборов 35х4х2100',                        category: 'dobor',      unit: 'шт',       price: 50 },
+    { name: 'Добор ДПТ100№2 100х10х2070',                                category: 'dobor',      unit: 'шт',       price: 1_082 },
+    { name: 'Добор ДПТ150№2 150х10х2070',                                category: 'dobor',      unit: 'шт',       price: 1_355 },
+    { name: 'Добор ДПТ200№2 200х10х2070',                                category: 'dobor',      unit: 'шт',       price: 1_617 },
+    { name: 'Соединитель для доборов 35х4х2100',                        category: 'dobor',      unit: 'шт',       price: 53 },
 
-    { name: 'Капитель 0,6 / 0,7 / 0,8 / 0,9',                            category: 'kapitel',    unit: 'шт',       price: 2_880 },
-    { name: 'Капитель 1,2',                                              category: 'kapitel',    unit: 'шт',       price: 4_330 },
+    { name: 'Капитель 0,6 / 0,7 / 0,8 / 0,9',                            category: 'kapitel',    unit: 'шт',       price: 3_024 },
+    { name: 'Капитель 1,2',                                              category: 'kapitel',    unit: 'шт',       price: 4_547 },
 
-    { name: 'Квадрат d35 85×22×85',                                      category: 'decorative', unit: 'шт',       price: 330 },
-    { name: 'Банкетка d35 85×22×160',                                    category: 'decorative', unit: 'шт',       price: 460 },
-    { name: 'Притворная планка 30х10х2100',                              category: 'decorative', unit: 'шт',       price: 570 },
+    { name: 'Квадрат d35 85×22×85',                                      category: 'decorative', unit: 'шт',       price: 347 },
+    { name: 'Банкетка d35 85×22×160',                                    category: 'decorative', unit: 'шт',       price: 483 },
+    { name: 'Притворная планка 30х10х2100',                              category: 'decorative', unit: 'шт',       price: 599 },
   ],
 
   // ── Эмалекс ──────────────────────────────────────────────────────────────
   emalex: [
     { name: `Комплект погонажа (${BASE_KIT_DESCRIPTION})`,               category: 'kit',        unit: 'комплект', price: BASE_KIT_PRICE.emalex },
 
-    { name: 'Коробка КБТ№43П 80х32х2100',                                category: 'box',        unit: 'шт',       price: 880 },
-    { name: 'Коробка КБТ№43П 80х32х2100 с запилом под скрытые петли (2 шт, HH24 Morelli)', category: 'box', unit: 'шт', price: 1_030 },
-    { name: 'Комплект коробки КБТ№43П 80×32×2100 под скрытые петли (2 шт, HH24 Morelli, 2,5 шт)', category: 'box', unit: 'комплект', price: 2_350 },
-    { name: 'Комплект коробки КБТ№46П 80×38×2100 под скрытые петли (2 шт, HH24 Morelli, 2,5 шт)', category: 'box', unit: 'комплект', price: 3_300 },
-    { name: 'Комплект коробки КБКМ№02/41 75×38×2100 компланарный (2,5 шт)', category: 'box',      unit: 'комплект', price: 2_760 },
+    { name: 'Коробка КБТ№43П 80х32х2100',                                category: 'box',        unit: 'шт',       price: 924 },
+    { name: 'Коробка КБТ№43П 80х32х2100 с запилом под скрытые петли (2 шт, HH24 Morelli)', category: 'box', unit: 'шт', price: 1_082 },
+    { name: 'Комплект коробки КБТ№43П 80×32×2100 под скрытые петли (2 шт, HH24 Morelli, 2,5 шт)', category: 'box', unit: 'комплект', price: 2_468 },
+    { name: 'Комплект коробки КБТ№46П 80×38×2100 под скрытые петли (2 шт, HH24 Morelli, 2,5 шт)', category: 'box', unit: 'комплект', price: 3_465 },
+    { name: 'Комплект коробки КБКМ№02/41 75×38×2100 компланарный (2,5 шт)', category: 'box',      unit: 'комплект', price: 2_898 },
 
-    { name: 'Наличник НТ№22 70х8х2140',                                  category: 'nalichnik',  unit: 'шт',       price: 540 },
-    { name: 'Наличник НТ№25 100х8х2200',                                 category: 'nalichnik',  unit: 'шт',       price: 750 },
-    { name: 'Наличник НТ№24 80х16х2140 «Фигурный»',                     category: 'nalichnik',  unit: 'шт',       price: 795 },
-    { name: 'Наличник НТ№34 80х12х2140 «Антик»',                        category: 'nalichnik',  unit: 'шт',       price: 730 },
-    { name: 'Наличник НТ№35 85х16х2140 «Каскад»',                       category: 'nalichnik',  unit: 'шт',       price: 750 },
-    { name: 'Наличник НТ№36 80х22х2140 «Нео 1»',                        category: 'nalichnik',  unit: 'шт',       price: 840 },
-    { name: 'Наличник НТ№37 80х22х2140 «Нео 2»',                        category: 'nalichnik',  unit: 'шт',       price: 840 },
-    { name: 'Комплект наличника КН№01 90×10×2140 компланарный (2,5 шт)', category: 'nalichnik', unit: 'комплект', price: 1_750 },
+    { name: 'Наличник НТ№22 70х8х2140',                                  category: 'nalichnik',  unit: 'шт',       price: 567 },
+    { name: 'Наличник НТ№25 100х8х2200',                                 category: 'nalichnik',  unit: 'шт',       price: 788 },
+    { name: 'Наличник НТ№24 80х16х2140 «Фигурный»',                     category: 'nalichnik',  unit: 'шт',       price: 835 },
+    { name: 'Наличник НТ№34 80х12х2140 «Антик»',                        category: 'nalichnik',  unit: 'шт',       price: 767 },
+    { name: 'Наличник НТ№35 85х16х2140 «Каскад»',                       category: 'nalichnik',  unit: 'шт',       price: 788 },
+    { name: 'Наличник НТ№36 80х22х2140 «Нео 1»',                        category: 'nalichnik',  unit: 'шт',       price: 882 },
+    { name: 'Наличник НТ№37 80х22х2140 «Нео 2»',                        category: 'nalichnik',  unit: 'шт',       price: 882 },
+    { name: 'Комплект наличника КН№01 90×10×2140 компланарный (2,5 шт)', category: 'nalichnik', unit: 'комплект', price: 1_838 },
 
-    { name: 'Добор ДПТ100№2 100х10х2070',                                category: 'dobor',      unit: 'шт',       price: 640 },
-    { name: 'Добор ДПТ150№2 150х10х2070',                                category: 'dobor',      unit: 'шт',       price: 840 },
-    { name: 'Добор ДПТ200№2 200х10х2070',                                category: 'dobor',      unit: 'шт',       price: 1_030 },
-    { name: 'Добор ДПТ300№2 300х10х2070',                                category: 'dobor',      unit: 'шт',       price: 2_130 },
-    { name: 'Добор ДПТ390№2 390х10х2070',                                category: 'dobor',      unit: 'шт',       price: 2_400 },
-    { name: 'Соединитель для доборов 35х4х2100',                        category: 'dobor',      unit: 'шт',       price: 50 },
+    { name: 'Добор ДПТ100№2 100х10х2070',                                category: 'dobor',      unit: 'шт',       price: 672 },
+    { name: 'Добор ДПТ150№2 150х10х2070',                                category: 'dobor',      unit: 'шт',       price: 882 },
+    { name: 'Добор ДПТ200№2 200х10х2070',                                category: 'dobor',      unit: 'шт',       price: 1_082 },
+    { name: 'Добор ДПТ300№2 300х10х2070',                                category: 'dobor',      unit: 'шт',       price: 2_237 },
+    { name: 'Добор ДПТ390№2 390х10х2070',                                category: 'dobor',      unit: 'шт',       price: 2_520 },
+    { name: 'Соединитель для доборов 35х4х2100',                        category: 'dobor',      unit: 'шт',       price: 53 },
 
-    { name: 'Плинтус 70х16х2140',                                        category: 'plinth',     unit: 'шт',       price: 810 },
-    { name: 'Клипсы для плинтуса',                                       category: 'plinth',     unit: 'шт',       price: 50 },
+    { name: 'Плинтус 70х16х2140',                                        category: 'plinth',     unit: 'шт',       price: 851 },
+    { name: 'Клипсы для плинтуса',                                       category: 'plinth',     unit: 'шт',       price: 53 },
   ],
 
   // ── Протач (Смарт) ──────────────────────────────────────────────────────
