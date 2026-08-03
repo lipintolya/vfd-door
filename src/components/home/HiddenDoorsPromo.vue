@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useScrollReveal } from '../../composables/useScrollReveal'
 import { POLOTNO_PRICE_SECRET, TOTAL_SECRET } from '../../data/skrytye-dveri-products'
+import BenefitItem from './BenefitItem.vue'
 
 const COVER_IMAGE = 'https://storage.yandexcloud.net/vfd74ru/Main_page/left_bento/secret_render_cover.webp'
 
@@ -45,37 +46,33 @@ const { sectionRef, visible } = useScrollReveal(0.15)
           </div>
 
           <ul class="flex flex-col gap-3 border-y border-slate-100 py-4 sm:gap-3.5 sm:py-5" role="list">
-            <li class="flex items-center gap-3 text-base text-slate-700">
+            <BenefitItem text="Полностью алюминиевый короб">
               <svg class="h-5.5 w-5.5 shrink-0 text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M3 8l9-5 9 5-9 5-9-5Z"/>
                 <path d="M3 8v8l9 5 9-5V8"/>
                 <path d="M12 13v8"/>
               </svg>
-              <span>Полностью алюминиевый короб</span>
-            </li>
-            <li class="flex items-center gap-3 text-base text-slate-700">
+            </BenefitItem>
+            <BenefitItem text="Реверсивный монтаж — сторона открывания на выбор">
               <svg class="h-5.5 w-5.5 shrink-0 text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M3 12h18"/>
                 <path d="M7 8l-4 4 4 4"/>
                 <path d="M17 8l4 4-4 4"/>
               </svg>
-              <span>Реверсивный монтаж — сторона открывания на выбор</span>
-            </li>
-            <li class="flex items-center gap-3 text-base text-slate-700">
+            </BenefitItem>
+            <BenefitItem text="Полотна нестандартной высоты">
               <svg class="h-5.5 w-5.5 shrink-0 text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M12 3v18"/>
                 <path d="M8 7l4-4 4 4"/>
                 <path d="M8 17l4 4 4-4"/>
               </svg>
-              <span>Полотна нестандартной высоты</span>
-            </li>
-            <li class="flex items-center gap-3 text-base text-slate-700">
+            </BenefitItem>
+            <BenefitItem text="Грунт — готово под покраску или декор">
               <svg class="h-5.5 w-5.5 shrink-0 text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <rect x="3" y="4" width="14" height="6" rx="1.5"/>
                 <path d="M8 10v4a2 2 0 0 0 2 2h1v4"/>
               </svg>
-              <span>Грунт — готово под покраску или декор</span>
-            </li>
+            </BenefitItem>
           </ul>
 
           <div>
