@@ -22,8 +22,8 @@ defineProps<{ text: string }>()
 const itemRef = ref<HTMLElement | null>(null)
 const pillRef = ref<HTMLElement | null>(null)
 const iconRef = ref<HTMLElement | null>(null)
+const isActive = ref(false)
 
-let active = false
 let rafId: number | null = null
 
 const check = () => {
@@ -38,18 +38,21 @@ const check = () => {
   const viewportCenter = window.innerHeight / 2
   const nowActive = Math.abs(itemCenter - viewportCenter) < rect.height / 2 + 6
 
-  if (nowActive === active) return
-  active = nowActive
+  if (nowActive === isActive.value) return
+  isActive.value = nowActive
 
   animate(
     pill,
-    { backgroundColor: active ? 'rgb(240 253 250)' : 'rgba(240, 253, 250, 0)' },
-    { duration: 0.45, ease: 'easeOut' }
+    {
+      backgroundColor: nowActive ? 'rgb(204 251 241)' : 'rgba(204, 251, 241, 0)',
+      boxShadow: nowActive ? 'inset 0 0 0 1.5px rgb(94 234 212)' : 'inset 0 0 0 0px rgba(94, 234, 212, 0)',
+    },
+    { duration: 0.4, ease: 'easeOut' }
   )
   animate(
     icon,
-    { scale: active ? 1.12 : 1 },
-    { duration: 0.45, ease: 'easeOut' }
+    { scale: nowActive ? 1.22 : 1 },
+    { duration: 0.4, ease: 'easeOut' }
   )
 }
 
@@ -76,7 +79,7 @@ onUnmounted(() => {
       <span ref="iconRef" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full">
         <slot />
       </span>
-      <span>{{ text }}</span>
+      <span class="transition-colors duration-300" :class="isActive ? 'font-semibold text-slate-900' : ''">{{ text }}</span>
     </span>
   </li>
 </template>
