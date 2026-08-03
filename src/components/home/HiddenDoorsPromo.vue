@@ -18,7 +18,7 @@ const { sectionRef, visible } = useScrollReveal(0.15)
       >
         <!-- Фото — без текстового оверлея, суть продукта в том, что дверь
              сливается со стеной -->
-        <div class="relative aspect-4/3 lg:aspect-auto">
+        <div class="relative aspect-square lg:aspect-auto">
           <img
             :src="COVER_IMAGE"
             alt="Скрытая дверь серии «Секрет» — полотно заподлицо со стеной"
@@ -31,46 +31,46 @@ const { sectionRef, visible } = useScrollReveal(0.15)
         </div>
 
         <!-- Контент -->
-        <div class="flex flex-col gap-4 p-6 sm:gap-5 sm:p-8">
+        <div class="flex flex-col gap-5 p-8 sm:gap-6 sm:p-10">
           <div>
             <h2
               id="hidden-doors-heading"
-              class="text-xl font-medium leading-tight tracking-tight text-slate-900 sm:text-2xl"
+              class="text-2xl font-medium leading-tight tracking-tight text-slate-900 sm:text-3xl"
             >
               Скрытые двери из наличия в Челябинске
             </h2>
-            <p class="mt-2 text-sm leading-relaxed text-slate-600 sm:text-base">
+            <p class="mt-3 text-base leading-relaxed text-slate-600 sm:text-lg">
               Полотно заподлицо со стеной. Алюминиевый короб без наличников и видимых петель — под покраску, штукатурку или обои в цвет стены.
             </p>
           </div>
 
-          <ul class="flex flex-col gap-2 border-y border-slate-100 py-3 sm:gap-2.5 sm:py-3.5" role="list">
-            <li class="flex items-center gap-2.5 text-sm text-slate-700">
-              <svg class="h-4.5 w-4.5 shrink-0 text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <ul class="flex flex-col gap-3 border-y border-slate-100 py-4 sm:gap-3.5 sm:py-5" role="list">
+            <li class="flex items-center gap-3 text-base text-slate-700">
+              <svg class="h-5.5 w-5.5 shrink-0 text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M3 8l9-5 9 5-9 5-9-5Z"/>
                 <path d="M3 8v8l9 5 9-5V8"/>
                 <path d="M12 13v8"/>
               </svg>
               <span>Полностью алюминиевый короб</span>
             </li>
-            <li class="flex items-center gap-2.5 text-sm text-slate-700">
-              <svg class="h-4.5 w-4.5 shrink-0 text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <li class="flex items-center gap-3 text-base text-slate-700">
+              <svg class="h-5.5 w-5.5 shrink-0 text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M3 12h18"/>
                 <path d="M7 8l-4 4 4 4"/>
                 <path d="M17 8l4 4-4 4"/>
               </svg>
               <span>Реверсивный монтаж — сторона открывания на выбор</span>
             </li>
-            <li class="flex items-center gap-2.5 text-sm text-slate-700">
-              <svg class="h-4.5 w-4.5 shrink-0 text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <li class="flex items-center gap-3 text-base text-slate-700">
+              <svg class="h-5.5 w-5.5 shrink-0 text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M12 3v18"/>
                 <path d="M8 7l4-4 4 4"/>
                 <path d="M8 17l4 4 4-4"/>
               </svg>
               <span>Полотна нестандартной высоты</span>
             </li>
-            <li class="flex items-center gap-2.5 text-sm text-slate-700">
-              <svg class="h-4.5 w-4.5 shrink-0 text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <li class="flex items-center gap-3 text-base text-slate-700">
+              <svg class="h-5.5 w-5.5 shrink-0 text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <rect x="3" y="4" width="14" height="6" rx="1.5"/>
                 <path d="M8 10v4a2 2 0 0 0 2 2h1v4"/>
               </svg>
@@ -79,22 +79,22 @@ const { sectionRef, visible } = useScrollReveal(0.15)
           </ul>
 
           <div>
-            <div class="flex items-baseline justify-between text-sm text-slate-500">
+            <div class="flex items-baseline justify-between text-base text-slate-500">
               <span>Полотно от</span>
-              <span class="text-base font-medium text-slate-900 sm:text-lg">{{ fmt(POLOTNO_PRICE_SECRET) }}</span>
+              <span class="text-lg font-medium text-slate-900 sm:text-xl">{{ fmt(POLOTNO_PRICE_SECRET) }}</span>
             </div>
-            <div class="mt-1 flex items-baseline justify-between">
-              <span class="text-sm text-slate-500">Комплект под ключ от</span>
-              <span class="text-xl font-medium text-slate-900 sm:text-2xl">{{ fmt(TOTAL_SECRET) }}</span>
+            <div class="mt-2 flex items-baseline justify-between">
+              <span class="text-base text-slate-500">Комплект под ключ от</span>
+              <span class="text-2xl font-medium text-slate-900 sm:text-3xl">{{ fmt(TOTAL_SECRET) }}</span>
             </div>
           </div>
 
           <a
             href="/catalog/skrytye-dveri/"
-            class="flex h-11 items-center justify-center gap-2 rounded-xl bg-slate-900 text-sm font-medium text-white transition-colors hover:bg-slate-800"
+            class="flex h-14 items-center justify-center gap-2 rounded-xl bg-slate-900 text-base font-medium text-white transition-colors hover:bg-slate-800"
           >
             Смотреть скрытые двери
-            <svg class="h-4 w-4 shrink-0" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <svg class="h-4.5 w-4.5 shrink-0" viewBox="0 0 16 16" fill="none" aria-hidden="true">
               <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </a>
