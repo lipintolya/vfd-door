@@ -22,6 +22,8 @@ export interface CatalogCardItem {
   photo: string
   price: number | null
   hasGlass: boolean
+  /** Бейдж "Новинка" — см. src/lib/new-models.ts */
+  isNew: boolean
 }
 
 export interface CatalogFilterOption {

@@ -7,6 +7,7 @@ import ProductColorPicker from '../../components/catalog/ProductColorPicker.vue'
 import type { ColorVariant } from '../../components/catalog/ProductColorPicker.vue'
 import { getSeriesSpec } from '../../data/series-descriptions'
 import { adjustPrice } from '../../lib/price-adjustments'
+import { isNewModel } from '../../lib/new-models'
 import { accessoriesByCoating, CATEGORY_LABELS, PRICE_LIST_UPDATED } from '../../data/accessories'
 import type { AccessoryCategory, CoatingSlug } from '../../data/accessories'
 
@@ -34,7 +35,7 @@ export async function getStaticPaths() {
   }
 
   type ModelEntry = {
-    model:       { id: string; name: string; hasGlass: boolean; trim: string | null }
+    model:       { id: string; name: string; hasGlass: boolean; trim: string | null; isNew: boolean }
     slug:        string
     seriesName:  string
     seriesSlug:  string
@@ -63,6 +64,7 @@ export async function getStaticPaths() {
           name:     model.name,
           hasGlass: model.has_glass ?? false,
           trim:     model.trim ?? null,
+          isNew:    isNewModel(model.id),
         },
         slug:        '',
         seriesName:  series?.name     ?? '',
@@ -248,6 +250,7 @@ const structuredData = [breadcrumbSchema, {
         <!-- ── Характеристики (статический HTML для SEO) ── -->
         <div class="product-info">
           <div class="product-badges">
+            {model.isNew && <span class="product-badge product-badge--new">Новинка</span>}
             {seriesName && <span class="product-badge">{seriesName}</span>}
             {coatingName && <span class="product-badge product-badge--muted">{coatingName}</span>}
           </div>
@@ -403,6 +406,12 @@ const structuredData = [breadcrumbSchema, {
   background: #f8fafc;
   border-color: #e2e8f0;
   color: #475569;
+}
+
+.product-badge--new {
+  background: oklch(39.1% 0.09 240.876);
+  border-color: oklch(39.1% 0.09 240.876);
+  color: #fff;
 }
 
 .product-title {

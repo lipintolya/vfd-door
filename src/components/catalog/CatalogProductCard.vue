@@ -133,6 +133,12 @@ const seriesBadgeClass = computed(() => {
       <div class="absolute left-0 top-3 flex flex-wrap gap-1">
         <span class="rounded-r-full px-3 py-1 text-xs font-medium uppercase tracking-wide" :class="seriesBadgeClass">{{ card.series }}</span>
       </div>
+      <span
+        v-if="card.isNew"
+        class="absolute right-3 top-3 rounded-full bg-[oklch(39.1%_0.09_240.876)] px-3 py-1 text-xs font-bold uppercase tracking-wide text-white shadow-sm"
+      >
+        Новинка
+      </span>
     </div>
 
     <div class="flex flex-1 flex-col gap-2.5 p-3.5 sm:gap-3 sm:p-5">

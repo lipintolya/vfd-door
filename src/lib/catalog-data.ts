@@ -8,6 +8,7 @@ import { supabase } from './supabase'
 import { buildModelSlugMap } from './slugify'
 import { getSeriesSpec } from '../data/series-descriptions'
 import { adjustPrice } from './price-adjustments'
+import { isNewModel } from './new-models'
 import type { CatalogCardItem } from '../components/catalog/types'
 
 const normalizeHexColor = (value: string | null | undefined) => {
@@ -133,6 +134,7 @@ export async function getCatalogCards(): Promise<{
       photo:       row.photo_url  ?? '',
       price:       adjustPrice(seriesSlug, row.price_rrp ?? null),
       hasGlass:    model.has_glass ?? false,
+      isNew:       isNewModel(model.id),
     })
   }
 
