@@ -30,7 +30,7 @@ const props = withDefaults(defineProps<{
       subtitle: 'При оформлении заказа',
       description:
         'При заказе межкомнатных дверей в нашем салоне на Братьев Кашириных. Гарантируем точность замеров и расчёт без лишних позиций.',
-      image: 'https://storage.yandexcloud.net/vfd74ru/Main_page/articles/article_1/zamer.webp',
+      image: 'https://storage.yandexcloud.net/vfd74ru/sale/zamer_render.webp',
       ctaText: 'Подробнее',
       ctaLink: '/contacts',
       discount: 'Бесплатно',
@@ -76,8 +76,6 @@ const formatDate = (dateStr: string): string => {
    Computed & State
    ============================================================ */
 const activePromos = computed(() => props.promos.filter(p => isPromoActive(p.validUntil)))
-const activeIndex = ref<number | null>(null)
-const hoveredIndex = ref<number | null>(null)
 
 /* Число дней "осталось" зависит от new Date() — на сервере это момент сборки,
    у клиента момент захода на сайт, обычно разные дни. Если считать прямо в
@@ -88,14 +86,6 @@ const hoveredIndex = ref<number | null>(null)
    реактивное обновление, а не расхождение. */
 const clientReady = ref(false)
 onMounted(() => { clientReady.value = true })
-
-const togglePromo = (index: number): void => {
-  activeIndex.value = activeIndex.value === index ? null : index
-}
-
-const handleCtaClick = (event: Event, link: string): void => {
-  if (link === '#') event.preventDefault()
-}
 
 const { sectionRef, visible } = useScrollReveal(0.1)
 </script>
@@ -117,8 +107,11 @@ const { sectionRef, visible } = useScrollReveal(0.1)
           Специальные предложения
         </p>
         <h2 id="promo-heading" class="text-3xl font-medium leading-tight tracking-tight text-slate-900 md:text-5xl">
-          Акции и скидки
+          Акции и специальные предложения
         </h2>
+        <p class="mt-3 text-sm font-semibold uppercase tracking-wide text-teal-600">
+          Только в салоне ВФД на Кашириных
+        </p>
         <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-600 md:text-lg">
           Получите лучшие условия для вашего заказа — следите за нашими акциями
           и не упустите возможность сэкономить
@@ -130,7 +123,11 @@ const { sectionRef, visible } = useScrollReveal(0.1)
         <p class="text-lg text-gray-500">Нет активных акций. Следите за обновлениями 👀</p>
       </div>
 
-      <!-- ── Promos grid ── -->
+      <!-- ── Promos grid — карточка целиком кликабельна и сразу показывает
+           всё описание (без аккордеона): раньше нужно было сначала раскрыть
+           карточку кликом, потом ещё раз кликнуть по кнопке внутри — два
+           клика до сути и до CTA. Теперь как остальные карточки на сайте
+           (SeriesCard/Reviews/CatalogProductCard) — обычная ссылка. ── -->
       <ul
         v-else
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 list-none p-0 m-0"
@@ -140,23 +137,11 @@ const { sectionRef, visible } = useScrollReveal(0.1)
           v-for="(promo, index) in activePromos"
           :key="promo.id"
         >
-          <article
-            class="group flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-[opacity,transform,border-color,box-shadow] duration-[600ms] ease-out hover:border-teal-400 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-teal-500 focus-visible:outline-offset-2 motion-reduce:transition-none"
-            :class="{
-              'translate-y-0 opacity-100': visible,
-              'translate-y-6 opacity-0': !visible,
-              'ring-2 ring-teal-500 border-teal-500': activeIndex === index,
-            }"
+          <a
+            :href="promo.ctaLink || '#'"
+            class="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white no-underline transition-[opacity,transform,border-color,box-shadow] duration-600 ease-out hover:border-teal-400 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-teal-500 focus-visible:outline-offset-2 motion-reduce:transition-none"
+            :class="visible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
             :style="{ transitionDelay: visible ? `${index * 100}ms` : '0ms' }"
-            role="button"
-            tabindex="0"
-            :aria-expanded="activeIndex === index"
-            :aria-label="`${promo.title}. ${activeIndex === index ? 'Свернуть описание' : 'Развернуть описание'}`"
-            @click="togglePromo(index)"
-            @keyup.enter="togglePromo(index)"
-            @keyup.space.prevent="togglePromo(index)"
-            @mouseenter="hoveredIndex = index"
-            @mouseleave="hoveredIndex = null"
           >
             <!-- Image -->
             <div class="relative h-72 w-full overflow-hidden bg-gray-100">
@@ -167,15 +152,14 @@ const { sectionRef, visible } = useScrollReveal(0.1)
                 decoding="async"
                 width="600"
                 height="288"
-                class="w-full h-full object-cover transition-transform duration-500"
-                :class="hoveredIndex === index || activeIndex === index ? 'scale-110' : 'scale-100'"
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
 
               <!-- Discount badge -->
               <span
                 v-if="promo.discount"
                 class="absolute top-3 right-3 bg-teal-600 text-white px-3 py-1.5 rounded-lg text-sm font-semibold shadow-sm"
-                aria-label="`Скидка: ${promo.discount}`"
+                :aria-label="`Скидка: ${promo.discount}`"
               >
                 {{ promo.discount }}
               </span>
@@ -194,25 +178,9 @@ const { sectionRef, visible } = useScrollReveal(0.1)
             <div class="p-5 sm:p-6 flex flex-col flex-1">
               <h3 class="text-lg font-semibold text-gray-900 line-clamp-2">{{ promo.title }}</h3>
               <p class="text-sm text-teal-600 font-medium mt-1 mb-3">{{ promo.subtitle }}</p>
+              <p class="text-sm text-gray-600 leading-relaxed">{{ promo.description }}</p>
 
-              <!-- Expandable description -->
-              <div
-                class="overflow-hidden transition-all duration-300"
-                :class="activeIndex === index ? 'max-h-72 opacity-100' : 'max-h-0 opacity-0'"
-                :aria-hidden="activeIndex !== index"
-              >
-                <p class="text-sm text-gray-600 leading-relaxed mb-4">{{ promo.description }}</p>
-                <a
-                  v-if="promo.ctaText && promo.ctaLink"
-                  :href="promo.ctaLink"
-                  class="inline-flex items-center justify-center w-full px-4 py-2.5 bg-teal-600 text-white text-sm font-semibold rounded-lg hover:bg-teal-700 transition-colors focus-visible:outline-2 focus-visible:outline-teal-500"
-                  @click.stop="handleCtaClick($event, promo.ctaLink!)"
-                >
-                  {{ promo.ctaText }}
-                </a>
-              </div>
-
-              <!-- Footer with date & toggle -->
+              <!-- Footer -->
               <div class="flex justify-between items-center mt-auto pt-4 border-t border-gray-100">
                 <time
                   :datetime="promo.validUntil"
@@ -221,31 +189,21 @@ const { sectionRef, visible } = useScrollReveal(0.1)
                   До {{ formatDate(promo.validUntil) }}
                 </time>
 
-                <button
-                  type="button"
-                  class="w-9 h-9 flex items-center justify-center rounded-lg bg-teal-50 text-teal-600 hover:bg-teal-100 transition-colors focus-visible:outline-2 focus-visible:outline-teal-500"
-                  :aria-label="activeIndex === index ? 'Свернуть описание' : 'Развернуть описание'"
-                  tabindex="-1"
-                  @click.stop="togglePromo(index)"
+                <span
+                  v-if="promo.ctaText"
+                  class="inline-flex items-center gap-1 text-sm font-semibold text-teal-600 transition-transform group-hover:translate-x-0.5"
                 >
-                  <svg
-                    class="w-5 h-5 transition-transform duration-300"
-                    :class="{ 'rotate-180': activeIndex === index }"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  {{ promo.ctaText }}
+                  <svg class="h-3.5 w-3.5 shrink-0" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
-                </button>
+                </span>
               </div>
             </div>
-          </article>
+          </a>
         </li>
       </ul>
 
     </div>
   </section>
 </template>
-
