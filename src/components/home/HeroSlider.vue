@@ -16,6 +16,15 @@ interface Slide {
 
 const slides: Slide[] = [
   {
+    id: 5,
+    image: 'https://storage.yandexcloud.net/vfd74ru/Main_page/left_bento/strix_render.webp',
+    title: 'Премиум дизайн по доступной цене',
+    subtitle: 'Новинка — «Штрих» уже в каталоге',
+    description: 'Серия Урбан: алюминиевая кромка с графичным акцентом, покрытие Эмалекс — от 14 300 ₽ за полотно',
+    cta: 'Смотреть модель',
+    ctaHref: '/models/shtrih-2a-urban-78543d/',
+  },
+  {
     id: 1,
     image: 'https://storage.yandexcloud.net/catalog-vfd/renders/hero-cover.webp',
     title: 'Межкомнатные и входные двери в Челябинске',
