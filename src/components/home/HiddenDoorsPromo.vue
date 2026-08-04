@@ -86,9 +86,12 @@ const { sectionRef, visible } = useScrollReveal(0.15)
             </div>
           </div>
 
-          <a href="/catalog/skrytye-dveri/" class="btn btn-primary w-fit">
+          <a
+            href="/catalog/skrytye-dveri/"
+            class="flex h-14 items-center justify-center gap-2 rounded-xl bg-slate-900 text-base font-medium text-white transition-colors hover:bg-slate-800"
+          >
             Смотреть скрытые двери
-            <svg class="btn-arrow-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <svg class="h-4.5 w-4.5 shrink-0" viewBox="0 0 16 16" fill="none" aria-hidden="true">
               <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </a>
