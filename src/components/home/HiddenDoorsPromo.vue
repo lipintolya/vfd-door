@@ -81,7 +81,7 @@ const { sectionRef, visible } = useScrollReveal(0.15)
               <span class="text-lg font-medium text-slate-900 sm:text-xl">{{ fmt(POLOTNO_PRICE_SECRET) }}</span>
             </div>
             <div class="mt-2 flex items-baseline justify-between">
-              <span class="text-base text-slate-500">Комплект под ключ от</span>
+              <span class="text-base text-slate-500"><span class="sm:hidden">Комплект от</span><span class="hidden sm:inline">Комплект под ключ от</span></span>
               <span class="text-2xl font-medium text-slate-900 sm:text-3xl">{{ fmt(TOTAL_SECRET) }}</span>
             </div>
           </div>

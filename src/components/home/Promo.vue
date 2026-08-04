@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useScrollReveal } from '../../composables/useScrollReveal'
 
 /* ============================================================
@@ -78,6 +78,16 @@ const formatDate = (dateStr: string): string => {
 const activePromos = computed(() => props.promos.filter(p => isPromoActive(p.validUntil)))
 const activeIndex = ref<number | null>(null)
 const hoveredIndex = ref<number | null>(null)
+
+/* Число дней "осталось" зависит от new Date() — на сервере это момент сборки,
+   у клиента момент захода на сайт, обычно разные дни. Если считать прямо в
+   шаблоне, первый клиентский рендер (хайдрейшн) не совпадёт с серверным —
+   Vue ругается "Hydration completed but contains mismatches". Показываем
+   плейсхолдер, пока не смонтировались, тогда серверный и первый клиентский
+   рендер идентичны — а разница появляется уже после хайдрейшна, как обычное
+   реактивное обновление, а не расхождение. */
+const clientReady = ref(false)
+onMounted(() => { clientReady.value = true })
 
 const togglePromo = (index: number): void => {
   activeIndex.value = activeIndex.value === index ? null : index
@@ -170,8 +180,9 @@ const { sectionRef, visible } = useScrollReveal(0.1)
                 {{ promo.discount }}
               </span>
 
-              <!-- Days left badge -->
+              <!-- Days left badge — считается от new Date(), см. clientReady выше -->
               <span
+                v-if="clientReady"
                 class="absolute bottom-3 left-3 bg-white/95 text-gray-900 px-3 py-1.5 rounded-lg text-xs font-semibold shadow-sm"
                 :aria-label="`Осталось ${getDaysLeft(promo.validUntil)} дней`"
               >
