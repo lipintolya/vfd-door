@@ -135,7 +135,7 @@ const seriesBadgeClass = computed(() => {
       </div>
       <span
         v-if="card.isNew"
-        class="absolute right-3 top-3 rounded-full bg-[oklch(39.1%_0.09_240.876)] px-3 py-1 text-xs font-bold uppercase tracking-wide text-white shadow-sm"
+        class="absolute right-3 top-3 rounded-full bg-sky-900 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white shadow-sm"
       >
         Новинка
       </span>
