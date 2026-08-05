@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed, watch } from 'vue'
 import CatalogEmptyState from './CatalogEmptyState.vue'
 import CatalogFilters from './CatalogFilters.vue'
 import CatalogGrid from './CatalogGrid.vue'
@@ -125,22 +125,6 @@ const visiblePages = computed<Array<number | string>>(() => {
 const goToPage = (page: number) => {
   currentPage.value = Math.max(1, Math.min(page, totalPages.value))
 }
-
-/* initialSeries/initialCoating/initialColor приходят из Astro.url.searchParams
-   на СТРОГО статичной сборке — на билде запроса нет, поэтому пропсы всегда
-   пустые, независимо от того, что реально в адресной строке у юзера. Ссылки
-   вида /catalog?series=urban#catalog-title (карточки серий, "Смотреть
-   модели", редиректы со старых /catalog/series/[slug]) работают только
-   потому что читаем query здесь, на клиенте, после маунта. */
-onMounted(() => {
-  const params = new URLSearchParams(window.location.search)
-  const series  = params.get('series')
-  const coating = params.get('coating')
-  const color   = params.get('color')
-  if (series)  activeSeries.value  = series
-  if (coating) activeCoating.value = coating
-  if (color)   activeColor.value   = color
-})
 
 watch(
   [activeSeries, activeCoating, activeColor],

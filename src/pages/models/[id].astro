@@ -186,7 +186,7 @@ const pageDesc      = spec.description ||
 const breadcrumbs = [
   { label: 'Главная',  href: '/' },
   { label: 'Каталог',  href: '/catalog' },
-  ...(seriesName ? [{ label: seriesName, href: `/catalog?series=${seriesSlug}#catalog-title` }] : []),
+  ...(seriesName ? [{ label: seriesName, href: `/catalog/series/${seriesSlug}` }] : []),
   { label: model.name },
 ]
 
