@@ -79,6 +79,11 @@ const logoError    = ref(false)
 const LOGO_PHRASES = ['ВФД НА КАШИРИНЫХ', 'ДВЕРИ ПРЯМО', 'С ФАБРИКИ'] as const
 const logoText      = ref<string>(LOGO_PHRASES[0])
 const logoTextShown = ref(true)
+const logoTextRef   = ref<HTMLElement | null>(null)
+/* Ширина фиксируется под самую длинную фразу (первую — она заведомо
+   длиннее остальных), иначе смена текста меняет ширину span и толкает
+   соседние пункты меню — рвано, элементы шапки должны стоять на месте. */
+const logoTextWidth = ref<number | null>(null)
 const now          = ref(new Date())
 const currentPath  = ref('/')
 
@@ -231,11 +236,15 @@ const callPrimary = () => {
 
 /* Один проход по LOGO_PHRASES и возврат на первую — см. комментарий у
    объявления состояния выше. FADE_MS должен совпадать с duration
-   translate/opacity-перехода в шаблоне. */
-const LOGO_FADE_MS  = 250
-const LOGO_DWELL_MS = 1800
+   opacity-перехода в шаблоне. */
+const LOGO_FADE_MS  = 500
+const LOGO_DWELL_MS = 1900
 
 const runLogoPhraseCycle = () => {
+  // Ширина фиксируется по факту отрисованной первой фразы — самой
+  // длинной из трёх, дальше текст меняется внутри уже не гуляющего блока.
+  if (logoTextRef.value) logoTextWidth.value = logoTextRef.value.getBoundingClientRect().width
+
   let i = 0
   const step = () => {
     logoTextShown.value = false
@@ -244,6 +253,7 @@ const runLogoPhraseCycle = () => {
       logoText.value = LOGO_PHRASES[i]
       logoTextShown.value = true
       if (i !== 0) setTimeout(step, LOGO_DWELL_MS)
+      else setTimeout(() => { logoTextWidth.value = null }, LOGO_FADE_MS)
     }, LOGO_FADE_MS)
   }
   setTimeout(step, LOGO_DWELL_MS)
@@ -325,10 +335,12 @@ onUnmounted(() => {
             </div>
           </div>
           <span
-            class="hidden sm:block text-sm font-semibold tracking-wide
-                   transition-[color,opacity,transform] duration-250 ease-out
+            ref="logoTextRef"
+            class="hidden sm:block overflow-hidden whitespace-nowrap text-sm font-semibold tracking-wide
+                   transition-[color,opacity] duration-500 ease-in-out
                    group-hover:text-teal-600 motion-reduce:transition-none"
-            :class="logoTextShown ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1'"
+            :style="logoTextWidth ? { width: logoTextWidth + 'px' } : {}"
+            :class="logoTextShown ? 'opacity-100' : 'opacity-0'"
           >
             {{ logoText }}
           </span>
