@@ -1,76 +1,18 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useScrollReveal } from '../../composables/useScrollReveal'
+import { PROMOS, type Promo } from '../../data/promos'
+import { isPromoActive, getDaysLeft, formatDate } from '../../lib/promo-dates'
 
 /* ============================================================
-   Types
-   ============================================================ */
-interface Promo {
-  id: number
-  title: string
-  subtitle: string
-  description: string
-  image: string
-  ctaText?: string
-  ctaLink?: string
-  discount?: string
-  validUntil: string
-}
-
-/* ============================================================
-   Props — данные передаются из Astro (серверный рендер = SEO)
+   Props — можно переопределить список извне, иначе берём общий
+   PROMOS (тот же источник, что и /promo-archive для истёкших)
    ============================================================ */
 const props = withDefaults(defineProps<{
   promos?: Promo[]
 }>(), {
-  promos: () => [
-    {
-      id: 1,
-      title: 'Бесплатный замер',
-      subtitle: 'По Челябинску, при оформлении заказа',
-      description:
-        'Выезд замерщика по Челябинску — бесплатно при заказе межкомнатных дверей в нашем салоне на Братьев Кашириных. Гарантируем точность замеров и расчёт без лишних позиций.',
-      image: 'https://storage.yandexcloud.net/vfd74ru/sale/zamer_render.webp',
-      ctaText: 'Подробнее',
-      ctaLink: '/contacts',
-      discount: 'Бесплатно',
-      validUntil: '2026-12-31',
-    },
-  ]
+  promos: () => PROMOS,
 })
-
-/* ============================================================
-   Date helpers
-   ============================================================ */
-const parseLocalDate = (dateStr: string): Date => {
-  const [year, month, day] = dateStr.split('-').map(Number)
-  return new Date(year, (month || 1) - 1, day || 1)
-}
-
-const isPromoActive = (validUntil: string): boolean => {
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  const deadline = parseLocalDate(validUntil)
-  deadline.setHours(23, 59, 59, 999)
-  return today <= deadline
-}
-
-const getDaysLeft = (validUntil: string): number => {
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  const deadline = parseLocalDate(validUntil)
-  deadline.setHours(0, 0, 0, 0)
-  const diffDays = Math.ceil((deadline.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
-  return Math.max(0, diffDays)
-}
-
-const formatDate = (dateStr: string): string => {
-  return parseLocalDate(dateStr).toLocaleDateString('ru-RU', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  })
-}
 
 /* ============================================================
    Computed & State
@@ -92,6 +34,7 @@ const { sectionRef, visible } = useScrollReveal(0.1)
 
 <template>
   <section
+    id="promo"
     ref="sectionEl"
     class="section bg-white"
     aria-labelledby="promo-heading"

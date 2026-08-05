@@ -16,6 +16,10 @@ const NAV_LINKS = [
   { href: '/contacts',   label: 'Контакты' },
 ] as const
 
+const LEGAL_LINKS = [
+  { href: '/promo-archive', label: 'Архив акций' },
+] as const
+
 const CATEGORY_LINKS = [
   { href: '/catalog',                label: 'Межкомнатные' },
   { href: '/catalog/skrytye-dveri',  label: 'Скрытые двери' },
@@ -212,6 +216,14 @@ onUnmounted(() => {
             © {{ year }} VFD. Все права защищены.
             <a href="/privacy" class="text-white/60 hover:text-white transition-colors duration-200 ml-3">
               Политика конфиденциальности
+            </a>
+            <a
+              v-for="link in LEGAL_LINKS"
+              :key="link.href"
+              :href="link.href"
+              class="text-white/60 hover:text-white transition-colors duration-200 ml-3"
+            >
+              {{ link.label }}
             </a>
           </span>
           <span>
