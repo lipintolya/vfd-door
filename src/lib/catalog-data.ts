@@ -209,8 +209,7 @@ export interface SeriesCardData extends SeriesListItem {
   cover: string
 }
 
-/** Данные для карточки серии (хаб /catalog/series, полоса серий на /catalog) —
-    та же форма в обоих местах, чтобы не расходились при правках. */
+/** Данные для карточки серии — полоса серий на /catalog. */
 export function getSeriesCardsData(cards: CatalogCardItem[]): SeriesCardData[] {
   return getSeriesList(cards).map(series => {
     const spec = getSeriesSpec(series.slug, series.coatingSlug)
