@@ -38,18 +38,6 @@ export interface SeriesSpec {
   /** Обложка hero страницы серии. Пусто → на странице серии используется
       фото первой (по цене) модели серии как фолбэк. */
   heroImage?:  string
-  /** Инфографика/презентация серии — картинка с текстом внутри (не фото),
-      показывается под описанием в «О коллекции». object-fit:contain
-      (variant="wide" в InfoImageViewer) — обрезать нельзя, там текст. */
-  infoImage?:  string
-  /** Реальное соотношение сторон infoImage (напр. "3508 / 2003") — у каждой
-      картинки своё, без этого либо обрезка, либо пустые поля по бокам.
-      Не указано → фолбэк 16:9 (см. [slug].astro). */
-  infoImageAspect?: string
-  /** Подпись под infoImage. Не указано → «Презентация серии {имя}» — подходит
-      для персональной презентации серии, но не для общей картинки (напр.
-      единая палитра цветов эмали emal_covers.webp на несколько серий сразу). */
-  infoImageCaption?: string
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -81,9 +69,6 @@ stockholm: {
   thickness: '37',
   
   heroImage: 'https://storage.yandexcloud.net/vfd74ru/cover_first_section/emal/stockholm.webp',
-  infoImage: 'https://storage.yandexcloud.net/vfd74ru/info/emal/emal_covers.webp',
-  infoImageAspect: '1672 / 941',
-  infoImageCaption: 'Цветовые решения — Эмаль',
 },
 
 skinel: {
@@ -109,9 +94,6 @@ skinel: {
   thickness: '37',
   
   heroImage: 'https://storage.yandexcloud.net/vfd74ru/cover_first_section/emal/skinel.webp',
-  infoImage: 'https://storage.yandexcloud.net/vfd74ru/info/emal/emal_covers.webp',
-  infoImageAspect: '1672 / 941',
-  infoImageCaption: 'Цветовые решения — Эмаль',
 },
 
   winter: {
@@ -136,9 +118,6 @@ skinel: {
   thickness: '37',
   
   heroImage: 'https://storage.yandexcloud.net/vfd74ru/cover_first_section/emal/winter.webp',
-  infoImage: 'https://storage.yandexcloud.net/vfd74ru/info/emal/emal_covers.webp',
-  infoImageAspect: '1672 / 941',
-  infoImageCaption: 'Цветовые решения — Эмаль',
 },
 
   elegant: {
@@ -179,9 +158,6 @@ skinel: {
   thickness: '37',
   
   heroImage: 'https://storage.yandexcloud.net/vfd74ru/cover_first_section/emal/antique_luxe.webp',
-  infoImage: 'https://storage.yandexcloud.net/vfd74ru/info/emal/emal_covers.webp',
-  infoImageAspect: '1672 / 941',
-  infoImageCaption: 'Цветовые решения — Эмаль',
 },
 
   basic: {
@@ -193,8 +169,6 @@ skinel: {
     edge:        'Защитная кромка в цвет полотна, обеспечивающая герметичность и защиту торцов от влаги и сколов',
     thickness:   '38',
     heroImage:   'https://storage.yandexcloud.net/vfd74ru/cover_first_section/basic.webp',
-    infoImage:   'https://storage.yandexcloud.net/vfd74ru/info/basic/prezentaciya_basic_emalex.webp',
-    infoImageAspect: '3508 / 2003',
   },
 
 
@@ -221,8 +195,6 @@ skinel: {
   thickness: '37',
   
   heroImage: 'https://storage.yandexcloud.net/vfd74ru/cover_first_section/emal/linea.webp',
-  infoImage: 'https://storage.yandexcloud.net/vfd74ru/info/linea/prezentaciya_linea.webp',
-  infoImageAspect: '3509 / 2481',
 },
 
  premium: {
@@ -247,9 +219,6 @@ skinel: {
   thickness: '37',
   
   heroImage: 'https://storage.yandexcloud.net/vfd74ru/cover_first_section/emal/premium.webp',
-  infoImage: 'https://storage.yandexcloud.net/vfd74ru/info/emal/emal_covers.webp',
-  infoImageAspect: '1672 / 941',
-  infoImageCaption: 'Цветовые решения — Эмаль',
 },
 
   urban: {
@@ -271,8 +240,6 @@ skinel: {
     // используется специальное полотно толщиной 54 мм.
     thickness:   '38',
     heroImage:   'https://storage.yandexcloud.net/vfd74ru/cover_first_section/urban.webp',
-    infoImage:   'https://storage.yandexcloud.net/vfd74ru/info/urban/urban_info.webp',
-    infoImageAspect: '3405 / 1122',
   },
 
   sektor: {
@@ -297,9 +264,6 @@ skinel: {
   thickness: '37',
   
   heroImage: 'https://storage.yandexcloud.net/vfd74ru/cover_first_section/emal/sector.webp',
-  infoImage: 'https://storage.yandexcloud.net/vfd74ru/info/emal/emal_covers.webp',
-  infoImageAspect: '1672 / 941',
-  infoImageCaption: 'Цветовые решения — Эмаль',
 },
 
   // ── ЭМАЛЕКС ──────────────────────────────────────────────────────────────
