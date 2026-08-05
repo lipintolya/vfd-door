@@ -143,14 +143,6 @@ const BALANCE_SPECS: EntranceDoorSpec[] = [
   { label: 'Количество петель',                value: '3 петли' },
 ]
 
-/** БалансПрайм отличается от БалансДуо магнитным уплотнителем — переопределяем
-    только строку "Уплотнение", остальные характеристики те же. */
-const BALANCE_PRIME_SPECS: EntranceDoorSpec[] = BALANCE_SPECS.map(spec =>
-  spec.label === 'Уплотнение'
-    ? { ...spec, value: 'Магнитный уплотнитель — плотнее прилегание полотна к коробу, отличие от БалансДуо' }
-    : spec
-)
-
 const BALANCE_HARDWARE: string[] = [
   'Замок нижний — Гардиан 3211, сувальдный, 4 класс защиты',
   'Замок верхний — Гардиан 3001, цилиндровый, 3 класс защиты',
@@ -550,21 +542,6 @@ export const ENTRANCE_DOOR_MODELS: EntranceDoorModel[] = [
       { skinId: 'atum6-belenyi-dub',          price: 39_500 },
       { skinId: 'atum6-kapuchino',            price: 39_500 },
       { skinId: 'atum6-venge',                price: 39_500 },
-    ],
-  },
-  {
-    id:          'balanceprime',
-    name:        'БалансПрайм',
-    tagline:     'Отличное сочетание качества сборки, дизайна и звукоизоляции',
-    description: 'Стальное полотно 102 мм с комбинированным утеплением (минплита + XPS), усиленная сталь короба 1,7 мм, магнитный уплотнитель — версия с одной фиксированной накладкой Сектор.',
-    purpose:     'apartment',
-    coverImage:  `${CDN}BalanceDuo/render_balance_duo.webp`,
-    doorImage:   `${CDN}BalanceDuo/balance_duo.webp`,
-    isHit:       true,
-    specs:    BALANCE_PRIME_SPECS,
-    hardware: BALANCE_HARDWARE,
-    skinOptions: [
-      { skinId: 'sektor', price: 40_000 },
     ],
   },
   {
