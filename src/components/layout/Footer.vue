@@ -21,6 +21,7 @@ const CATEGORY_LINKS = [
   { href: '/catalog/skrytye-dveri',  label: 'Скрытые двери' },
   { href: '/vhodnye-dveri',          label: 'Входные' },
   { href: '/partitions',             label: 'Перегородки' },
+  { href: '/catalog/decor',          label: 'Декор' },
 ] as const
 
 const CONTACTS = {
@@ -214,7 +215,7 @@ onUnmounted(() => {
             </a>
           </span>
           <span>
-            Разработка —
+            Разработка и дизайн —
             <a
               href="https://t.me/tolyalipin"
               target="_blank"
