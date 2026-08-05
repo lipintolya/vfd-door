@@ -71,6 +71,14 @@ const catalogOpen  = ref(false)
 let   catalogTimer: ReturnType<typeof setTimeout> | null = null
 const logoLoaded   = ref(false)
 const logoError    = ref(false)
+
+/* Название в шапке один раз при загрузке пробегает по фразам и
+   возвращается на исходную — не setInterval (как цикл слов в
+   Features.vue), а цепочка setTimeout: после возврата на первую фразу
+   больше ни одного таймера не остаётся, никакой фоновой нагрузки. */
+const LOGO_PHRASES = ['ВФД НА КАШИРИНЫХ', 'ДВЕРИ ПРЯМО', 'С ФАБРИКИ'] as const
+const logoText      = ref<string>(LOGO_PHRASES[0])
+const logoTextShown = ref(true)
 const now          = ref(new Date())
 const currentPath  = ref('/')
 
@@ -221,6 +229,26 @@ const callPrimary = () => {
   if (phone) window.location.href = `tel:${phone.raw}`
 }
 
+/* Один проход по LOGO_PHRASES и возврат на первую — см. комментарий у
+   объявления состояния выше. FADE_MS должен совпадать с duration
+   translate/opacity-перехода в шаблоне. */
+const LOGO_FADE_MS  = 250
+const LOGO_DWELL_MS = 1800
+
+const runLogoPhraseCycle = () => {
+  let i = 0
+  const step = () => {
+    logoTextShown.value = false
+    setTimeout(() => {
+      i = (i + 1) % LOGO_PHRASES.length
+      logoText.value = LOGO_PHRASES[i]
+      logoTextShown.value = true
+      if (i !== 0) setTimeout(step, LOGO_DWELL_MS)
+    }, LOGO_FADE_MS)
+  }
+  setTimeout(step, LOGO_DWELL_MS)
+}
+
 /* ============================================================
    Lifecycle
    ============================================================ */
@@ -232,6 +260,7 @@ onMounted(() => {
   window.addEventListener('resize',  onResize,       { passive: true })
   document.addEventListener('click', onClickOutside, { capture: true })
   timerId = setInterval(() => { now.value = new Date() }, 1_000)
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) runLogoPhraseCycle()
 })
 
 onUnmounted(() => {
@@ -295,9 +324,13 @@ onUnmounted(() => {
               ВФД
             </div>
           </div>
-          <span class="hidden sm:block text-sm font-semibold tracking-wide
-                       group-hover:text-teal-600 transition-colors duration-200">
-            ВФД НА КАШИРИНЫХ
+          <span
+            class="hidden sm:block text-sm font-semibold tracking-wide
+                   transition-[color,opacity,transform] duration-250 ease-out
+                   group-hover:text-teal-600 motion-reduce:transition-none"
+            :class="logoTextShown ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1'"
+          >
+            {{ logoText }}
           </span>
         </a>
 
