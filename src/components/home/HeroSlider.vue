@@ -129,29 +129,23 @@ onUnmounted(stop)
           @mouseleave="onMouseLeave"
           @keydown="onKeyDown"
         >
-          <!-- Backgrounds -->
+          <!-- Backgrounds — все слайды смонтированы всегда, активный переключается
+               прозрачностью. Раньше 1-й слайд жил на v-if (жёсткое размонтирование
+               без анимации), остальные — на v-show (display toggle, transition на
+               opacity не срабатывал, т.к. opacity не менялся). Из-за этого переход
+               был рваным. Теперь у всех один и тот же кросс-фейд. -->
           <div class="absolute inset-0">
-            <!-- First slide - optimized for LCP -->
             <img
-              v-if="activeIndex === 0"
-              :src="slides[0].image"
-              alt=""
-              fetchpriority="high"
-              loading="eager"
-              decoding="sync"
-              class="absolute inset-0 w-full h-full object-cover object-center"
-              aria-hidden="true"
-            />
-            
-            <!-- Other slides -->
-            <div
               v-for="(slide, i) in slides"
-              v-show="i === activeIndex && i !== 0"
               :key="slide.id"
-              class="absolute inset-0 bg-cover bg-center will-change-opacity"
-              :style="{ backgroundImage: `url(${slide.image})` }"
-              role="img"
-              :aria-label="slide.title"
+              :src="slide.image"
+              alt=""
+              :fetchpriority="i === 0 ? 'high' : undefined"
+              :loading="i === 0 ? 'eager' : 'lazy'"
+              :decoding="i === 0 ? 'sync' : 'async'"
+              class="hero-slide absolute inset-0 w-full h-full object-cover object-center"
+              :class="{ 'hero-slide-active': i === activeIndex }"
+              aria-hidden="true"
             />
           </div>
 
@@ -160,27 +154,29 @@ onUnmounted(stop)
 
           <!-- Content -->
           <div class="relative z-10 flex h-full items-end min-h-96 lg:min-h-0">
-            <div class="p-6 sm:p-8 lg:p-10 max-w-2xl text-white pb-16" aria-live="polite" aria-atomic="true">
-              <p class="text-xs uppercase tracking-widest text-white/60 mb-2">
-                {{ currentSlide.subtitle }}
-              </p>
-              <h1 class="text-2xl sm:text-3xl lg:text-4xl font-medium mb-3 leading-tight">
-                {{ currentSlide.title }}
-              </h1>
-              <p class="text-sm sm:text-base text-white/85 mb-6 leading-relaxed">
-                {{ currentSlide.description }}
-              </p>
-              <a
-                v-if="currentSlide.cta && currentSlide.ctaHref"
-                :href="currentSlide.ctaHref"
-                class="btn btn-ghost"
-              >
-                {{ currentSlide.cta }}
-                <svg class="btn-arrow-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </a>
-            </div>
+            <Transition name="hero-content" mode="out-in">
+              <div :key="currentSlide.id" class="p-6 sm:p-8 lg:p-10 max-w-2xl text-white pb-16" aria-live="polite" aria-atomic="true">
+                <p class="text-xs uppercase tracking-widest text-white/60 mb-2">
+                  {{ currentSlide.subtitle }}
+                </p>
+                <h1 class="text-2xl sm:text-3xl lg:text-4xl font-medium mb-3 leading-tight">
+                  {{ currentSlide.title }}
+                </h1>
+                <p class="text-sm sm:text-base text-white/85 mb-6 leading-relaxed">
+                  {{ currentSlide.description }}
+                </p>
+                <a
+                  v-if="currentSlide.cta && currentSlide.ctaHref"
+                  :href="currentSlide.ctaHref"
+                  class="btn btn-ghost"
+                >
+                  {{ currentSlide.cta }}
+                  <svg class="btn-arrow-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </a>
+              </div>
+            </Transition>
           </div>
 
           <!-- Dots -->
@@ -294,15 +290,27 @@ onUnmounted(stop)
   contain-intrinsic-size: auto 520px;
 }
 
-/* First slide - optimized for LCP (no transition delay) */
-[fetchpriority="high"] {
-  display: block;
+/* Кросс-фейд фона — все слайды в стеке, активный получает opacity:1 */
+.hero-slide {
+  opacity: 0;
+  z-index: 0;
+  will-change: opacity;
+  transition: opacity 900ms ease-in-out;
+}
+.hero-slide-active {
+  opacity: 1;
+  z-index: 1;
 }
 
-/* Other slides - with smooth transition */
-.will-change-opacity {
-  will-change: opacity;
-  transition: opacity 1000ms ease-in-out;
+/* Плавная смена текста (заголовок/описание/CTA) синхронно с фоном */
+.hero-content-enter-active,
+.hero-content-leave-active {
+  transition: opacity 350ms ease, transform 350ms ease;
+}
+.hero-content-enter-from,
+.hero-content-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
 }
 
 /* Dots navigation */
@@ -331,7 +339,9 @@ onUnmounted(stop)
 
 @media (prefers-reduced-motion: reduce) {
   .dot,
-  .will-change-opacity {
+  .hero-slide,
+  .hero-content-enter-active,
+  .hero-content-leave-active {
     transition: none;
   }
 }
