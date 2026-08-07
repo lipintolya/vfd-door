@@ -16,9 +16,14 @@ const props = withDefaults(defineProps<{
       — для инфографики/презентаций с текстом внутри, где обрезать нельзя. */
   variant?: 'diagram' | 'photo' | 'wide'
   aspectRatio?: string
+  /** Колонок в сетке на десктопе (мобайл всегда 1). По умолчанию 2 — под
+      привычные пары/четвёрки фото; 3 — под нечётные наборы вроде триптиха
+      постеров, чтобы последняя карточка не повисала одна в пустой строке. */
+  columns?: 2 | 3
 }>(), {
   variant: 'diagram',
   aspectRatio: '16 / 9',
+  columns: 2,
 })
 
 const active = ref<InfoImage | null>(null)
@@ -44,7 +49,7 @@ onUnmounted(() => {
   <div class="iiv-host">
     <div
       class="iiv"
-      :class="{ 'iiv--photo': variant === 'photo', 'iiv--wide': variant === 'wide' }"
+      :class="{ 'iiv--photo': variant === 'photo', 'iiv--wide': variant === 'wide', 'iiv--cols-3': columns === 3 }"
       :style="variant !== 'diagram' ? { '--iiv-ar': aspectRatio } : {}"
     >
       <figure v-for="img in images" :key="img.src" class="iiv-card">
@@ -112,6 +117,7 @@ onUnmounted(() => {
 }
 /* Один элемент — карточка на всю ширину, а не половина с пустым местом рядом */
 .iiv:has(.iiv-card:only-child) { grid-template-columns: 1fr; }
+.iiv--cols-3 { grid-template-columns: repeat(3, 1fr); }
 
 .iiv-card {
   margin: 0;

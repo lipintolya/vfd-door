@@ -218,7 +218,7 @@ export function getSeriesCardsData(cards: CatalogCardItem[]): SeriesCardData[] {
     return {
       ...series,
       tagline: spec.tagline,
-      cover:   spec.heroImage || seriesCards[0]?.photo || '',
+      cover:   spec.previewImage || spec.heroImage || seriesCards[0]?.photo || '',
     }
   })
 }

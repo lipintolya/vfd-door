@@ -153,7 +153,7 @@ const structuredData = canonicalUrl ? [
         <p class="sr-p">{spec.description}</p>
         {spec.infoImage && (
           <InfoImageViewer
-            client:load
+            client:only="vue"
             variant="wide"
             aspectRatio={spec.infoImageAspect || '16 / 9'}
             images={[{
@@ -161,6 +161,19 @@ const structuredData = canonicalUrl ? [
               caption: spec.infoImageCaption || `Презентация серии ${series.name}`,
               alt: spec.infoImageCaption || `Презентация серии ${series.name} — ВФД`,
             }]}
+          />
+        )}
+
+        {spec.posterImages && spec.posterImages.length > 0 && (
+          <InfoImageViewer
+            client:only="vue"
+            variant="photo"
+            aspectRatio="9 / 16"
+            images={spec.posterImages.map((src, i) => ({
+              src,
+              caption: `${series.name} — постер ${i + 1}`,
+              alt: `Коллекция ${series.name} — ВФД, постер ${i + 1}`,
+            }))}
           />
         )}
       </div>
