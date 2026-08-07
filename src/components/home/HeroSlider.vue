@@ -149,8 +149,10 @@ onUnmounted(stop)
             />
           </div>
 
-          <!-- Overlay -->
-          <div class="absolute inset-0 bg-linear-to-t from-black/70 via-black/35 to-black/10" aria-hidden="true" />
+          <!-- Overlay — z-10, т.к. активный слайд в .hero-slide-active получил
+               z-index:1 для кросс-фейда и без явного z-index здесь оказывался
+               бы поверх затемнения ── -->
+          <div class="absolute inset-0 z-10 bg-linear-to-t from-black/70 via-black/35 to-black/10" aria-hidden="true" />
 
           <!-- Content -->
           <div class="relative z-10 flex h-full items-end min-h-96 lg:min-h-0">
