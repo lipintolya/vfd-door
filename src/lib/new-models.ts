@@ -13,6 +13,13 @@ export const NEW_MODEL_IDS: ReadonlySet<string> = new Set([
   '78543d40-b617-4976-809e-06bc22c61fc1', // Штрих 2А (золото молдинг/кромка)
   'ca198b3a-764d-4c6e-86b0-e5cb3473dab8', // Штрих 1 (чёрный молдинг/кромка)
   '59aa5754-41d7-4ff7-b7ee-7f5a602daa7a', // Штрих 1 (золото молдинг/кромка)
+  '615ab91c-0880-4b87-9529-257ccd859798', // Смарт ЗТ
+  '867dfd8b-eb31-40eb-9c93-79fe61646a6d', // Смарт 1В
+  '83a18c66-71c5-4bd6-af68-faa5e7ffc011', // Смарт 1
+  '93c50d00-0669-44d7-9a82-a59787305df7', // Некст 26
+  'efc95ba1-3391-49e3-aaf3-baab7ec057bc', // Некст 33
+  '5fee9158-4684-4098-8c08-9e13310b58a2', // Некст 26
+  'a0528aeb-4424-48fb-9d7c-7dd873ca389a', // Некст 33
 ])
 
 export const isNewModel = (modelId: string): boolean => NEW_MODEL_IDS.has(modelId)
