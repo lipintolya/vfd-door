@@ -339,9 +339,12 @@ const structuredData = canonicalUrl ? [
         Ручка, стопор и завёртка WC — опционально.
       </p>
 
-      <!-- Инфо-изображения: комплектация + сторонность -->
+      <!-- Инфо-изображения: комплектация + сторонность — client:only="vue" (не
+           client:load), см. фикс на /catalog/decor: InfoImageViewer c
+           Teleport-модалкой на SSR даёт hydration mismatch (безобидно тут,
+           один экземпляр, но паттерн лучше не плодить). -->
       <InfoImageViewer
-        client:load
+        client:only="vue"
         images={[
           { src: INFO_IMAGES.kompl, caption: 'Состав комплекта', alt: 'Состав комплекта скрытой двери — профиль, петли, ответная планка' },
           { src: INFO_IMAGES.lr,    caption: 'Схема сторонности', alt: 'Схема сторонности (левая / правая) открывания скрытой двери' },
@@ -469,7 +472,13 @@ const structuredData = canonicalUrl ? [
         <p class="sd-p" style="margin-top: -0.75rem; margin-bottom: 1.75rem">
           Реальные объекты нашей бригады в Челябинске и Челябинской области — с фото монтажа и полной спецификацией каждой двери.
         </p>
-        <WorksGallery client:load works={INVISIBLE_WORKS} tgHref={TG} limit={WORKS_LIMIT} archiveHref={ARCHIVE_HREF} />
+        {/* client:only="vue" — WorksGallery рендерит WorkDetailCard через v-for,
+            и КАЖДАЯ карточка несёт свой <Teleport to="body"> для лайтбокса фото.
+            На client:load это SSR-ится, и хайдрейшн ломает Teleport у всех
+            карточек, кроме первой открытой за сессию: клик по фото 2-й/3-й/4-й
+            работы просто ничего не делает (TypeError: insertBefore на null),
+            без видимой ошибки для пользователя — баг был живым на проде. */}
+        <WorksGallery client:only="vue" works={INVISIBLE_WORKS} tgHref={TG} limit={WORKS_LIMIT} archiveHref={ARCHIVE_HREF} />
       </div>
     </section>
   )}
