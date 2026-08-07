@@ -130,15 +130,21 @@ const seriesBadgeClass = computed(() => {
         </svg>
       </div>
 
-      <div class="absolute left-0 top-3 flex flex-wrap gap-1">
-        <span class="rounded-r-full px-3 py-1 text-xs font-medium uppercase tracking-wide" :class="seriesBadgeClass">{{ card.series }}</span>
+      <!-- Бейдж серии и «Новинка» — раньше стояли рядом (серия слева, «Новинка»
+           справа) и на узких мобильных карточках (grid-cols-2, ~135px под
+           фото) «Новинка» одна съедала половину ширины — серии почти не
+           оставалось места, имя обрезалось до одной буквы. Теперь оба
+           флагом друг под другом у левого края — конкурируют за высоту,
+           не за ширину, и каждый читается полностью в любую сторону. -->
+      <div class="absolute left-0 top-3 flex max-w-[85%] flex-col items-start gap-1">
+        <span class="max-w-full truncate rounded-r-full px-3 py-1 text-xs font-medium uppercase tracking-wide" :class="seriesBadgeClass">{{ card.series }}</span>
+        <span
+          v-if="card.isNew"
+          class="max-w-full truncate rounded-r-full bg-red-600 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white shadow-sm"
+        >
+          Новинка
+        </span>
       </div>
-      <span
-        v-if="card.isNew"
-        class="absolute right-3 top-3 rounded-full bg-red-600 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white shadow-sm"
-      >
-        Новинка
-      </span>
     </div>
 
     <div class="flex flex-1 flex-col gap-2.5 p-3.5 sm:gap-3 sm:p-5">
