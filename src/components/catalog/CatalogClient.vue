@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import CatalogEmptyState from './CatalogEmptyState.vue'
 import CatalogFilters from './CatalogFilters.vue'
 import CatalogGrid from './CatalogGrid.vue'
@@ -32,6 +32,21 @@ const allColors   = props.colors
 const activeSeries  = ref(props.initialSeries)
 const activeCoating = ref(props.initialCoating)
 const activeColor   = ref(props.initialColor)
+
+/* initialSeries/initialCoating/initialColor приходят из Astro.url.searchParams
+   на сервере — при статической сборке (output: "static") этот URL всегда
+   пустой, так что пропы всегда ''. Ссылки вида /catalog?series=X реально
+   фильтруют только благодаря этому: читаем настоящий URL браузера при
+   маунте и досеиваем состояние фильтров. */
+onMounted(() => {
+  const params = new URLSearchParams(window.location.search)
+  const series  = params.get('series')
+  const coating = params.get('coating')
+  const color   = params.get('color')
+  if (series)  activeSeries.value  = series
+  if (coating) activeCoating.value = coating
+  if (color)   activeColor.value   = color
+})
 const glassOnly     = ref(false)
 const searchQuery   = ref('')
 const sortBy        = ref<CatalogSort>('price_asc')
