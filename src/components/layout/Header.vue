@@ -72,18 +72,6 @@ let   catalogTimer: ReturnType<typeof setTimeout> | null = null
 const logoLoaded   = ref(false)
 const logoError    = ref(false)
 
-/* Название в шапке один раз при загрузке пробегает по фразам и
-   возвращается на исходную — не setInterval (как цикл слов в
-   Features.vue), а цепочка setTimeout: после возврата на первую фразу
-   больше ни одного таймера не остаётся, никакой фоновой нагрузки. */
-const LOGO_PHRASES = ['ВФД НА КАШИРИНЫХ', 'ДВЕРИ ПРЯМО', 'С ФАБРИКИ'] as const
-const logoText      = ref<string>(LOGO_PHRASES[0])
-const logoTextShown = ref(true)
-const logoTextRef   = ref<HTMLElement | null>(null)
-/* Ширина фиксируется под самую длинную фразу (первую — она заведомо
-   длиннее остальных), иначе смена текста меняет ширину span и толкает
-   соседние пункты меню — рвано, элементы шапки должны стоять на месте. */
-const logoTextWidth = ref<number | null>(null)
 const now          = ref(new Date())
 const currentPath  = ref('/')
 
@@ -234,31 +222,6 @@ const callPrimary = () => {
   if (phone) window.location.href = `tel:${phone.raw}`
 }
 
-/* Один проход по LOGO_PHRASES и возврат на первую — см. комментарий у
-   объявления состояния выше. FADE_MS должен совпадать с duration
-   opacity-перехода в шаблоне. */
-const LOGO_FADE_MS  = 500
-const LOGO_DWELL_MS = 1900
-
-const runLogoPhraseCycle = () => {
-  // Ширина фиксируется по факту отрисованной первой фразы — самой
-  // длинной из трёх, дальше текст меняется внутри уже не гуляющего блока.
-  if (logoTextRef.value) logoTextWidth.value = logoTextRef.value.getBoundingClientRect().width
-
-  let i = 0
-  const step = () => {
-    logoTextShown.value = false
-    setTimeout(() => {
-      i = (i + 1) % LOGO_PHRASES.length
-      logoText.value = LOGO_PHRASES[i]
-      logoTextShown.value = true
-      if (i !== 0) setTimeout(step, LOGO_DWELL_MS)
-      else setTimeout(() => { logoTextWidth.value = null }, LOGO_FADE_MS)
-    }, LOGO_FADE_MS)
-  }
-  setTimeout(step, LOGO_DWELL_MS)
-}
-
 /* ============================================================
    Lifecycle
    ============================================================ */
@@ -270,7 +233,6 @@ onMounted(() => {
   window.addEventListener('resize',  onResize,       { passive: true })
   document.addEventListener('click', onClickOutside, { capture: true })
   timerId = setInterval(() => { now.value = new Date() }, 1_000)
-  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) runLogoPhraseCycle()
 })
 
 onUnmounted(() => {
@@ -335,14 +297,11 @@ onUnmounted(() => {
             </div>
           </div>
           <span
-            ref="logoTextRef"
             class="hidden sm:block overflow-hidden whitespace-nowrap text-sm font-semibold tracking-wide
-                   transition-[color,opacity] duration-500 ease-in-out
-                   group-hover:text-teal-600 motion-reduce:transition-none"
-            :style="logoTextWidth ? { width: logoTextWidth + 'px' } : {}"
-            :class="logoTextShown ? 'opacity-100' : 'opacity-0'"
+                   transition-colors duration-300 ease-in-out
+                   group-hover:text-teal-600"
           >
-            {{ logoText }}
+            ВФД НА КАШИРИНЫХ
           </span>
         </a>
 
@@ -596,7 +555,7 @@ onUnmounted(() => {
         role="dialog"
         aria-label="Мобильное меню"
         aria-modal="true"
-        class="xl:hidden fixed inset-0 z-10000 flex flex-col bg-[oklch(21%_0.006_285.885)]"
+        class="xl:hidden fixed inset-0 z-10000 flex flex-col bg-zinc-900"
         :style="{
           top:           '-100px',
           paddingTop:    'calc(env(safe-area-inset-top, 0px) + 100px)',
@@ -705,7 +664,7 @@ onUnmounted(() => {
 
         <!-- Телефоны — закреплены внизу -->
         <div
-          class="shrink-0 border-t border-white/10 bg-[oklch(21%_0.006_285.885)] px-5 pt-4 flex flex-col items-center gap-1"
+          class="shrink-0 border-t border-white/10 bg-zinc-900 px-5 pt-4 flex flex-col items-center gap-1"
           :style="{ paddingBottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))' }"
         >
           <a
