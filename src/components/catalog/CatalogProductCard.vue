@@ -93,7 +93,7 @@ const BLUE_SERIES = new Set(['emalex', 'emalex-modern', 'urban', 'elegant', 'bas
 
 const seriesBadgeClass = computed(() => {
   const slug = props.card.seriesSlug
-  if (slug === 'smart')      return 'bg-violet-500 text-white'
+  if (props.card.coatingSlug === 'protach') return 'bg-violet-500 text-white'
   if (RED_SERIES.has(slug))  return 'bg-rose-500 text-white'
   if (BLUE_SERIES.has(slug)) return 'bg-blue-500 text-white'
   return 'bg-slate-700 text-white'
