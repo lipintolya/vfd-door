@@ -17,11 +17,15 @@ export interface ColorVariant {
 
 import { calcKitPrice, BASE_KIT_DESCRIPTION } from '../../data/accessories'
 import { companyLegalInfo } from '../../lib/contacts-data'
+import { isMadeToOrder } from '../../lib/made-to-order'
 
 const props = defineProps<{
-  colors:    ColorVariant[]
-  modelName: string
+  colors:     ColorVariant[]
+  modelName:  string
+  seriesSlug: string
 }>()
+
+const madeToOrder = isMadeToOrder(props.seriesSlug)
 
 const phone = companyLegalInfo.contacts.phone[0]!
 
@@ -108,6 +112,8 @@ onUnmounted(() => {
           <path d="M15 12h.01" stroke-linecap="round" />
         </svg>
       </div>
+
+      <span v-if="madeToOrder" class="color-picker__order-badge bg-blue-400 text-white">Под заказ</span>
     </div>
 
     <!-- Зум-модалка -->
@@ -240,7 +246,7 @@ onUnmounted(() => {
 
 .color-picker__zoom-hint {
   position: absolute;
-  right: 0.875rem;
+  left: 0.875rem;
   bottom: 0.875rem;
   display: inline-flex;
   align-items: center;
@@ -270,6 +276,25 @@ onUnmounted(() => {
 
 .color-picker__placeholder {
   color: #d1d5db;
+}
+
+/* Цвет — utility-классы Tailwind (bg-blue-400) в шаблоне, тут только форма/
+   позиция: справа снизу от фото, симметрично зум-подсказке слева. */
+.color-picker__order-badge {
+  position: absolute;
+  right: 0;
+  bottom: 0.875rem;
+  max-width: 70%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0.375rem 0.75rem;
+  border-radius: 9999px 0 0 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
 }
 
 .color-picker__price-row {

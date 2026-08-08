@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { calcKitPrice, BASE_KIT_DESCRIPTION } from '../../data/accessories'
+import { isMadeToOrder } from '../../lib/made-to-order'
 import type { CatalogCardItem } from './types'
 
 const props = defineProps<{
@@ -98,6 +99,8 @@ const seriesBadgeClass = computed(() => {
   if (BLUE_SERIES.has(slug)) return 'bg-blue-500 text-white'
   return 'bg-slate-700 text-white'
 })
+
+const madeToOrder = computed(() => isMadeToOrder(props.card.seriesSlug))
 </script>
 
 <template>
@@ -145,6 +148,13 @@ const seriesBadgeClass = computed(() => {
           Новинка
         </span>
       </div>
+
+      <span
+        v-if="madeToOrder"
+        class="absolute right-0 bottom-3 max-w-[85%] truncate rounded-l-full bg-blue-400 px-3 py-1 text-xs font-medium uppercase tracking-wide text-white shadow-sm"
+      >
+        Под заказ
+      </span>
     </div>
 
     <div class="flex flex-1 flex-col gap-2.5 p-3.5 sm:gap-3 sm:p-5">
