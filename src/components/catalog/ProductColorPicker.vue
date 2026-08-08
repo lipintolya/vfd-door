@@ -195,15 +195,29 @@ onUnmounted(() => {
   border-radius: 1.5rem;
   overflow: hidden;
   background: #f8fafc;
-  aspect-ratio: 1 / 1;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Фолбэк для браузеров без aspect-ratio (Safari < 15, старые iOS) — без
+     него блок без явной высоты схлопывается, а фото внутри (width/height:
+     100%) растягивается/сжимается непропорционально. padding-bottom:100%
+     держит квадрат через классический приём, а не через aspect-ratio. */
+  position: relative;
+  height: 0;
+  padding-bottom: 100%;
+}
+@supports (aspect-ratio: 1 / 1) {
+  .color-picker__photo-wrap {
+    height: auto;
+    padding-bottom: 0;
+    aspect-ratio: 1 / 1;
+  }
 }
 
 .color-picker__photo-btn {
-  position: relative;
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   padding: 0;
