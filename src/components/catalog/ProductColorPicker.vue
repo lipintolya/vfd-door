@@ -18,6 +18,7 @@ export interface ColorVariant {
 import { calcKitPrice, BASE_KIT_DESCRIPTION } from '../../data/accessories'
 import { companyLegalInfo } from '../../lib/contacts-data'
 import { isMadeToOrder } from '../../lib/made-to-order'
+import PriceCalculatorModal from './PriceCalculatorModal.vue'
 
 const props = defineProps<{
   colors:     ColorVariant[]
@@ -74,6 +75,11 @@ onUnmounted(() => {
   window.removeEventListener('keydown', onZoomKeydown)
   document.body.style.overflow = ''
 })
+
+/* ── Калькулятор стоимости — свой единственный Teleport-модал (компонент
+   монтируется 1 раз на страницу товара), безопасно на client:load по той же
+   причине, что и зум фото выше. ── */
+const calcOpen = ref(false)
 </script>
 
 <template>
@@ -177,6 +183,25 @@ onUnmounted(() => {
       />
     </div>
 
+    <!-- Калькулятор — отдельным приглашением, не наравне с контактными кнопками:
+         это другое по смыслу действие (инструмент, а не связь с салоном), поэтому
+         не btn-outline в общем ряду, а свой акцентный блок. -->
+    <button type="button" class="color-picker__calc-promo" @click="calcOpen = true">
+      <span class="color-picker__calc-promo-icon" aria-hidden="true">
+        <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
+          <rect x="5" y="3" width="14" height="18" rx="2" />
+          <path d="M8 7h8M8 11h2m3 0h3M8 14.5h2m3 0h3M8 18h2m3 0h3" stroke-linecap="round" />
+        </svg>
+      </span>
+      <span class="color-picker__calc-promo-text">
+        <span class="color-picker__calc-promo-title">Рассчитать стоимость</span>
+        <span class="color-picker__calc-promo-subtitle">Короб, наличники, петли, замок — соберите комплект</span>
+      </span>
+      <svg class="color-picker__calc-promo-arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </button>
+
     <!-- CTA -->
     <div class="color-picker__cta">
       <a href="https://t.me/vfddoors74" target="_blank" rel="noopener" class="btn btn-primary">Написать в Telegram</a>
@@ -187,6 +212,16 @@ onUnmounted(() => {
         {{ phone.label }}
       </a>
     </div>
+
+    <PriceCalculatorModal
+      :open="calcOpen"
+      :model-name="modelName"
+      :photo="displayPhoto"
+      :coating-slug="selected.coatingSlug"
+      :color-name="selected.name"
+      :blade-price="selected.available === false ? 0 : (selected.price ?? 0)"
+      @close="calcOpen = false"
+    />
   </div>
 </template>
 
@@ -377,6 +412,59 @@ onUnmounted(() => {
 .color-picker__swatch:focus-visible {
   outline: 2px solid #14b8a6;
   outline-offset: 3px;
+}
+
+.color-picker__calc-promo {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background: #f0fdfa;
+  border: 1px solid #99f6e4;
+  border-radius: 1rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background 150ms ease, border-color 150ms ease;
+}
+.color-picker__calc-promo:hover {
+  background: #ccfbf1;
+  border-color: #5eead4;
+}
+.color-picker__calc-promo-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex-shrink: 0;
+  background: #fff;
+  border-radius: 0.75rem;
+  color: #0d9488;
+}
+.color-picker__calc-promo-icon svg { width: 1.375rem; height: 1.375rem; }
+.color-picker__calc-promo-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+  flex: 1;
+}
+.color-picker__calc-promo-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+.color-picker__calc-promo-subtitle {
+  font-size: 0.8125rem;
+  color: #0f766e;
+  line-height: 1.4;
+}
+.color-picker__calc-promo-arrow {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
+  color: #0d9488;
 }
 
 .color-picker__cta {

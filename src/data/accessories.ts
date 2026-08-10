@@ -57,7 +57,7 @@ export const BASE_KIT_PRICE: Record<CoatingSlug, number> = {
   pet:     5_387,
   emal:    6_384,
   emalex:  5_145,
-  protach: 3_833,
+  protach: 3_840,
 }
 export const BASE_KIT_DESCRIPTION = 'дверной короб 2,5 шт, наличники с обеих сторон 5 шт'
 
@@ -178,10 +178,19 @@ export const accessoriesByCoating: Record<CoatingSlug, Accessory[]> = {
     { name: 'Клипсы для плинтуса',                                       category: 'plinth',     unit: 'шт',       price: 53 },
   ],
 
-  // ── Протач (Смарт) ──────────────────────────────────────────────────────
-  // Итемизированный погонаж (коробка/наличники поштучно) пока не внесён —
-  // добавь строки по тому же образцу, когда будут цены на конкретные профили.
+  // ── Протач (Смарт/Некст) ─────────────────────────────────────────────────
   protach: [
     { name: `Комплект погонажа (${BASE_KIT_DESCRIPTION})`,               category: 'kit',        unit: 'комплект', price: BASE_KIT_PRICE.protach },
+
+    { name: 'Коробка КБТ№43П 80х32х2100',                                category: 'box',        unit: 'шт',       price: 700 },
+
+    { name: 'Наличник НТ№22 70х8х2140',                                  category: 'nalichnik',  unit: 'шт',       price: 420 },
+
+    { name: 'Добор ДПТ100№2 100х10х2070',                                category: 'dobor',      unit: 'шт',       price: 510 },
+    { name: 'Добор ДПТ150№2 150х10х2070',                                category: 'dobor',      unit: 'шт',       price: 650 },
+    { name: 'Добор ДПТ200№2 200х10х2070',                                category: 'dobor',      unit: 'шт',       price: 780 },
+    { name: 'Соединитель для доборов 35х4х2100',                        category: 'dobor',      unit: 'шт',       price: 45 },
+
+    { name: 'Притворная планка 30х10х2100',                              category: 'decorative', unit: 'шт',       price: 300 },
   ],
 }
