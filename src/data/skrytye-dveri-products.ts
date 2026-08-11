@@ -13,6 +13,10 @@ export const INFO_IMAGES = {
   constr: `${INFO_CDN}invisible_constr.webp`,
 } as const
 
+// Разрезы короба «Секрет» — Стандарт (монолитный алюминий) и Лайт (алюминий + сосна)
+export const BOX_PRO_IMAGE  = 'https://storage.yandexcloud.net/vfd74ru/invisible/render_alum_pro.webp'
+export const BOX_LITE_IMAGE = 'https://storage.yandexcloud.net/vfd74ru/invisible/render_alum_lite.webp'
+
 // ── Изображения ───────────────────────────────────────────────
 export const IMAGES = {
   // Серия «Секрет» (прямой монтаж)
@@ -41,14 +45,42 @@ export const DOOR_HEIGHT         = 2000
 export const SECRET_SIZES        = [600, 700, 800, 900] as const
 export const SECRET_REVERS_SIZES = [600, 700, 800]      as const
 
-// ── Цены РРЦ ─────────────────────────────────────────────────
-export const POLOTNO_PRICE_SECRET        = 11_360   // РРЦ полотна «Секрет»
-export const POLOTNO_PRICE_SECRET_REVERS = 15_910   // РРЦ полотна «Секрет Реверс»
-export const FRAME_KIT_PRICE             = 19_820   // РРЦ комплекта короба (2 цвета — одна цена)
+// ── Цены РРЦ — зависят от кромки и стороны открывания ──────────
+// Полотно «Финиш-грунт» — единственный доступный вариант покрытия
+// (позиции с простым грунтом убраны из продажи).
+export const FRAME_KIT_PRICE = 19_820   // РРЦ короба «Хром» (2,5 шт) — сверено: kitStandardPrice - bladePrice = 19 820 везде
 
-// Итоговая стоимость комплекта (полотно + короб)
-export const TOTAL_SECRET        = POLOTNO_PRICE_SECRET + FRAME_KIT_PRICE         // 31 180
-export const TOTAL_SECRET_REVERS = POLOTNO_PRICE_SECRET_REVERS + FRAME_KIT_PRICE  // 35 730
+export type SecretEdgeColor = 'black' | 'silver' | 'gold'
+
+export interface SecretPriceRow {
+  edgeColor:        SecretEdgeColor
+  edgeLabel:        string
+  reverse:          boolean
+  bladePrice:        number
+  kitStandardPrice:  number
+  /** null — комплект «Лайт» для этой комбинации не предлагается (сейчас так у кромки золото) */
+  kitLitePrice:      number | null
+}
+
+export const SECRET_PRICES: SecretPriceRow[] = [
+  { edgeColor: 'black',  edgeLabel: 'Чёрная 4×4 мм',  reverse: false, bladePrice: 11_360, kitStandardPrice: 31_180, kitLitePrice: 23_820 },
+  { edgeColor: 'black',  edgeLabel: 'Чёрная 4×4 мм',  reverse: true,  bladePrice: 15_910, kitStandardPrice: 35_730, kitLitePrice: 28_370 },
+  { edgeColor: 'silver', edgeLabel: 'Серебро 4×4 мм', reverse: false, bladePrice: 11_360, kitStandardPrice: 31_180, kitLitePrice: 23_820 },
+  { edgeColor: 'silver', edgeLabel: 'Серебро 4×4 мм', reverse: true,  bladePrice: 15_910, kitStandardPrice: 35_730, kitLitePrice: 28_370 },
+  // Золото — цена не уточнялась в последней правке, оставлена по прежним данным.
+  { edgeColor: 'gold',   edgeLabel: 'Золото 4×4 мм',  reverse: false, bladePrice: 12_090, kitStandardPrice: 32_310, kitLitePrice: null },
+  { edgeColor: 'gold',   edgeLabel: 'Золото 4×4 мм',  reverse: true,  bladePrice: 16_920, kitStandardPrice: 37_140, kitLitePrice: null },
+]
+
+// «От» для превью и карточки «Секрет» — самая доступная комбинация в целом;
+// комплект считаем по самому дешёвому доступному уровню (Лайт, где он есть)
+export const SECRET_MIN_BLADE_PRICE = Math.min(...SECRET_PRICES.map(r => r.bladePrice))
+export const SECRET_MIN_KIT_PRICE   = Math.min(...SECRET_PRICES.map(r => r.kitLitePrice ?? r.kitStandardPrice))
+
+// «От» для карточки «Секрет Реверс» — минимум среди строк реверсивного открывания
+const SECRET_REVERS_ROWS = SECRET_PRICES.filter(r => r.reverse)
+export const SECRET_REVERS_MIN_BLADE_PRICE = Math.min(...SECRET_REVERS_ROWS.map(r => r.bladePrice))
+export const SECRET_REVERS_MIN_KIT_PRICE   = Math.min(...SECRET_REVERS_ROWS.map(r => r.kitLitePrice ?? r.kitStandardPrice))
 
 // ── Комплект скрытого короба ─────────────────────────────────
 export const FRAME_KIT = {
@@ -107,6 +139,48 @@ export const OPTIONAL_HARDWARE = [
     desc: 'Для санузлов: блокировка изнутри, индикатор занятости снаружи',
     icon: 'wc',
   },
+] as const
+
+// ── Секрет «Рефлекс» — скрытая дверь с зеркалом ──────────────
+export const REFLEX_IMAGE           = 'https://storage.yandexcloud.net/vfd74ru/invisible/invisible_door.webp'
+export const REFLEX_OPENING_DIAGRAM = 'https://storage.yandexcloud.net/vfd74ru/invisible/opredelenie_storoni_otkrivaniya_dlya_zerkal.webp'
+
+export type ReflexEdgeColor = 'black' | 'silver' | 'gold'
+
+export interface ReflexPriceRow {
+  edgeColor:        ReflexEdgeColor
+  edgeLabel:        string
+  reverse:          boolean
+  bladePrice:        number
+  kitStandardPrice:  number
+  /** null — комплект «Лайт» для этой кромки не предлагается (сейчас так у золота) */
+  kitLitePrice:      number | null
+}
+
+export const REFLEX_PRICES: ReflexPriceRow[] = [
+  { edgeColor: 'black',  edgeLabel: 'Чёрная',  reverse: false, bladePrice: 19_790, kitStandardPrice: 41_690, kitLitePrice: 36_270 },
+  { edgeColor: 'black',  edgeLabel: 'Чёрная',  reverse: true,  bladePrice: 24_620, kitStandardPrice: 46_520, kitLitePrice: 41_100 },
+  { edgeColor: 'silver', edgeLabel: 'Серебро', reverse: false, bladePrice: 19_790, kitStandardPrice: 41_690, kitLitePrice: 36_270 },
+  { edgeColor: 'silver', edgeLabel: 'Серебро', reverse: true,  bladePrice: 24_620, kitStandardPrice: 46_520, kitLitePrice: 41_100 },
+  { edgeColor: 'gold',   edgeLabel: 'Золото',  reverse: false, bladePrice: 19_790, kitStandardPrice: 41_690, kitLitePrice: null },
+  { edgeColor: 'gold',   edgeLabel: 'Золото',  reverse: true,  bladePrice: 24_620, kitStandardPrice: 46_520, kitLitePrice: null },
+]
+
+// «От» для превью — самая доступная комбинация; комплект считаем по самому
+// дешёвому доступному уровню (Лайт дешевле Стандарта там, где он есть)
+export const REFLEX_MIN_BLADE_PRICE = Math.min(...REFLEX_PRICES.map(r => r.bladePrice))
+export const REFLEX_MIN_KIT_PRICE   = Math.min(...REFLEX_PRICES.map(r => r.kitLitePrice ?? r.kitStandardPrice))
+
+// «От» для обратного открывания — минимум среди строк реверса
+const REFLEX_REVERS_ROWS = REFLEX_PRICES.filter(r => r.reverse)
+export const REFLEX_REVERS_MIN_KIT_PRICE = Math.min(...REFLEX_REVERS_ROWS.map(r => r.kitLitePrice ?? r.kitStandardPrice))
+
+// Нестандартные высоты для «Рефлекс» — максимум 2500 мм (короче, чем у «Секрет»),
+// поэтому верхний тир урезан до +40% и тира +50% (2600–2700 мм) для неё нет
+export const REFLEX_HEIGHT_TIERS = [
+  { range: '2050–2250', from: 2050, to: 2250, surcharge: 0.20, pct: '+20%' },
+  { range: '2300–2350', from: 2300, to: 2350, surcharge: 0.30, pct: '+30%' },
+  { range: '2400–2500', from: 2400, to: 2500, surcharge: 0.40, pct: '+40%' },
 ] as const
 
 // ── Цифры и факты ────────────────────────────────────────────

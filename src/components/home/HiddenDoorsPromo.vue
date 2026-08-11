@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useScrollReveal } from '../../composables/useScrollReveal'
-import { POLOTNO_PRICE_SECRET, TOTAL_SECRET } from '../../data/skrytye-dveri-products'
+import { SECRET_MIN_BLADE_PRICE, SECRET_MIN_KIT_PRICE } from '../../data/skrytye-dveri-products'
 import BenefitItem from './BenefitItem.vue'
 
 const COVER_IMAGE = 'https://storage.yandexcloud.net/vfd74ru/Main_page/left_bento/secret_render_cover.webp'
@@ -78,11 +78,11 @@ const { sectionRef, visible } = useScrollReveal(0.15)
           <div>
             <div class="flex items-baseline justify-between text-base text-slate-500">
               <span>Полотно от</span>
-              <span class="text-lg font-medium text-slate-900 sm:text-xl">{{ fmt(POLOTNO_PRICE_SECRET) }}</span>
+              <span class="text-lg font-medium text-slate-900 sm:text-xl">{{ fmt(SECRET_MIN_BLADE_PRICE) }}</span>
             </div>
             <div class="mt-2 flex items-baseline justify-between">
               <span class="text-base text-slate-500"><span class="sm:hidden">Комплект от</span><span class="hidden sm:inline">Комплект под ключ от</span></span>
-              <span class="text-2xl font-medium text-slate-900 sm:text-3xl">{{ fmt(TOTAL_SECRET) }}</span>
+              <span class="text-2xl font-medium text-slate-900 sm:text-3xl">{{ fmt(SECRET_MIN_KIT_PRICE) }}</span>
             </div>
           </div>
 

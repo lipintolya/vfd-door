@@ -10,16 +10,26 @@ import { INVISIBLE_WORKS } from '../../data/skrytye-dveri-works'
 import {
   IMAGES,
   INFO_IMAGES,
+  BOX_PRO_IMAGE,
+  BOX_LITE_IMAGE,
   SECRET_SIZES,
   SECRET_REVERS_SIZES,
   DOOR_HEIGHT,
-  POLOTNO_PRICE_SECRET,
-  POLOTNO_PRICE_SECRET_REVERS,
-  TOTAL_SECRET,
-  TOTAL_SECRET_REVERS,
+  SECRET_PRICES,
+  SECRET_MIN_BLADE_PRICE,
+  SECRET_MIN_KIT_PRICE,
+  SECRET_REVERS_MIN_BLADE_PRICE,
+  SECRET_REVERS_MIN_KIT_PRICE,
   CUSTOM_HEIGHT_TIERS,
   CUSTOM_LEAD_TIME,
   calcCustomPrice,
+  REFLEX_IMAGE,
+  REFLEX_OPENING_DIAGRAM,
+  REFLEX_PRICES,
+  REFLEX_MIN_BLADE_PRICE,
+  REFLEX_MIN_KIT_PRICE,
+  REFLEX_REVERS_MIN_KIT_PRICE,
+  REFLEX_HEIGHT_TIERS,
 } from '../../data/skrytye-dveri-products'
 
 const PHONE = '+79000297888'
@@ -60,6 +70,8 @@ const faq = [
     a: `Стандарт в наличии: ширины ${SECRET_SIZES.join(', ')} мм, высота 2000 мм. Нестандартные высоты под заказ — от 2050 до 2700 мм, надбавка к цене полотна от +20% до +50%. Срок изготовления: ${CUSTOM_LEAD_TIME}.` },
   { q: 'Сколько стоит установка?',
     a: 'Стоимость монтажа рассчитывается отдельно. Мы работаем по Челябинску, даём гарантию на работы. Уточняйте у менеджера при заказе.' },
+  { q: 'Чем «Рефлекс» отличается от «Секрета»?',
+    a: 'Тем же скрытым монтажом вровень со стеной, но вместо глухого полотна — зеркало во всю высоту двери. Изготавливается индивидуально, высотой до 2,5 м, доступны прямое и обратное открывание.' },
 ]
 
 const structuredData = canonicalUrl ? [
@@ -109,8 +121,27 @@ const structuredData = canonicalUrl ? [
     offers: {
       '@type': 'AggregateOffer',
       priceCurrency: 'RUB',
-      lowPrice: TOTAL_SECRET,
-      highPrice: TOTAL_SECRET_REVERS,
+      lowPrice: SECRET_MIN_KIT_PRICE,
+      highPrice: Math.max(...SECRET_PRICES.map(r => r.kitStandardPrice)),
+      availability: 'https://schema.org/InStock',
+      areaServed: [
+        { '@type': 'City', name: 'Челябинск' },
+        { '@type': 'AdministrativeArea', name: 'Челябинская область' },
+      ],
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: 'Скрытая дверь с зеркалом «Рефлекс»',
+    description: 'Скрытая дверь с зеркальным полотном во всю высоту — устанавливается вровень со стеной, изготавливается индивидуально высотой до 2,5 м. Кромка: чёрная, серебро, золото.',
+    brand: { '@type': 'Brand', name: 'ВФД' },
+    image: REFLEX_IMAGE,
+    offers: {
+      '@type': 'AggregateOffer',
+      priceCurrency: 'RUB',
+      lowPrice: REFLEX_MIN_KIT_PRICE,
+      highPrice: Math.max(...REFLEX_PRICES.map(r => r.kitStandardPrice)),
       availability: 'https://schema.org/InStock',
       areaServed: [
         { '@type': 'City', name: 'Челябинск' },
@@ -123,7 +154,7 @@ const structuredData = canonicalUrl ? [
 
 <BaseLayout
   title="Скрытые двери в Челябинске — цены и монтаж | ВФД"
-  description={`Скрытые двери «Секрет» и «Секрет Реверс» в Челябинске — полотно вровень со стеной, без наличников и видимых петель. Комплект от ${fmt(TOTAL_SECRET)}. Бесплатный замер, монтаж под ключ.`}
+  description={`Скрытые двери «Секрет» и «Секрет Реверс» в Челябинске — полотно вровень со стеной, без наличников и видимых петель. Комплект от ${fmt(SECRET_MIN_KIT_PRICE)}. Бесплатный замер, монтаж под ключ.`}
   ogImage={IMAGES.invisible}
   preloadImage={IMAGES.covers[0].src}
   canonical={canonicalUrl}
@@ -208,11 +239,11 @@ const structuredData = canonicalUrl ? [
             <div class="sd-product__price">
               <div>
                 <span class="sd-price-label">Полотно</span>
-                <span class="sd-price-val">{fmt(POLOTNO_PRICE_SECRET)}</span>
+                <span class="sd-price-val">от {fmt(SECRET_MIN_BLADE_PRICE)}</span>
               </div>
               <div>
                 <span class="sd-price-label">Комплект с коробом</span>
-                <span class="sd-price-val sd-price-val--accent">от {fmt(TOTAL_SECRET)}</span>
+                <span class="sd-price-val sd-price-val--accent">от {fmt(SECRET_MIN_KIT_PRICE)}</span>
               </div>
             </div>
             <a href={TG} target="_blank" rel="noopener" class="btn btn-primary sd-product__btn">
@@ -263,11 +294,11 @@ const structuredData = canonicalUrl ? [
             <div class="sd-product__price">
               <div>
                 <span class="sd-price-label">Полотно</span>
-                <span class="sd-price-val">{fmt(POLOTNO_PRICE_SECRET_REVERS)}</span>
+                <span class="sd-price-val">от {fmt(SECRET_REVERS_MIN_BLADE_PRICE)}</span>
               </div>
               <div>
                 <span class="sd-price-label">Комплект с коробом</span>
-                <span class="sd-price-val sd-price-val--accent">от {fmt(TOTAL_SECRET_REVERS)}</span>
+                <span class="sd-price-val sd-price-val--accent">от {fmt(SECRET_REVERS_MIN_KIT_PRICE)}</span>
               </div>
             </div>
             <a href={TG} target="_blank" rel="noopener" class="btn btn-primary sd-product__btn">
@@ -276,6 +307,247 @@ const structuredData = canonicalUrl ? [
           </div>
         </article>
 
+      </div>
+
+      <!-- Цены «Секрет» / «Секрет Реверс» по кромке и стороне открывания -->
+      <h3 class="sd-h3" style="margin-top: 2.5rem">Цены «Секрет» по кромке и стороне открывания</h3>
+      <div class="sd-table-wrap sd-stack-table-wrap">
+        <table class="sd-compare sd-stack-table">
+          <thead>
+            <tr>
+              <th scope="col">Кромка</th>
+              <th scope="col">Открывание</th>
+              <th scope="col">Полотно</th>
+              <th scope="col">Комплект Стандарт</th>
+              <th scope="col">Комплект Лайт</th>
+            </tr>
+          </thead>
+          <tbody>
+            {SECRET_PRICES.map(row => (
+              <tr>
+                <td data-label="Кромка">{row.edgeLabel}</td>
+                <td data-label="Открывание">{row.reverse ? 'Обратное' : 'Прямое'}</td>
+                <td data-label="Полотно">{fmt(row.bladePrice)}</td>
+                <td data-label="Комплект Стандарт"><strong>{fmt(row.kitStandardPrice)}</strong></td>
+                <td data-label="Комплект Лайт">{row.kitLitePrice != null ? fmt(row.kitLitePrice) : '—'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="sd-table-foot">
+        Комплект Стандарт и Комплект Лайт отличаются коробом — разница в конструкции ниже.
+        Для кромки золото комплект Лайт не предлагается.
+      </p>
+
+      <!-- Короб «Секрет» — два варианта конструкции, разрезы кликабельны (модалка) -->
+      <h3 class="sd-h3" style="margin-top: 2.5rem">Короб «Секрет»: Стандарт и Лайт — в чём разница</h3>
+      <InfoImageViewer
+        client:only="vue"
+        variant="wide"
+        aspectRatio="5 / 4"
+        images={[
+          { src: BOX_LITE_IMAGE, caption: 'Короб «Секрет Лайт» — разрез', alt: 'Разрез короба «Секрет Лайт»: алюминиевый профиль с наполнением из массива сосны' },
+          { src: BOX_PRO_IMAGE,  caption: 'Короб «Секрет» — профиль',     alt: 'Профиль короба «Секрет»: монолитный алюминиевый сплав со штукатурным крылом' },
+        ]}
+      />
+      <div class="sd-box-types">
+        <div class="sd-box-type">
+          <h4 class="sd-box-type__name">Короб «Секрет Лайт ВФД»</h4>
+          <p class="sd-p">
+            Облегчённый комплект скрытого алюминиевого короба, разработанный для монтажа
+            межкомнатных дверей-невидимок. Конструкция позволяет установить дверное полотно
+            в одной плоскости со стеной, полностью отказавшись от традиционных наличников
+            и создавая эффект «двери без двери».
+          </p>
+          <div class="sd-box-feature">
+            <h5>Облегчённый профиль с наполнением из массива сосны</h5>
+            <p>
+              Сечение короба оптимизировано для снижения массы без потери жёсткости,
+              необходимой для стандартных межкомнатных полотен. Внешний контур выполнен
+              из тонкостенного алюминиевого профиля, внутри которого расположен массив
+              сосны. Такое сочетание решает сразу несколько задач: алюминий задаёт точную
+              геометрию и защищает конструкцию от внешних воздействий, а древесина
+              обеспечивает плотную фиксацию крепежа.
+            </p>
+          </div>
+        </div>
+        <div class="sd-box-type">
+          <h4 class="sd-box-type__name">Короб «Секрет»</h4>
+          <p class="sd-p">
+            Система скрытой установки межкомнатных дверей, выполненная из экструдированного
+            алюминиевого сплава. Конструкция монтируется вровень со стеной и формирует
+            безупречно ровный проём без наличников, создавая эффект «двери-невидимки».
+          </p>
+          <div class="sd-box-feature">
+            <h5>Монолитный профиль</h5>
+            <p>
+              Короб выполнен из единого алюминиевого сплава методом экструзии. Отсутствие
+              составных элементов и клеевых соединений исключает расслоение, деформацию
+              и образование микрощелей на стыках.
+            </p>
+          </div>
+          <div class="sd-box-feature">
+            <h5>Интегрированное штукатурное крыло</h5>
+            <p>
+              Профиль оснащён монтажной полкой с рифлением, которая обеспечивает надёжную
+              адгезию со штукатуркой, шпаклёвкой и армирующей сеткой. Переход от короба
+              к стене получается бесшовным и не даёт трещин при усадке.
+            </p>
+          </div>
+          <div class="sd-box-feature">
+            <h5>Усиленный узел притвора</h5>
+            <p>
+              Внутренняя геометрия профиля рассчитана под установку магнитных и механических
+              замков скрытого типа без дополнительного фрезерования.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       «РЕФЛЕКС» — СКРЫТАЯ ДВЕРЬ С ЗЕРКАЛОМ
+  ══════════════════════════════════════════════ -->
+  <section class="section" id="reflex" style="padding-top: 0">
+    <div class="container">
+      <div class="sd-products">
+
+        <article class="sd-product">
+          <div class="sd-product__photo">
+            <img
+              src={REFLEX_IMAGE}
+              alt="Скрытая дверь с зеркалом «Рефлекс» — полотно заподлицо со стеной"
+              loading="lazy"
+              decoding="async"
+              width="1920"
+              height="1080"
+            />
+          </div>
+          <div class="sd-product__info">
+            <span class="sd-product__eyebrow">Новинка</span>
+            <h2 class="sd-product__name">«Рефлекс»</h2>
+            <p class="sd-product__type">Скрытый монтаж, зеркальное полотно</p>
+            <p class="sd-product__desc">
+              Дизайнерское решение для интерьера: зеркало во всю высоту полотна визуально
+              увеличивает пространство и добавляет комнате естественного света. Дверь
+              по-прежнему устанавливается вровень со стеной — тот же эффект скрытности,
+              что и у «Секрета». Изготавливается по индивидуальным размерам, высотой до 2,5 м.
+            </p>
+            <div class="sd-product__specs">
+              <div class="sd-spec">
+                <span class="sd-spec__key">Монтаж</span>
+                <span class="sd-spec__val">Прямой · Обратный</span>
+              </div>
+              <div class="sd-spec">
+                <span class="sd-spec__key">Высота</span>
+                <span class="sd-spec__val">Индивидуально, до 2500 мм</span>
+              </div>
+              <div class="sd-spec">
+                <span class="sd-spec__key">Полотно</span>
+                <span class="sd-spec__val">Финиш-грунт + зеркало</span>
+              </div>
+              <div class="sd-spec">
+                <span class="sd-spec__key">Цвет кромки</span>
+                <span class="sd-spec__val">Чёрная · Серебро · Золото</span>
+              </div>
+            </div>
+            <div class="sd-product__price">
+              <div>
+                <span class="sd-price-label">Полотно</span>
+                <span class="sd-price-val">от {fmt(REFLEX_MIN_BLADE_PRICE)}</span>
+              </div>
+              <div>
+                <span class="sd-price-label">Комплект с коробом</span>
+                <span class="sd-price-val sd-price-val--accent">от {fmt(REFLEX_MIN_KIT_PRICE)}</span>
+              </div>
+            </div>
+            <a href={TG} target="_blank" rel="noopener" class="btn btn-primary sd-product__btn">
+              Рассчитать стоимость
+            </a>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- Цены «Рефлекс» по кромке и стороне открывания -->
+      <h3 class="sd-h3" style="margin-top: 2.5rem">Цены «Рефлекс» по кромке и стороне открывания</h3>
+      <div class="sd-table-wrap sd-stack-table-wrap">
+        <table class="sd-compare sd-stack-table">
+          <thead>
+            <tr>
+              <th scope="col">Кромка</th>
+              <th scope="col">Открывание</th>
+              <th scope="col">Полотно</th>
+              <th scope="col">Комплект Стандарт</th>
+              <th scope="col">Комплект Лайт</th>
+            </tr>
+          </thead>
+          <tbody>
+            {REFLEX_PRICES.map(row => (
+              <tr>
+                <td data-label="Кромка">{row.edgeLabel}</td>
+                <td data-label="Открывание">{row.reverse ? 'Обратное' : 'Прямое'}</td>
+                <td data-label="Полотно">{fmt(row.bladePrice)}</td>
+                <td data-label="Комплект Стандарт"><strong>{fmt(row.kitStandardPrice)}</strong></td>
+                <td data-label="Комплект Лайт">{row.kitLitePrice != null ? fmt(row.kitLitePrice) : '—'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="sd-table-foot">
+        Комплект Стандарт и Комплект Лайт отличаются комплектацией короба — уточняйте у менеджера.
+        Для кромки золото комплект Лайт не предлагается.
+      </p>
+
+      <!-- Схема определения стороны открывания — свой экземпляр InfoImageViewer:
+           client:only="vue", тот же безопасный паттерн, что уже используется
+           выше на этой странице (не хайдрейтим Teleport-модалку через SSR). -->
+      <InfoImageViewer
+        client:only="vue"
+        variant="wide"
+        aspectRatio="16 / 9"
+        images={[
+          { src: REFLEX_OPENING_DIAGRAM, caption: 'Определение стороны открывания', alt: 'Схема определения стороны открывания для скрытой двери с зеркалом' },
+        ]}
+      />
+
+      <!-- Нестандартные высоты «Рефлекс» — тот же расчёт, что у «Секрет»,
+           но верхний тир урезан: максимум по «Рефлекс» — 2500 мм, не 2700. -->
+      <div class="sd-custom-section">
+        <h3 class="sd-h3">Нестандартные высоты — под заказ</h3>
+        <p class="sd-p" style="margin-bottom: 1rem">
+          Надбавка применяется к полотну и коробу. Максимальная высота — 2500 мм.
+          Срок изготовления: {CUSTOM_LEAD_TIME}.
+        </p>
+        <div class="sd-table-wrap sd-stack-table-wrap">
+          <table class="sd-compare sd-stack-table">
+            <thead>
+              <tr>
+                <th scope="col">Высота</th>
+                <th scope="col">Надбавка</th>
+                <th scope="col">«Рефлекс», прямое</th>
+                <th scope="col">«Рефлекс», обратное</th>
+              </tr>
+            </thead>
+            <tbody>
+              {REFLEX_HEIGHT_TIERS.map(tier => (
+                <tr>
+                  <th scope="row">{tier.range} мм</th>
+                  <td class="sd-custom__pct" data-label="Надбавка">{tier.pct}</td>
+                  <td data-label="«Рефлекс», прямое">{fmt(calcCustomPrice(REFLEX_MIN_KIT_PRICE, tier.surcharge))}</td>
+                  <td data-label="«Рефлекс», обратное">{fmt(calcCustomPrice(REFLEX_REVERS_MIN_KIT_PRICE, tier.surcharge))}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="sd-table-foot" style="margin-top: 0.75rem">
+          Цена включает полотно и короб с той же надбавкой. Расчёт — от минимального
+          комплекта (Лайт, где предлагается) для соответствующего направления.
+        </p>
       </div>
     </div>
   </section>
@@ -320,15 +592,19 @@ const structuredData = canonicalUrl ? [
               <th scope="row">Цвет кромки</th>
               <td colspan="2" class="sd-compare__shared">Чёрная / Серебро / Золото</td>
             </tr>
+            <tr>
+              <th scope="row">Покрытие полотна</th>
+              <td colspan="2" class="sd-compare__shared">Финиш-грунт с кромкой</td>
+            </tr>
             <tr class="sd-compare__price-row">
               <th scope="row">Полотно</th>
-              <td>{fmt(POLOTNO_PRICE_SECRET)}</td>
-              <td>{fmt(POLOTNO_PRICE_SECRET_REVERS)}</td>
+              <td>от {fmt(SECRET_MIN_BLADE_PRICE)}</td>
+              <td>от {fmt(SECRET_REVERS_MIN_BLADE_PRICE)}</td>
             </tr>
             <tr class="sd-compare__price-row sd-compare__kit-row">
               <th scope="row">Комплект с коробом</th>
-              <td><strong>{fmt(TOTAL_SECRET)}</strong></td>
-              <td><strong>{fmt(TOTAL_SECRET_REVERS)}</strong></td>
+              <td><strong>от {fmt(SECRET_MIN_KIT_PRICE)}</strong></td>
+              <td><strong>от {fmt(SECRET_REVERS_MIN_KIT_PRICE)}</strong></td>
             </tr>
           </tbody>
         </table>
@@ -336,7 +612,8 @@ const structuredData = canonicalUrl ? [
 
       <p class="sd-table-foot">
         В комплект входит: короб 54×43×2200 мм, ответная планка, 2 скрытые петли.
-        Ручка, стопор и завёртка WC — опционально.
+        Ручка, стопор и завёртка WC — опционально. Точная цена зависит от покрытия,
+        цвета кромки и стороны открывания — таблица выше.
       </p>
 
       <!-- Инфо-изображения: комплектация + сторонность — client:only="vue" (не
@@ -358,8 +635,8 @@ const structuredData = canonicalUrl ? [
           Надбавка применяется к полотну и коробу. Максимальная высота — 2700 мм.
           Срок изготовления: {CUSTOM_LEAD_TIME}.
         </p>
-        <div class="sd-table-wrap">
-          <table class="sd-compare">
+        <div class="sd-table-wrap sd-stack-table-wrap">
+          <table class="sd-compare sd-stack-table">
             <thead>
               <tr>
                 <th scope="col">Высота</th>
@@ -372,9 +649,9 @@ const structuredData = canonicalUrl ? [
               {CUSTOM_HEIGHT_TIERS.map(tier => (
                 <tr>
                   <th scope="row">{tier.range} мм</th>
-                  <td class="sd-custom__pct">{tier.pct}</td>
-                  <td>{fmt(calcCustomPrice(TOTAL_SECRET, tier.surcharge))}</td>
-                  <td>{fmt(calcCustomPrice(TOTAL_SECRET_REVERS, tier.surcharge))}</td>
+                  <td class="sd-custom__pct" data-label="Надбавка">{tier.pct}</td>
+                  <td data-label="«Секрет», комплект">{fmt(calcCustomPrice(SECRET_MIN_KIT_PRICE, tier.surcharge))}</td>
+                  <td data-label="«Секрет Реверс», комплект">{fmt(calcCustomPrice(SECRET_REVERS_MIN_KIT_PRICE, tier.surcharge))}</td>
                 </tr>
               ))}
             </tbody>
@@ -776,6 +1053,42 @@ const structuredData = canonicalUrl ? [
   line-height: 1.6;
 }
 
+/* ── Короб «Секрет»: Стандарт / Лайт — мобайл-фёрст (база — 1 колонка,
+   2 колонки только от планшета), т.к. это длинный editorial-контент. ── */
+.sd-box-types {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+.sd-box-type__name {
+  margin: 0 0 0.625rem;
+  font-size: 1.0625rem;
+  font-weight: 500;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+}
+.sd-box-feature {
+  margin-top: 1.125rem;
+  padding-top: 1.125rem;
+  border-top: 1px solid #f1f5f9;
+}
+.sd-box-feature h5 {
+  margin: 0 0 0.375rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+.sd-box-feature p {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+@media (min-width: 720px) {
+  .sd-box-types { grid-template-columns: 1fr 1fr; gap: clamp(1.5rem, 3vw, 2.5rem); }
+}
+
 /* ── Color section ────────────────────────────────────────────── */
 .sd-color-section { border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; }
 .sd-color-wrap {
@@ -911,5 +1224,54 @@ const structuredData = canonicalUrl ? [
 
   /* Кнопки в карточке товара — на всю ширину для удобного тапа */
   .sd-product__btn { align-self: stretch; }
+}
+
+/* Таблицы цен «Секрет» и «Рефлекс» по кромке/стороне — 5-6 колонок,
+   горизонтальный скролл технически работает, но незаметен (обрезанная
+   последняя колонка выглядит как баг, а не как «свайпни вправо»).
+   На узких экранах — карточками, по одной строке на комбинацию,
+   тот же приём, что на /catalog/decor. */
+@media (max-width: 640px) {
+  .sd-stack-table-wrap { overflow-x: visible; border: none; border-radius: 0; margin-top: 1.25rem; }
+  .sd-stack-table, .sd-stack-table thead, .sd-stack-table tbody, .sd-stack-table tr, .sd-stack-table th, .sd-stack-table td {
+    display: block;
+    width: 100%;
+  }
+  .sd-stack-table thead { display: none; }
+  .sd-stack-table tbody tr {
+    padding: 1rem 1.125rem;
+    margin-bottom: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.875rem;
+    background: #fff;
+  }
+  .sd-stack-table tbody tr:last-child { margin-bottom: 0; }
+  .sd-stack-table tbody td {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.375rem 0;
+    border-bottom: none;
+    white-space: normal;
+  }
+  .sd-stack-table tbody td::before {
+    content: attr(data-label);
+    color: #94a3b8;
+    font-weight: 500;
+    font-size: 0.8125rem;
+    flex-shrink: 0;
+  }
+  /* Строки с th scope="row" (напр. высота в тирах нестандартных размеров) —
+     заголовок карточки, а не пара label:value. */
+  .sd-stack-table tbody th {
+    text-align: left;
+    padding: 0 0 0.5rem;
+    margin-bottom: 0.375rem;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #0f172a;
+  }
 }
 </style>
