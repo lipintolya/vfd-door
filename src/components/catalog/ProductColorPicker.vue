@@ -74,12 +74,32 @@ onMounted(() => window.addEventListener('keydown', onZoomKeydown))
 onUnmounted(() => {
   window.removeEventListener('keydown', onZoomKeydown)
   document.body.style.overflow = ''
+  if (shareCopiedTimer) clearTimeout(shareCopiedTimer)
 })
 
 /* ── Калькулятор стоимости — свой единственный Teleport-модал (компонент
    монтируется 1 раз на страницу товара), безопасно на client:load по той же
    причине, что и зум фото выше. ── */
 const calcOpen = ref(false)
+
+/* ── Поделиться ссылкой на модель — Web Share API на устройствах, где он
+   есть (в основном мобильные), иначе копируем ссылку в буфер. ── */
+const shareCopied = ref(false)
+let shareCopiedTimer: ReturnType<typeof setTimeout> | null = null
+const shareModel = async () => {
+  const url = window.location.href
+  const title = `${props.modelName}${selected.value.name ? ` — ${selected.value.name}` : ''}`
+  if (navigator.share) {
+    try { await navigator.share({ title, url }) } catch { /* пользователь отменил — не ошибка */ }
+    return
+  }
+  try {
+    await navigator.clipboard.writeText(url)
+    shareCopied.value = true
+    if (shareCopiedTimer) clearTimeout(shareCopiedTimer)
+    shareCopiedTimer = setTimeout(() => { shareCopied.value = false }, 2500)
+  } catch { /* буфер недоступен — молча игнорируем, как и в калькуляторе */ }
+}
 </script>
 
 <template>
@@ -211,6 +231,20 @@ const calcOpen = ref(false)
         </svg>
         {{ phone.label }}
       </a>
+      <button
+        type="button"
+        class="btn btn-outline color-picker__share-btn"
+        :aria-label="shareCopied ? 'Ссылка скопирована' : 'Поделиться ссылкой на модель'"
+        @click="shareModel"
+      >
+        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="18" cy="5" r="2.5" />
+          <circle cx="6" cy="12" r="2.5" />
+          <circle cx="18" cy="19" r="2.5" />
+          <path stroke-linecap="round" d="M8.2 10.8l7.6-4.6M8.2 13.2l7.6 4.6" />
+        </svg>
+        <span class="color-picker__share-tip" :class="{ 'is-visible': shareCopied }">Ссылка скопирована</span>
+      </button>
     </div>
 
     <PriceCalculatorModal
@@ -478,6 +512,34 @@ const calcOpen = ref(false)
   width: 1.1rem;
   height: 1.1rem;
   margin-right: 0.5rem;
+}
+
+/* ── Поделиться — иконка-кнопка, без текста в общем ряду ── */
+.color-picker__share-btn {
+  position: relative;
+  flex: 0 0 auto;
+  padding: 0.6rem;
+}
+.color-picker__share-btn svg { width: 1.1rem; height: 1.1rem; }
+.color-picker__share-tip {
+  position: absolute;
+  bottom: calc(100% + 0.5rem);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.5rem;
+  background: #0f172a;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms ease, transform 150ms ease;
+}
+.color-picker__share-tip.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
 /* ── Зум-модалка ── */

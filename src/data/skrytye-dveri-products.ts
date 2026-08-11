@@ -171,6 +171,10 @@ export const REFLEX_PRICES: ReflexPriceRow[] = [
 export const REFLEX_MIN_BLADE_PRICE = Math.min(...REFLEX_PRICES.map(r => r.bladePrice))
 export const REFLEX_MIN_KIT_PRICE   = Math.min(...REFLEX_PRICES.map(r => r.kitLitePrice ?? r.kitStandardPrice))
 
+// Опция «зеркало с двух сторон» — дверь не делится на левую/правую,
+// доплата фиксированная, не зависит от кромки и стороны открывания
+export const REFLEX_TWO_SIDED_MIRROR_SURCHARGE = 5_200
+
 // «От» для обратного открывания — минимум среди строк реверса
 const REFLEX_REVERS_ROWS = REFLEX_PRICES.filter(r => r.reverse)
 export const REFLEX_REVERS_MIN_KIT_PRICE = Math.min(...REFLEX_REVERS_ROWS.map(r => r.kitLitePrice ?? r.kitStandardPrice))

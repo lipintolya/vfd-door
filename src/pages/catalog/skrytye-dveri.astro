@@ -30,6 +30,7 @@ import {
   REFLEX_MIN_KIT_PRICE,
   REFLEX_REVERS_MIN_KIT_PRICE,
   REFLEX_HEIGHT_TIERS,
+  REFLEX_TWO_SIDED_MIRROR_SURCHARGE,
 } from '../../data/skrytye-dveri-products'
 
 const PHONE = '+79000297888'
@@ -462,6 +463,10 @@ const structuredData = canonicalUrl ? [
                 <span class="sd-price-label">Комплект с коробом</span>
                 <span class="sd-price-val sd-price-val--accent">от {fmt(REFLEX_MIN_KIT_PRICE)}</span>
               </div>
+              <div>
+                <span class="sd-price-label">Комплект, зеркало с двух сторон</span>
+                <span class="sd-price-val">от {fmt(REFLEX_MIN_KIT_PRICE + REFLEX_TWO_SIDED_MIRROR_SURCHARGE)}</span>
+              </div>
             </div>
             <a href={TG} target="_blank" rel="noopener" class="btn btn-primary sd-product__btn">
               Рассчитать стоимость
@@ -482,6 +487,8 @@ const structuredData = canonicalUrl ? [
               <th scope="col">Полотно</th>
               <th scope="col">Комплект Стандарт</th>
               <th scope="col">Комплект Лайт</th>
+              <th scope="col">Стандарт, зеркало с обеих сторон</th>
+              <th scope="col">Лайт, зеркало с обеих сторон</th>
             </tr>
           </thead>
           <tbody>
@@ -492,6 +499,8 @@ const structuredData = canonicalUrl ? [
                 <td data-label="Полотно">{fmt(row.bladePrice)}</td>
                 <td data-label="Комплект Стандарт"><strong>{fmt(row.kitStandardPrice)}</strong></td>
                 <td data-label="Комплект Лайт">{row.kitLitePrice != null ? fmt(row.kitLitePrice) : '—'}</td>
+                <td data-label="Стандарт, зеркало с обеих сторон"><strong>{fmt(row.kitStandardPrice + REFLEX_TWO_SIDED_MIRROR_SURCHARGE)}</strong></td>
+                <td data-label="Лайт, зеркало с обеих сторон">{row.kitLitePrice != null ? fmt(row.kitLitePrice + REFLEX_TWO_SIDED_MIRROR_SURCHARGE) : '—'}</td>
               </tr>
             ))}
           </tbody>

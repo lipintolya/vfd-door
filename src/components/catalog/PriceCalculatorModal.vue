@@ -2,10 +2,10 @@
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { accessoriesByCoating, type CoatingSlug } from '../../data/accessories'
 import {
-  HINGE_PRICE, HINGE_LABEL, HINGE_QTY,
-  LOCK_PRICE, LOCK_LABEL, LOCK_QTY,
-  WC_PRICE, WC_LABEL, WC_QTY,
-  type HingeType,
+  HINGE_PRICE, HINGE_LABEL, HINGE_QTY, HINGE_IMAGES,
+  LOCK_PRICE, LOCK_LABEL, LOCK_QTY, LOCK_IMAGES,
+  WC_PRICE, WC_LABEL, WC_QTY, WC_IMAGES,
+  type HingeType, type HardwareImages,
 } from '../../data/hardware'
 
 /* ============================================================
@@ -126,13 +126,31 @@ const copyCalcMessage = () => {
 }
 
 /* ============================================================
+   Фото + схема с размерами для петель/замка/WC — своя лёгкая
+   Teleport-модалка поверх калькулятора (z-index выше), а не
+   переиспользование InfoImageViewer: там своя инлайн-сетка карточек,
+   тут нужен только триггер-иконка внутри строки чекбокса.
+   ============================================================ */
+interface HardwareView { title: string; photo: string; schema: string }
+const hardwareView = ref<HardwareView | null>(null)
+const openHardwareView = (title: string, images: HardwareImages) => {
+  hardwareView.value = { title, ...images }
+}
+const closeHardwareView = () => { hardwareView.value = null }
+
+/* ============================================================
    Модалка
    ============================================================ */
 const close = () => emit('close')
-const onKeydown = (e: KeyboardEvent) => { if (e.key === 'Escape' && props.open) close() }
+const onKeydown = (e: KeyboardEvent) => {
+  if (e.key !== 'Escape') return
+  if (hardwareView.value) { closeHardwareView(); return }
+  if (props.open) close()
+}
 
 watch(() => props.open, (isOpen) => {
   document.body.style.overflow = isOpen ? 'hidden' : ''
+  if (!isOpen) hardwareView.value = null
 })
 
 onMounted(() => window.addEventListener('keydown', onKeydown))
@@ -205,6 +223,11 @@ onUnmounted(() => {
                   <span class="calc-row__control">
                     <input type="radio" name="hinge" value="standard" v-model="hingeType" />
                     {{ HINGE_LABEL.standard }}
+                    <button
+                      type="button" class="calc-hw-view"
+                      :aria-label="`Фото и схема: ${HINGE_LABEL.standard}`"
+                      @click.stop.prevent="openHardwareView(HINGE_LABEL.standard, HINGE_IMAGES.standard)"
+                    ><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="7.25" stroke="currentColor" stroke-width="1.5"/><path d="M10 9v4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="6.5" r="0.9" fill="currentColor" stroke="none"/></svg></button>
                   </span>
                   <span class="calc-row__price">{{ fmt(HINGE_PRICE.standard * HINGE_QTY) }}</span>
                 </label>
@@ -212,6 +235,11 @@ onUnmounted(() => {
                   <span class="calc-row__control">
                     <input type="radio" name="hinge" value="hidden" v-model="hingeType" />
                     {{ HINGE_LABEL.hidden }}
+                    <button
+                      type="button" class="calc-hw-view"
+                      :aria-label="`Фото и схема: ${HINGE_LABEL.hidden}`"
+                      @click.stop.prevent="openHardwareView(HINGE_LABEL.hidden, HINGE_IMAGES.hidden)"
+                    ><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="7.25" stroke="currentColor" stroke-width="1.5"/><path d="M10 9v4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="6.5" r="0.9" fill="currentColor" stroke="none"/></svg></button>
                   </span>
                   <span class="calc-row__price">{{ fmt(HINGE_PRICE.hidden * HINGE_QTY) }}</span>
                 </label>
@@ -223,6 +251,11 @@ onUnmounted(() => {
                 <span class="calc-row__control">
                   <input type="checkbox" v-model="lockChecked" />
                   {{ LOCK_LABEL }}
+                  <button
+                    type="button" class="calc-hw-view"
+                    :aria-label="`Фото и схема: ${LOCK_LABEL}`"
+                    @click.stop.prevent="openHardwareView(LOCK_LABEL, LOCK_IMAGES)"
+                  ><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="7.25" stroke="currentColor" stroke-width="1.5"/><path d="M10 9v4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="6.5" r="0.9" fill="currentColor" stroke="none"/></svg></button>
                 </span>
                 <span class="calc-row__price">{{ fmt(LOCK_PRICE * LOCK_QTY) }}</span>
               </label>
@@ -231,6 +264,11 @@ onUnmounted(() => {
                 <span class="calc-row__control">
                   <input type="checkbox" v-model="wcChecked" />
                   {{ WC_LABEL }}
+                  <button
+                    type="button" class="calc-hw-view"
+                    :aria-label="`Фото и схема: ${WC_LABEL}`"
+                    @click.stop.prevent="openHardwareView(WC_LABEL, WC_IMAGES)"
+                  ><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="7.25" stroke="currentColor" stroke-width="1.5"/><path d="M10 9v4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="6.5" r="0.9" fill="currentColor" stroke="none"/></svg></button>
                 </span>
                 <span class="calc-row__price">{{ fmt(WC_PRICE * WC_QTY) }}</span>
               </label>
@@ -277,6 +315,42 @@ onUnmounted(() => {
             </div>
           </div>
         </div>
+
+        <!-- Фото + схема с размерами для петель/замка/WC — тот же Teleport,
+             что и калькулятор (второй независимый Teleport-в-body от одного
+             клиентского компонента ловит "Cannot read properties of null
+             (reading insertBefore)" — тот же класс бага, что у WorksGallery,
+             только через два РАЗНЫХ Teleport вместо нескольких копий одного).
+             z-index выше calc-panel, поэтому просто рисуется поверх. -->
+        <Transition name="calc-fade">
+          <div
+            v-if="hardwareView"
+            class="hw-overlay"
+            role="dialog"
+            aria-modal="true"
+            :aria-label="hardwareView.title"
+            @click.self="closeHardwareView"
+          >
+            <button class="hw-close" type="button" aria-label="Закрыть" @click="closeHardwareView">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+              </svg>
+            </button>
+            <div class="hw-panel">
+              <p class="hw-panel__title">{{ hardwareView.title }}</p>
+              <div class="hw-panel__images">
+                <figure class="hw-figure">
+                  <img :src="hardwareView.photo" :alt="`${hardwareView.title} — фото`" decoding="async" />
+                  <figcaption>Фото</figcaption>
+                </figure>
+                <figure class="hw-figure">
+                  <img :src="hardwareView.schema" :alt="`${hardwareView.title} — схема с размерами`" decoding="async" />
+                  <figcaption>Схема с размерами</figcaption>
+                </figure>
+              </div>
+            </div>
+          </div>
+        </Transition>
       </div>
     </Transition>
   </Teleport>
@@ -522,6 +596,103 @@ onUnmounted(() => {
 .calc-fade-leave-active { transition: opacity 180ms ease; }
 .calc-fade-enter-from,
 .calc-fade-leave-to { opacity: 0; }
+
+/* ── Иконка "показать фото/схему" в строках петель/замка/WC ── */
+.calc-hw-view {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border: none;
+  border-radius: 9999px;
+  background: transparent;
+  color: #94a3b8;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 150ms ease, background-color 150ms ease;
+}
+.calc-hw-view:hover { color: #0d9488; background: #f0fdfa; }
+.calc-hw-view svg { width: 1rem; height: 1rem; }
+
+/* ── Модалка "фото + схема" для петель/замка/WC — z-index выше
+   .calc-overlay, чтобы всегда рисоваться поверх калькулятора. ── */
+.hw-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+.hw-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+  transition: background 150ms ease;
+}
+.hw-close:hover { background: rgba(255, 255, 255, 0.22); }
+.hw-close svg { width: 1.375rem; height: 1.375rem; }
+
+.hw-panel {
+  width: 100%;
+  max-width: 44rem;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+}
+.hw-panel__title {
+  margin: 0 0 1rem;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: #0f172a;
+  padding-right: 2rem;
+}
+.hw-panel__images {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+@media (max-width: 640px) {
+  .hw-panel__images { grid-template-columns: 1fr; }
+}
+.hw-figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.hw-figure img {
+  width: 100%;
+  max-height: 22rem;
+  object-fit: contain;
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+  border-radius: 0.75rem;
+}
+.hw-figure figcaption {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  text-align: center;
+}
 
 @media (prefers-reduced-motion: reduce) {
   .calc-fade-enter-active,
