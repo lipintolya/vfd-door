@@ -160,7 +160,9 @@ const madeToOrder = computed(() => isMadeToOrder(props.card.seriesSlug))
     <div class="flex flex-1 flex-col gap-2.5 p-3.5 sm:gap-3 sm:p-5">
       <div>
         <h2 class="m-0 min-h-12 text-step-2 font-medium leading-snug text-ink line-clamp-2">{{ card.name }}</h2>
-        <p class="m-0 mt-1 text-sm font-semibold text-slate-500">{{ card.coating }}</p>
+        <p class="m-0 mt-1 text-sm font-semibold text-slate-500">
+          {{ card.coating }}<span v-if="card.trim"> · Кромка {{ card.trim }}</span>
+        </p>
       </div>
 
       <div v-if="card.colorSwatches.length > 1" class="relative z-10 flex min-w-0 flex-wrap items-center gap-1.5">

@@ -8,6 +8,10 @@ export interface CatalogCardItem {
   coatingSlug: string
   colorName: string
   colorHex: string
+  /** Кромка/отделка модели (Supabase models.trim, приведено к читаемому виду) —
+      различает SKU с одинаковым названием, но разной кромкой (см. lib/trim-labels).
+      Пустая строка — либо не задано, либо значение битое ("true" в БД). */
+  trim: string
   /** Все цвета, в которых реально доступна эта модель — для корректной фильтрации по цвету */
   colorNames: string[]
   /** Те же цвета с hex/ценой/фото — рядок свотчей на карточке переключает

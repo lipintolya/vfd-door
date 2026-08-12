@@ -9,6 +9,7 @@ import { buildModelSlugMap } from './slugify'
 import { getSeriesSpec } from '../data/series-descriptions'
 import { adjustPrice } from './price-adjustments'
 import { isNewModel } from './new-models'
+import { formatTrim } from './trim-labels'
 import type { CatalogCardItem } from '../components/catalog/types'
 
 const normalizeHexColor = (value: string | null | undefined) => {
@@ -42,6 +43,7 @@ export async function getCatalogCards(): Promise<{
         id,
         name,
         has_glass,
+        trim,
         series (
           id,
           name,
@@ -129,6 +131,7 @@ export async function getCatalogCards(): Promise<{
       coatingSlug: coating?.slug  ?? '',
       colorName:   color.name,
       colorHex:    normalizeHexColor(color.hex_preview),
+      trim:        formatTrim(model.trim),
       colorNames:  colorsByModel.get(model.id) ?? [color.name],
       colorSwatches: colorSwatchesByModel.get(model.id) ?? [{ name: color.name, hex: normalizeHexColor(color.hex_preview), price: adjustPrice(seriesSlug, row.price_rrp ?? null), photo: row.photo_url ?? '', available: true }],
       photo:       row.photo_url  ?? '',

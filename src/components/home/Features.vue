@@ -6,12 +6,17 @@ import { useScrollReveal } from '../../composables/useScrollReveal'
    Types
    ============================================================ */
 interface Feature {
-  id:     number
-  title:  string
-  text:   string
+  id:      number
+  title:   string
+  text:    string
   /** 1–3 фото для слайдера карточки. Можно добавить ссылки с Yandex Cloud — стрелки и точки появятся автоматически, когда их больше одной. */
-  images: string[]
-  cta:    { label: string; href: string; external?: boolean }
+  images:  string[]
+  cta:     { label: string; href: string; external?: boolean }
+  /** Короткий факт + подпись в подвале карточки — тот же приём, что "автор
+      статьи" в блог-карточках (лицо + подпись), но без выдуманных персон:
+      реальная цифра/адрес, уже упомянутые в копирайтинге секции. */
+  stat:    string
+  caption: string
 }
 
 /* ============================================================
@@ -40,6 +45,8 @@ const FEATURES: (Feature & { eyebrow: string })[] = [
       `${CARDS_CDN}f4.webp`,
     ],
     cta: { label: 'Выбрать двери', href: '/catalog' },
+    stat: '15 лет',
+    caption: 'напрямую с фабрики',
   },
   {
     id: 2,
@@ -53,6 +60,8 @@ const FEATURES: (Feature & { eyebrow: string })[] = [
       `${CARDS_CDN}t3.webp`,
     ],
     cta: { label: 'Посмотреть монтажи', href: '/portfolio' },
+    stat: 'Под ключ',
+    caption: 'замер и монтаж',
   },
   {
     id: 3,
@@ -68,7 +77,16 @@ const FEATURES: (Feature & { eyebrow: string })[] = [
       `${CARDS_CDN}foto6.webp`,
     ],
     cta: { label: 'Построить маршрут', href: 'https://yandex.ru/maps/-/CPTwZPi-', external: true },
+    stat: '80+ моделей',
+    caption: 'Кашириных, 131Б',
   },
+]
+
+/** Иконка подвала — по индексу карточки (фабрика / сервис / шоурум), общий teal-акцент. */
+const FOOTER_ICONS = [
+  'M3 7l9-4 9 4-9 4-9-4Z M3 7v10l9 4 9-4V7 M12 11v10', // Фабрика — короб/поставка
+  'M14.5 3.5l6 6-8.5 8.5H5.5v-6.5l9-8Z M13 5l6 6',       // Сервис — инструмент/монтаж
+  'M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12Z M12 12a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z', // Шоурум — метка на карте
 ]
 
 /* ============================================================
@@ -195,27 +213,18 @@ onBeforeUnmount(stopCycle)
         <li
           v-for="(feature, idx) in FEATURES"
           :key="feature.id"
-          class="group relative flex flex-col overflow-hidden rounded-3xl bg-[#1A191C] p-6 transition-[opacity,transform] duration-700 ease-out motion-reduce:transition-none sm:p-7"
+          class="group relative flex flex-col overflow-hidden rounded-3xl bg-[#1A191C] transition-[opacity,transform] duration-700 ease-out motion-reduce:transition-none"
           :class="visible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
           :style="{ transitionDelay: visible ? `${idx * 130}ms` : '0ms' }"
           itemprop="item"
           itemscope
           itemtype="https://schema.org/Thing"
         >
-          <p class="relative mb-3 text-xs font-medium uppercase tracking-widest text-teal-400" aria-hidden="true">
-            {{ feature.eyebrow }}
-          </p>
-
-          <h3
-            class="relative mb-4 text-xl font-medium leading-[1.15] tracking-tight text-white sm:text-[1.375rem]"
-            itemprop="name"
-          >
-            {{ feature.title }}
-          </h3>
-
-          <!-- Фото: статично, переключение по клику на точку/стрелку или свайпом на тач -->
+          <!-- Фото — во всю ширину карточки, без отступов, статично, переключение
+               по клику на точку/стрелку или свайпом на тач (мобайл-фёрст: фото
+               задаёт форму карточки, текст под ним в своём паддинге). -->
           <div
-            class="relative mb-4 aspect-16/15 w-full shrink-0 overflow-hidden rounded-2xl"
+            class="relative aspect-[16/12.65] w-full shrink-0 overflow-hidden"
             @touchstart.passive="onImageTouchStart($event, idx)"
             @touchend="onImageTouchEnd($event, idx)"
           >
@@ -272,22 +281,53 @@ onBeforeUnmount(stopCycle)
             </template>
           </div>
 
-          <p class="relative mb-5 text-sm leading-relaxed text-slate-400" itemprop="description">{{ feature.text }}</p>
+          <!-- Контент под фото — свой паддинг, фото само в отступы не заворачиваем -->
+          <div class="relative flex flex-1 flex-col p-6 sm:p-7">
+            <p class="relative mb-3 text-xs font-medium uppercase tracking-widest text-teal-400" aria-hidden="true">
+              {{ feature.eyebrow }}
+            </p>
 
-          <a
-            :href="feature.cta.href"
-            class="btn btn-ghost relative mt-auto w-fit self-start"
-            :target="feature.cta.external ? '_blank' : undefined"
-            :rel="feature.cta.external ? 'noopener noreferrer' : undefined"
-            :aria-label="feature.cta.external
-              ? `${feature.cta.label} (открывается в новой вкладке)`
-              : undefined"
-          >
-            {{ feature.cta.label }}
-            <svg class="btn-arrow-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </a>
+            <h3
+              class="relative mb-3 text-xl font-medium leading-[1.15] tracking-tight text-white sm:text-[1.375rem]"
+              itemprop="name"
+            >
+              {{ feature.title }}
+            </h3>
+
+            <p class="relative mb-5 text-sm leading-relaxed text-slate-400" itemprop="description">{{ feature.text }}</p>
+
+            <!-- Подвал: факт+подпись слева (тот же ритм, что «автор + должность»
+                 в референс-карточках блога), ссылка справа — вместо pill-кнопки
+                 простая текстовая ссылка со стрелкой, как в референсе. -->
+            <div class="relative mt-auto flex items-center justify-between gap-3 border-t border-white/10 pt-4">
+              <div class="flex min-w-0 items-center gap-2.5">
+                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-teal-500/15 text-teal-400">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="h-4.5 w-4.5" aria-hidden="true">
+                    <path :d="FOOTER_ICONS[idx]" />
+                  </svg>
+                </span>
+                <span class="min-w-0 leading-tight">
+                  <span class="block truncate text-sm font-medium text-white">{{ feature.stat }}</span>
+                  <span class="block truncate text-xs text-slate-500">{{ feature.caption }}</span>
+                </span>
+              </div>
+
+              <a
+                :href="feature.cta.href"
+                class="group/link inline-flex shrink-0 items-center gap-1 text-sm font-medium text-teal-400 transition-colors hover:text-teal-300"
+                :target="feature.cta.external ? '_blank' : undefined"
+                :rel="feature.cta.external ? 'noopener noreferrer' : undefined"
+                :aria-label="feature.cta.external
+                  ? `${feature.cta.label} (открывается в новой вкладке)`
+                  : undefined"
+              >
+                {{ feature.cta.label }}
+                <svg class="h-3.5 w-3.5 shrink-0 transition-transform group-hover/link:translate-x-0.5" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </a>
+            </div>
+          </div>
         </li>
       </ul>
 

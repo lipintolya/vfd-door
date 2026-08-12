@@ -58,6 +58,16 @@ const onPhotoTouchEnd = (review: Review, e: TouchEvent) => {
 /* ── Лайтбокс ── */
 const lightbox = ref<{ photos: string[]; name: string; index: number } | null>(null)
 
+/* SSR рендерит лайтбокс закрытым (lightbox=null), но сам Teleport-в-body с
+   Transition вокруг v-if всё равно попадает в SSR-разметку как placeholder —
+   и на конкретно этой странице коллизирует с местом, куда Astro вставляет
+   свой служебный <style> для astro-island/astro-slot, из-за чего Vue при
+   гидратации ловит "Hydration node mismatch" (эффект есть, крэша нет, но
+   предупреждение в консоли и лишний re-render). Лайтбокс всё равно нужен
+   только после клика пользователя — держим Teleport вне SSR/гидратации
+   вовсе, включая после маунта. */
+const mounted = ref(false)
+
 const openLightbox = (review: Review) => {
   if (!review.photos?.length) return
   lightbox.value = { photos: review.photos, name: review.name, index: getActiveIdx(review.id) }
@@ -86,7 +96,10 @@ const onKeydown = (e: KeyboardEvent) => {
   if (e.key === 'ArrowRight') lightboxStep(1)
   if (e.key === 'ArrowLeft')  lightboxStep(-1)
 }
-onMounted(() => window.addEventListener('keydown', onKeydown))
+onMounted(() => {
+  mounted.value = true
+  window.addEventListener('keydown', onKeydown)
+})
 onUnmounted(() => {
   window.removeEventListener('keydown', onKeydown)
   document.body.style.overflow = ''
@@ -280,8 +293,10 @@ onUnmounted(() => {
 
     </div>
 
-    <!-- Лайтбокс — полноэкранный просмотр фото от клиента -->
-    <Teleport to="body">
+    <!-- Лайтбокс — полноэкранный просмотр фото от клиента. mounted-гейт см.
+         комментарий у объявления lightbox выше: убирает SSR/гидратацию
+         hydration mismatch для этого Teleport целиком. -->
+    <Teleport v-if="mounted" to="body">
       <Transition name="menu-fade">
         <div
           v-if="lightbox"
