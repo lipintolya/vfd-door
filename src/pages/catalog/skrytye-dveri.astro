@@ -6,7 +6,9 @@ import CoverSwitcher      from '../../components/catalog/CoverSwitcher.vue'
 import ColorSelector      from '../../components/catalog/ColorSelector.vue'
 import InfoImageViewer    from '../../components/catalog/InfoImageViewer.vue'
 import WorksGallery      from '../../components/catalog/WorksGallery.vue'
+import PromoBanner       from '../../components/ui/PromoBanner.vue'
 import { INVISIBLE_WORKS } from '../../data/skrytye-dveri-works'
+import { PROMOS } from '../../data/promos'
 import {
   IMAGES,
   INFO_IMAGES,
@@ -15,11 +17,17 @@ import {
   SECRET_SIZES,
   SECRET_REVERS_SIZES,
   DOOR_HEIGHT,
-  SECRET_PRICES,
+  SECRET_PRICES_DISPLAY,
   SECRET_MIN_BLADE_PRICE,
   SECRET_MIN_KIT_PRICE,
+  SECRET_MIN_BLADE_PRICE_ORIGINAL,
+  SECRET_MIN_KIT_PRICE_ORIGINAL,
   SECRET_REVERS_MIN_BLADE_PRICE,
   SECRET_REVERS_MIN_KIT_PRICE,
+  SECRET_REVERS_MIN_BLADE_PRICE_ORIGINAL,
+  SECRET_REVERS_MIN_KIT_PRICE_ORIGINAL,
+  SECRET_PROMO_ACTIVE,
+  SECRET_PROMO_VALID_UNTIL,
   CUSTOM_HEIGHT_TIERS,
   CUSTOM_LEAD_TIME,
   calcCustomPrice,
@@ -32,6 +40,8 @@ import {
   REFLEX_HEIGHT_TIERS,
   REFLEX_TWO_SIDED_MIRROR_SURCHARGE,
 } from '../../data/skrytye-dveri-products'
+
+const secretPromo = PROMOS.find(p => p.id === 3)
 
 const PHONE = '+79000297888'
 const TG    = 'https://t.me/vfddoors74'
@@ -123,7 +133,7 @@ const structuredData = canonicalUrl ? [
       '@type': 'AggregateOffer',
       priceCurrency: 'RUB',
       lowPrice: SECRET_MIN_KIT_PRICE,
-      highPrice: Math.max(...SECRET_PRICES.map(r => r.kitStandardPrice)),
+      highPrice: Math.max(...SECRET_PRICES_DISPLAY.map(r => r.kitStandardPrice)),
       availability: 'https://schema.org/InStock',
       areaServed: [
         { '@type': 'City', name: 'Челябинск' },
@@ -161,6 +171,10 @@ const structuredData = canonicalUrl ? [
   canonical={canonicalUrl}
   structuredData={structuredData}
 >
+
+  {secretPromo && (
+    <PromoBanner client:only="vue" promo={secretPromo} anchor="secret-prices" />
+  )}
 
   <div class="breadcrumb-bar">
     <div class="container">
@@ -237,14 +251,23 @@ const structuredData = canonicalUrl ? [
                 <span class="sd-spec__val">Чёрная · Серебро · Золото</span>
               </div>
             </div>
+            {SECRET_PROMO_ACTIVE && (
+              <span class="sd-promo-chip">🔥 Акция -8% до 31 августа</span>
+            )}
             <div class="sd-product__price">
               <div>
                 <span class="sd-price-label">Полотно</span>
-                <span class="sd-price-val">от {fmt(SECRET_MIN_BLADE_PRICE)}</span>
+                <span>
+                  {SECRET_PROMO_ACTIVE && <span class="sd-price-old">{fmt(SECRET_MIN_BLADE_PRICE_ORIGINAL)}</span>}
+                  <span class="sd-price-val">от {fmt(SECRET_MIN_BLADE_PRICE)}</span>
+                </span>
               </div>
               <div>
                 <span class="sd-price-label">Комплект с коробом</span>
-                <span class="sd-price-val sd-price-val--accent">от {fmt(SECRET_MIN_KIT_PRICE)}</span>
+                <span>
+                  {SECRET_PROMO_ACTIVE && <span class="sd-price-old">{fmt(SECRET_MIN_KIT_PRICE_ORIGINAL)}</span>}
+                  <span class="sd-price-val sd-price-val--accent">от {fmt(SECRET_MIN_KIT_PRICE)}</span>
+                </span>
               </div>
             </div>
             <a href={TG} target="_blank" rel="noopener" class="btn btn-primary sd-product__btn">
@@ -292,14 +315,23 @@ const structuredData = canonicalUrl ? [
                 <span class="sd-spec__val">Чёрная · Серебро · Золото</span>
               </div>
             </div>
+            {SECRET_PROMO_ACTIVE && (
+              <span class="sd-promo-chip">🔥 Акция -8% до 31 августа</span>
+            )}
             <div class="sd-product__price">
               <div>
                 <span class="sd-price-label">Полотно</span>
-                <span class="sd-price-val">от {fmt(SECRET_REVERS_MIN_BLADE_PRICE)}</span>
+                <span>
+                  {SECRET_PROMO_ACTIVE && <span class="sd-price-old">{fmt(SECRET_REVERS_MIN_BLADE_PRICE_ORIGINAL)}</span>}
+                  <span class="sd-price-val">от {fmt(SECRET_REVERS_MIN_BLADE_PRICE)}</span>
+                </span>
               </div>
               <div>
                 <span class="sd-price-label">Комплект с коробом</span>
-                <span class="sd-price-val sd-price-val--accent">от {fmt(SECRET_REVERS_MIN_KIT_PRICE)}</span>
+                <span>
+                  {SECRET_PROMO_ACTIVE && <span class="sd-price-old">{fmt(SECRET_REVERS_MIN_KIT_PRICE_ORIGINAL)}</span>}
+                  <span class="sd-price-val sd-price-val--accent">от {fmt(SECRET_REVERS_MIN_KIT_PRICE)}</span>
+                </span>
               </div>
             </div>
             <a href={TG} target="_blank" rel="noopener" class="btn btn-primary sd-product__btn">
@@ -311,7 +343,12 @@ const structuredData = canonicalUrl ? [
       </div>
 
       <!-- Цены «Секрет» / «Секрет Реверс» по кромке и стороне открывания -->
-      <h3 class="sd-h3" style="margin-top: 2.5rem">Цены «Секрет» по кромке и стороне открывания</h3>
+      <h3 id="secret-prices" class="sd-h3" style="margin-top: 2.5rem">Цены «Секрет» по кромке и стороне открывания</h3>
+      {SECRET_PROMO_ACTIVE && (
+        <p class="sd-promo-note">
+          🔥 Цены в таблице уже с учётом акции -8% — действует до 31 августа 2026 г.
+        </p>
+      )}
       <div class="sd-table-wrap sd-stack-table-wrap">
         <table class="sd-compare sd-stack-table">
           <thead>
@@ -324,7 +361,7 @@ const structuredData = canonicalUrl ? [
             </tr>
           </thead>
           <tbody>
-            {SECRET_PRICES.map(row => (
+            {SECRET_PRICES_DISPLAY.map(row => (
               <tr>
                 <td data-label="Кромка">{row.edgeLabel}</td>
                 <td data-label="Открывание">{row.reverse ? 'Обратное' : 'Прямое'}</td>
@@ -623,6 +660,7 @@ const structuredData = canonicalUrl ? [
         В комплект входит: короб 54×43×2200 мм, ответная планка, 2 скрытые петли.
         Ручка, стопор и завёртка WC — опционально. Точная цена зависит от покрытия,
         цвета кромки и стороны открывания — таблица выше.
+        {SECRET_PROMO_ACTIVE && ' Цены указаны с учётом акции -8% (действует до 31 августа 2026 г.).'}
       </p>
 
       <!-- Инфо-изображения: комплектация + сторонность — client:only="vue" (не
@@ -976,6 +1014,36 @@ const structuredData = canonicalUrl ? [
   letter-spacing: -0.01em;
 }
 .sd-price-val--accent { color: #0f172a; }
+.sd-price-old {
+  margin-right: 0.375rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #94a3b8;
+  text-decoration: line-through;
+  text-decoration-color: #cbd5e1;
+}
+.sd-promo-note {
+  margin: 0.75rem 0 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.sd-promo-chip {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 0.375rem;
+  margin-bottom: 1rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
+  background: #fee2e2;
+  color: #b91c1c;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
 .sd-product__btn { align-self: flex-start; }
 
 /* ── H3 ───────────────────────────────────────────────────────── */

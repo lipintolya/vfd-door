@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { useScrollReveal } from '../../composables/useScrollReveal'
-import { SECRET_MIN_BLADE_PRICE, SECRET_MIN_KIT_PRICE } from '../../data/skrytye-dveri-products'
+import {
+  SECRET_MIN_BLADE_PRICE, SECRET_MIN_KIT_PRICE,
+  SECRET_MIN_BLADE_PRICE_ORIGINAL, SECRET_MIN_KIT_PRICE_ORIGINAL,
+  SECRET_PROMO_ACTIVE,
+} from '../../data/skrytye-dveri-products'
 import BenefitItem from './BenefitItem.vue'
 
 const COVER_IMAGE = 'https://storage.yandexcloud.net/vfd74ru/Main_page/left_bento/secret_render_cover.webp'
@@ -75,14 +79,27 @@ const { sectionRef, visible } = useScrollReveal(0.15)
             </BenefitItem>
           </ul>
 
+          <div
+            v-if="SECRET_PROMO_ACTIVE"
+            class="inline-flex w-fit items-center gap-1.5 self-start rounded-full bg-red-50 px-3 py-1 text-xs font-bold text-red-700"
+          >
+            🔥 Акция -8% до 31 августа
+          </div>
+
           <div>
             <div class="flex items-baseline justify-between text-base text-slate-500">
               <span>Полотно от</span>
-              <span class="text-lg font-medium text-slate-900 sm:text-xl">{{ fmt(SECRET_MIN_BLADE_PRICE) }}</span>
+              <span class="flex items-baseline gap-1.5">
+                <span v-if="SECRET_PROMO_ACTIVE" class="text-sm text-slate-400 line-through">{{ fmt(SECRET_MIN_BLADE_PRICE_ORIGINAL) }}</span>
+                <span class="text-lg font-medium text-slate-900 sm:text-xl">{{ fmt(SECRET_MIN_BLADE_PRICE) }}</span>
+              </span>
             </div>
             <div class="mt-2 flex items-baseline justify-between">
               <span class="text-base text-slate-500"><span class="sm:hidden">Комплект от</span><span class="hidden sm:inline">Комплект под ключ от</span></span>
-              <span class="text-2xl font-medium text-slate-900 sm:text-3xl">{{ fmt(SECRET_MIN_KIT_PRICE) }}</span>
+              <span class="flex items-baseline gap-1.5">
+                <span v-if="SECRET_PROMO_ACTIVE" class="text-base text-slate-400 line-through">{{ fmt(SECRET_MIN_KIT_PRICE_ORIGINAL) }}</span>
+                <span class="text-2xl font-medium text-slate-900 sm:text-3xl">{{ fmt(SECRET_MIN_KIT_PRICE) }}</span>
+              </span>
             </div>
           </div>
 

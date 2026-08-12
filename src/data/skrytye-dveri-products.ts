@@ -2,6 +2,24 @@
    Данные скрытых дверей «Секрет» / «Секрет Реверс»
    Только РРЦ — закупочные цены на сайте не публикуются
    ============================================================ */
+import { isPromoActive } from '../lib/promo-dates'
+
+// ── Акция «Секрет» -8% (см. data/promos.ts, id: 3) ────────────
+// Дата продублирована здесь намеренно: это временная переоценка цен
+// в данных конкретного товара, а не часть общей витрины акций —
+// удобнее держать рядом с ценами, которые она меняет. Когда истечёт,
+// applySecretPromo сама перестанет применяться, ничего вручную
+// возвращать не нужно.
+export const SECRET_PROMO_DISCOUNT    = 0.08
+export const SECRET_PROMO_VALID_UNTIL = '2026-08-31'
+export const SECRET_PROMO_ACTIVE      = isPromoActive(SECRET_PROMO_VALID_UNTIL)
+
+/** Скидка -8%, округление вверх до 10 ₽ (та же схема, что в calcCustomPrice).
+    Вне акции возвращает цену без изменений. */
+export function applySecretPromo(price: number): number {
+  if (!SECRET_PROMO_ACTIVE) return price
+  return Math.ceil(price * (1 - SECRET_PROMO_DISCOUNT) / 10) * 10
+}
 
 const CDN      = 'https://storage.yandexcloud.net/catalog-vfd/invisible/'
 const INFO_CDN  = `${CDN}invisible_info/`
@@ -73,14 +91,29 @@ export const SECRET_PRICES: SecretPriceRow[] = [
 ]
 
 // «От» для превью и карточки «Секрет» — самая доступная комбинация в целом;
-// комплект считаем по самому дешёвому доступному уровню (Лайт, где он есть)
-export const SECRET_MIN_BLADE_PRICE = Math.min(...SECRET_PRICES.map(r => r.bladePrice))
-export const SECRET_MIN_KIT_PRICE   = Math.min(...SECRET_PRICES.map(r => r.kitLitePrice ?? r.kitStandardPrice))
+// комплект считаем по самому дешёвому доступному уровню (Лайт, где он есть).
+// *_ORIGINAL — цена без акции, нужна только для зачёркнутой цены в вёрстке;
+// везде, где нужна «текущая» цена, используй версию без суффикса.
+export const SECRET_MIN_BLADE_PRICE_ORIGINAL = Math.min(...SECRET_PRICES.map(r => r.bladePrice))
+export const SECRET_MIN_KIT_PRICE_ORIGINAL   = Math.min(...SECRET_PRICES.map(r => r.kitLitePrice ?? r.kitStandardPrice))
+export const SECRET_MIN_BLADE_PRICE = applySecretPromo(SECRET_MIN_BLADE_PRICE_ORIGINAL)
+export const SECRET_MIN_KIT_PRICE   = applySecretPromo(SECRET_MIN_KIT_PRICE_ORIGINAL)
 
 // «От» для карточки «Секрет Реверс» — минимум среди строк реверсивного открывания
 const SECRET_REVERS_ROWS = SECRET_PRICES.filter(r => r.reverse)
-export const SECRET_REVERS_MIN_BLADE_PRICE = Math.min(...SECRET_REVERS_ROWS.map(r => r.bladePrice))
-export const SECRET_REVERS_MIN_KIT_PRICE   = Math.min(...SECRET_REVERS_ROWS.map(r => r.kitLitePrice ?? r.kitStandardPrice))
+export const SECRET_REVERS_MIN_BLADE_PRICE_ORIGINAL = Math.min(...SECRET_REVERS_ROWS.map(r => r.bladePrice))
+export const SECRET_REVERS_MIN_KIT_PRICE_ORIGINAL   = Math.min(...SECRET_REVERS_ROWS.map(r => r.kitLitePrice ?? r.kitStandardPrice))
+export const SECRET_REVERS_MIN_BLADE_PRICE = applySecretPromo(SECRET_REVERS_MIN_BLADE_PRICE_ORIGINAL)
+export const SECRET_REVERS_MIN_KIT_PRICE   = applySecretPromo(SECRET_REVERS_MIN_KIT_PRICE_ORIGINAL)
+
+// Полная таблица цен «Секрет» с применённой акцией — используй в таблице на
+// странице вместо SECRET_PRICES (который остаётся исходником/каноном).
+export const SECRET_PRICES_DISPLAY: SecretPriceRow[] = SECRET_PRICES.map(row => ({
+  ...row,
+  bladePrice:       applySecretPromo(row.bladePrice),
+  kitStandardPrice: applySecretPromo(row.kitStandardPrice),
+  kitLitePrice:      row.kitLitePrice != null ? applySecretPromo(row.kitLitePrice) : null,
+}))
 
 // ── Комплект скрытого короба ─────────────────────────────────
 export const FRAME_KIT = {
