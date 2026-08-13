@@ -58,4 +58,16 @@ export const PROMOS: Promo[] = [
     discount: '-8%',
     validUntil: '2026-08-31',
   },
+  {
+    id: 4,
+    title: 'Дверь Бэйсик ЗТ из наличия',
+    subtitle: 'Скидка -8% на полотна, -5% на погонаж',
+    description:
+      'Серия Бэйсик ЗТ уже на складе — не нужно ждать поставку. Скидка -8% на полотна и -5% на погонажные изделия (короб, наличники, добор) до 31 августа.',
+    image: 'https://storage.yandexcloud.net/vfd74ru/sale/basic_z.webp',
+    ctaText: 'Смотреть в каталоге',
+    ctaLink: 'https://vfd74.ru/catalog/series/basic/',
+    discount: '-8%',
+    validUntil: '2026-08-31',
+  },
 ]
