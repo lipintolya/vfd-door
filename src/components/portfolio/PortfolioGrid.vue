@@ -68,13 +68,19 @@ const filtered = computed(() =>
             class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
         </div>
-        <div class="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
-        <div class="absolute bottom-0 left-0 right-0 p-4">
-          <span :class="['inline-block text-xs font-medium uppercase tracking-wider text-white px-2 py-0.5 rounded mb-1.5', CATEGORY_BADGE_COLORS[work.category]]">
+        <div class="absolute inset-0 bg-linear-to-t from-black/80 via-black/25 to-transparent" />
+        <div class="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
+          <span :class="['inline-block text-[11px] font-semibold uppercase tracking-wider text-white px-2.5 py-1 rounded-full mb-2 shadow-sm', CATEGORY_BADGE_COLORS[work.category]]">
             {{ CATEGORY_LABELS[work.category] }}
           </span>
-          <h3 class="text-sm font-medium text-white leading-snug line-clamp-2">{{ work.title }}</h3>
-          <p class="text-xs text-white/65 mt-1">📍 {{ work.location }}</p>
+          <h3 class="text-sm font-semibold text-white leading-snug line-clamp-2">{{ work.title }}</h3>
+          <p class="flex items-center gap-1.5 text-sm font-medium text-white mt-2">
+            <svg viewBox="0 0 24 24" fill="none" class="h-4 w-4 shrink-0" aria-hidden="true">
+              <path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12Z" stroke="white" stroke-width="1.8" stroke-linejoin="round"/>
+              <circle cx="12" cy="9" r="2.5" stroke="white" stroke-width="1.8"/>
+            </svg>
+            {{ work.location }}
+          </p>
         </div>
       </a>
     </div>

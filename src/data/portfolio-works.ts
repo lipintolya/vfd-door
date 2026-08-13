@@ -19,10 +19,10 @@ export const CATEGORY_LABELS: Record<WorkCategory, string> = {
 /** Цвет бейджа категории на карточке/странице работы — разные цвета на
     глаз различают категории в сетке (сейчас все были одинаковым teal). */
 export const CATEGORY_BADGE_COLORS: Record<WorkCategory, string> = {
-  interior:   'bg-[oklch(50.5%_0.213_27.518)]',
-  hidden:     'bg-teal-500',
-  partitions: 'bg-teal-500',
-  entrance:   'bg-teal-500',
+  interior:   'bg-[oklch(50.5%_0.213_27.518)]', // красный
+  hidden:     'bg-teal-600',                    // фирменный teal — флагманский продукт
+  partitions: 'bg-indigo-600',                  // холодный синий — алюминий/стекло
+  entrance:   'bg-amber-600',                   // тёплый янтарный — входная группа
 }
 
 export const OBJECT_TYPE_LABELS: Record<ObjectType, string> = {
