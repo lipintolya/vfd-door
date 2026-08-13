@@ -54,6 +54,28 @@ export interface PortfolioWork {
 
 export const PORTFOLIO_WORKS: PortfolioWork[] = [
   {
+    id:          '2026-08-13-feniks-2-magnoliya',
+    date:        '2026-08-13',
+    label:       '13.08.2026',
+    title:       'Монтаж дверей Феникс 2 эмаль цвета «Магнолия» в Челябинске',
+    description: 'Установка эмалевых дверей Феникс 2 в изящном и актуальном цвете «Магнолия». Челябинск.',
+    category:    'interior',
+    objectType:  'apartment',
+    location:    'Челябинск',
+    story:       'Цвет «Магнолия» — изящный и актуальный оттенок, который добавляет интерьеру лёгкости и тепла, не теряя строгости эмалевого покрытия. Двери Феникс 2 отлично держат геометрию и хорошо смотрятся как в современных, так и в более классических интерьерах.',
+    model:       'Феникс 2',
+    features:    ['Эмаль', 'Цвет «Магнолия»'],
+    images: [
+      'https://storage.yandexcloud.net/vfd74ru/works_prod/13.08.26_fenix2/IMG_20260813_191909.webp',
+      'https://storage.yandexcloud.net/vfd74ru/works_prod/13.08.26_fenix2/IMG_20260813_191908.webp',
+      'https://storage.yandexcloud.net/vfd74ru/works_prod/13.08.26_fenix2/IMG_20260813_191907.webp',
+      'https://storage.yandexcloud.net/vfd74ru/works_prod/13.08.26_fenix2/IMG_20260813_191906.webp',
+      'https://storage.yandexcloud.net/vfd74ru/works_prod/13.08.26_fenix2/IMG_20260813_191905.webp',
+      'https://storage.yandexcloud.net/vfd74ru/works_prod/13.08.26_fenix2/IMG_20260813_191904.webp',
+      'https://storage.yandexcloud.net/vfd74ru/works_prod/13.08.26_fenix2/IMG_20260813_191844.webp',
+    ],
+  },
+  {
     id:          '2026-08-10-innova-banya',
     date:        '2026-08-10',
     label:       '10.08.2026',
