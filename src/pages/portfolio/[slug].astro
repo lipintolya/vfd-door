@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import ProjectSlider from '../../components/portfolio/ProjectSlider.vue'
-import { PORTFOLIO_WORKS, CATEGORY_LABELS, OBJECT_TYPE_LABELS } from '../../data/portfolio-works'
+import { PORTFOLIO_WORKS, CATEGORY_LABELS, CATEGORY_BADGE_COLORS, OBJECT_TYPE_LABELS } from '../../data/portfolio-works'
 import { companyLegalInfo } from '../../lib/contacts-data'
 
 export async function getStaticPaths() {
@@ -71,7 +71,7 @@ const breadcrumbSchema = {
         <!-- Header -->
         <header class="mt-8 mb-6">
           <div class="flex flex-wrap items-center gap-2 mb-3">
-            <span class="inline-block text-xs font-medium uppercase tracking-wider bg-teal-500 text-white px-2.5 py-1 rounded">
+            <span class:list={['inline-block text-xs font-medium uppercase tracking-wider text-white px-2.5 py-1 rounded', CATEGORY_BADGE_COLORS[work.category]]}>
               {CATEGORY_LABELS[work.category]}
             </span>
             <span class="text-xs text-slate-500">{OBJECT_TYPE_LABELS[work.objectType]}</span>

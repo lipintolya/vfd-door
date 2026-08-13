@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import type { PortfolioWork, WorkCategory } from '../../data/portfolio-works'
-import { CATEGORY_LABELS } from '../../data/portfolio-works'
+import { CATEGORY_LABELS, CATEGORY_BADGE_COLORS } from '../../data/portfolio-works'
 
 const props = defineProps<{ works: PortfolioWork[] }>()
 
@@ -48,27 +48,32 @@ const filtered = computed(() =>
       Показано {{ filtered.length }} из {{ works.length }} работ
     </p>
 
-    <!-- Masonry grid -->
-    <div class="columns-1 sm:columns-2 lg:columns-3 gap-x-4">
+    <!-- Ровная сетка, не масонри/пинтерест — одинаковая высота карточек,
+         крупные плитки удобнее сканировать глазами, чем "плавающие" колонки.
+         Портретные пропорции + уже колонок на широких экранах — плитки
+         выглядят стройнее, ближе к формату дверного полотна на фото. -->
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       <a
         v-for="work in filtered"
         :key="work.id"
         :href="`/portfolio/${work.id}`"
-        class="mb-4 block break-inside-avoid rounded-2xl overflow-hidden relative group"
+        class="group relative block overflow-hidden rounded-2xl"
       >
-        <img
-          :src="work.images[0]"
-          :alt="work.title"
-          loading="lazy"
-          decoding="async"
-          class="w-full object-cover group-hover:scale-105 transition-transform duration-300"
-        />
-        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+        <div class="relative aspect-4/3 w-full overflow-hidden bg-slate-100 sm:aspect-3/4">
+          <img
+            :src="work.images[0]"
+            :alt="work.title"
+            loading="lazy"
+            decoding="async"
+            class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+        </div>
+        <div class="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
         <div class="absolute bottom-0 left-0 right-0 p-4">
-          <span class="inline-block text-xs font-medium uppercase tracking-wider bg-teal-500 text-white px-2 py-0.5 rounded mb-1.5">
+          <span :class="['inline-block text-xs font-medium uppercase tracking-wider text-white px-2 py-0.5 rounded mb-1.5', CATEGORY_BADGE_COLORS[work.category]]">
             {{ CATEGORY_LABELS[work.category] }}
           </span>
-          <h3 class="text-sm font-medium text-white leading-snug">{{ work.title }}</h3>
+          <h3 class="text-sm font-medium text-white leading-snug line-clamp-2">{{ work.title }}</h3>
           <p class="text-xs text-white/65 mt-1">📍 {{ work.location }}</p>
         </div>
       </a>
