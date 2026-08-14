@@ -242,18 +242,21 @@ onUnmounted(stop)
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 lg:gap-6">
 
             <!-- О компании -->
-            <div class="rounded-2xl bg-linear-to-br from-gray-800 to-teal-700 p-6 text-white flex flex-col justify-between min-h-44">
-              <div>
-                <p class="text-xs uppercase tracking-widest text-white/50 mb-1">Салон ВФД на Кашириных</p>
-                <h4 class="font-medium text-base mb-2 leading-snug">Полный цикл: от замера до монтажа</h4>
-                <p class="text-sm text-white/75">Работаем в Челябинске с 2014 года</p>
+            <div class="relative overflow-hidden rounded-2xl min-h-44 vfd-gradient-card">
+              <div class="absolute inset-0 bg-linear-to-br from-white/10 via-transparent to-black/25" aria-hidden="true" />
+              <div class="relative z-10 h-full p-6 flex flex-col justify-between text-white min-h-44">
+                <div>
+                  <p class="text-xs uppercase tracking-widest text-white/60 mb-1">Салон ВФД на Кашириных</p>
+                  <h4 class="font-medium text-base mb-2 leading-snug">Полный цикл: от замера до монтажа</h4>
+                  <p class="text-sm text-white/75">Работаем в Челябинске с 2014 года</p>
+                </div>
+                <a href="/about/" class="btn btn-ghost mt-4">
+                  Подробнее
+                  <svg class="btn-arrow-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </a>
               </div>
-              <a href="/about/" class="btn btn-ghost mt-4">
-                Подробнее
-                <svg class="btn-arrow-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </a>
             </div>
 
             <!-- Портфолио -->
@@ -345,12 +348,39 @@ onUnmounted(stop)
   outline-offset: 2px;
 }
 
+/* ════ «О компании» — анимированный градиент из тонов teal (без сторонних либ) ════
+   Один элемент, один composited-слой: несколько radial-gradient в одном
+   background-image поверх сплошного фона — дешевле, чем blur()+несколько div
+   (аналитический градиент против дорогого гауссова размытия по пикселям).
+   Анимируется background-position (панорамирование слоёв по своему,
+   заведомо большему background-size) — репейнт идёт только внутри контейнера,
+   contain изолирует его от остального layout. */
+.vfd-gradient-card {
+  isolation: isolate;
+  contain: layout paint style;
+  background-color: #005f5a; /* teal-800 */
+  background-image:
+    radial-gradient(circle at 50% 50%, #46ecd566, transparent 70%),
+    radial-gradient(circle at 10% 10%, #022f2e99, transparent 60%),
+    radial-gradient(circle at 90% 90%, #00968980, transparent 65%),
+    radial-gradient(circle at 30% 80%, #00bba74d, transparent 55%),
+    radial-gradient(circle at 80% 15%, #46ecd54d, transparent 55%);
+  background-size: 200% 200%, 180% 180%, 190% 190%, 170% 170%, 160% 160%;
+  animation: vfd-gradient-pan 26s ease-in-out infinite alternate;
+}
+@keyframes vfd-gradient-pan {
+  0%   { background-position: 50% 50%, 10% 10%, 90% 90%, 30% 80%, 80% 15%; }
+  100% { background-position: 60% 38%, 25% 22%, 72% 78%, 46% 64%, 62% 32%; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .dot,
   .hero-slide,
   .hero-content-enter-active,
-  .hero-content-leave-active {
+  .hero-content-leave-active,
+  .vfd-gradient-card {
     transition: none;
+    animation: none;
   }
 }
 </style>
