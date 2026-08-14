@@ -90,14 +90,14 @@ const { sectionRef, visible } = useScrollReveal(0.15)
             <div class="flex items-baseline justify-between text-base text-slate-500">
               <span>Полотно от</span>
               <span class="flex items-baseline gap-1.5">
-                <span v-if="SECRET_PROMO_ACTIVE" class="text-sm text-slate-400 line-through">{{ fmt(SECRET_MIN_BLADE_PRICE_ORIGINAL) }}</span>
+                <span v-if="SECRET_PROMO_ACTIVE" class="text-sm text-slate-600 line-through">{{ fmt(SECRET_MIN_BLADE_PRICE_ORIGINAL) }}</span>
                 <span class="text-lg font-medium text-slate-900 sm:text-xl">{{ fmt(SECRET_MIN_BLADE_PRICE) }}</span>
               </span>
             </div>
             <div class="mt-2 flex items-baseline justify-between">
               <span class="text-base text-slate-500"><span class="sm:hidden">Комплект от</span><span class="hidden sm:inline">Комплект под ключ от</span></span>
               <span class="flex items-baseline gap-1.5">
-                <span v-if="SECRET_PROMO_ACTIVE" class="text-base text-slate-400 line-through">{{ fmt(SECRET_MIN_KIT_PRICE_ORIGINAL) }}</span>
+                <span v-if="SECRET_PROMO_ACTIVE" class="text-base text-slate-600 line-through">{{ fmt(SECRET_MIN_KIT_PRICE_ORIGINAL) }}</span>
                 <span class="text-2xl font-medium text-slate-900 sm:text-3xl">{{ fmt(SECRET_MIN_KIT_PRICE) }}</span>
               </span>
             </div>
