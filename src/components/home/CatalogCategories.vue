@@ -64,14 +64,12 @@ const { sectionRef, visible } = useScrollReveal(0.15)
       <!-- ── Bento grid ── -->
       <div
         class="grid grid-cols-1 items-stretch gap-4 md:grid-cols-2 lg:grid-cols-[1fr_2fr] lg:gap-5"
-        role="list"
       >
 
         <!-- Hero card -->
         <article
           class="overflow-hidden rounded-3xl transition-[opacity,transform] duration-600 ease-out motion-reduce:transition-none"
           :class="visible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
-          role="listitem"
         >
           <a
             :href="CATEGORIES[0]!.href"
@@ -109,14 +107,13 @@ const { sectionRef, visible } = useScrollReveal(0.15)
         </article>
 
         <!-- Right column — 2 cards -->
-        <div class="grid grid-rows-2 gap-4 lg:gap-5" role="list">
+        <div class="grid grid-rows-2 gap-4 lg:gap-5">
           <article
             v-for="(cat, idx) in CATEGORIES.slice(1)"
             :key="cat.href"
             class="overflow-hidden rounded-3xl transition-[opacity,transform] duration-600 ease-out motion-reduce:transition-none"
             :class="visible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
             :style="{ transitionDelay: visible ? `${(idx + 1) * 130}ms` : '0ms' }"
-            role="listitem"
           >
             <a
               :href="cat.href"
