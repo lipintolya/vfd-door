@@ -15,19 +15,19 @@ const SOCIAL_NETWORKS = [
     name: 'VK',
     label: 'ВКонтакте',
     url: 'https://vk.com/vfddoors74',
-    icon: '/svg/b_vk_logo.svg',
+    icon: '/icons/b_vk_logo.webp',
   },
   {
     name: 'Telegram',
     label: 'Telegram',
     url: 'https://t.me/vfddoors74',
-    icon: '/svg/b_tg_logo.svg',
+    icon: '/icons/b_tg_logo.webp',
   },
   {
     name: 'MAX',
     label: 'Max',
     url: 'https://max.ru/id452402308842_biz',
-    icon: '/svg/b_max_logo.svg',
+    icon: '/icons/b_max_logo.webp',
   },
 ] as const
 
@@ -391,7 +391,7 @@ onUnmounted(() => {
               :aria-label="`${s.label} (открывается в новой вкладке)`"
               class="hover:scale-105 transition-transform duration-200"
             >
-              <img :src="s.icon" :alt="s.label" class="w-7 h-7" width="28" height="28" />
+              <img :src="s.icon" :alt="s.label" class="w-7 h-7" width="28" height="28" loading="eager" fetchpriority="high" />
             </a>
 
             <!-- Contacts dropdown -->
@@ -431,7 +431,7 @@ onUnmounted(() => {
                         class="flex items-center gap-2.5 font-semibold text-gray-800 hover:text-teal-600
                                transition-colors duration-200 py-0.5"
                       >
-                        <img src="https://storage.yandexcloud.net/vfd74ru/svg/phone_call.svg" alt="" class="w-6 h-6 shrink-0" />
+                        <img src="/icons/phone-call.webp" alt="" class="w-6 h-6 shrink-0" loading="eager" fetchpriority="high" />
                         {{ p.label }}
                       </a>
                     </div>
@@ -502,7 +502,7 @@ onUnmounted(() => {
               rel="noopener noreferrer"
               :aria-label="`${s.label} (открывается в новой вкладке)`"
             >
-              <img :src="s.icon" :alt="s.label" class="w-7 h-7" width="28" height="28" />
+              <img :src="s.icon" :alt="s.label" class="w-7 h-7" width="28" height="28" loading="eager" fetchpriority="high" />
             </a>
 
             <button
@@ -594,7 +594,7 @@ onUnmounted(() => {
             class="flex-1 flex items-center justify-center gap-2 rounded-full bg-white text-ink font-semibold text-sm py-3 transition-opacity active:opacity-80"
             @click="closeMobileMenu"
           >
-            <img src="https://storage.yandexcloud.net/vfd74ru/svg/phone_call.svg" alt="" class="w-5 h-5" width="20" height="20" />
+            <img src="/icons/phone-call.webp" alt="" class="w-5 h-5" width="20" height="20" loading="eager" fetchpriority="high" />
             Позвонить
           </a>
           <a
@@ -606,7 +606,7 @@ onUnmounted(() => {
             :aria-label="`${s.label} (открывается в новой вкладке)`"
             class="w-11 h-11 shrink-0 flex items-center justify-center rounded-full bg-white transition-opacity active:opacity-80"
           >
-            <img :src="s.icon" :alt="s.label" class="w-5 h-5" width="20" height="20" />
+            <img :src="s.icon" :alt="s.label" class="w-5 h-5" width="20" height="20" loading="eager" fetchpriority="high" />
           </a>
         </div>
 

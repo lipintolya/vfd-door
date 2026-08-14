@@ -11,9 +11,9 @@ const phone = companyLegalInfo.contacts.phone[0]!
 
 /* Мессенджеры — те же иконки/ссылки, что в шапке сайта (Header.vue SOCIAL_NETWORKS) */
 const SOCIAL_NETWORKS = [
-  { name: 'VK',       label: 'ВК',       url: 'https://vk.com/vfddoors74',              icon: '/svg/b_vk_logo.svg' },
-  { name: 'Telegram', label: 'Телеграм', url: 'https://t.me/vfddoors74',                icon: '/svg/b_tg_logo.svg' },
-  { name: 'MAX',      label: 'Макс',     url: 'https://max.ru/id452402308842_biz',      icon: '/svg/b_max_logo.svg' },
+  { name: 'VK',       label: 'ВК',       url: 'https://vk.com/vfddoors74',              icon: '/icons/b_vk_logo.webp' },
+  { name: 'Telegram', label: 'Телеграм', url: 'https://t.me/vfddoors74',                icon: '/icons/b_tg_logo.webp' },
+  { name: 'MAX',      label: 'Макс',     url: 'https://max.ru/id452402308842_biz',      icon: '/icons/b_max_logo.webp' },
 ] as const
 
 type View = 'outside' | 'render' | 'inside'
@@ -324,7 +324,7 @@ const toggleTab = (tab: InfoTab) => { infoTab.value = infoTab.value === tab ? nu
               :title="phone.label"
               class="flex flex-col items-center gap-1 active:scale-90"
             >
-              <img src="https://storage.yandexcloud.net/vfd74ru/svg/phone_call.svg" alt="" class="h-10 w-10" width="40" height="40" />
+              <img src="/icons/phone-call.webp" alt="" class="h-10 w-10" width="40" height="40" />
               <span class="text-[0.6875rem] font-medium text-slate-500">Звонок</span>
             </a>
           </div>

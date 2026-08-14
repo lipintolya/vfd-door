@@ -304,7 +304,7 @@ onUnmounted(() => {
                     class="calc-send__btn" aria-label="Отправить запрос в Telegram"
                     @click="copyCalcMessage"
                   >
-                    <img src="/svg/b_tg_logo.svg" alt="" width="20" height="20" />
+                    <img src="/icons/b_tg_logo.webp" alt="" width="20" height="20" />
                     Написать в Telegram
                   </a>
                 </div>

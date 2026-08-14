@@ -115,7 +115,7 @@ onUnmounted(() => {
                   aria-label="ВКонтакте (открывается в новой вкладке)"
                   class="opacity-60 hover:opacity-100 transition-opacity duration-200 block"
                 >
-                  <img src="/svg/w_vk.svg" alt="" class="w-6 h-6" width="24" height="24" />
+                  <img src="/icons/w_vk.webp" alt="" class="w-6 h-6" width="24" height="24" loading="eager" fetchpriority="high" />
                 </a>
               </div>
               <div role="listitem">
@@ -126,7 +126,7 @@ onUnmounted(() => {
                   aria-label="Telegram (открывается в новой вкладке)"
                   class="opacity-60 hover:opacity-100 transition-opacity duration-200 block"
                 >
-                  <img src="/svg/w_tg_logo.svg" alt="" class="w-6 h-6" width="24" height="24" />
+                  <img src="/svg/w_tg_logo.svg" alt="" class="w-6 h-6" width="24" height="24" loading="eager" fetchpriority="high" />
                 </a>
               </div>
               <div role="listitem">
@@ -137,7 +137,7 @@ onUnmounted(() => {
                   aria-label="Max (открывается в новой вкладке)"
                   class="opacity-60 hover:opacity-100 transition-opacity duration-200 block"
                 >
-                  <img src="/svg/w_max.svg" alt="" class="w-6 h-6" width="24" height="24" />
+                  <img src="/icons/w_max.webp" alt="" class="w-6 h-6" width="24" height="24" loading="eager" fetchpriority="high" />
                 </a>
               </div>
             </div>
