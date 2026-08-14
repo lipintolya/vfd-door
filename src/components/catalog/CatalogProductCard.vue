@@ -207,7 +207,7 @@ const madeToOrder = computed(() => isMadeToOrder(props.card.seriesSlug))
             </span>
           </p>
           <a
-            :href="`/models/${card.slug}`"
+            :href="`/models/${card.slug}/`"
             class="btn btn-outline shrink-0 justify-center px-4 py-2 text-sm after:absolute after:inset-0 after:content-['']"
             :aria-label="`${card.name} — подробнее`"
           >

@@ -47,18 +47,18 @@ const PHONE = '+79000297888'
 const TG    = 'https://t.me/vfddoors74'
 
 const WORKS_LIMIT = 4
-const ARCHIVE_HREF = '/catalog/skrytye-dveri/raboty'
+const ARCHIVE_HREF = '/catalog/skrytye-dveri/raboty/'
 const featuredWorks = INVISIBLE_WORKS.slice(0, WORKS_LIMIT)
 
 const fmt = (n: number) => n.toLocaleString('ru-RU') + ' ₽'
 
 const canonicalUrl = Astro.site
-  ? new URL('/catalog/skrytye-dveri', Astro.site).href
+  ? new URL('/catalog/skrytye-dveri/', Astro.site).href
   : undefined
 
 const breadcrumbItems = [
   { label: 'Главная', href: '/' },
-  { label: 'Каталог', href: '/catalog' },
+  { label: 'Каталог', href: '/catalog/' },
   { label: 'Скрытые двери' },
 ]
 
@@ -769,7 +769,7 @@ const structuredData = canonicalUrl ? [
           </p>
           <div class="sd-about__actions">
             <a href={TG} target="_blank" rel="noopener" class="btn btn-primary">Написать в Telegram</a>
-            <a href="/contacts" class="btn btn-outline">Контакты</a>
+            <a href="/contacts/" class="btn btn-outline">Контакты</a>
           </div>
         </div>
         <div class="sd-about__photo sd-about__photo--info">
@@ -836,9 +836,9 @@ const structuredData = canonicalUrl ? [
       </div>
 
       <nav class="sd-related" aria-label="Смежные разделы">
-        <a href="/catalog">Каталог дверей</a>
-        <a href="/partitions">Перегородки</a>
-        <a href="/contacts">Контакты</a>
+        <a href="/catalog/">Каталог дверей</a>
+        <a href="/partitions/">Перегородки</a>
+        <a href="/contacts/">Контакты</a>
       </nav>
     </div>
   </section>

@@ -31,7 +31,7 @@ const dateStr = (d: Date) => d.toLocaleDateString('ru-RU', { day: 'numeric', mon
         </div>
 
         <a
-          href="/articles"
+          href="/articles/"
           class="inline-flex w-fit shrink-0 items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition-colors hover:bg-teal-400"
         >
           Все статьи
@@ -50,7 +50,7 @@ const dateStr = (d: Date) => d.toLocaleDateString('ru-RU', { day: 'numeric', mon
           return (
             <li>
               <a
-                href={`/articles/${slug}`}
+                href={`/articles/${slug}/`}
                 class="group flex flex-col overflow-hidden rounded-3xl bg-[#1A191C] transition-colors duration-200 hover:bg-[#211F24] focus-visible:outline-2 focus-visible:outline-teal-400 focus-visible:outline-offset-2 sm:flex-row sm:items-center sm:gap-8 sm:p-6 lg:gap-12 lg:p-10"
               >
                 <div class="flex flex-1 flex-col p-6 sm:p-0">

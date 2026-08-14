@@ -56,7 +56,7 @@ const filtered = computed(() =>
       <a
         v-for="work in filtered"
         :key="work.id"
-        :href="`/portfolio/${work.id}`"
+        :href="`/portfolio/${work.id}/`"
         class="group relative block overflow-hidden rounded-2xl"
       >
         <div class="relative aspect-4/3 w-full overflow-hidden bg-slate-100 sm:aspect-3/4">
@@ -67,6 +67,9 @@ const filtered = computed(() =>
             decoding="async"
             class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
+          <span class="absolute top-3 right-3 rounded-full bg-black/55 backdrop-blur-sm px-2.5 py-1 text-xs font-semibold text-white shadow-sm">
+            {{ work.label }}
+          </span>
         </div>
         <div class="absolute inset-0 bg-linear-to-t from-black/80 via-black/25 to-transparent" />
         <div class="absolute bottom-0 left-0 right-0 p-4 sm:p-5">

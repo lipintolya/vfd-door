@@ -9,23 +9,23 @@ const year = new Date().getFullYear()
 
 const NAV_LINKS = [
   { href: '/',           label: 'Главная' },
-  { href: '/catalog',    label: 'Каталог' },
-  { href: '/partitions', label: 'Перегородки' },
-  { href: '/designers',  label: 'Дизайнерам' },
-  { href: '/about',      label: 'О нас' },
-  { href: '/contacts',   label: 'Контакты' },
+  { href: '/catalog/',    label: 'Каталог' },
+  { href: '/partitions/', label: 'Перегородки' },
+  { href: '/designers/',  label: 'Дизайнерам' },
+  { href: '/about/',      label: 'О нас' },
+  { href: '/contacts/',   label: 'Контакты' },
 ] as const
 
 const LEGAL_LINKS = [
-  { href: '/promo-archive', label: 'Архив акций' },
+  { href: '/promo-archive/', label: 'Архив акций' },
 ] as const
 
 const CATEGORY_LINKS = [
-  { href: '/catalog',                label: 'Межкомнатные' },
-  { href: '/catalog/skrytye-dveri',  label: 'Скрытые двери' },
-  { href: '/vhodnye-dveri',          label: 'Входные' },
-  { href: '/partitions',             label: 'Перегородки' },
-  { href: '/catalog/decor',          label: 'Декор' },
+  { href: '/catalog/',                label: 'Межкомнатные' },
+  { href: '/catalog/skrytye-dveri/',  label: 'Скрытые двери' },
+  { href: '/vhodnye-dveri/',          label: 'Входные' },
+  { href: '/partitions/',             label: 'Перегородки' },
+  { href: '/catalog/decor/',          label: 'Декор' },
 ] as const
 
 const CONTACTS = {
@@ -214,7 +214,7 @@ onUnmounted(() => {
                     text-xs text-white/40">
           <span>
             © {{ year }} VFD. Все права защищены.
-            <a href="/privacy" class="text-white/60 hover:text-white transition-colors duration-200 ml-3">
+            <a href="/privacy/" class="text-white/60 hover:text-white transition-colors duration-200 ml-3">
               Политика конфиденциальности
             </a>
             <a

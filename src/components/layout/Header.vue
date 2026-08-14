@@ -39,20 +39,20 @@ const CONTACTS = {
 }
 
 const NAV_LINKS = [
-  { href: '/',           label: 'Главная' },
-  { href: '/catalog',    label: 'Каталог' },
-  { href: '/partitions', label: 'Перегородки' },
-  { href: '/designers',  label: 'Дизайнерам' },
-  { href: '/about',      label: 'О нас' },
-  { href: '/contacts',   label: 'Контакты' },
+  { href: '/',            label: 'Главная' },
+  { href: '/catalog/',    label: 'Каталог' },
+  { href: '/partitions/', label: 'Перегородки' },
+  { href: '/designers/',  label: 'Дизайнерам' },
+  { href: '/about/',      label: 'О нас' },
+  { href: '/contacts/',   label: 'Контакты' },
 ] as const
 
 const CATALOG_DROPDOWN = [
-  { href: '/catalog',               label: 'Все двери',      desc: 'Межкомнатные' },
-  { href: '/catalog#series',        label: 'Серии',          desc: 'Все коллекции' },
-  { href: '/catalog/skrytye-dveri', label: 'Скрытые двери', desc: 'Скрытый монтаж' },
-  { href: '/vhodnye-dveri',         label: 'Входные двери', desc: 'С монтажом' },
-  { href: '/catalog/decor',         label: 'Декор',         desc: 'Плинтус, фрамуги, рейки' },
+  { href: '/catalog/',               label: 'Все двери',      desc: 'Межкомнатные' },
+  { href: '/catalog/#series',        label: 'Серии',          desc: 'Все коллекции' },
+  { href: '/catalog/skrytye-dveri/', label: 'Скрытые двери', desc: 'Скрытый монтаж' },
+  { href: '/vhodnye-dveri/',         label: 'Входные двери', desc: 'С монтажом' },
+  { href: '/catalog/decor/',         label: 'Декор',         desc: 'Плинтус, фрамуги, рейки' },
 ] as const
 
 const WORK_SCHEDULE = {
@@ -479,7 +479,7 @@ onUnmounted(() => {
                     </div>
 
                     <a
-                      href="/contacts"
+                      href="/contacts/"
                       class="btn btn-primary w-full justify-center inline-flex items-center"
                       @click="closeContacts(false)"
                     >

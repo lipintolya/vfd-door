@@ -38,12 +38,12 @@ const fmt = (n: number) => n.toLocaleString('ru-RU') + ' ₽'
 const PHONE = '+79000297888'
 const TG    = 'https://t.me/vfddoors74'
 
-const canonicalUrl = Astro.site ? new URL(`/catalog/series/${series.slug}`, Astro.site).href : undefined
+const canonicalUrl = Astro.site ? new URL(`/catalog/series/${series.slug}/`, Astro.site).href : undefined
 
 const breadcrumbItems = [
   { label: 'Главная', href: '/' },
-  { label: 'Каталог', href: '/catalog' },
-  { label: 'Серии',   href: '/catalog#series' },
+  { label: 'Каталог', href: '/catalog/' },
+  { label: 'Серии',   href: '/catalog/#series' },
   { label: series.name },
 ]
 

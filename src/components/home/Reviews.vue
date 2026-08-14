@@ -221,6 +221,11 @@ onUnmounted(() => {
             <span itemprop="name">{{ review.name }}</span>
           </span>
 
+          <!-- Что рецензируется — обязательное поле для валидности Review-разметки -->
+          <span itemprop="itemReviewed" itemscope itemtype="https://schema.org/LocalBusiness" class="hidden">
+            <span itemprop="name">ВФД (Фирменный салон Владимирской фабрики дверей)</span>
+          </span>
+
           <!-- Text -->
           <p
             class="line-clamp-6 flex-1 text-sm leading-relaxed text-slate-700"

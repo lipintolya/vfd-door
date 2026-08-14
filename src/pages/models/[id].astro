@@ -174,7 +174,7 @@ const accessoryGroups: [AccessoryCategory, typeof accessories][] = Object.entrie
   .sort(([a], [b]) => CATEGORY_ORDER.indexOf(a as AccessoryCategory) - CATEGORY_ORDER.indexOf(b as AccessoryCategory))
   .map(([category, items]) => [category as AccessoryCategory, items])
 
-const canonicalUrl  = Astro.site ? new URL(`/models/${slug}`, Astro.site).href : undefined
+const canonicalUrl  = Astro.site ? new URL(`/models/${slug}/`, Astro.site).href : undefined
 const priceStr      = minPrice ? `${minPrice.toLocaleString('ru-RU')} ₽` : ''
 const seriesPart    = seriesName ? `серия ${seriesName}` : ''
 const coatingPart   = coatingName
@@ -185,8 +185,8 @@ const pageDesc      = spec.description ||
 
 const breadcrumbs = [
   { label: 'Главная',  href: '/' },
-  { label: 'Каталог',  href: '/catalog' },
-  ...(seriesName ? [{ label: seriesName, href: `/catalog/series/${seriesSlug}` }] : []),
+  { label: 'Каталог',  href: '/catalog/' },
+  ...(seriesName ? [{ label: seriesName, href: `/catalog/series/${seriesSlug}/` }] : []),
   { label: model.name },
 ]
 
@@ -318,7 +318,7 @@ const structuredData = [breadcrumbSchema, {
               <a href="https://t.me/vfddoors74" target="_blank" rel="noopener" class="btn btn-primary">
                 Написать в Telegram
               </a>
-              <a href="/contacts" class="btn btn-outline">Контакты</a>
+              <a href="/contacts/" class="btn btn-outline">Контакты</a>
             </div>
           </div>
         </div>

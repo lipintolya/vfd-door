@@ -26,7 +26,7 @@ const totalWord = total === 1 ? 'фотоотчёт' : total < 5 ? 'фотоот
           </p>
         </div>
         <a
-          href="/portfolio"
+          href="/portfolio/"
           class="flex-none inline-flex items-center gap-2 rounded-full border-[1.5px] border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-900 hover:border-teal-500 hover:bg-teal-500 hover:text-white transition-colors duration-200"
         >
           Все работы
@@ -40,7 +40,7 @@ const totalWord = total === 1 ? 'фотоотчёт' : total < 5 ? 'фотоот
       <div class="portfolio-preview-grid">
         {preview.map((work, i) => (
           <a
-            href={`/portfolio/${work.id}`}
+            href={`/portfolio/${work.id}/`}
             class:list={['portfolio-preview-card', i === 0 && 'portfolio-preview-card--main', 'group']}
           >
             <img
@@ -51,6 +51,7 @@ const totalWord = total === 1 ? 'фотоотчёт' : total < 5 ? 'фотоот
               class="portfolio-preview-card__img"
             />
             <div class="portfolio-preview-card__overlay" />
+            <span class="portfolio-preview-card__date">{work.label}</span>
             <div class="portfolio-preview-card__meta">
               <span class:list={['inline-block text-[11px] font-semibold uppercase tracking-wider text-white px-2.5 py-1 rounded-full mb-2 shadow-sm', CATEGORY_BADGE_COLORS[work.category]]}>
                 {CATEGORY_LABELS[work.category]}
@@ -107,6 +108,18 @@ const totalWord = total === 1 ? 'фотоотчёт' : total < 5 ? 'фотоот
     position: absolute;
     inset: 0;
     background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.15) 50%, transparent 100%);
+  }
+  .portfolio-preview-card__date {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    border-radius: 9999px;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(4px);
+    padding: 0.25rem 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #fff;
   }
   .portfolio-preview-card__meta {
     position: absolute;
