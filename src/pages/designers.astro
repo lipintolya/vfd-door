@@ -17,6 +17,31 @@ const HERO_SLIDER_IMAGES = [
 ]
 const CATALOG_HREF = 'https://crm.vfd.ru/~W8Bcr'
 
+/* Перелинковка на товарные разделы — что ещё есть у ВФД для проектов */
+const crossLinks = [
+  {
+    title: 'Межкомнатные и входные двери',
+    desc: '80+ моделей в наличии, эмаль/ПЭТ/полипропилен, бесплатный замер',
+    image: 'https://storage.yandexcloud.net/vfd74ru/Main_page/left_bento/cover_doors.webp',
+    href: '/catalog/',
+    cta: 'Смотреть каталог',
+  },
+  {
+    title: 'Алюминиевые перегородки',
+    desc: 'Раздвижные и стационарные системы GRAFIA, 13+ цветов профиля',
+    image: 'https://storage.yandexcloud.net/catalog-vfd/catalog_preview/catalog-preview3.webp',
+    href: '/partitions/',
+    cta: 'Смотреть перегородки',
+  },
+  {
+    title: 'Декор: плинтус, фрамуги, рейки',
+    desc: 'Декоративные элементы в цвет дверей и интерьера',
+    image: 'https://storage.yandexcloud.net/vfd74ru/decor/render_framuga.webp',
+    href: '/catalog/decor/',
+    cta: 'Смотреть декор',
+  },
+]
+
 const heroStats = [
   { val: '150+',  lbl: 'реализованных проектов', desc: 'с дизайнерами и архитекторами Челябинска' },
   { val: 'Бонус', lbl: 'за реализованный проект', desc: 'размеры бонусов определяются при встрече с руководителем салона' },
@@ -274,6 +299,47 @@ const structuredData = canonicalUrl ? [
             <span class="block text-sm font-semibold text-ink mt-1.5 leading-snug">{s.lbl}</span>
             <span class="block text-xs text-slate-500 leading-snug mt-1">{s.desc}</span>
           </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       ЧТО ЕЩЁ ЕСТЬ У ВФД — перелинковка на товарные разделы
+  ══════════════════════════════════════════════ -->
+  <section class="section bg-white">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Каталог ВФД"
+        title="Больше решений для ваших проектов"
+        subtitle="Двери, алюминиевые перегородки и декор — с ценами, фото и техническими параметрами"
+      />
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 lg:gap-5">
+        {crossLinks.map(link => (
+          <a
+            href={link.href}
+            class="group relative flex min-h-70 flex-col justify-end overflow-hidden rounded-3xl no-underline focus-visible:outline-2 focus-visible:outline-teal-500 focus-visible:outline-offset-3"
+          >
+            <img
+              src={link.image}
+              alt=""
+              loading="lazy"
+              decoding="async"
+              class="absolute inset-0 h-full w-full object-cover transition-transform duration-600 ease-out group-hover:scale-[1.06]"
+              aria-hidden="true"
+            />
+            <div class="absolute inset-0 bg-linear-to-t from-black/80 via-black/25 to-transparent" aria-hidden="true"></div>
+            <div class="relative z-10 p-5 lg:p-6">
+              <h3 class="mb-1.5 text-xl font-medium leading-snug text-white">{link.title}</h3>
+              <p class="mb-4 text-sm leading-relaxed text-white/75">{link.desc}</p>
+              <span class="inline-flex items-center gap-1.5 rounded-full border border-white/50 px-4 py-2 text-sm font-semibold text-white transition-[background-color,border-color,transform] duration-200 ease-out group-hover:-translate-y-px group-hover:border-white group-hover:bg-white/15">
+                {link.cta}
+                <svg class="h-3.5 w-3.5 shrink-0 transition-transform duration-200 ease-out group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </div>
+          </a>
         ))}
       </div>
     </div>
