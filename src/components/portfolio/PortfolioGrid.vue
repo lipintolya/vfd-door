@@ -61,7 +61,7 @@ const filtered = computed(() =>
       >
         <div class="relative aspect-4/3 w-full overflow-hidden bg-slate-100 sm:aspect-3/4">
           <img
-            :src="work.images[0]"
+            :src="`/renders/portfolio/${work.id}.webp`"
             :alt="work.title"
             loading="lazy"
             decoding="async"

@@ -13,6 +13,7 @@
     "prerender": "astro build --experimental-rebalance-chunks",
     "sitemap": "echo 'Sitemap generation handled by astro-sitemap integration'",
     "gen:renders": "node scripts/gen-render-gallery.mjs",
+    "gen:portfolio-thumbs": "node scripts/gen-portfolio-thumbs.mjs",
     "deploy": "git push production main"
   },
   "dependencies": {

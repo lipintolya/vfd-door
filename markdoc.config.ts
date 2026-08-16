@@ -43,5 +43,12 @@ export default defineMarkdocConfig({
         tags:     { type: String },
       },
     },
+
+    // Слайдер реализованных проектов перегородок (кураторская подборка
+    // фото из cases в src/data/partitions.ts) — {% projectsSlider /%}
+    projectsSlider: {
+      render: component('./src/components/articles/ProjectsSlider.astro'),
+      selfClosing: true,
+    },
   },
 })

@@ -22,7 +22,7 @@ const blogPostingSchema = {
   '@type': 'BlogPosting',
   headline: article.data.title,
   description: article.data.description,
-  ...(article.data.coverImage ? { image: article.data.coverImage } : {}),
+  ...(article.data.coverImage ? { image: new URL(article.data.coverImage, Astro.site).href } : {}),
   datePublished: article.data.publishDate.toISOString(),
   author: {
     '@type': 'Organization',

@@ -44,7 +44,7 @@ const totalWord = total === 1 ? 'фотоотчёт' : total < 5 ? 'фотоот
             class:list={['portfolio-preview-card', i === 0 && 'portfolio-preview-card--main', 'group']}
           >
             <img
-              src={work.images[0]}
+              src={`/renders/portfolio/${work.id}.webp`}
               alt={work.title}
               loading={i === 0 ? 'eager' : 'lazy'}
               decoding="async"
