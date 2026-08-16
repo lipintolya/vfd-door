@@ -3,10 +3,10 @@ interface Props {
   title: string
   image?: string
   imageAlt?: string
-  tags?: string   // через запятую
+  tags?: string   // через запятую или «•»
 }
 const { title, image, imageAlt, tags } = Astro.props
-const tagList = tags ? tags.split(',').map((t) => t.trim()).filter(Boolean) : []
+const tagList = tags ? tags.split(/[,•]/).map((t) => t.trim()).filter(Boolean) : []
 ---
 
 <article class="dcard">

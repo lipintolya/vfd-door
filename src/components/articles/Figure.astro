@@ -1,4 +1,6 @@
 ---
+import FigureLightbox from './FigureLightbox.vue'
+
 interface Props {
   src: string
   alt?: string
@@ -10,13 +12,7 @@ const { src, alt = '', caption, wide = false } = Astro.props
 ---
 
 <figure class:list={['article-figure', wide && 'article-figure--wide']}>
-  <img
-    src={src}
-    alt={alt}
-    loading="lazy"
-    decoding="async"
-    class="w-full rounded-xl object-cover"
-  />
+  <FigureLightbox src={src} alt={alt} client:visible />
   {caption && (
     <figcaption class="mt-2 text-center text-sm text-slate-400">
       {caption}
