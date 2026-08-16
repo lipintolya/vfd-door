@@ -20,7 +20,7 @@ import IconExpand from '../components/ui/icons/IconExpand.astro'
 import {
   imgs, heroStats, tracks, mountings, colorSwatches, glassSwatches,
   partitionBenefits, steps, sectionalModels, sectionalDecor, overlayModels, overlayDecor, cases,
-  renderGallery,
+  renderGallery, aspenCase,
 } from '../data/partitions'
 import '../styles/partitions.css'
 
@@ -464,6 +464,9 @@ const renderLightbox = renderGallery
       </p>
     </div>
   </section>
+
+  <!-- СПОТЛАЙТ: система Aspen -->
+  <ProjectCase data={aspenCase} />
 
   <!-- CTA -->
   <section class="section pt-tint">
