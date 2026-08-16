@@ -5,13 +5,15 @@ interface Props {
   src: string
   alt?: string
   caption?: string
-  wide?: boolean  // выходит за пределы колонки текста на широких экранах
+  /** @deprecated фото больше не выходит за пределы колонки текста — проп оставлен,
+      чтобы не трогать существующий контент статей, но ни на что не влияет. */
+  wide?: boolean
 }
 
-const { src, alt = '', caption, wide = false } = Astro.props
+const { src, alt = '', caption } = Astro.props
 ---
 
-<figure class:list={['article-figure', wide && 'article-figure--wide']}>
+<figure class="article-figure">
   <FigureLightbox src={src} alt={alt} client:visible />
   {caption && (
     <figcaption class="mt-2 text-center text-sm text-slate-400">
@@ -23,12 +25,5 @@ const { src, alt = '', caption, wide = false } = Astro.props
 <style>
 .article-figure {
   margin: 2rem 0;
-}
-/* Широкий вариант — немного выходит за колонку */
-@media (min-width: 768px) {
-  .article-figure--wide {
-    margin-left: -3rem;
-    margin-right: -3rem;
-  }
 }
 </style>

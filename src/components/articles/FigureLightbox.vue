@@ -83,6 +83,7 @@ onBeforeUnmount(() => {
 .fig-zoom-img {
   display: block;
   width: 100%;
+  aspect-ratio: 21 / 9;
   border-radius: 0.75rem;
   object-fit: cover;
 }
