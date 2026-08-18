@@ -309,16 +309,6 @@
         </div>
       </div>
 
-      <!-- Следующий шаг -->
-      <div class="mt-8 flex flex-wrap items-center gap-3 rounded-lg bg-gray-50 p-6">
-        <p class="text-sm text-gray-600 mr-auto">Готовы выбрать двери или перегородки?</p>
-        <a href="/catalog/" class="inline-flex items-center gap-2 rounded-full bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-gray-700">
-          Смотреть каталог
-        </a>
-        <a href="/portfolio/" class="inline-flex items-center gap-2 rounded-full border border-gray-300 px-5 py-2.5 text-sm font-semibold text-gray-900 transition-colors hover:border-teal-500 hover:text-teal-600">
-          Наши работы
-        </a>
-      </div>
     </div>
   </section>
 </template>

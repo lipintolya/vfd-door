@@ -13,6 +13,7 @@ import ProcessSteps from '../components/partitions/ProcessSteps.astro'
 import Downloads from '../components/partitions/Downloads.astro'
 import SectionNav from '../components/partitions/SectionNav.astro'
 import ReplayButton from '../components/partitions/ReplayButton.astro'
+import QuoteCta from '../components/ui/QuoteCta.astro'
 import IconArrowRight from '../components/ui/icons/IconArrowRight.astro'
 import IconTelegram from '../components/ui/icons/IconTelegram.astro'
 import IconExpand from '../components/ui/icons/IconExpand.astro'
@@ -471,30 +472,12 @@ const renderLightbox = renderGallery
   <!-- CTA -->
   <section class="section pt-tint">
     <div class="container">
-      <div class="pt-cta">
-        <div class="pt-cta__text">
-          <h2 class="t-h2 m-0 text-white tracking-[-0.02em]">Рассчитаем стоимость бесплатно</h2>
-          <p class="m-0 text-sm leading-relaxed text-white/82">
-            Специалист выедет на замер, составит проект и коммерческое предложение за один рабочий день
-          </p>
-        </div>
-        <div class="pt-cta__media">
-          <img
-            src="https://storage.yandexcloud.net/catalog-vfd/alum/rener-2.webp"
-            alt=""
-            role="presentation"
-            class="pt-cta__img"
-            loading="lazy"
-            decoding="async"
-            width="600"
-            height="400"
-          />
-          <div class="pt-cta__btns">
-            <a href="https://t.me/vfddoors74" target="_blank" rel="noopener" class="btn btn-ghost">Получить расчёт</a>
-            <a href="/contacts/" class="btn btn-ghost">Написать нам</a>
-          </div>
-        </div>
-      </div>
+      <QuoteCta
+        image="https://storage.yandexcloud.net/catalog-vfd/alum/rener-2.webp"
+        primaryHref="https://t.me/vfddoors74"
+        secondaryHref="/contacts/"
+        secondaryLabel="Написать нам"
+      />
     </div>
   </section>
 
