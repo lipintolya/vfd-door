@@ -37,12 +37,18 @@ export const companyLegalInfo = {
     fss_number: '1273789246',
   },
 
-  // Время работы (летний график)
+  // Время работы (летний график: июнь–август)
   workingHours: {
     summer: {
       weekdays: { opens: '10:00', closes: '20:00', label: 'Пн–Пт: 10:00–20:00' },
       saturday: { opens: '11:00', closes: '16:00', label: 'Сб: 11:00–16:00' },
       sunday: { label: 'Вс: выходной', note: 'По предварительной записи' },
+    },
+    // Зимний график: сентябрь–май
+    winter: {
+      weekdays: { opens: '10:00', closes: '20:00', label: 'Пн–Пт: 10:00–20:00' },
+      saturday: { opens: '10:00', closes: '18:00', label: 'Сб: 10:00–18:00' },
+      sunday: { opens: '10:00', closes: '18:00', label: 'Вс: 10:00–18:00' },
     },
     shortDisplay: 'Пн–Пт: 10:00–20:00, Сб: 11:00–16:00',
   },

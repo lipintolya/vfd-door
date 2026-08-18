@@ -8,17 +8,30 @@
             <h1 class="text-4xl lg:text-5xl font-medium mb-4 text-gray-900">Контакты</h1>
             <p class="text-lg text-gray-600 mb-1">Свяжитесь с нами удобным способом</p>
             <p class="text-sm text-gray-500 mb-6">Консультации и бесплатный выезд замерщика — по Челябинску и области</p>
-            <a
-              href="https://t.me/vfddoors74"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 rounded-full bg-teal-500 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-teal-600"
-            >
-              Написать в Telegram
-              <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </a>
+            <div class="flex flex-wrap gap-3">
+              <a
+                href="https://t.me/vfddoors74"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-2 rounded-full bg-gray-900 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-gray-700"
+              >
+                Написать в Telegram
+                <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+              <a
+                href="https://max.ru/id452402308842_biz"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-2 rounded-full bg-gray-900 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-gray-700"
+              >
+                Написать в MAX
+                <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
           </div>
 
           <!-- Телефоны -->
@@ -64,24 +77,46 @@
 
           <!-- Время работы -->
           <div class="mb-8">
-            <h3 class="text-sm uppercase tracking-widest text-gray-500 font-semibold mb-4">Часы работы (летний график)</h3>
-            <div class="space-y-2 p-4 bg-gray-50 rounded-lg">
-              <div class="flex justify-between">
-                <span class="text-gray-600">Пн–Пт</span>
-                <span class="font-semibold text-gray-900">10:00–20:00</span>
+            <h3 class="text-sm uppercase tracking-widest text-gray-500 font-semibold mb-4">Часы работы</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="p-4 bg-gray-50 rounded-lg">
+                <p class="text-xs font-semibold uppercase tracking-wide text-teal-600 mb-3">Июнь – август</p>
+                <div class="space-y-2">
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">Пн–Пт</span>
+                    <span class="font-semibold text-gray-900">10:00–20:00</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">Сб</span>
+                    <span class="font-semibold text-gray-900">11:00–16:00</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">Вс</span>
+                    <span class="font-semibold text-gray-900">Выходной</span>
+                  </div>
+                </div>
               </div>
-              <div class="flex justify-between">
-                <span class="text-gray-600">Сб</span>
-                <span class="font-semibold text-gray-900">11:00–16:00</span>
+              <div class="p-4 bg-gray-50 rounded-lg">
+                <p class="text-xs font-semibold uppercase tracking-wide text-teal-600 mb-3">Сентябрь – май</p>
+                <div class="space-y-2">
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">Пн–Пт</span>
+                    <span class="font-semibold text-gray-900">10:00–20:00</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">Сб</span>
+                    <span class="font-semibold text-gray-900">10:00–18:00</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">Вс</span>
+                    <span class="font-semibold text-gray-900">10:00–18:00</span>
+                  </div>
+                </div>
               </div>
-              <div class="flex justify-between">
-                <span class="text-gray-600">Вс</span>
-                <span class="font-semibold text-gray-900">Выходной</span>
-              </div>
-              <p class="text-xs text-gray-500 mt-3 pt-3 border-t border-gray-200">
-                По выходным возможна консультация и посещение по предварительной записи
-              </p>
             </div>
+            <p class="text-xs text-gray-500 mt-3">
+              По выходным вне графика возможна консультация и посещение по предварительной записи
+            </p>
           </div>
 
           <!-- Социальные сети -->
@@ -226,25 +261,70 @@
 
       <!-- Дополнительная информация -->
       <div class="mt-16 pt-12 border-t border-gray-200">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div>
-            <h4 class="font-semibold text-gray-900 mb-2">Консультации</h4>
-            <p class="text-gray-600 text-sm">
-              Бесплатная консультация специалиста по подбору дверей и перегородок
-            </p>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 mb-2">Замеры</h4>
-            <p class="text-gray-600 text-sm">
-              Бесплатный выезд мастера для замера при заказе дверей или перегородок
-            </p>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 mb-2">Гарантия</h4>
-            <p class="text-gray-600 text-sm">
-              Гарантия на монтажные работы - 12 месяцев, на двери согласно условиям производителя
-            </p>
-          </div>
+        <h3 class="text-2xl font-medium text-gray-900 mb-6">Что вы получаете</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <article class="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-shadow duration-200 hover:shadow-lg">
+            <div class="relative aspect-4/3 overflow-hidden bg-gray-100">
+              <img
+                src="https://storage.yandexcloud.net/catalog-vfd/designers/covers_second_block/designer_render.webp"
+                alt=""
+                loading="lazy"
+                decoding="async"
+                class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div class="absolute inset-0 bg-linear-to-t from-black/65 via-transparent to-transparent" aria-hidden="true" />
+              <span class="absolute left-4 bottom-4 inline-flex items-center rounded-full bg-teal-500 px-3 py-1 text-xs font-semibold text-white">
+                Консультации
+              </span>
+            </div>
+            <div class="p-5">
+              <p class="text-sm leading-relaxed text-gray-600">
+                Бесплатная консультация специалиста по подбору дверей и перегородок
+              </p>
+            </div>
+          </article>
+
+          <article class="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-shadow duration-200 hover:shadow-lg">
+            <div class="relative aspect-4/3 overflow-hidden bg-gray-100">
+              <img
+                src="https://storage.yandexcloud.net/catalog-vfd/designers/covers_second_block/tz_render.webp"
+                alt=""
+                loading="lazy"
+                decoding="async"
+                class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div class="absolute inset-0 bg-linear-to-t from-black/65 via-transparent to-transparent" aria-hidden="true" />
+              <span class="absolute left-4 bottom-4 inline-flex items-center rounded-full bg-amber-500 px-3 py-1 text-xs font-semibold text-white">
+                Замеры
+              </span>
+            </div>
+            <div class="p-5">
+              <p class="text-sm leading-relaxed text-gray-600">
+                Бесплатный выезд мастера для замера при заказе дверей или перегородок
+              </p>
+            </div>
+          </article>
+
+          <article class="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-shadow duration-200 hover:shadow-lg">
+            <div class="relative aspect-4/3 overflow-hidden bg-gray-100">
+              <img
+                src="https://storage.yandexcloud.net/catalog-vfd/designers/covers_second_block/dogovor_render.webp"
+                alt=""
+                loading="lazy"
+                decoding="async"
+                class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div class="absolute inset-0 bg-linear-to-t from-black/65 via-transparent to-transparent" aria-hidden="true" />
+              <span class="absolute left-4 bottom-4 inline-flex items-center rounded-full bg-indigo-500 px-3 py-1 text-xs font-semibold text-white">
+                Гарантия
+              </span>
+            </div>
+            <div class="p-5">
+              <p class="text-sm leading-relaxed text-gray-600">
+                Гарантия на монтажные работы — 12 месяцев, на двери согласно условиям производителя
+              </p>
+            </div>
+          </article>
         </div>
       </div>
 
