@@ -265,53 +265,44 @@
       <div class="mt-16 pt-12 border-t border-gray-200">
         <h3 class="text-2xl font-medium text-gray-900 mb-6">Что вы получаете</h3>
         <div class="wtg-stack">
-          <article class="wtg-card" style="--wtg-i: 0">
-            <img
-              src="https://storage.yandexcloud.net/catalog-vfd/designers/covers_second_block/designer_render.webp"
-              alt=""
-              loading="lazy"
-              decoding="async"
-              class="wtg-card__img"
-            />
-            <div class="wtg-card__overlay" aria-hidden="true" />
+          <article class="wtg-card wtg-card--1" style="--wtg-i: 0">
             <div class="wtg-card__body">
-              <span class="wtg-card__badge">Консультации</span>
+              <h4 class="wtg-card__title">Бесплатные консультации</h4>
+              <div class="wtg-card__tags">
+                <span>Подбор моделей</span>
+                <span>Образцы покрытий</span>
+                <span>Помощь дизайнера</span>
+              </div>
               <p class="wtg-card__text">
-                Бесплатная консультация специалиста по подбору дверей и перегородок
+                Специалист салона поможет подобрать модель, покрытие и цвет под ваш интерьер и бюджет — вживую, с образцами материалов на руках. Консультация ни к чему не обязывает.
               </p>
             </div>
           </article>
 
-          <article class="wtg-card" style="--wtg-i: 1">
-            <img
-              src="https://storage.yandexcloud.net/catalog-vfd/designers/covers_second_block/tz_render.webp"
-              alt=""
-              loading="lazy"
-              decoding="async"
-              class="wtg-card__img"
-            />
-            <div class="wtg-card__overlay" aria-hidden="true" />
+          <article class="wtg-card wtg-card--2" style="--wtg-i: 1">
             <div class="wtg-card__body">
-              <span class="wtg-card__badge">Замеры</span>
+              <h4 class="wtg-card__title">Бесплатный выезд на замер</h4>
+              <div class="wtg-card__tags">
+                <span>Челябинск и область</span>
+                <span>Точные размеры</span>
+                <span>Без обязательств</span>
+              </div>
               <p class="wtg-card__text">
-                Бесплатный выезд мастера для замера при заказе дверей или перегородок
+                Мастер выезжает на объект, снимает точные размеры проёма и учитывает особенности стен — от этого зависят итоговая смета и корректность монтажа. Выезд бесплатный независимо от того, оформите вы заказ или нет.
               </p>
             </div>
           </article>
 
-          <article class="wtg-card" style="--wtg-i: 2">
-            <img
-              src="https://storage.yandexcloud.net/catalog-vfd/designers/covers_second_block/dogovor_render.webp"
-              alt=""
-              loading="lazy"
-              decoding="async"
-              class="wtg-card__img"
-            />
-            <div class="wtg-card__overlay" aria-hidden="true" />
+          <article class="wtg-card wtg-card--3" style="--wtg-i: 2">
             <div class="wtg-card__body">
-              <span class="wtg-card__badge">Гарантия</span>
+              <h4 class="wtg-card__title">Гарантия на монтаж и материалы</h4>
+              <div class="wtg-card__tags">
+                <span>12 месяцев на работы</span>
+                <span>Гарантия производителя</span>
+                <span>Постгарантийная поддержка</span>
+              </div>
               <p class="wtg-card__text">
-                Гарантия на монтажные работы — 12 месяцев, на двери согласно условиям производителя
+                На монтажные работы даём гарантию 12 месяцев, на сами двери и перегородки — по условиям производителя. Если после установки что-то потребует внимания, обращайтесь напрямую в салон, без посредников.
               </p>
             </div>
           </article>
@@ -360,46 +351,49 @@
   justify-content: flex-end;
   overflow: hidden;
   border-radius: 1.5rem;
-  min-height: 22rem;
-  background: #1a1a1c;
+  min-height: 20rem;
   box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.35);
 }
-.wtg-card__img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: grayscale(85%) contrast(1.05) brightness(0.9);
-}
-.wtg-card__overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.25) 55%, rgba(0, 0, 0, 0.05) 100%);
-}
+/* Оттенки серого вместо фото — каждая карточка своим тоном */
+.wtg-card--1 { background: #3a3a3d; }
+.wtg-card--2 { background: #29292b; }
+.wtg-card--3 { background: #18181a; }
+
 .wtg-card__body {
   position: relative;
   z-index: 1;
-  padding: 1.5rem;
+  padding: 2rem;
 }
-.wtg-card__badge {
+.wtg-card__title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+.wtg-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+.wtg-card__tags span {
   display: inline-flex;
   align-items: center;
   border-radius: 9999px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(6px);
-  padding: 0.375rem 0.875rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.3rem 0.75rem;
   font-size: 0.75rem;
   font-weight: 600;
-  color: #fff;
-  margin-bottom: 0.75rem;
+  color: rgba(255, 255, 255, 0.9);
+  white-space: nowrap;
 }
 .wtg-card__text {
   font-size: 0.9375rem;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.85);
-  max-width: 32rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.65);
+  max-width: 34rem;
 }
 
 @media (max-width: 767px) {
@@ -412,7 +406,7 @@
     position: sticky;
     top: calc(5.5rem + var(--wtg-i) * 1.75rem);
     z-index: calc(var(--wtg-i) + 1);
-    min-height: 18rem;
+    min-height: 16rem;
     margin-bottom: 1.75rem;
   }
 }
