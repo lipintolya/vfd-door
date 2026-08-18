@@ -78,45 +78,47 @@
           <!-- Время работы -->
           <div class="mb-8">
             <h3 class="text-sm uppercase tracking-widest text-gray-500 font-semibold mb-4">Часы работы</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div class="p-4 bg-gray-50 rounded-lg">
-                <p class="text-xs font-semibold uppercase tracking-wide text-teal-600 mb-3">Июнь – август</p>
-                <div class="space-y-2">
-                  <div class="flex justify-between">
-                    <span class="text-gray-600">Пн–Пт</span>
-                    <span class="font-semibold text-gray-900">10:00–20:00</span>
+            <div class="rounded-3xl bg-fg p-6 lg:p-8">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                <div>
+                  <p class="text-xs font-semibold uppercase tracking-widest text-teal-400 mb-4">Июнь – август</p>
+                  <div class="space-y-3">
+                    <div class="flex items-baseline justify-between gap-3">
+                      <span class="text-sm text-white/55">Пн–Пт</span>
+                      <span class="text-2xl font-medium text-white tracking-tight tabular-nums">10:00–20:00</span>
+                    </div>
+                    <div class="flex items-baseline justify-between gap-3">
+                      <span class="text-sm text-white/55">Сб</span>
+                      <span class="text-2xl font-medium text-white tracking-tight tabular-nums">11:00–16:00</span>
+                    </div>
+                    <div class="flex items-baseline justify-between gap-3">
+                      <span class="text-sm text-white/55">Вс</span>
+                      <span class="text-2xl font-medium text-white tracking-tight">Выходной</span>
+                    </div>
                   </div>
-                  <div class="flex justify-between">
-                    <span class="text-gray-600">Сб</span>
-                    <span class="font-semibold text-gray-900">11:00–16:00</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-gray-600">Вс</span>
-                    <span class="font-semibold text-gray-900">Выходной</span>
+                </div>
+                <div>
+                  <p class="text-xs font-semibold uppercase tracking-widest text-teal-400 mb-4">Сентябрь – май</p>
+                  <div class="space-y-3">
+                    <div class="flex items-baseline justify-between gap-3">
+                      <span class="text-sm text-white/55">Пн–Пт</span>
+                      <span class="text-2xl font-medium text-white tracking-tight tabular-nums">10:00–20:00</span>
+                    </div>
+                    <div class="flex items-baseline justify-between gap-3">
+                      <span class="text-sm text-white/55">Сб</span>
+                      <span class="text-2xl font-medium text-white tracking-tight tabular-nums">10:00–18:00</span>
+                    </div>
+                    <div class="flex items-baseline justify-between gap-3">
+                      <span class="text-sm text-white/55">Вс</span>
+                      <span class="text-2xl font-medium text-white tracking-tight tabular-nums">10:00–18:00</span>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="p-4 bg-gray-50 rounded-lg">
-                <p class="text-xs font-semibold uppercase tracking-wide text-teal-600 mb-3">Сентябрь – май</p>
-                <div class="space-y-2">
-                  <div class="flex justify-between">
-                    <span class="text-gray-600">Пн–Пт</span>
-                    <span class="font-semibold text-gray-900">10:00–20:00</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-gray-600">Сб</span>
-                    <span class="font-semibold text-gray-900">10:00–18:00</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-gray-600">Вс</span>
-                    <span class="font-semibold text-gray-900">10:00–18:00</span>
-                  </div>
-                </div>
-              </div>
+              <p class="mt-6 pt-6 border-t border-white/10 text-xs text-white/50">
+                По выходным вне графика возможна консультация и посещение по предварительной записи
+              </p>
             </div>
-            <p class="text-xs text-gray-500 mt-3">
-              По выходным вне графика возможна консультация и посещение по предварительной записи
-            </p>
           </div>
 
           <!-- Социальные сети -->
