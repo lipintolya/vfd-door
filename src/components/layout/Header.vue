@@ -311,7 +311,7 @@ onUnmounted(() => {
 
             <!-- Обычная ссылка -->
             <a
-              v-if="link.href !== '/catalog'"
+              v-if="link.href !== '/catalog/'"
               :href="link.href"
               class="transition-colors duration-200"
               :class="isActive(link.href)
@@ -627,7 +627,7 @@ onUnmounted(() => {
                 </svg>
               </a>
               <!-- Подразделы каталога -->
-              <ul v-if="link.href === '/catalog'" class="mb-3 -mt-1 space-y-0.5" role="list">
+              <ul v-if="link.href === '/catalog/'" class="mb-3 -mt-1 space-y-0.5" role="list">
                 <li v-for="item in CATALOG_DROPDOWN" :key="item.href">
                   <a
                     :href="item.href"
