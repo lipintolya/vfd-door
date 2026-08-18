@@ -261,68 +261,56 @@
         </div>
       </div>
 
-      <!-- Дополнительная информация -->
+      <!-- Дополнительная информация — стек карточек, "переворот" на скролле (мобайл) -->
       <div class="mt-16 pt-12 border-t border-gray-200">
         <h3 class="text-2xl font-medium text-gray-900 mb-6">Что вы получаете</h3>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-          <article class="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-shadow duration-200 hover:shadow-lg">
-            <div class="relative aspect-4/3 overflow-hidden bg-gray-100">
-              <img
-                src="https://storage.yandexcloud.net/catalog-vfd/designers/covers_second_block/designer_render.webp"
-                alt=""
-                loading="lazy"
-                decoding="async"
-                class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-              <div class="absolute inset-0 bg-linear-to-t from-black/65 via-transparent to-transparent" aria-hidden="true" />
-              <span class="absolute left-4 bottom-4 inline-flex items-center rounded-full bg-teal-500 px-3 py-1 text-xs font-semibold text-white">
-                Консультации
-              </span>
-            </div>
-            <div class="p-5">
-              <p class="text-sm leading-relaxed text-gray-600">
+        <div class="wtg-stack">
+          <article class="wtg-card" style="--wtg-i: 0">
+            <img
+              src="https://storage.yandexcloud.net/catalog-vfd/designers/covers_second_block/designer_render.webp"
+              alt=""
+              loading="lazy"
+              decoding="async"
+              class="wtg-card__img"
+            />
+            <div class="wtg-card__overlay" aria-hidden="true" />
+            <div class="wtg-card__body">
+              <span class="wtg-card__badge">Консультации</span>
+              <p class="wtg-card__text">
                 Бесплатная консультация специалиста по подбору дверей и перегородок
               </p>
             </div>
           </article>
 
-          <article class="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-shadow duration-200 hover:shadow-lg">
-            <div class="relative aspect-4/3 overflow-hidden bg-gray-100">
-              <img
-                src="https://storage.yandexcloud.net/catalog-vfd/designers/covers_second_block/tz_render.webp"
-                alt=""
-                loading="lazy"
-                decoding="async"
-                class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-              <div class="absolute inset-0 bg-linear-to-t from-black/65 via-transparent to-transparent" aria-hidden="true" />
-              <span class="absolute left-4 bottom-4 inline-flex items-center rounded-full bg-amber-500 px-3 py-1 text-xs font-semibold text-white">
-                Замеры
-              </span>
-            </div>
-            <div class="p-5">
-              <p class="text-sm leading-relaxed text-gray-600">
+          <article class="wtg-card" style="--wtg-i: 1">
+            <img
+              src="https://storage.yandexcloud.net/catalog-vfd/designers/covers_second_block/tz_render.webp"
+              alt=""
+              loading="lazy"
+              decoding="async"
+              class="wtg-card__img"
+            />
+            <div class="wtg-card__overlay" aria-hidden="true" />
+            <div class="wtg-card__body">
+              <span class="wtg-card__badge">Замеры</span>
+              <p class="wtg-card__text">
                 Бесплатный выезд мастера для замера при заказе дверей или перегородок
               </p>
             </div>
           </article>
 
-          <article class="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-shadow duration-200 hover:shadow-lg">
-            <div class="relative aspect-4/3 overflow-hidden bg-gray-100">
-              <img
-                src="https://storage.yandexcloud.net/catalog-vfd/designers/covers_second_block/dogovor_render.webp"
-                alt=""
-                loading="lazy"
-                decoding="async"
-                class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-              <div class="absolute inset-0 bg-linear-to-t from-black/65 via-transparent to-transparent" aria-hidden="true" />
-              <span class="absolute left-4 bottom-4 inline-flex items-center rounded-full bg-indigo-500 px-3 py-1 text-xs font-semibold text-white">
-                Гарантия
-              </span>
-            </div>
-            <div class="p-5">
-              <p class="text-sm leading-relaxed text-gray-600">
+          <article class="wtg-card" style="--wtg-i: 2">
+            <img
+              src="https://storage.yandexcloud.net/catalog-vfd/designers/covers_second_block/dogovor_render.webp"
+              alt=""
+              loading="lazy"
+              decoding="async"
+              class="wtg-card__img"
+            />
+            <div class="wtg-card__overlay" aria-hidden="true" />
+            <div class="wtg-card__body">
+              <span class="wtg-card__badge">Гарантия</span>
+              <p class="wtg-card__text">
                 Гарантия на монтажные работы — 12 месяцев, на двери согласно условиям производителя
               </p>
             </div>
@@ -358,5 +346,86 @@
   .section {
     padding: 2rem 1rem;
   }
+}
+
+/* ── «Что вы получаете» — стек карточек ──
+   Мобайл: карточки залипают (position: sticky) на разных отступах сверху
+   и с ростом z-index — при скролле каждая следующая карточка наезжает на
+   предыдущую, оставляя виден верхний край с бейджем (эффект "переворота
+   колоды"). Десктоп: обычная сетка в 3 колонки, без sticky. */
+.wtg-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  min-height: 22rem;
+  background: #1a1a1c;
+  box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.35);
+}
+.wtg-card__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(85%) contrast(1.05) brightness(0.9);
+}
+.wtg-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.25) 55%, rgba(0, 0, 0, 0.05) 100%);
+}
+.wtg-card__body {
+  position: relative;
+  z-index: 1;
+  padding: 1.5rem;
+}
+.wtg-card__badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(6px);
+  padding: 0.375rem 0.875rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 0.75rem;
+}
+.wtg-card__text {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 32rem;
+}
+
+@media (max-width: 767px) {
+  .wtg-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .wtg-card {
+    position: sticky;
+    top: calc(5.5rem + var(--wtg-i) * 1.75rem);
+    z-index: calc(var(--wtg-i) + 1);
+    min-height: 18rem;
+    margin-bottom: 1.75rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .wtg-stack {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wtg-card { transition: none; }
 }
 </style>
