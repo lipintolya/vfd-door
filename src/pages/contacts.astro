@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
+import Breadcrumbs from '../components/ui/Breadcrumbs.astro'
+import FaqAccordion from '../components/ui/FaqAccordion.astro'
 import ContactsSection from '../components/contacts/ContactsSection.vue'
 import { companyLegalInfo } from '../lib/contacts-data'
 
@@ -54,11 +56,76 @@ const localBusinessSchema = {
   acceptsPaymentMethod: ['Cash', 'CreditCard', 'DebitCard'],
   sameAs: [
     'https://wa.me/79000297888',
-    'https://t.me/vfd74',
+    'https://t.me/vfddoors74',
+    'https://vk.com/vfddoors74',
+    'https://max.ru/id452402308842_biz',
   ],
 }
+
+const breadcrumbItems = [
+  { label: 'Главная', href: '/' },
+  { label: 'Контакты' },
+]
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: breadcrumbItems.map((item, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: item.label,
+    ...(item.href ? { item: new URL(item.href, 'https://vfd74.ru').href } : {}),
+  })),
+}
+
+const faq = [
+  {
+    q: 'Нужно ли записываться заранее, чтобы приехать в салон?',
+    a: 'Нет, предварительная запись не обязательна — заходите в рабочие часы. Если хотите, чтобы вас проконсультировал конкретный специалист или показал образцы под ваш проект, удобнее предупредить заранее в Telegram.',
+  },
+  {
+    q: 'Работаете ли вы в выходные?',
+    a: 'В воскресенье салон закрыт для свободного посещения, но по предварительной записи возможна консультация и показ образцов. В субботу салон работает с 11:00 до 16:00.',
+  },
+  {
+    q: 'Есть ли парковка у салона?',
+    a: 'Да, у здания на Братьев Кашириных, 131Б есть места для парковки. Вход в салон — со стороны улицы Чичерина.',
+  },
+  {
+    q: 'Выезжаете ли вы на замер за пределы Челябинска?',
+    a: 'Да, замерщик выезжает бесплатно по Челябинску и Челябинской области — уточните адрес объекта у менеджера при обращении.',
+  },
+  {
+    q: 'Как быстрее всего получить консультацию?',
+    a: 'Быстрее всего — написать в Telegram или позвонить по основному номеру. Отвечаем в мессенджере в течение рабочего дня.',
+  },
+]
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+}
+
+const structuredData = [localBusinessSchema, breadcrumbSchema, faqSchema]
 ---
 
-<BaseLayout title={title} description={description} structuredData={localBusinessSchema}>
+<BaseLayout title={title} description={description} structuredData={structuredData}>
+  <div class="breadcrumb-bar">
+    <div class="container">
+      <Breadcrumbs items={breadcrumbItems} />
+    </div>
+  </div>
+
   <ContactsSection client:visible />
+
+  <section class="section pt-0">
+    <div class="container">
+      <FaqAccordion items={faq} />
+    </div>
+  </section>
 </BaseLayout>

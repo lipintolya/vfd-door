@@ -6,7 +6,19 @@
         <div>
           <div class="mb-12">
             <h1 class="text-4xl lg:text-5xl font-medium mb-4 text-gray-900">Контакты</h1>
-            <p class="text-lg text-gray-600">Свяжитесь с нами удобным способом</p>
+            <p class="text-lg text-gray-600 mb-1">Свяжитесь с нами удобным способом</p>
+            <p class="text-sm text-gray-500 mb-6">Консультации и бесплатный выезд замерщика — по Челябинску и области</p>
+            <a
+              href="https://t.me/vfddoors74"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 rounded-full bg-teal-500 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-teal-600"
+            >
+              Написать в Telegram
+              <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
           </div>
 
           <!-- Телефоны -->
@@ -43,7 +55,7 @@
               href="mailto:vfddoors74@mail.ru"
               class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors group"
             >
-              <img src="https://storage.yandexcloud.net/vfd74ru/svg/email_cover.svg" alt="" class="w-9 h-9 shrink-0" />
+              <img src="/icons/email_cover.webp" alt="" class="w-9 h-9 shrink-0" loading="eager" />
               <div>
                 <p class="font-semibold text-gray-900 group-hover:text-teal-600 transition-colors">vfddoors74@mail.ru</p>
               </div>
@@ -101,7 +113,7 @@
                 class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors"
                 aria-label="Max"
               >
-                <img src="https://storage.yandexcloud.net/catalog-vfd/svg/max-logo.svg" alt="Max" class="w-6 h-6" />
+                <img src="/icons/max-logo.webp" alt="Max" class="w-6 h-6" loading="lazy" />
               </a>
             </div>
           </div>
@@ -234,6 +246,17 @@
             </p>
           </div>
         </div>
+      </div>
+
+      <!-- Следующий шаг -->
+      <div class="mt-8 flex flex-wrap items-center gap-3 rounded-lg bg-gray-50 p-6">
+        <p class="text-sm text-gray-600 mr-auto">Готовы выбрать двери или перегородки?</p>
+        <a href="/catalog/" class="inline-flex items-center gap-2 rounded-full bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-gray-700">
+          Смотреть каталог
+        </a>
+        <a href="/portfolio/" class="inline-flex items-center gap-2 rounded-full border border-gray-300 px-5 py-2.5 text-sm font-semibold text-gray-900 transition-colors hover:border-teal-500 hover:text-teal-600">
+          Наши работы
+        </a>
       </div>
     </div>
   </section>
