@@ -324,20 +324,11 @@
 </template>
 
 <style scoped>
-.section {
-  padding: 4rem 1rem;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-@media (max-width: 640px) {
-  .section {
-    padding: 2rem 1rem;
-  }
-}
+/* .section/.container намеренно не переопределяются — используются
+   глобальные классы (см. global.css), чтобы контент совпадал по ширине
+   с остальной страницей (хлебные крошки, FAQ — тоже на глобальном
+   .container). Раньше здесь был локальный .container:1200px при
+   глобальном 1280px — блок FAQ ниже был на 80px шире контента. */
 
 /* ── «Что вы получаете» — стек карточек ──
    Мобайл: карточки залипают (position: sticky) на разных отступах сверху
