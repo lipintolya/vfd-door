@@ -610,9 +610,10 @@ const renderLightbox = renderGallery
     }
   }
 
-  // Слайдеры проектов (стационар/отель/Лахта) — без лайтбокса; треки — с лайтбоксом.
-  // Перебор по классу: новый кейс/слайдер подхватывается автоматически.
-  document.querySelectorAll('.pt-stat-slider').forEach(function (s) { initSlider(s) })
+  // Слайдеры проектов и треки — оба с лайтбоксом (клик по фото открывает
+  // крупный просмотр). Перебор по классу: новый кейс/слайдер подхватывается
+  // автоматически, без правки этого скрипта.
+  document.querySelectorAll('.pt-stat-slider').forEach(function (s) { initSlider(s, true) })
   document.querySelectorAll('.pt-track-slider').forEach(function (s) { initSlider(s, true) })
 
   // ── Лайтбокс для одиночных фото (крепления) ──
