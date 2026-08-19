@@ -26,7 +26,7 @@ const slides: Slide[] = [
     image: 'https://storage.yandexcloud.net/vfd74ru/promo_main/main_render_innova.webp',
     title: 'Купить двери в Челябинске',
     subtitle: 'Официальный дилер ВФД',
-    description: 'Фирменный салон на Братьев Кашириных, 131Б — 80+ моделей в наличии, бесплатный замер и монтаж под ключ',
+    description: 'Подберём дверь для дома или квартиры: каталог моделей, цены и установка',
     cta: 'Смотреть каталог',
     ctaHref: '/catalog/',
   },
