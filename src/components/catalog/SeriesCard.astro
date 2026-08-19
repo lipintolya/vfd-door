@@ -16,9 +16,13 @@ interface Props {
     minPrice:   number | null
     modelCount: number
   }
+  /** Карточка видна без прокрутки (первые серии первой группы) — грузим
+      сразу, а не лениво, иначе именно эта картинка становится LCP и
+      lazy-loading только откладывает её отрисовку. */
+  priority?: boolean
 }
 
-const { series: s } = Astro.props
+const { series: s, priority = false } = Astro.props
 const fmt = (n: number) => n.toLocaleString('ru-RU') + ' ₽'
 ---
 
@@ -31,8 +35,9 @@ const fmt = (n: number) => n.toLocaleString('ru-RU') + ' ₽'
       <img
         src={s.cover}
         alt={`Серия ${s.name} — ВФД`}
-        loading="lazy"
+        loading={priority ? 'eager' : 'lazy'}
         decoding="async"
+        fetchpriority={priority ? 'high' : undefined}
         width="300"
         height="400"
         class="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"

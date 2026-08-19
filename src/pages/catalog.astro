@@ -6,6 +6,7 @@
  */
 import BaseLayout from '../layouts/BaseLayout.astro'
 import Breadcrumbs from '../components/ui/Breadcrumbs.astro'
+import SectionNav from '../components/partitions/SectionNav.astro'
 import CatalogClient from '../components/catalog/CatalogClient.vue'
 import SeriesCard from '../components/catalog/SeriesCard.astro'
 import { getCatalogCards, getSeriesCardsData } from '../lib/catalog-data'
@@ -137,10 +138,22 @@ const structuredData = canonicalUrl ? [
     </div>
   </div>
 
+  <SectionNav items={[
+    { id: 'series-title',  label: 'Серии' },
+    { id: 'catalog-title', label: 'Каталог' },
+  ]} />
+
   {seriesCoatingGroups.length > 0 && (
     <div id="series" class="section bg-white" style="padding-bottom: 0; scroll-margin-top: 5.5rem">
       <div class="container">
-        {seriesCoatingGroups.map(group => {
+        <header id="series-title" class="max-w-2xl mb-8 md:mb-10" style="scroll-margin-top: 7.5rem">
+          <p class="t-eyebrow mb-3">Каталог дверей ВФД</p>
+          <h1 class="text-3xl font-medium leading-tight tracking-tight text-slate-900 md:text-5xl">Серии</h1>
+          <p class="mt-4 text-base leading-relaxed text-slate-600 md:text-lg">
+            {seriesCardsData.length} серий межкомнатных дверей, сгруппированных по покрытию — выберите материал или сразу переходите к полному каталогу моделей ниже.
+          </p>
+        </header>
+        {seriesCoatingGroups.map((group, groupIndex) => {
           const accent = COATING_ACCENT[group.slug] ?? DEFAULT_ACCENT
           return (
           /* Вся группа (карточки + преимущества + вывод) — в едином панельном
@@ -177,7 +190,7 @@ const structuredData = canonicalUrl ? [
                   <a href={`/catalog/?coating=${group.slug}#catalog-title`} class="btn btn-primary w-fit">Смотреть модели</a>
                 </div>
               </div>
-              {group.series.map(s => <SeriesCard series={s} />)}
+              {group.series.map((s, i) => <SeriesCard series={s} priority={groupIndex === 0 && i < 2} />)}
             </div>
 
             {group.benefits.length > 0 && (

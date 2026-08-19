@@ -1,12 +1,25 @@
 ---
-const items = [
-  { id: 'pt-profiles', label: 'Профили' },
-  { id: 'pt-colors',   label: 'Цвета' },
-  { id: 'pt-glass',    label: 'Остекление' },
-  { id: 'pt-benefits', label: 'Преимущества' },
-  { id: 'pt-process',  label: 'Процесс' },
-  { id: 'pt-projects', label: 'Проекты' },
-]
+/**
+ * Плавающая пилюля-навигация по секциям страницы — появляется после
+ * прокрутки, подсвечивает активный раздел, сворачивается в сессии.
+ * Изначально писалась только под /partitions/, теперь принимает `items`
+ * снаружи, чтобы тот же паттерн переиспользовать на /catalog/ (Серии/Каталог)
+ * без копипасты компонента.
+ */
+interface Props {
+  items?: { id: string; label: string }[]
+}
+
+const {
+  items = [
+    { id: 'pt-profiles', label: 'Профили' },
+    { id: 'pt-colors',   label: 'Цвета' },
+    { id: 'pt-glass',    label: 'Остекление' },
+    { id: 'pt-benefits', label: 'Преимущества' },
+    { id: 'pt-process',  label: 'Процесс' },
+    { id: 'pt-projects', label: 'Проекты' },
+  ],
+} = Astro.props
 ---
 
 <nav
@@ -154,7 +167,7 @@ const items = [
     }
 
     const links = Array.from(nav.querySelectorAll<HTMLAnchorElement>('[data-snav]'))
-    const ids = ['pt-profiles', 'pt-colors', 'pt-glass', 'pt-benefits', 'pt-process', 'pt-projects']
+    const ids = links.map((l) => l.dataset.snav).filter((id): id is string => Boolean(id))
 
     if ('IntersectionObserver' in window) {
       const io = new IntersectionObserver(

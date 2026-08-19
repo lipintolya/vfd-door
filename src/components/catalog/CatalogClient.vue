@@ -163,10 +163,10 @@ watch(
 </script>
 
 <template>
-  <section class="grid gap-8" aria-labelledby="catalog-title">
+  <section class="grid scroll-mt-28 gap-8" aria-labelledby="catalog-title">
     <div class="flex flex-wrap items-end justify-between gap-4">
       <div>
-        <h1 id="catalog-title" class="t-h1 text-step-5 m-0 mb-1.5 leading-tight">Межкомнатные двери</h1>
+        <h2 id="catalog-title" class="t-h1 text-step-5 m-0 mb-1.5 leading-tight">Каталог межкомнатных дверей</h2>
         <p class="m-0 text-base text-slate-600">
           Найдено: <strong class="font-medium text-ink">{{ filteredCards.length }}</strong>
           {{ filteredCards.length === 1 ? 'товар' : 'товаров' }}
