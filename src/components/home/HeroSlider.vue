@@ -31,6 +31,17 @@ const slides: Slide[] = [
     ctaHref: '/catalog/',
   },
   {
+    /* Сезонное промо — начался сезон входных дверей для частных домов,
+       второй слайд (сразу после H1) для максимальной видимости. */
+    id: 6,
+    image: '/renders/hero/comforttermo-promo.webp',
+    title: 'Входные двери с терморазрывом',
+    subtitle: 'Уличная дверь «Комфорт Термо» для частного дома',
+    description: 'Полотно 110 мм, короб с терморазрывом 150 мм, 3 контура EPDM-уплотнения, цвет «Букле графит» — от 42 660 ₽',
+    cta: 'Смотреть дверь',
+    ctaHref: '/vhodnye-dveri/#comforttermo',
+  },
+  {
     id: 5,
     image: 'https://storage.yandexcloud.net/vfd74ru/Main_page/left_bento/strix_render.webp',
     title: 'Премиум дизайн по доступной цене',
