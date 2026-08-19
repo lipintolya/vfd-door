@@ -150,7 +150,7 @@
                 class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors"
                 aria-label="Max"
               >
-                <img src="/icons/max-logo.webp" alt="Max" class="w-6 h-6" loading="lazy" />
+                <img src="/icons/max-logo-v2.webp" alt="Max" class="w-6 h-6" loading="lazy" />
               </a>
             </div>
           </div>
