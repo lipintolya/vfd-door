@@ -28,7 +28,6 @@ export interface ProjectCase {
   id:         string
   side:       'left' | 'right'          // сторона слайдера
   sliderTone: 'dark' | 'light'
-  bg?:        'white' | 'slate'         // фон секции (по умолчанию white)
   eyebrow:    { kind: 'plain'; text: string }
             | { kind: 'badge'; text: string; tone: 'amber' | 'teal' }
   titleHtml:  string                    // допускает <br>
@@ -330,9 +329,7 @@ export const cases: ProjectCase[] = [
   {
     id: 'lahta',
     side: 'right',
-    sliderTone: 'dark',
-    bg: 'slate',
-    eyebrow: { kind: 'badge', text: 'Реализованный проект', tone: 'teal' },
+    sliderTone: 'dark',    eyebrow: { kind: 'badge', text: 'Реализованный проект', tone: 'teal' },
     titleHtml: 'ЖК Лахта парк,<br/>Санкт-Петербург',
     paragraphs: [
       'Раздвижные алюминиевые перегородки для квартиры в ЖК Лахта парк — проект выполнен по авторскому дизайну Веры Никитиной. Лаконичная минималистичная концепция: тонкий профиль, максимум стекла и воздуха, чёткие линии без лишних деталей.',
@@ -400,7 +397,6 @@ export const aspenCase: ProjectCase = {
   id: 'aspen',
   side: 'left',
   sliderTone: 'dark',
-  bg: 'slate',
   eyebrow: { kind: 'badge', text: 'Система Aspen', tone: 'teal' },
   titleHtml: 'Раздвижные перегородки Aspen —<br/>премиальное зонирование от ВФД',
   paragraphs: [

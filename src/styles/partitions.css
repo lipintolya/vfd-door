@@ -5,13 +5,6 @@
    Брейкпоинты привязаны к Tailwind: md = 768px, lg = 1024px.
    ============================================================ */
 
-/* Тонированный фон секций (мягкий teal-радиал на светло-сером) */
-.pt-tint {
-  background:
-    radial-gradient(ellipse 70% 50% at 50% 0%, color-mix(in srgb, var(--color-accent) 8%, transparent), transparent),
-    #f8f9fa;
-}
-
 /* Universal card shell */
 .pt-card {
   border-radius: 1.5rem;
