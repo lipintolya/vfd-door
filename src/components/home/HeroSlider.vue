@@ -23,9 +23,9 @@ const slides: Slide[] = [
        (крутится через 9с и доступен по точкам навигации), сам по себе он
        никуда не делся. */
     id: 1,
-    image: 'https://storage.yandexcloud.net/catalog-vfd/renders/hero-cover.webp',
+    image: 'https://storage.yandexcloud.net/vfd74ru/promo_main/main_render_innova.webp',
     title: 'Купить двери в Челябинске',
-    subtitle: 'Официальный дилер ВФД с 2014 года',
+    subtitle: 'Официальный дилер ВФД',
     description: 'Фирменный салон на Братьев Кашириных, 131Б — 80+ моделей в наличии, бесплатный замер и монтаж под ключ',
     cta: 'Смотреть каталог',
     ctaHref: '/catalog/',
