@@ -30,6 +30,17 @@ const clientReady = ref(false)
 onMounted(() => { clientReady.value = true })
 
 const { sectionRef, visible } = useScrollReveal(0.1)
+
+/* Описание скрыто за кнопкой «Узнать больше» — карточки короче и не давят
+   текстом, картинка при этом крупнее (см. h-96 ниже), чтобы карточка не
+   выглядела куце. Set пересоздаём целиком на каждый toggle — мутация
+   add/delete на месте не триггерит реактивность ref(Set). */
+const expandedIds = ref(new Set<string>())
+function toggleExpanded(id: string) {
+  const next = new Set(expandedIds.value)
+  next.has(id) ? next.delete(id) : next.add(id)
+  expandedIds.value = next
+}
 </script>
 
 <template>
@@ -66,11 +77,11 @@ const { sectionRef, visible } = useScrollReveal(0.1)
         <p class="text-lg text-gray-500">Нет активных акций. Следите за обновлениями 👀</p>
       </div>
 
-      <!-- ── Promos grid — карточка целиком кликабельна и сразу показывает
-           всё описание (без аккордеона): раньше нужно было сначала раскрыть
-           карточку кликом, потом ещё раз кликнуть по кнопке внутри — два
-           клика до сути и до CTA. Теперь как остальные карточки на сайте
-           (SeriesCard/Reviews/CatalogProductCard) — обычная ссылка. ── -->
+      <!-- ── Promos grid — картинка крупная (h-96), описание свёрнуто за
+           кнопкой «Узнать больше» (текста было много, карточки давили
+           текстом). CTA-переход и разворачивание текста — разные действия,
+           поэтому карточка больше не единая <a>: кнопка тоггла — <button>,
+           переход по промо — отдельная <a> внизу с ctaText/ctaLink. ── -->
       <ul
         v-else
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 list-none p-0 m-0"
@@ -80,21 +91,21 @@ const { sectionRef, visible } = useScrollReveal(0.1)
           v-for="(promo, index) in activePromos"
           :key="promo.id"
         >
-          <a
-            :href="promo.ctaLink || '#'"
-            class="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white no-underline transition-[opacity,transform,border-color,box-shadow] duration-600 ease-out hover:border-teal-400 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-teal-500 focus-visible:outline-offset-2 motion-reduce:transition-none"
+          <div
+            class="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-[opacity,transform,border-color,box-shadow] duration-600 ease-out hover:border-teal-400 hover:shadow-lg motion-reduce:transition-none"
             :class="visible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
             :style="{ transitionDelay: visible ? `${index * 100}ms` : '0ms' }"
           >
-            <!-- Image -->
-            <div class="relative h-72 w-full overflow-hidden bg-gray-100">
+            <!-- Image — крупнее, чем раньше: без всегда видимого описания
+                 карточка стала короче, картинка компенсирует высоту. -->
+            <div class="relative h-96 w-full overflow-hidden bg-gray-100">
               <img
                 :src="promo.image"
                 :alt="promo.title"
                 loading="lazy"
                 decoding="async"
                 width="600"
-                height="288"
+                height="384"
                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
 
@@ -121,7 +132,24 @@ const { sectionRef, visible } = useScrollReveal(0.1)
             <div class="p-5 sm:p-6 flex flex-col flex-1">
               <h3 class="text-lg font-semibold text-gray-900 line-clamp-2">{{ promo.title }}</h3>
               <p class="text-sm text-teal-600 font-medium mt-1 mb-3">{{ promo.subtitle }}</p>
-              <p class="text-sm text-gray-600 leading-relaxed">{{ promo.description }}</p>
+
+              <button
+                type="button"
+                class="inline-flex w-fit items-center gap-1 text-sm font-semibold text-gray-500 transition-colors hover:text-gray-700 focus-visible:outline-2 focus-visible:outline-teal-500 focus-visible:outline-offset-2"
+                :aria-expanded="expandedIds.has(promo.id)"
+                @click="toggleExpanded(promo.id)"
+              >
+                {{ expandedIds.has(promo.id) ? 'Скрыть' : 'Узнать больше' }}
+                <svg
+                  class="h-3 w-3 shrink-0 transition-transform duration-200"
+                  :class="expandedIds.has(promo.id) ? 'rotate-180' : ''"
+                  viewBox="0 0 16 16" fill="none" aria-hidden="true"
+                >
+                  <path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+
+              <p v-if="expandedIds.has(promo.id)" class="mt-3 text-sm text-gray-600 leading-relaxed">{{ promo.description }}</p>
 
               <!-- Footer -->
               <div class="flex justify-between items-center mt-auto pt-4 border-t border-gray-100">
@@ -132,18 +160,19 @@ const { sectionRef, visible } = useScrollReveal(0.1)
                   До {{ formatDate(promo.validUntil) }}
                 </time>
 
-                <span
+                <a
                   v-if="promo.ctaText"
-                  class="inline-flex items-center gap-1 text-sm font-semibold text-teal-600 transition-transform group-hover:translate-x-0.5"
+                  :href="promo.ctaLink || '#'"
+                  class="inline-flex items-center gap-1 text-sm font-semibold text-teal-600 transition-transform hover:translate-x-0.5 focus-visible:outline-2 focus-visible:outline-teal-500 focus-visible:outline-offset-2"
                 >
                   {{ promo.ctaText }}
                   <svg class="h-3.5 w-3.5 shrink-0" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                     <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
-                </span>
+                </a>
               </div>
             </div>
-          </a>
+          </div>
         </li>
       </ul>
 
