@@ -5,6 +5,7 @@
  */
 import BaseLayout from '../layouts/BaseLayout.astro'
 import HeroSlider from '../components/home/HeroSlider.vue'
+import PromoStripBanner from '../components/home/PromoStripBanner.astro'
 import HiddenDoorsPromo from '../components/home/HiddenDoorsPromo.vue'
 import MirrorDoorPromo from '../components/home/MirrorDoorPromo.vue'
 import Features from '../components/home/Features.vue'
@@ -98,6 +99,7 @@ const localBusinessSchema = {
   preloadHero={true}
 >
   <HeroSlider client:load />
+  <PromoStripBanner />
   <HiddenDoorsPromo client:visible />
   <MirrorDoorPromo client:visible />
   <Features client:visible />
