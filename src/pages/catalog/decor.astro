@@ -3,12 +3,12 @@ import BaseLayout from '../../layouts/BaseLayout.astro'
 import Breadcrumbs from '../../components/ui/Breadcrumbs.astro'
 import FaqAccordion from '../../components/ui/FaqAccordion.astro'
 import InfoImageViewer from '../../components/catalog/InfoImageViewer.vue'
+import PlinthSection from '../../components/catalog/PlinthSection.astro'
 import {
   IMAGES,
   REYKI_IMAGES,
   MATERIAL_LABELS,
   FRAMUGA_MATERIALS, FRAMUGA_ROWS,
-  PLINTUS_MATERIALS, PLINTUS_ROWS,
   REYKI_MATERIALS,   REYKI_ROWS,
   FROM_PRICE_FRAMUGA_KIT,
   FROM_PRICE_PLINTUS,
@@ -180,61 +180,7 @@ const structuredData = canonicalUrl ? [
   <!-- ══════════════════════════════════════════════
        ПЛИНТУС
   ══════════════════════════════════════════════ -->
-  <section class="section" style="padding-bottom: 0">
-    <div class="container">
-      <div class="dc-section">
-        <div class="dc-section__text">
-          <h2 class="dc-h2">Плинтус</h2>
-          <p class="dc-p">
-            Закрывает стык пола и стены, скрывает зазор и кабель-канал.
-            Крепится на клипсы — без видимых саморезов на лицевой стороне.
-          </p>
-          <p class="dc-p">
-            <strong>Область применения:</strong> подбирается в цвет дверного полотна
-            для единого ансамбля или в цвет пола/стен — под любой интерьер.
-            Высота 70 мм — для стандартных помещений, 100 мм — для высоких потолков
-            и просторных комнат.
-          </p>
-        </div>
-      </div>
-
-      <div class="dc-table-wrap">
-        <table class="dc-table">
-          <thead>
-            <tr>
-              <th scope="col" class="dc-table__row-head"></th>
-              <th scope="col" class="dc-table__row-head"></th>
-              {PLINTUS_MATERIALS.map((m: Material) => <th scope="col">{MATERIAL_LABELS[m]}</th>)}
-            </tr>
-          </thead>
-          <tbody>
-            {PLINTUS_ROWS.map((row: PriceRow) => (
-              <tr>
-                <th scope="row">{row.name}{row.size && <span class="dc-row-size">{row.size}</span>}</th>
-                <td class="dc-table__unit" data-label="Ед.">{row.unit}</td>
-                {PLINTUS_MATERIALS.map((m: Material) => (
-                  <td data-label={MATERIAL_LABELS[m]}>{row.prices[m] != null ? fmt(row.prices[m]!) : '—'}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <p class="dc-table-foot">Длина плинтуса — 2140 мм. Клипсы для монтажа — единая цена для всех покрытий. * Цены ознакомительные — точный расчёт у менеджера салона.</p>
-
-      {IMAGES.plintus && (
-        <InfoImageViewer
-          client:only="vue"
-          variant="photo"
-          images={[{
-            src: IMAGES.plintus,
-            caption: 'Плинтус в интерьере',
-            alt: 'Плинтус в цвет дверного полотна — ВФД',
-          }]}
-        />
-      )}
-    </div>
-  </section>
+  <PlinthSection />
 
   <!-- ══════════════════════════════════════════════
        ДЕКОРАТИВНЫЕ РЕЙКИ
@@ -442,7 +388,6 @@ const structuredData = canonicalUrl ? [
   font-size: 0.875rem;
   font-weight: 600;
   color: #334155;
-  background: #fafbfc;
   border-right: 1px solid #f1f5f9;
   max-width: 13rem;
   white-space: normal;

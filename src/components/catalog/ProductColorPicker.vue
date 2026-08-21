@@ -494,6 +494,26 @@ const shareModel = async () => {
   color: #0f766e;
   line-height: 1.4;
 }
+/* Чуть крупнее на десктопе (иконка/паддинги, шрифт не трогаем — крупный
+   текст смотрелся вычурно) + отступ сверху от кружков цвета — вместе
+   подтягивают низ левой колонки ближе к низу правой. Мобильный размер не
+   трогаем. */
+@media (min-width: 901px) {
+  .color-picker__calc-promo {
+    gap: 1.125rem;
+    padding: 1.5rem 1.75rem;
+    border-radius: 1.25rem;
+    margin-top: 1.75rem;
+  }
+  .color-picker__calc-promo-icon {
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 0.875rem;
+  }
+  .color-picker__calc-promo-icon svg { width: 1.625rem; height: 1.625rem; }
+  .color-picker__calc-promo-arrow { width: 1.25rem; height: 1.25rem; }
+}
+
 .color-picker__calc-promo-arrow {
   width: 1.125rem;
   height: 1.125rem;

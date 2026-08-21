@@ -24,7 +24,14 @@
  *   Цвета, не упомянутые в COLOR_SURCHARGE, считаются базовыми (0%).
  *   Действует ТОЛЬКО на цену комплекта (коробка+наличники), не на цену полотна —
  *   цена полотна приходит из model_colors.price_rrp и уже учитывает цвет.
+ *
+ * ПЛИНТУС:
+ *   Цены и размеры не дублируются здесь вручную — берутся из PLINTUS_ROWS
+ *   (src/data/decor-products.ts, та же таблица, что на странице /catalog/decor),
+ *   чтобы цифры на карточке товара и на странице декора никогда не расходились.
  */
+
+import { PLINTUS_ROWS, type Material as PlintusMaterial } from './decor-products'
 
 export type AccessoryCategory = 'kit' | 'box' | 'nalichnik' | 'kapitel' | 'dobor' | 'plinth' | 'decorative'
 
@@ -36,6 +43,18 @@ export const CATEGORY_LABELS: Record<AccessoryCategory, string> = {
   dobor:      'Доборы',
   plinth:     'Плинтус',
   decorative: 'Декоративные элементы',
+}
+
+/** Пояснение под списком категории — пока используется только для плинтуса
+    (продаётся по штукам-планкам, но меряется в погонных метрах, порядок
+    расчёта неочевиден без объяснения). */
+export const CATEGORY_NOTES: Partial<Record<AccessoryCategory, string>> = {
+  plinth:
+    'Цена — за штуку (планка 2140 мм), но подбирается по погонным метрам. ' +
+    'Порядок расчёта: Периметр — измерьте рулеткой длину каждой стены и сложите их вместе. ' +
+    'Проёмы — измерьте ширину дверей и арок, где плинтус не нужен, и отнимите эту сумму от периметра. ' +
+    'Запас — прибавьте 5% для ровных комнат или 10% для помещений со сложной формой, выступами и углами. ' +
+    'Штуки — разделите итоговую длину на длину одной планки (2140 мм).',
 }
 
 export interface Accessory {
@@ -88,6 +107,18 @@ export function calcKitPrice(coatingSlug: string, colorName: string): number {
   const base = BASE_KIT_PRICE[coatingSlug as CoatingSlug] ?? 0
   const surcharge = COLOR_SURCHARGE[colorName] ?? 0
   return Math.ceil(base * (1 + surcharge))
+}
+
+/** Строки PLINTUS_ROWS под конкретный материал → позиции для accessoriesByCoating. */
+function plinthAccessories(material: PlintusMaterial): Accessory[] {
+  return PLINTUS_ROWS
+    .filter(row => row.prices[material] != null)
+    .map(row => ({
+      name:     row.size ? `${row.name} ${row.size.replace(/×/g, 'х')}` : row.name,
+      category: 'plinth',
+      unit:     'шт',
+      price:    row.prices[material]!,
+    }))
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -146,6 +177,8 @@ export const accessoriesByCoating: Record<CoatingSlug, Accessory[]> = {
     { name: 'Квадрат d35 85×22×85',                                      category: 'decorative', unit: 'шт',       price: 347 },
     { name: 'Банкетка d35 85×22×160',                                    category: 'decorative', unit: 'шт',       price: 483 },
     { name: 'Притворная планка 30х10х2100',                              category: 'decorative', unit: 'шт',       price: 599 },
+
+    ...plinthAccessories('emal'),
   ],
 
   // ── Эмалекс ──────────────────────────────────────────────────────────────
@@ -174,8 +207,7 @@ export const accessoriesByCoating: Record<CoatingSlug, Accessory[]> = {
     { name: 'Добор ДПТ390№2 390х10х2070',                                category: 'dobor',      unit: 'шт',       price: 2_520 },
     { name: 'Соединитель для доборов 35х4х2100',                        category: 'dobor',      unit: 'шт',       price: 53 },
 
-    { name: 'Плинтус 70х16х2140',                                        category: 'plinth',     unit: 'шт',       price: 851 },
-    { name: 'Клипсы для плинтуса',                                       category: 'plinth',     unit: 'шт',       price: 53 },
+    ...plinthAccessories('emalex'),
   ],
 
   // ── Протач (Смарт/Некст) ─────────────────────────────────────────────────

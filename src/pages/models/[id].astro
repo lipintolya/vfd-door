@@ -5,10 +5,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro'
 import Breadcrumbs from '../../components/ui/Breadcrumbs.astro'
 import ProductColorPicker from '../../components/catalog/ProductColorPicker.vue'
 import type { ColorVariant } from '../../components/catalog/ProductColorPicker.vue'
+import PlinthSection from '../../components/catalog/PlinthSection.astro'
 import { getSeriesSpec } from '../../data/series-descriptions'
 import { adjustPrice } from '../../lib/price-adjustments'
 import { isNewModel } from '../../lib/new-models'
-import { accessoriesByCoating, CATEGORY_LABELS, PRICE_LIST_UPDATED } from '../../data/accessories'
+import { accessoriesByCoating, CATEGORY_LABELS, CATEGORY_NOTES, PRICE_LIST_UPDATED } from '../../data/accessories'
 import type { AccessoryCategory, CoatingSlug } from '../../data/accessories'
 
 export async function getStaticPaths() {
@@ -162,6 +163,7 @@ const { model, slug, colors, minPrice, seriesName, seriesSlug, coatingName, coat
 
 const spec        = getSeriesSpec(seriesSlug, coatingSlug)
 const accessories = accessoriesByCoating[coatingSlug as CoatingSlug] ?? []
+const hasPlinth   = accessories.some(item => item.category === 'plinth')
 
 const CATEGORY_ORDER: AccessoryCategory[] = ['kit', 'box', 'nalichnik', 'kapitel', 'dobor', 'plinth', 'decorative']
 
@@ -327,6 +329,9 @@ const structuredData = [breadcrumbSchema, {
     </div>
   </div>
 
+  <!-- ── Плинтус к дверям (только для покрытий, где он есть — Эмаль/Эмалекс) ── -->
+  {hasPlinth && <PlinthSection title="Плинтус к дверям" />}
+
   <!-- ── Погонажные изделия ── -->
   {accessories.length > 0 && (
     <section class="accessories-section">
@@ -354,6 +359,9 @@ const structuredData = [breadcrumbSchema, {
                   </li>
                 ))}
               </ul>
+              {CATEGORY_NOTES[category] && (
+                <p class="accessories-note accessories-note--group">{CATEGORY_NOTES[category]}</p>
+              )}
             </details>
           ))}
         </div>
@@ -365,12 +373,12 @@ const structuredData = [breadcrumbSchema, {
 <style>
 /* ── Product layout ── */
 .product-page {
-  padding-bottom: clamp(3rem, 5vw, 5rem);
+  padding-bottom: clamp(1.5rem, 3vw, 2.5rem);
 }
 
 .product-layout {
   display: grid;
-  grid-template-columns: 480px 1fr;
+  grid-template-columns: 34rem 1fr;
   gap: 3.5rem;
   margin-top: 1.75rem;
   align-items: start;
@@ -507,7 +515,6 @@ const structuredData = [breadcrumbSchema, {
 
 /* ── Accessories ── */
 .accessories-section {
-  background: #f8fafc;
   padding: clamp(2.5rem, 4vw, 4rem) 0;
 }
 
@@ -526,6 +533,14 @@ const structuredData = [breadcrumbSchema, {
   font-size: 0.9rem;
   color: #64748b;
   margin: 0;
+}
+
+.accessories-note--group {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  padding: 1rem 1.5rem 1.375rem;
+  margin: 0;
+  border-top: 1px dashed #e2e8f0;
 }
 
 .accessories-groups {
