@@ -13,6 +13,8 @@ export default defineMarkdocConfig({
         alt:     { type: String },
         caption: { type: String },
         wide:    { type: Boolean, default: false },
+        // Схемы/чертежи: без кропа 21:9, компактно по центру колонки
+        narrow:  { type: Boolean, default: false },
       },
     },
 
@@ -41,6 +43,8 @@ export default defineMarkdocConfig({
         image:    { type: String },
         imageAlt: { type: String },
         tags:     { type: String },
+        // Предметные фото на белом фоне: 4:3 + contain вместо кропа 3:4
+        contain:  { type: Boolean, default: false },
       },
     },
 

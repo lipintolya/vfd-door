@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 
-const props = defineProps<{ src: string; alt?: string }>()
+/* natural — без кропа 21:9: картинка в своих пропорциях (схемы, чертежи). */
+const props = defineProps<{ src: string; alt?: string; natural?: boolean }>()
 
 /* Teleport гейтится через mounted, чтобы SSR и первый клиентский рендер
    совпадали (иначе Vue ловит "Hydration node mismatch") — тот же паттерн,
@@ -36,7 +37,14 @@ onBeforeUnmount(() => {
     :aria-label="`Открыть фото на весь экран${alt ? ': ' + alt : ''}`"
     @click="show"
   >
-    <img :src="src" :alt="alt ?? ''" loading="lazy" decoding="async" class="fig-zoom-img" />
+    <img
+      :src="src"
+      :alt="alt ?? ''"
+      loading="lazy"
+      decoding="async"
+      class="fig-zoom-img"
+      :class="natural ? 'fig-zoom-img--natural' : ''"
+    />
     <span class="fig-zoom-hint" aria-hidden="true">
       <svg viewBox="0 0 20 20" fill="none">
         <circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.75"/>
@@ -86,6 +94,12 @@ onBeforeUnmount(() => {
   aspect-ratio: 21 / 9;
   border-radius: 0.75rem;
   object-fit: cover;
+}
+.fig-zoom-img--natural {
+  aspect-ratio: auto;
+  object-fit: contain;
+  background: #fff;
+  border: 1px solid #e5e7eb;
 }
 .fig-zoom-hint {
   position: absolute;

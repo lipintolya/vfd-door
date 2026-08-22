@@ -4,13 +4,17 @@ interface Props {
   image?: string
   imageAlt?: string
   tags?: string   // через запятую или «•»
+  /** Для предметных фото на белом фоне (фурнитура и т.п.): ландшафтная
+      область 4:3 и object-fit:contain вместо кропа 3:4 — предмет виден
+      целиком и не «взорван» зумом. */
+  contain?: boolean
 }
-const { title, image, imageAlt, tags } = Astro.props
+const { title, image, imageAlt, tags, contain = false } = Astro.props
 const tagList = tags ? tags.split(/[,•]/).map((t) => t.trim()).filter(Boolean) : []
 ---
 
 <article class="dcard">
-  <div class="dcard__media">
+  <div class:list={['dcard__media', contain && 'dcard__media--contain']}>
     {image ? (
       <img src={image} alt={imageAlt ?? title} loading="lazy" decoding="async" />
     ) : (
@@ -68,6 +72,16 @@ const tagList = tags ? tags.split(/[,•]/).map((t) => t.trim()).filter(Boolean)
   transition: transform 400ms ease;
 }
 .dcard:hover .dcard__media img { transform: scale(1.04); }
+
+.dcard__media--contain {
+  aspect-ratio: 4 / 3;
+  background: #fff;
+  border-bottom: 1px solid #f1f5f9;
+}
+.dcard__media--contain img {
+  object-fit: contain;
+  padding: 1.25rem;
+}
 
 .dcard__ph {
   width: 100%;

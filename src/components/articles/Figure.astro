@@ -8,13 +8,16 @@ interface Props {
   /** @deprecated фото больше не выходит за пределы колонки текста — проп оставлен,
       чтобы не трогать существующий контент статей, но ни на что не влияет. */
   wide?: boolean
+  /** Компактный вариант для схем/чертежей: без кропа 21:9 (естественные
+      пропорции картинки) и с ограниченной шириной по центру колонки. */
+  narrow?: boolean
 }
 
-const { src, alt = '', caption } = Astro.props
+const { src, alt = '', caption, narrow = false } = Astro.props
 ---
 
-<figure class="article-figure">
-  <FigureLightbox src={src} alt={alt} client:visible />
+<figure class:list={['article-figure', narrow && 'article-figure--narrow']}>
+  <FigureLightbox src={src} alt={alt} natural={narrow} client:visible />
   {caption && (
     <figcaption class="mt-2 text-center text-sm text-slate-400">
       {caption}
@@ -25,5 +28,10 @@ const { src, alt = '', caption } = Astro.props
 <style>
 .article-figure {
   margin: 2rem 0;
+}
+.article-figure--narrow {
+  max-width: 26rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>
