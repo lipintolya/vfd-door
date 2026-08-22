@@ -3,8 +3,17 @@
  * src/components/home/PromoStripBanner.astro
  *
  * Плашка-анонс акций между хиро и остальным контентом главной. Ведёт к
- * блоку #promo (Promo.vue). Статика без JS — переход по обычному якорю
- * <a href="#promo">, без анимаций при монтировании (не нагружаем страницу).
+ * блоку #promo (Promo.vue).
+ *
+ * Переход — не обычный якорь: страница длинная (~9-10к px), а ниже
+ * PromoStripBanner ещё лежат несколько client:visible/client:idle
+ * островов — пока анимированный scroll-behavior:smooth едет вниз, их
+ * картинки и разметка догружаются и меняют высоту документа под ногами
+ * (замерено: +~440px за первые ~300мс скролла). Анимация целится в
+ * зафиксированную на старте точку, поэтому скролл иногда не долетает и
+ * приземляется в блок «Портфолио» прямо перед #promo, а не в сами акции.
+ * Мгновенный прыжок (behavior:'instant') снимает саму возможность гонки —
+ * он не анимируется, значит нечему "не долетать".
  */
 
 const IMAGE = 'https://storage.yandexcloud.net/vfd74ru/promo_main/F3563280-790C-49CB-A81E-00ED9A0D2A3B.webp'
@@ -13,17 +22,6 @@ const IMAGE = 'https://storage.yandexcloud.net/vfd74ru/promo_main/F3563280-790C-
 <div class="pt-6 sm:pt-8">
   <div class="container">
     <a href="#promo" class="promo-strip group">
-      <div class="promo-strip__image-wrap">
-        <img
-          src={IMAGE}
-          alt="Акции и спецпредложения ВФД"
-          loading="lazy"
-          decoding="async"
-          width="1200"
-          height="400"
-          class="promo-strip__image"
-        />
-      </div>
       <div class="promo-strip__panel">
         <div class="promo-strip__text">
           <h2 class="promo-strip__title">Акции</h2>
@@ -36,13 +34,37 @@ const IMAGE = 'https://storage.yandexcloud.net/vfd74ru/promo_main/F3563280-790C-
           </svg>
         </span>
       </div>
+      <div class="promo-strip__image-wrap">
+        <img
+          src={IMAGE}
+          alt="Акции и спецпредложения ВФД"
+          loading="lazy"
+          decoding="async"
+          width="900"
+          height="500"
+          class="promo-strip__image"
+        />
+      </div>
     </a>
   </div>
 </div>
 
+<script>
+  document.querySelectorAll('.promo-strip').forEach((el) => {
+    el.addEventListener('click', (e) => {
+      const target = document.getElementById('promo')
+      if (!target) return
+      e.preventDefault()
+      target.scrollIntoView({ behavior: 'instant', block: 'start' })
+      history.pushState(null, '', '#promo')
+    })
+  })
+</script>
+
 <style>
   .promo-strip {
-    display: block;
+    display: grid;
+    grid-template-columns: 1fr;
     overflow: hidden;
     border-radius: 1.5rem;
     background: #18181b;
@@ -50,6 +72,7 @@ const IMAGE = 'https://storage.yandexcloud.net/vfd74ru/promo_main/F3563280-790C-
   }
 
   .promo-strip__image-wrap {
+    order: -1;
     overflow: hidden;
     height: clamp(7.2rem, 17.6vw, 12.8rem);
   }
@@ -69,6 +92,7 @@ const IMAGE = 'https://storage.yandexcloud.net/vfd74ru/promo_main/F3563280-790C-
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    justify-content: center;
     gap: 1rem;
     padding: clamp(1rem, 2.4vw, 1.6rem) clamp(1.25rem, 4vw, 2.5rem);
   }
@@ -84,7 +108,6 @@ const IMAGE = 'https://storage.yandexcloud.net/vfd74ru/promo_main/F3563280-790C-
 
   .promo-strip__subtitle {
     margin: 0;
-    max-width: 30rem;
     font-size: 0.9375rem;
     line-height: 1.5;
     color: rgba(255, 255, 255, 0.6);
@@ -95,10 +118,14 @@ const IMAGE = 'https://storage.yandexcloud.net/vfd74ru/promo_main/F3563280-790C-
   }
 
   @media (min-width: 640px) {
-    .promo-strip__panel {
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
+    .promo-strip {
+      grid-template-columns: 3fr 4fr;
+      align-items: stretch;
+    }
+
+    .promo-strip__image-wrap {
+      order: 0;
+      height: auto;
     }
   }
 </style>
